@@ -23,6 +23,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [0.1.0] - 2026-02-10
 
 - **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.1.0] - 2026-02-10
+
+- **Added**
   - Lumen-inspired hybrid realtime lighting technique scaffold.
   - Path-traced reference, volumetric lighting, and HDRI/IBL technique catalogs.
   - Loader APIs for technique WGSL modules and profile-driven planning.
