@@ -1,6 +1,13 @@
 # @plasius/gpu-lighting
 
-[![npm version](https://img.shields.io/npm/v/@plasius/gpu-lighting)](https://www.npmjs.com/package/@plasius/gpu-lighting)
+[![npm version](https://img.shields.io/npm/v/@plasius/gpu-lighting.svg)](https://www.npmjs.com/package/@plasius/gpu-lighting)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Plasius-LTD/gpu-lighting/ci.yml?branch=main&label=build&style=flat)](https://github.com/Plasius-LTD/gpu-lighting/actions/workflows/ci.yml)
+[![coverage](https://img.shields.io/codecov/c/github/Plasius-LTD/gpu-lighting)](https://codecov.io/gh/Plasius-LTD/gpu-lighting)
+[![License](https://img.shields.io/github/license/Plasius-LTD/gpu-lighting)](./LICENSE)
+[![Code of Conduct](https://img.shields.io/badge/code%20of%20conduct-yes-blue.svg)](./CODE_OF_CONDUCT.md)
+[![Security Policy](https://img.shields.io/badge/security%20policy-yes-orange.svg)](./SECURITY.md)
+[![Changelog](https://img.shields.io/badge/changelog-md-blue.svg)](./CHANGELOG.md)
+
 [![license](https://img.shields.io/github/license/Plasius-LTD/gpu-lighting)](./LICENSE)
 
 Advanced lighting WGSL modules and planning profiles for `@plasius/gpu-worker`.
