@@ -9,6 +9,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.1.2] - 2026-03-01
+
+- **Added**
   - `lint`, `typecheck`, and security audit scripts for local and CI enforcement.
 
 - **Changed**
@@ -73,3 +87,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 - **Security**
   - (placeholder)
 [0.1.1]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.1
+[0.1.2]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.2
