@@ -1,6 +1,6 @@
 {
   "name": "@plasius/gpu-lighting",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Advanced lighting WGSL modules and planning profiles for @plasius/gpu-worker.",
   "type": "module",
   "sideEffects": false,
