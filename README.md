@@ -98,6 +98,16 @@ npm run demo
 
 Then open `http://localhost:8000/gpu-lighting/demo/`.
 
+## Development Checks
+
+```sh
+npm run lint
+npm run typecheck
+npm run test:coverage
+npm run build
+npm run pack:check
+```
+
 ## Files
 
 - `src/index.js`: technique/profile catalogs, loader APIs, validation.
