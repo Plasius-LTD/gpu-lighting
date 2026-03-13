@@ -31,6 +31,7 @@ npm install @plasius/gpu-lighting
 ```js
 import {
   loadLightingTechniqueJobs,
+  loadLightingTechniqueWorkerBundle,
   getLightingTechnique,
 } from "@plasius/gpu-lighting";
 import { assembleWorkerWgsl, loadWorkerWgsl } from "@plasius/gpu-worker";
@@ -44,6 +45,27 @@ const shaderCode = await assembleWorkerWgsl(workerWgsl, {
 });
 
 console.log(getLightingTechnique("hybrid").description);
+```
+
+## Usage (worker governance bundle)
+
+```js
+import {
+  getLightingProfileWorkerManifest,
+  loadLightingTechniqueWorkerBundle,
+} from "@plasius/gpu-lighting";
+
+const bundle = await loadLightingTechniqueWorkerBundle("hybrid");
+
+// WGSL for gpu-worker assembly
+console.log(bundle.preludeWgsl, bundle.jobs);
+
+// Contract-aligned metadata for gpu-performance and gpu-debug integrations
+console.log(bundle.workerManifest.jobs[0].performance.levels);
+console.log(bundle.workerManifest.jobs[0].debug);
+
+const profileManifest = getLightingProfileWorkerManifest("realtime");
+console.log(profileManifest.jobs.map((job) => job.worker.jobType));
 ```
 
 ## Usage (profile planning)
@@ -116,3 +138,5 @@ npm run pack:check
 - `src/techniques/volumetrics/*`: volumetric lighting WGSL modules.
 - `src/techniques/hdri/*`: HDRI/IBL precompute WGSL modules.
 - `docs/adrs/*`: architecture decisions for the lighting stack.
+- `docs/tdrs/*`: technical design records for worker manifests and debug hooks.
+- `docs/design/*`: integration guidance for worker budgets and debug metadata.

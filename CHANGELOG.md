@@ -9,10 +9,13 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
-  - (placeholder)
+  - Worker governance manifests and bundle loaders that align lighting jobs with
+    `gpu-worker`, `gpu-performance`, and `gpu-debug` integration contracts.
+  - ADR, TDR, and design documentation for worker-first lighting integration.
 
 - **Changed**
-  - (placeholder)
+  - README now documents lighting worker manifests, performance budget ladders,
+    and debug metadata expectations for consumers.
 
 - **Fixed**
   - (placeholder)
