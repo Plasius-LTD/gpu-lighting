@@ -24,6 +24,7 @@ also need a stable way to discover:
 - worker job labels,
 - suggested performance budget ladders,
 - debug ownership and resource tags,
+- DAG scheduling metadata for ordered technique stages,
 - profile-level aggregation across techniques.
 
 ## Design
@@ -45,6 +46,9 @@ Each manifest job contains:
 
 - `worker.jobType`
 - `worker.queueClass`
+- `worker.priority`
+- `worker.dependencies[]`
+- `worker.schedulerMode`
 - `performance.id`
 - `performance.domain`
 - `performance.authority`
@@ -58,6 +62,8 @@ Each manifest job contains:
 
 - Reliability: unknown profile and technique names fail fast.
 - Observability: debug tags and allocation ids create stable integration hooks.
+- Coordination: lighting packages publish DAG ordering as data so downstream
+  packages do not reconstruct stage graphs.
 - Security: manifests are static local data with no network behavior.
 - Cost: bundle loaders reuse existing WGSL loader flows.
 

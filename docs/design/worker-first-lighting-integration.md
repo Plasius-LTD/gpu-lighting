@@ -12,8 +12,14 @@ Each lighting technique publishes a manifest with:
 
 - owner: `lighting`
 - queue class: `lighting`
+- scheduler mode: `dag`
 - suggested allocation ids for key GPU resources
 - per-job worker, performance, and debug contracts
+
+Each job may also publish:
+
+- `priority` for ready-queue ordering
+- `dependencies` for ordered lighting stages and join points
 
 ## Consumer Usage
 
@@ -31,3 +37,11 @@ Each lighting technique publishes a manifest with:
   levels.
 - Volumetrics and HDRI jobs expose lighter-weight ladders appropriate to their
   cost profile.
+
+## DAG Guidance
+
+- Treat technique roots as the first runnable jobs in the queue.
+- Publish downstream dependencies using the full manifest job labels so
+  `@plasius/gpu-performance` and `@plasius/gpu-worker` see the same identifiers.
+- Keep priority values bounded and package-owned; consumers should not need to
+  reinterpret the lighting graph.

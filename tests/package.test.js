@@ -178,19 +178,28 @@ test("lighting worker manifests expose performance and debug contracts", () => {
   const manifest = getLightingTechniqueWorkerManifest("hybrid");
   assert.equal(manifest.owner, "lighting");
   assert.equal(manifest.queueClass, "lighting");
+  assert.equal(manifest.schedulerMode, "dag");
   assert.equal(manifest.jobs.length, lightingTechniques.hybrid.jobs.length);
 
   const screenTrace = manifest.jobs.find((job) => job.key === "screenTrace");
+  const finalGather = manifest.jobs.find((job) => job.key === "finalGather");
   assert.equal(screenTrace.worker.jobType, "lighting.hybrid.screenTrace");
+  assert.equal(screenTrace.worker.priority, 3);
+  assert.deepEqual(screenTrace.worker.dependencies, []);
   assert.equal(screenTrace.performance.domain, "reflections");
   assert.equal(screenTrace.performance.levels[0].id, "low");
   assert.equal(screenTrace.debug.owner, "lighting");
   assert.ok(screenTrace.debug.suggestedAllocationIds.includes("lighting.hybrid.reflection-history"));
+  assert.deepEqual(finalGather.worker.dependencies, [
+    "lighting.hybrid.radianceCache",
+    "lighting.hybrid.screenTrace",
+  ]);
 });
 
 test("profile worker manifest aggregates technique manifests", () => {
   const manifest = getLightingProfileWorkerManifest("realtime");
   assert.equal(manifest.profile, "realtime");
+  assert.equal(manifest.schedulerMode, "dag");
   assert.equal(manifest.techniques.length, 3);
   assert.ok(manifest.jobs.length >= manifest.techniques.length);
 });

@@ -683,8 +683,42 @@ const lightingWorkerSpecPresets = {
   },
 };
 
+const lightingWorkerDagSpecs = {
+  hybrid: {
+    directLighting: { priority: 4, dependencies: [] },
+    screenTrace: { priority: 3, dependencies: [] },
+    radianceCache: { priority: 4, dependencies: ["directLighting"] },
+    finalGather: { priority: 2, dependencies: ["radianceCache", "screenTrace"] },
+    reflectionResolve: {
+      priority: 1,
+      dependencies: ["screenTrace", "finalGather"],
+    },
+  },
+  pathtracer: {
+    pathTrace: { priority: 4, dependencies: [] },
+    accumulate: { priority: 3, dependencies: ["pathTrace"] },
+    denoise: { priority: 2, dependencies: ["accumulate"] },
+  },
+  volumetrics: {
+    volumetricShadow: { priority: 3, dependencies: [] },
+    froxelIntegrate: { priority: 2, dependencies: ["volumetricShadow"] },
+  },
+  hdri: {
+    irradianceConvolution: { priority: 3, dependencies: [] },
+    specularPrefilter: { priority: 3, dependencies: [] },
+    brdfLut: {
+      priority: 2,
+      dependencies: ["irradianceConvolution", "specularPrefilter"],
+    },
+  },
+};
+
 function buildWorkerManifestJob(techniqueName, job) {
   const spec = lightingWorkerSpecPresets[techniqueName].jobs[job.key];
+  const dag = lightingWorkerDagSpecs[techniqueName][job.key];
+  const dependencies = dag.dependencies.map(
+    (dependency) => `lighting.${techniqueName}.${dependency}`
+  );
 
   return Object.freeze({
     key: job.key,
@@ -692,6 +726,9 @@ function buildWorkerManifestJob(techniqueName, job) {
     worker: Object.freeze({
       jobType: job.label,
       queueClass: lightingWorkerQueueClass,
+      priority: dag.priority,
+      dependencies: Object.freeze(dependencies),
+      schedulerMode: "dag",
     }),
     performance: Object.freeze({
       id: job.label,
@@ -726,6 +763,7 @@ function buildLightingWorkerManifest(name, technique) {
     technique: name,
     description: technique.description,
     queueClass: lightingWorkerQueueClass,
+    schedulerMode: "dag",
     suggestedAllocationIds: Object.freeze([...spec.suggestedAllocationIds]),
     jobs: Object.freeze(
       technique.jobs.map((job) => buildWorkerManifestJob(name, job))
@@ -798,6 +836,7 @@ export function getLightingProfileWorkerManifest(
     owner: lightingDebugOwner,
     profile: profile.name,
     description: profile.description,
+    schedulerMode: "dag",
     techniques: Object.freeze(techniques),
     jobs: Object.freeze(techniques.flatMap((technique) => technique.jobs)),
   });

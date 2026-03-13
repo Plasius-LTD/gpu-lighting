@@ -39,6 +39,8 @@ Each manifest records:
 
 - stable `jobType` values aligned with worker job labels,
 - queue-class ownership for scheduling and debugging,
+- `schedulerMode`, `priority`, and `dependencies` when lighting jobs form an
+  ordered DAG,
 - suggested performance budget ladders for worker-budget adapters,
 - opt-in debug metadata such as owner, tags, and suggested allocation ids.
 
@@ -58,6 +60,8 @@ Each manifest records:
 - Consumers can assemble WGSL and governance metadata from one package surface.
 - Lighting jobs remain framework-agnostic while still aligning to the shared
   worker/performance/debug model.
+- Multi-stage lighting passes can preserve critical ordering without requiring
+  downstream apps to rebuild dependency graphs.
 - Manifest presets will need tuning as real workloads mature.
 
 ---

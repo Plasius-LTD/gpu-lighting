@@ -63,10 +63,25 @@ console.log(bundle.preludeWgsl, bundle.jobs);
 // Contract-aligned metadata for gpu-performance and gpu-debug integrations
 console.log(bundle.workerManifest.jobs[0].performance.levels);
 console.log(bundle.workerManifest.jobs[0].debug);
+console.log(bundle.workerManifest.schedulerMode);
+console.log(bundle.workerManifest.jobs[0].worker.priority);
+console.log(bundle.workerManifest.jobs[0].worker.dependencies);
 
 const profileManifest = getLightingProfileWorkerManifest("realtime");
 console.log(profileManifest.jobs.map((job) => job.worker.jobType));
 ```
+
+## DAG Scheduling
+
+Lighting worker manifests now publish `schedulerMode: "dag"` plus per-job
+`priority` and `dependencies` so downstream runtimes can preserve stage order.
+
+- `hybrid`: `directLighting` and `screenTrace` are roots; `radianceCache`,
+  `finalGather`, and `reflectionResolve` unlock as upstream work finishes.
+- `pathtracer`: `pathTrace -> accumulate -> denoise`
+- `volumetrics`: `volumetricShadow -> froxelIntegrate`
+- `hdri`: `irradianceConvolution` and `specularPrefilter` are roots; `brdfLut`
+  joins after both finish.
 
 ## Usage (profile planning)
 
@@ -139,4 +154,4 @@ npm run pack:check
 - `src/techniques/hdri/*`: HDRI/IBL precompute WGSL modules.
 - `docs/adrs/*`: architecture decisions for the lighting stack.
 - `docs/tdrs/*`: technical design records for worker manifests and debug hooks.
-- `docs/design/*`: integration guidance for worker budgets and debug metadata.
+- `docs/design/*`: integration guidance for worker budgets, DAG metadata, and debug instrumentation.
