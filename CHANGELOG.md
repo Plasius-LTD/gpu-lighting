@@ -12,6 +12,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.1.8] - 2026-03-14
+
+- **Added**
+  - (placeholder)
+
+- **Changed**
   - Raised the minimum `@plasius/gpu-worker` dependency to `^0.1.10` so npm
     installs resolve the published DAG-ready worker runtime by default.
   - Updated GitHub Actions workflows to run JavaScript actions on Node 24,
@@ -127,3 +141,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.2]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.2
 [0.1.6]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.6
 [0.1.7]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.7
+[0.1.8]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.8
