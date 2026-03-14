@@ -84,7 +84,7 @@
     }
   ],
   "dependencies": {
-    "@plasius/gpu-worker": "^0.1.8"
+    "@plasius/gpu-worker": "^0.1.10"
   },
   "overrides": {
     "minimatch": "^10.2.1"

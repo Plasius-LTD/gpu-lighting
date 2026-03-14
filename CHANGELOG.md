@@ -12,6 +12,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Changed**
+  - Raised the minimum `@plasius/gpu-worker` dependency to `^0.1.10` so npm
+    installs resolve the published DAG-ready worker runtime by default.
   - Updated GitHub Actions workflows to run JavaScript actions on Node 24,
     refreshed core workflow action versions, and switched Codecov uploads to
     the Codecov CLI.
