@@ -5,3 +5,4 @@
 - [Architectural Decision Record (ADR)](./adr-0003:%20Froxel%20Volumetric%20Lighting%20Pipeline.md)
 - [Architectural Decision Record (ADR)](./adr-0004:%20HDRI-First%20Physical%20Lighting%20and%20Exposure.md)
 - [Architectural Decision Record (ADR)](./adr-0005:%20Worker-First%20Lighting%20Governance%20Manifest.md)
+- [Architectural Decision Record (ADR)](./adr-0006:%20Distance-Banded%20Lighting%20and%20Shadow%20Sources.md)
