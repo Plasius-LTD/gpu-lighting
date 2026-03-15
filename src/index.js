@@ -127,9 +127,150 @@ export const lightingProfiles = Object.freeze(
 export const lightingProfileNames = Object.freeze(Object.keys(lightingProfiles));
 
 export const defaultLightingProfile = "realtime";
+export const lightingDistanceBands = Object.freeze([
+  "near",
+  "mid",
+  "far",
+  "horizon",
+]);
 
 export const lightingWorkerQueueClass = "lighting";
 export const lightingDebugOwner = "lighting";
+
+const lightingImportanceLevels = Object.freeze([
+  "low",
+  "medium",
+  "high",
+  "critical",
+]);
+
+const lightingBandPolicySpecs = Object.freeze({
+  near: Object.freeze({
+    primaryShadowSource: "ray-traced-primary",
+    assistShadowSources: Object.freeze(["visibility-raster", "shadow-map-assist"]),
+    temporalReuse: "balanced",
+    updateCadenceDivisor: 1,
+    liveObjectShadows: true,
+    impressionOnly: false,
+  }),
+  mid: Object.freeze({
+    primaryShadowSource: "selective-raster-and-proxy",
+    assistShadowSources: Object.freeze([
+      "regional-shadow-map",
+      "proxy-caster",
+      "temporal-history",
+    ]),
+    temporalReuse: "aggressive",
+    updateCadenceDivisor: 2,
+    liveObjectShadows: true,
+    impressionOnly: false,
+  }),
+  far: Object.freeze({
+    primaryShadowSource: "merged-proxy-casters",
+    assistShadowSources: Object.freeze([
+      "coarse-directional",
+      "semi-static-occlusion",
+    ]),
+    temporalReuse: "high",
+    updateCadenceDivisor: 8,
+    liveObjectShadows: false,
+    impressionOnly: false,
+  }),
+  horizon: Object.freeze({
+    primaryShadowSource: "baked-impression",
+    assistShadowSources: Object.freeze(["atmospheric-gradient", "skyline-darkening"]),
+    temporalReuse: "baked",
+    updateCadenceDivisor: 60,
+    liveObjectShadows: false,
+    impressionOnly: true,
+  }),
+});
+
+function assertLightingImportance(name, value) {
+  if (!lightingImportanceLevels.includes(value)) {
+    throw new Error(
+      `${name} must be one of: ${lightingImportanceLevels.join(", ")}.`
+    );
+  }
+  return value;
+}
+
+function resolveBandParticipation(profileName, band, importance) {
+  const referenceProfile = profileName === "reference";
+  const premiumImportance =
+    importance === "critical" || importance === "high";
+
+  if (band === "near") {
+    return Object.freeze({
+      directShadows: premiumImportance ? "premium" : "selective",
+      reflections: premiumImportance ? "premium" : "selective",
+      globalIllumination:
+        referenceProfile || importance === "critical" ? "premium" : "selective",
+    });
+  }
+
+  if (band === "mid") {
+    return Object.freeze({
+      directShadows: premiumImportance ? "selective" : "proxy",
+      reflections:
+        referenceProfile && premiumImportance ? "selective" : "proxy",
+      globalIllumination:
+        referenceProfile && importance === "critical" ? "selective" : "disabled",
+    });
+  }
+
+  if (band === "far") {
+    return Object.freeze({
+      directShadows: "proxy",
+      reflections:
+        referenceProfile && importance === "critical" ? "proxy" : "disabled",
+      globalIllumination: "disabled",
+    });
+  }
+
+  return Object.freeze({
+    directShadows: "disabled",
+    reflections: "disabled",
+    globalIllumination: "disabled",
+  });
+}
+
+export function createLightingBandPlan(options = {}) {
+  const profileName = options.profile ?? defaultLightingProfile;
+  const profile = getLightingProfile(profileName);
+  const importance = assertLightingImportance(
+    "importance",
+    options.importance ?? "high"
+  );
+
+  const bands = Object.freeze(
+    lightingDistanceBands.map((band) =>
+      Object.freeze({
+        band,
+        profile: profile.name,
+        importance,
+        primaryShadowSource: lightingBandPolicySpecs[band].primaryShadowSource,
+        assistShadowSources: Object.freeze([
+          ...lightingBandPolicySpecs[band].assistShadowSources,
+        ]),
+        rtParticipation: resolveBandParticipation(profile.name, band, importance),
+        temporalReuse: lightingBandPolicySpecs[band].temporalReuse,
+        updateCadenceDivisor: lightingBandPolicySpecs[band].updateCadenceDivisor,
+        liveObjectShadows: lightingBandPolicySpecs[band].liveObjectShadows,
+        impressionOnly: lightingBandPolicySpecs[band].impressionOnly,
+      })
+    )
+  );
+
+  return Object.freeze({
+    schemaVersion: 1,
+    owner: lightingDebugOwner,
+    profile: profile.name,
+    importance,
+    techniques: Object.freeze([...profile.techniques]),
+    bands,
+  });
+}
 
 function buildWorkerBudgetLevels(jobType, queueClass, presets) {
   return Object.freeze([
@@ -713,6 +854,80 @@ const lightingWorkerDagSpecs = {
   },
 };
 
+function resolveLightingQualityDimensions(techniqueName, jobKey) {
+  const key = `${techniqueName}.${jobKey}`;
+  return Object.freeze(
+    {
+      "hybrid.directLighting": { shadows: 1, lightingSamples: 0.7 },
+      "hybrid.screenTrace": { rayTracing: 1, temporalReuse: 0.4 },
+      "hybrid.radianceCache": {
+        lightingSamples: 0.8,
+        updateCadence: 0.7,
+        temporalReuse: 1,
+      },
+      "hybrid.finalGather": { lightingSamples: 1, rayTracing: 0.6 },
+      "hybrid.reflectionResolve": {
+        rayTracing: 0.5,
+        temporalReuse: 1,
+        shading: 0.3,
+      },
+      "pathtracer.pathTrace": { rayTracing: 1, lightingSamples: 1 },
+      "pathtracer.accumulate": { temporalReuse: 1, updateCadence: 0.4 },
+      "pathtracer.denoise": { temporalReuse: 1, shading: 0.4 },
+      "volumetrics.froxelIntegrate": {
+        lightingSamples: 0.6,
+        shading: 0.4,
+        updateCadence: 0.3,
+      },
+      "volumetrics.volumetricShadow": { shadows: 0.8, updateCadence: 0.5 },
+      "hdri.irradianceConvolution": {
+        lightingSamples: 0.4,
+        temporalReuse: 1,
+        updateCadence: 1,
+      },
+      "hdri.specularPrefilter": {
+        lightingSamples: 0.5,
+        temporalReuse: 1,
+        updateCadence: 1,
+      },
+      "hdri.brdfLut": {
+        shading: 0.4,
+        temporalReuse: 1,
+        updateCadence: 1,
+      },
+    }[key] ?? {}
+  );
+}
+
+function resolveLightingImportanceSignals(techniqueName, jobKey) {
+  const key = `${techniqueName}.${jobKey}`;
+  return Object.freeze(
+    {
+      "hybrid.directLighting": { visible: true, shadowSignificance: "high" },
+      "hybrid.screenTrace": { visible: true, reflectionSignificance: "high" },
+      "hybrid.radianceCache": { visible: true },
+      "hybrid.finalGather": {
+        visible: true,
+        shadowSignificance: "critical",
+        reflectionSignificance: "high",
+      },
+      "hybrid.reflectionResolve": { visible: true, reflectionSignificance: "high" },
+      "pathtracer.pathTrace": {
+        visible: true,
+        shadowSignificance: "high",
+        reflectionSignificance: "high",
+      },
+      "pathtracer.accumulate": { visible: true },
+      "pathtracer.denoise": { visible: true },
+      "volumetrics.froxelIntegrate": { visible: true },
+      "volumetrics.volumetricShadow": { visible: true, shadowSignificance: "high" },
+      "hdri.irradianceConvolution": { visible: false },
+      "hdri.specularPrefilter": { visible: false, reflectionSignificance: "medium" },
+      "hdri.brdfLut": { visible: false },
+    }[key] ?? {}
+  );
+}
+
 function buildWorkerManifestJob(techniqueName, job) {
   const spec = lightingWorkerSpecPresets[techniqueName].jobs[job.key];
   const dag = lightingWorkerDagSpecs[techniqueName][job.key];
@@ -737,6 +952,8 @@ function buildWorkerManifestJob(techniqueName, job) {
       domain: spec.domain,
       authority: "visual",
       importance: spec.importance,
+      qualityDimensions: resolveLightingQualityDimensions(techniqueName, job.key),
+      importanceSignals: resolveLightingImportanceSignals(techniqueName, job.key),
       levels: spec.levels,
     }),
     debug: Object.freeze({
@@ -830,6 +1047,7 @@ export function getLightingProfileWorkerManifest(
   const techniques = profile.techniques.map((techniqueName) =>
     getLightingTechniqueWorkerManifest(techniqueName)
   );
+  const lightingBandPlan = createLightingBandPlan({ profile: profile.name });
 
   return Object.freeze({
     schemaVersion: 1,
@@ -838,6 +1056,7 @@ export function getLightingProfileWorkerManifest(
     description: profile.description,
     schedulerMode: "dag",
     techniques: Object.freeze(techniques),
+    lightingBands: lightingBandPlan.bands,
     jobs: Object.freeze(techniques.flatMap((technique) => technique.jobs)),
   });
 }
@@ -1011,6 +1230,7 @@ export async function loadLightingProfileWorkerPlan(
   return {
     profile,
     techniques,
+    lightingBandPlan: createLightingBandPlan({ profile: profile.name }),
     workerManifest: getLightingProfileWorkerManifest(profile.name),
   };
 }

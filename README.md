@@ -71,6 +71,24 @@ const profileManifest = getLightingProfileWorkerManifest("realtime");
 console.log(profileManifest.jobs.map((job) => job.worker.jobType));
 ```
 
+## Distance-Banded Lighting
+
+```js
+import { createLightingBandPlan } from "@plasius/gpu-lighting";
+
+const bandPlan = createLightingBandPlan({
+  profile: "realtime",
+  importance: "high",
+});
+
+console.log(bandPlan.bands.map((band) => band.primaryShadowSource));
+console.log(bandPlan.bands.find((band) => band.band === "near").rtParticipation);
+```
+
+Band plans make near, mid, far, and horizon shadow sources explicit, keep RT
+shadow/reflection/GI participation independent, and publish temporal reuse plus
+update cadence expectations for downstream renderer and performance packages.
+
 ## DAG Scheduling
 
 Lighting worker manifests now publish `schedulerMode: "dag"` plus per-job

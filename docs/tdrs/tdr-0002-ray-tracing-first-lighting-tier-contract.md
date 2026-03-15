@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Accepted
 
 ## Goal
 
@@ -51,3 +51,11 @@ Unit tests should prove that:
   band contract
 - horizon lighting is represented as a far-field impression rather than a live
   per-object shadow system
+
+## Implementation Notes
+
+The first public implementation now ships as `createLightingBandPlan(...)`,
+with `getLightingProfileWorkerManifest(...)` also exposing `lightingBands`.
+The package now publishes explicit banded shadow sources, independent RT
+participation policy for shadows/reflections/GI, and explicit temporal reuse
+plus update cadence metadata.

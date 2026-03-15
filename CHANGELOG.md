@@ -11,9 +11,15 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 - **Added**
   - ADR, TDR, and test-first planning coverage for distance-banded lighting and
     shadow-source strategy in the ray-tracing-first renderer.
+  - Added `createLightingBandPlan(...)` and public near/mid/far/horizon
+    lighting-band exports.
+  - Added tests covering explicit banded shadow sources, RT participation
+    scaling, cadence policy, and horizon impression behavior.
 
 - **Changed**
-  - (placeholder)
+  - Profile worker manifests now publish `lightingBands`, and technique worker
+    jobs now carry ray-tracing-first quality dimension metadata for downstream
+    `@plasius/gpu-performance` integrations.
 
 - **Fixed**
   - (placeholder)
