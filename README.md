@@ -153,6 +153,9 @@ npm run demo
 
 Then open `http://localhost:8000/gpu-lighting/demo/`.
 
+The demo is intentionally catalog-first. It does not mount a 3D canvas; it
+shows profile, technique, and worker-planning state.
+
 ## Development Checks
 
 ```sh

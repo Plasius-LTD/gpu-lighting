@@ -7,6 +7,17 @@ import {
 
 const profileList = document.getElementById("profiles");
 const techniqueList = document.getElementById("techniques");
+const displayBadge = document.getElementById("displayBadge");
+const displayDetails = document.getElementById("displayDetails");
+
+function setDisplayState(badge, details) {
+  if (displayBadge) {
+    displayBadge.textContent = badge;
+  }
+  if (displayDetails) {
+    displayDetails.textContent = details;
+  }
+}
 
 for (const profileName of lightingProfileNames) {
   const profile = getLightingProfile(profileName);
@@ -23,3 +34,9 @@ for (const techniqueName of lightingTechniqueNames) {
     .join(", ")}`;
   techniqueList.appendChild(item);
 }
+
+setDisplayState(
+  "Catalog demo",
+  `No 3D canvas is mounted here. This demo shows ${lightingProfileNames.length} profile(s) ` +
+    `and ${lightingTechniqueNames.length} technique catalog entry point(s).`
+);
