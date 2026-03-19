@@ -26,6 +26,18 @@ Apache-2.0. ESM + CJS builds. WGSL assets are published in `dist/`.
 npm install @plasius/gpu-lighting
 ```
 
+## Browser Demo
+
+```bash
+npm run demo
+```
+
+Then open `http://localhost:8000/gpu-lighting/demo/`.
+
+The browser demo now mounts the shared 3D harbor validation scene instead of a
+catalog-only page, so lighting-band behavior is visible against GLTF ships,
+water, and cloth.
+
 ## Usage (load one technique)
 
 ```js

@@ -9,10 +9,11 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
-  - (placeholder)
+  - A browser-based 3D harbor demo so lighting band behavior is visible against
+    GLTF ships, cloth, and water instead of a catalog-only page.
 
 - **Changed**
-  - (placeholder)
+  - `demo/main.js` now mounts the shared 3D showcase runtime.
 
 - **Fixed**
   - (placeholder)
