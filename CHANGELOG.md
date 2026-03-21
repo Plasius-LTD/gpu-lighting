@@ -13,8 +13,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
     GLTF ships, cloth, and water instead of a catalog-only page.
 
 - **Changed**
-  - `gpu-lighting/demo/` now delegates its 3D harbor scene to the shared
-    `gpu-demo-viewer` showcase runtime instead of carrying a package-local copy
+- `gpu-lighting/demo/` now delegates its 3D harbor scene to the shared
+    `@plasius/gpu-shared` showcase runtime instead of carrying a package-local copy
     of the renderer and loader logic.
   - The harbor runtime now renders stronger near-field shadow projection and
     reflection accents so the lighting bands read closer to the intended

@@ -59,7 +59,7 @@ function describeState(state, scene) {
       `horizon impression: ${bandPlan.bands[3]?.impressionOnly ? "yes" : "no"}`,
     ],
     notes: [
-      "This demo now runs on the shared gpu-demo-viewer harbor runtime instead of carrying its own renderer copy.",
+      "This demo now runs on the shared @plasius/gpu-shared harbor runtime instead of carrying its own renderer copy.",
       "The near field keeps premium lighting behavior while mid and far fields visibly step down.",
       "Stress mode preserves continuity but cools the scene and reduces reflection strength.",
     ],

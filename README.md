@@ -34,9 +34,9 @@ npm run demo
 
 Then open `http://localhost:8000/gpu-lighting/demo/`.
 
-The browser demo now mounts the shared 3D harbor validation scene instead of a
-catalog-only page, so lighting-band behavior is visible against GLTF ships,
-water, and cloth.
+The browser demo now mounts the shared 3D harbor validation scene from
+`@plasius/gpu-shared` instead of a catalog-only page, so lighting-band behavior
+is visible against GLTF ships, water, and cloth.
 
 ## Usage (load one technique)
 
