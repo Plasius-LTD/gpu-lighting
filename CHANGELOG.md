@@ -13,7 +13,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
     GLTF ships, cloth, and water instead of a catalog-only page.
 
 - **Changed**
-  - `demo/main.js` now mounts the shared 3D showcase runtime.
+  - `gpu-lighting/demo/` is now self-contained, with a local harbor runtime,
+    GLTF ship asset, and loader instead of a sibling-repo showcase import.
 
 - **Fixed**
   - (placeholder)
