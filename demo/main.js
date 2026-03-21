@@ -59,7 +59,7 @@ function describeState(state, scene) {
       `horizon impression: ${bandPlan.bands[3]?.impressionOnly ? "yes" : "no"}`,
     ],
     notes: [
-      "This demo now runs entirely from gpu-lighting/demo without reaching into sibling repos.",
+      "This demo now runs on the shared gpu-demo-viewer harbor runtime instead of carrying its own renderer copy.",
       "The near field keeps premium lighting behavior while mid and far fields visibly step down.",
       "Stress mode preserves continuity but cools the scene and reduces reflection strength.",
     ],
@@ -97,7 +97,7 @@ await mountHarborShowcase({
   packageName: "@plasius/gpu-lighting",
   title: "Lighting Bands in a 3D Harbor",
   subtitle:
-    "Package-local 3D lighting validation with GLTF ships, collision metadata, and visible near/mid/far lighting policy shifts.",
+    "Family-coordinated 3D lighting validation with GLTF ships, collision metadata, and visible near/mid/far lighting policy shifts.",
   createState,
   updateState,
   describeState,
