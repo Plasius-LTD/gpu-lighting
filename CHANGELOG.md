@@ -15,9 +15,13 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 - **Changed**
   - `gpu-lighting/demo/` is now self-contained, with a local harbor runtime,
     GLTF ship asset, and loader instead of a sibling-repo showcase import.
+  - The harbor runtime now renders stronger near-field shadow projection and
+    reflection accents so the lighting bands read closer to the intended
+    ray-traced lighting path.
 
 - **Fixed**
-  - (placeholder)
+  - The package-local lighting demo now gives a clear visual result instead of
+    looking like a flat catalog surface.
 
 - **Security**
   - (placeholder)
