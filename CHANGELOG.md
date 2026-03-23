@@ -9,6 +9,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.1.10] - 2026-03-23
+
+- **Added**
   - A browser-based 3D harbor demo so lighting band behavior is visible against
     GLTF ships, cloth, and water instead of a catalog-only page.
 
@@ -171,3 +185,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.7]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.7
 [0.1.8]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.8
 [0.1.9]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.9
+[0.1.10]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.10
