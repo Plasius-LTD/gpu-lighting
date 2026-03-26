@@ -26,7 +26,7 @@
   "scripts": {
     "build": "tsup && cp -R src/techniques dist/techniques",
     "demo": "python3 -m http.server --directory ..",
-    "typecheck": "node --check src/index.js",
+    "typecheck": "node --check src/index.js && node --check demo/lighting-demo-config.js && node --check demo/main.js",
     "audit:eslint": "eslint . --max-warnings=0",
     "audit:deps": "npm ls --all --omit=optional --omit=peer > /dev/null 2>&1 || true",
     "audit:npm": "npm audit --audit-level=high --omit=dev",

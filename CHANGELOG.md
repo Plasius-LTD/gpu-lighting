@@ -9,10 +9,15 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
-  - (placeholder)
+  - Demo contract tests that lock the shared 3D harbor mount options and the
+    visible lighting state catalog surfaced by `gpu-lighting/demo/`.
 
 - **Changed**
-  - (placeholder)
+  - The browser demo now imports `@plasius/gpu-shared` through an import map
+    and public package import instead of a deep internal `node_modules/.../dist`
+    path.
+  - README guidance now consistently describes the mounted 3D harbor demo
+    instead of mixing in stale catalog-only text.
 
 - **Fixed**
   - (placeholder)

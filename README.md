@@ -38,6 +38,10 @@ The browser demo now mounts the shared 3D harbor validation scene from
 `@plasius/gpu-shared` instead of a catalog-only page, so lighting-band behavior
 is visible against GLTF ships, water, and cloth.
 
+For browser-only serving, the demo resolves `@plasius/gpu-shared` through an
+import map so the page stays on the published package surface rather than a
+package-private source path.
+
 ## Usage (load one technique)
 
 ```js
@@ -164,9 +168,8 @@ npm run demo
 ```
 
 Then open `http://localhost:8000/gpu-lighting/demo/`.
-
-The demo is intentionally catalog-first. It does not mount a 3D canvas; it
-shows profile, technique, and worker-planning state.
+The mounted 3D scene keeps the lighting profile, band-policy, and worker-state
+catalog visible while rendering the shared harbor validation surface.
 
 ## Development Checks
 
