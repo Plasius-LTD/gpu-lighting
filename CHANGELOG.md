@@ -9,6 +9,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.1.11] - 2026-04-02
+
+- **Added**
   - Demo contract tests that lock the shared 3D harbor mount options and the
     visible lighting state catalog surfaced by `gpu-lighting/demo/`.
 
@@ -191,3 +205,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.8]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.8
 [0.1.9]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.9
 [0.1.10]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.10
+[0.1.11]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.11
