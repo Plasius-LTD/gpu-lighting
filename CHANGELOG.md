@@ -15,7 +15,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Fixed**
-  - (placeholder)
+  - Keep import metadata out of direct URL constructor calls so browser
+    bundlers do not rewrite the lighting module base into a `data:` asset URL.
 
 - **Security**
   - (placeholder)

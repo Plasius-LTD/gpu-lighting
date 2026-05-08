@@ -84,8 +84,8 @@ test("module base does not use a browser-bundler asset URL pattern", () => {
 
   assert.doesNotMatch(
     source,
-    /new URL\(\s*["'`]\.\/index\.js["'`]\s*,\s*__IMPORT_META_URL__\s*\)/,
-    "browser bundlers rewrite static new URL('./index.js', import.meta.url) expressions into asset URLs"
+    /new URL\(\s*(?:["'`]\.\/index\.js["'`]\s*,\s*)?__IMPORT_META_URL__\s*\)/,
+    "browser bundlers rewrite direct new URL(import.meta.url) patterns into asset URLs"
   );
 });
 
