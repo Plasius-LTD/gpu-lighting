@@ -1,5 +1,5 @@
 function createModuleBaseUrl(metaUrl) {
-  return new URL(String(metaUrl));
+  return Reflect.construct(URL, [String(metaUrl)]);
 }
 
 const baseUrl = (() => {
