@@ -15,6 +15,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.1.14] - 2026-05-08
+
+- **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
   - Use an opaque URL constructor path for import metadata so Vite/Rolldown
     cannot inline the lighting module URL as a generated `data:` asset.
 
@@ -239,3 +253,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.11]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.11
 [0.1.12]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.12
 [0.1.13]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.13
+[0.1.14]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.14
