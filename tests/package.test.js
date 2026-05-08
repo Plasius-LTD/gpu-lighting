@@ -76,6 +76,31 @@ test("default lighting technique prelude URL points at hybrid prelude", () => {
   );
 });
 
+test("module base does not use a browser-bundler asset URL pattern", () => {
+  const source = fs.readFileSync(
+    path.resolve(__dirname, "..", "src", "index.js"),
+    "utf8"
+  );
+
+  assert.doesNotMatch(
+    source,
+    /new URL\(\s*["'`]\.\/index\.js["'`]\s*,\s*__IMPORT_META_URL__\s*\)/,
+    "browser bundlers rewrite static new URL('./index.js', import.meta.url) expressions into asset URLs"
+  );
+});
+
+test("browser-like module metadata resolves technique URLs from the package", async () => {
+  const module = await importLightingModuleWithBase(
+    "https://lighting.example/pkg/dist/index.js",
+    "browser-module-url"
+  );
+
+  assert.equal(
+    module.lightingPreludeWgslUrl.href,
+    "https://lighting.example/pkg/dist/techniques/hybrid/prelude.wgsl"
+  );
+});
+
 test("lighting job WGSL defines process_job entry points", () => {
   for (const techniqueName of lightingTechniqueNames) {
     const technique = lightingTechniques[techniqueName];
