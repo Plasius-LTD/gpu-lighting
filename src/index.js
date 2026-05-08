@@ -1,6 +1,6 @@
 const baseUrl = (() => {
   if (typeof __IMPORT_META_URL__ !== "undefined") {
-    return new URL("./index.js", __IMPORT_META_URL__);
+    return new URL(__IMPORT_META_URL__);
   }
   if (typeof __filename !== "undefined" && typeof require !== "undefined") {
     const { pathToFileURL } = require("node:url");

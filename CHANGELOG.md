@@ -15,7 +15,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Fixed**
-  - (placeholder)
+  - Prevent browser bundlers from rewriting the lighting module base URL into a
+    `data:` asset URL before technique WGSL URLs are constructed.
 
 - **Security**
   - (placeholder)
