@@ -15,6 +15,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.1.12] - 2026-05-08
+
+- **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
   - Prevent browser bundlers from rewriting the lighting module base URL into a
     `data:` asset URL before technique WGSL URLs are constructed.
 
@@ -207,3 +221,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.9]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.9
 [0.1.10]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.10
 [0.1.11]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.11
+[0.1.12]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.12
