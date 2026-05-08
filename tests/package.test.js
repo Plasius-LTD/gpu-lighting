@@ -84,8 +84,13 @@ test("module base does not use a browser-bundler asset URL pattern", () => {
 
   assert.doesNotMatch(
     source,
-    /new URL\(\s*(?:["'`]\.\/index\.js["'`]\s*,\s*)?__IMPORT_META_URL__\s*\)/,
+    /new URL\(\s*(?:String\(\s*)?(?:["'`]\.\/index\.js["'`]\s*,\s*)?__IMPORT_META_URL__/,
     "browser bundlers rewrite direct new URL(import.meta.url) patterns into asset URLs"
+  );
+  assert.match(
+    source,
+    /Reflect\.construct\(\s*URL,\s*\[\s*String\(metaUrl\)\s*\]\s*\)/,
+    "import metadata must be converted through an opaque constructor call"
   );
 });
 

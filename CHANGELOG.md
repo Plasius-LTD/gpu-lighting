@@ -15,7 +15,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Fixed**
-  - (placeholder)
+  - Use an opaque URL constructor path for import metadata so Vite/Rolldown
+    cannot inline the lighting module URL as a generated `data:` asset.
 
 - **Security**
   - (placeholder)
