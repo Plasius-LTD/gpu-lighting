@@ -7,12 +7,15 @@ import { fileURLToPath } from "node:url";
 const originalImportMetaUrl = globalThis.__IMPORT_META_URL__;
 globalThis.__IMPORT_META_URL__ = new URL("../src/index.js", import.meta.url);
 const {
+  createLightingProfileModeLadder,
+  defaultAdaptiveLightingProfilePolicy,
   defaultLightingProfile,
   defaultLightingTechnique,
   getLightingProfile,
   getLightingProfileWorkerManifest,
   getLightingTechnique,
   getLightingTechniqueWorkerManifest,
+  lightingProfileModeOrder,
   lightingProfileNames,
   lightingProfiles,
   lightingPreludeWgslUrl,
@@ -116,6 +119,84 @@ test("lighting job WGSL defines process_job entry points", () => {
   }
 });
 
+test("pathtracer prelude publishes concrete scene, history, and environment contracts", () => {
+  const source = fs.readFileSync(
+    path.resolve(
+      __dirname,
+      "..",
+      "src",
+      "techniques",
+      "pathtracer",
+      "prelude.wgsl"
+    ),
+    "utf8"
+  );
+
+  assert.match(source, /struct PathTracerCamera/);
+  assert.match(source, /struct PathTracerSceneMetadata/);
+  assert.match(source, /struct PathAccumulationPixel/);
+  assert.match(source, /fn environment_radiance/);
+});
+
+test("reference pathtracer WGSL stages are real kernels rather than placeholders", () => {
+  const base = path.resolve(
+    __dirname,
+    "..",
+    "src",
+    "techniques",
+    "pathtracer"
+  );
+  const pathTrace = fs.readFileSync(path.join(base, "pathtrace.job.wgsl"), "utf8");
+  const accumulate = fs.readFileSync(path.join(base, "accumulate.job.wgsl"), "utf8");
+  const denoise = fs.readFileSync(path.join(base, "denoise.job.wgsl"), "utf8");
+
+  assert.match(pathTrace, /@compute\s+@workgroup_size/);
+  assert.match(pathTrace, /fn trace_scene\b/);
+  assert.match(pathTrace, /samples_per_pixel/);
+  assert.match(pathTrace, /max_bounces/);
+  assert.doesNotMatch(pathTrace, /Placeholder/);
+
+  assert.match(accumulate, /PathAccumulationPixel/);
+  assert.match(accumulate, /history_blend/);
+  assert.doesNotMatch(accumulate, /Placeholder/);
+
+  assert.match(denoise, /fn bilateral_weight\b/);
+  assert.match(denoise, /filtered_radiance/);
+  assert.doesNotMatch(denoise, /Placeholder/);
+});
+
+test("hybrid reflection resolve WGSL traces and shapes reflections by surface response", () => {
+  const prelude = fs.readFileSync(
+    path.resolve(
+      __dirname,
+      "..",
+      "src",
+      "techniques",
+      "hybrid",
+      "prelude.wgsl"
+    ),
+    "utf8"
+  );
+  const resolve = fs.readFileSync(
+    path.resolve(
+      __dirname,
+      "..",
+      "src",
+      "techniques",
+      "hybrid",
+      "reflection-resolve.job.wgsl"
+    ),
+    "utf8"
+  );
+
+  assert.match(prelude, /struct HybridReflectionSurface/);
+  assert.match(prelude, /struct HybridReflectionPixel/);
+  assert.match(resolve, /fn trace_reflection_scene\b/);
+  assert.match(resolve, /reflect\(/);
+  assert.match(resolve, /HybridReflectionPixel/);
+  assert.doesNotMatch(resolve, /Placeholder/);
+});
+
 test("lighting profiles reference known techniques", () => {
   assert.ok(lightingProfileNames.length > 0);
   for (const profileName of lightingProfileNames) {
@@ -128,6 +209,63 @@ test("lighting profiles reference known techniques", () => {
       );
     }
   }
+});
+
+test("adaptive lighting profile defaults keep reference mode eligible at a 30 FPS four-frame floor", () => {
+  assert.deepEqual(lightingProfileModeOrder, [
+    "realtime",
+    "hybrid",
+    "reference",
+  ]);
+  assert.deepEqual(defaultAdaptiveLightingProfilePolicy, {
+    preferredProfile: "reference",
+    minimumFrameRate: 30,
+    sampleWindowSize: 4,
+  });
+
+  const ladder = createLightingProfileModeLadder();
+
+  assert.equal(ladder.id, "lighting-profile-mode");
+  assert.equal(ladder.domain, "lighting");
+  assert.equal(ladder.authority, "visual");
+  assert.equal(ladder.importance, "critical");
+  assert.equal(ladder.initialLevel, "reference");
+  assert.deepEqual(
+    ladder.levels.map((level) => level.id),
+    lightingProfileModeOrder
+  );
+  assert.equal(ladder.target.minimumFrameRate, 30);
+  assert.equal(ladder.target.maximumFrameRate, 30);
+  assert.deepEqual(ladder.target.preferredFrameRates, [30]);
+  assert.equal(ladder.adaptation.sampleWindowSize, 4);
+  assert.equal(ladder.adaptation.minimumSamplesBeforeAdjustment, 4);
+  assert.equal(ladder.policy.preferredProfile, "reference");
+
+  const referenceLevel = ladder.levels.find((level) => level.id === "reference");
+  assert.ok(referenceLevel);
+  assert.equal(referenceLevel.config.profile, "reference");
+  assert.ok(referenceLevel.config.techniques.includes("pathtracer"));
+  assert.equal(referenceLevel.config.lightingBandPlan.profile, "reference");
+});
+
+test("adaptive lighting profile ladder supports custom governor window and initial profile overrides", () => {
+  const ladder = createLightingProfileModeLadder({
+    id: "game-lighting-profile-mode",
+    initialProfile: "hybrid",
+    preferredProfile: "reference",
+    minimumFrameRate: 36,
+    sampleWindowSize: 6,
+    importance: "critical",
+    moduleImportance: "high",
+  });
+
+  assert.equal(ladder.id, "game-lighting-profile-mode");
+  assert.equal(ladder.initialLevel, "hybrid");
+  assert.equal(ladder.importance, "high");
+  assert.equal(ladder.target.minimumFrameRate, 36);
+  assert.equal(ladder.adaptation.sampleWindowSize, 6);
+  assert.equal(ladder.policy.sampleWindowSize, 6);
+  assert.equal(ladder.levels[2].config.lightingBandPlan.importance, "critical");
 });
 
 test("loading default profile returns loaded technique bundles", async () => {

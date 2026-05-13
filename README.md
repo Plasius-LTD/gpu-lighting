@@ -121,6 +121,7 @@ Lighting worker manifests now publish `schedulerMode: "dag"` plus per-job
 
 ```js
 import {
+  createLightingProfileModeLadder,
   getLightingProfile,
   loadLightingProfile,
 } from "@plasius/gpu-lighting";
@@ -130,7 +131,56 @@ const profile = getLightingProfile("realtime");
 
 const plan = await loadLightingProfile("realtime");
 // plan.techniques is an array of loaded prelude+job WGSL bundles.
+
+const modeLadder = createLightingProfileModeLadder();
+// modeLadder exposes reference -> hybrid -> realtime ordering for gpu-performance.
 ```
+
+## Usage (reference-first performance ladder)
+
+```js
+import {
+  createGpuPerformanceGovernor,
+  createQualityLadderAdapter,
+} from "@plasius/gpu-performance";
+import {
+  createLightingProfileModeLadder,
+} from "@plasius/gpu-lighting";
+
+const lightingModePlan = createLightingProfileModeLadder({
+  initialProfile: "reference",
+});
+const lightingMode = createQualityLadderAdapter(lightingModePlan);
+
+const governor = createGpuPerformanceGovernor({
+  device,
+  modules: [lightingMode],
+  target: lightingModePlan.target,
+  adaptation: lightingModePlan.adaptation,
+});
+```
+
+`createLightingProfileModeLadder()` publishes the policy contract for the
+reference-first mode you described:
+
+- start from `reference`
+- keep a 4-frame adaptation window
+- hold the premium mode while the negotiated average remains at or above `30`
+  FPS
+- degrade the whole lighting profile to `hybrid`, then `realtime`, only when
+  that window can no longer sustain the budget
+
+The package now ships concrete WGSL contracts for:
+
+- `pathtracer.pathTrace`: analytic scene tracing, bounce integration, and sky fallback
+- `pathtracer.accumulate`: progressive history resolve with reset handling
+- `pathtracer.denoise`: spatial-temporal bilateral filtering for reference previews
+- `hybrid.reflectionResolve`: surface-aware reflection shading with roughness/fresnel shaping
+
+This is still a catalog/planning package rather than proof of a finished
+end-to-end renderer. Downstream runtimes such as `@plasius/gpu-renderer` still
+need to bind real scene buffers and execute these kernels on the live frame
+graph.
 
 ## Profiles
 
