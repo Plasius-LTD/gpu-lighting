@@ -9,10 +9,19 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
-  - (placeholder)
+  - Added `createLightingProfileModeLadder()` plus default reference-first
+    policy metadata so downstream runtimes can expose `reference`, `hybrid`,
+    and `realtime` as governor-managed lighting modes with a `30` FPS, `4`
+    frame adaptive window.
+  - Replaced the placeholder `pathtracer` WGSL jobs with concrete path trace,
+    accumulation, and denoise kernels plus a concrete hybrid
+    `reflectionResolve` WGSL stage.
 
 - **Changed**
-  - (placeholder)
+  - Documented that the new reference-first ladder is a performance-planning
+    contract for real renderers, and that the shipped WGSL kernels still
+    require downstream renderer integration before they become a live RT frame
+    path.
 
 - **Fixed**
   - (placeholder)

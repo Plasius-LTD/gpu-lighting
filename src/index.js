@@ -131,6 +131,16 @@ export const lightingProfiles = Object.freeze(
 export const lightingProfileNames = Object.freeze(Object.keys(lightingProfiles));
 
 export const defaultLightingProfile = "realtime";
+export const lightingProfileModeOrder = Object.freeze([
+  "realtime",
+  "hybrid",
+  "reference",
+]);
+export const defaultAdaptiveLightingProfilePolicy = Object.freeze({
+  preferredProfile: "reference",
+  minimumFrameRate: 30,
+  sampleWindowSize: 4,
+});
 export const lightingDistanceBands = Object.freeze([
   "near",
   "mid",
@@ -196,6 +206,23 @@ function assertLightingImportance(name, value) {
       `${name} must be one of: ${lightingImportanceLevels.join(", ")}.`
     );
   }
+  return value;
+}
+
+function readPositiveIntegerOption(name, value, fallback) {
+  if (value === undefined) {
+    return fallback;
+  }
+
+  if (
+    typeof value !== "number" ||
+    !Number.isFinite(value) ||
+    value <= 0 ||
+    Math.round(value) !== value
+  ) {
+    throw new Error(`${name} must be a positive integer.`);
+  }
+
   return value;
 }
 
@@ -273,6 +300,93 @@ export function createLightingBandPlan(options = {}) {
     importance,
     techniques: Object.freeze([...profile.techniques]),
     bands,
+  });
+}
+
+const lightingProfileModeEstimatedCostMs = Object.freeze({
+  realtime: 4.5,
+  hybrid: 7.5,
+  reference: 12.5,
+});
+
+export function createLightingProfileModeLadder(options = {}) {
+  const moduleId =
+    typeof options.id === "string" && options.id.trim().length > 0
+      ? options.id.trim()
+      : "lighting-profile-mode";
+  const preferredProfile = getLightingProfile(
+    options.preferredProfile ?? defaultAdaptiveLightingProfilePolicy.preferredProfile
+  ).name;
+  const initialProfile = getLightingProfile(
+    options.initialProfile ?? preferredProfile
+  ).name;
+  const minimumFrameRate = readPositiveIntegerOption(
+    "minimumFrameRate",
+    options.minimumFrameRate,
+    defaultAdaptiveLightingProfilePolicy.minimumFrameRate
+  );
+  const sampleWindowSize = readPositiveIntegerOption(
+    "sampleWindowSize",
+    options.sampleWindowSize,
+    defaultAdaptiveLightingProfilePolicy.sampleWindowSize
+  );
+  const importance = assertLightingImportance(
+    "importance",
+    options.importance ?? "high"
+  );
+  const moduleImportance = assertLightingImportance(
+    "moduleImportance",
+    options.moduleImportance ?? "critical"
+  );
+
+  const levels = Object.freeze(
+    lightingProfileModeOrder.map((profileName) => {
+      const profile = getLightingProfile(profileName);
+      return Object.freeze({
+        id: profile.name,
+        estimatedCostMs: lightingProfileModeEstimatedCostMs[profile.name],
+        config: Object.freeze({
+          profile: profile.name,
+          description: profile.description,
+          techniques: Object.freeze([...profile.techniques]),
+          lightingBandPlan: createLightingBandPlan({
+            profile: profile.name,
+            importance,
+          }),
+          policy: Object.freeze({
+            preferredProfile,
+            minimumFrameRate,
+            sampleWindowSize,
+          }),
+        }),
+      });
+    })
+  );
+
+  return Object.freeze({
+    id: moduleId,
+    domain: "lighting",
+    authority: "visual",
+    importance: moduleImportance,
+    initialLevel: initialProfile,
+    levels,
+    target: Object.freeze({
+      minimumFrameRate,
+      maximumFrameRate: minimumFrameRate,
+      preferredFrameRates: Object.freeze([minimumFrameRate]),
+    }),
+    adaptation: Object.freeze({
+      sampleWindowSize,
+      minimumSamplesBeforeAdjustment: sampleWindowSize,
+      degradeCooldownFrames: 1,
+      upgradeCooldownFrames: sampleWindowSize,
+      minStableFramesForRecovery: sampleWindowSize,
+    }),
+    policy: Object.freeze({
+      preferredProfile,
+      minimumFrameRate,
+      sampleWindowSize,
+    }),
   });
 }
 
