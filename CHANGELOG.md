@@ -20,6 +20,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 - **Security**
   - (placeholder)
 
+## [0.1.15] - 2026-05-13
+
+- **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
 ## [0.1.14] - 2026-05-08
 
 - **Added**
@@ -254,3 +268,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.12]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.12
 [0.1.13]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.13
 [0.1.14]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.14
+[0.1.15]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.15
