@@ -9,6 +9,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.1.17] - 2026-05-13
+
+- **Added**
   - Added `createLightingProfileModeLadder()` plus default reference-first
     policy metadata so downstream runtimes can expose `reference`, `hybrid`,
     and `realtime` as governor-managed lighting modes with a `30` FPS, `4`
@@ -293,3 +307,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.14]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.14
 [0.1.15]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.15
 [0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
+[0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
