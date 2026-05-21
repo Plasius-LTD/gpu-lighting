@@ -172,6 +172,10 @@ reference-first mode you described:
 
 The package now ships concrete WGSL contracts for:
 
+- `hybrid.directLighting`: direct sun/sky resolve with roughness-aware specular shaping
+- `hybrid.screenTrace`: first-hit reflection tracing over the shared hybrid scene contracts
+- `hybrid.radianceCache`: irradiance history updates for cache-backed indirect reuse
+- `hybrid.finalGather`: cache + trace composition with temporal reuse for the hybrid GI path
 - `pathtracer.pathTrace`: analytic scene tracing, bounce integration, and sky fallback
 - `pathtracer.accumulate`: progressive history resolve with reset handling
 - `pathtracer.denoise`: spatial-temporal bilateral filtering for reference previews

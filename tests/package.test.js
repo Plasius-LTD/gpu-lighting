@@ -197,6 +197,52 @@ test("hybrid reflection resolve WGSL traces and shapes reflections by surface re
   assert.doesNotMatch(resolve, /Placeholder/);
 });
 
+test("hybrid realtime WGSL stages are real kernels rather than placeholders", () => {
+  const base = path.resolve(
+    __dirname,
+    "..",
+    "src",
+    "techniques",
+    "hybrid"
+  );
+  const directLighting = fs.readFileSync(
+    path.join(base, "direct-lighting.job.wgsl"),
+    "utf8"
+  );
+  const screenTrace = fs.readFileSync(
+    path.join(base, "screen-trace.job.wgsl"),
+    "utf8"
+  );
+  const radianceCache = fs.readFileSync(
+    path.join(base, "radiance-cache.job.wgsl"),
+    "utf8"
+  );
+  const finalGather = fs.readFileSync(
+    path.join(base, "final-gather.job.wgsl"),
+    "utf8"
+  );
+
+  assert.match(directLighting, /HybridLightingPixel/);
+  assert.match(directLighting, /evaluate_direct_sun/);
+  assert.match(directLighting, /@compute\s+@workgroup_size/);
+  assert.doesNotMatch(directLighting, /Placeholder/);
+
+  assert.match(screenTrace, /trace_screen_scene/);
+  assert.match(screenTrace, /HybridScreenTracePixel/);
+  assert.match(screenTrace, /HybridReflectionTrace/);
+  assert.doesNotMatch(screenTrace, /Placeholder/);
+
+  assert.match(radianceCache, /HybridRadianceCacheEntry/);
+  assert.match(radianceCache, /resolved_irradiance/);
+  assert.match(radianceCache, /history_weight/);
+  assert.doesNotMatch(radianceCache, /Placeholder/);
+
+  assert.match(finalGather, /HybridLightingPixel/);
+  assert.match(finalGather, /indirect_gi/);
+  assert.match(finalGather, /reflection_term/);
+  assert.doesNotMatch(finalGather, /Placeholder/);
+});
+
 test("lighting profiles reference known techniques", () => {
   assert.ok(lightingProfileNames.length > 0);
   for (const profileName of lightingProfileNames) {
