@@ -71,6 +71,21 @@ struct HybridReflectionPixel {
   hit_normal_distance: vec4<f32>,
 };
 
+struct HybridLightingPixel {
+  radiance_confidence: vec4<f32>,
+  normal_occlusion: vec4<f32>,
+};
+
+struct HybridScreenTracePixel {
+  radiance_confidence: vec4<f32>,
+  hit_normal_distance: vec4<f32>,
+};
+
+struct HybridRadianceCacheEntry {
+  irradiance_validity: vec4<f32>,
+  bent_normal_depth: vec4<f32>,
+};
+
 fn encode_history_weight(value: f32) -> f32 {
   return clamp(value, 0.0, 1.0);
 }
@@ -90,6 +105,14 @@ fn hybrid_safe_normalize(value: vec3<f32>) -> vec3<f32> {
 fn hybrid_fresnel_schlick(cos_theta: f32, f0: vec3<f32>) -> vec3<f32> {
   let factor = pow(1.0 - hybrid_saturate(cos_theta), 5.0);
   return f0 + (vec3<f32>(1.0) - f0) * factor;
+}
+
+fn hybrid_surface_f0(albedo: vec3<f32>, metalness: f32) -> vec3<f32> {
+  return vec3<f32>(0.04) * (1.0 - metalness) + albedo * metalness;
+}
+
+fn hybrid_luminance(color: vec3<f32>) -> f32 {
+  return dot(color, vec3<f32>(0.2126, 0.7152, 0.0722));
 }
 
 fn hybrid_hash_u32(value: u32) -> u32 {

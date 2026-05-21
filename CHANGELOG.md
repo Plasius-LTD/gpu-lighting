@@ -9,13 +9,17 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
-  - (placeholder)
+  - Concrete hybrid realtime WGSL kernels for `directLighting`,
+    `screenTrace`, `radianceCache`, and `finalGather`.
 
 - **Changed**
-  - (placeholder)
+  - README now documents the delivered hybrid realtime kernel scope alongside
+    the existing pathtracer and reflection-resolve stages.
 
 - **Fixed**
-  - (placeholder)
+  - Hybrid realtime technique exports no longer ship placeholder WGSL bodies
+    for the direct-lighting, screen-trace, radiance-cache, and final-gather
+    stages.
 
 - **Security**
   - (placeholder)
