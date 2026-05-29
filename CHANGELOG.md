@@ -9,7 +9,13 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
-  - (placeholder)
+  - `createWaterRayTraceLightingPlan()` for converting RT participation bands
+    into renderer-facing water reflection and sampled soft-shadow pass metadata.
+  - `createRayTracedShadowPostProcessPlan()` for converting direct RT shadow
+    participation into scene-level shadow-mask and post-processed lighting
+    metadata that avoids polygon shadow darkening.
+  - Ultra-quality RT water and scene shadow plans now advertise per-pixel resolve
+    passes with zero polygon shadow/reflection contribution.
 
 - **Changed**
   - (placeholder)
