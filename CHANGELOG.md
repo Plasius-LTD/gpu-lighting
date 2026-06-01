@@ -11,6 +11,13 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 - **Added**
   - Concrete hybrid realtime WGSL kernels for `directLighting`,
     `screenTrace`, `radianceCache`, and `finalGather`.
+  - `createWaterRayTraceLightingPlan()` for converting RT participation bands
+    into renderer-facing water reflection and sampled soft-shadow pass metadata.
+  - `createRayTracedShadowPostProcessPlan()` for converting direct RT shadow
+    participation into scene-level shadow-mask and post-processed lighting
+    metadata that avoids polygon shadow darkening.
+  - Ultra-quality RT water and scene shadow plans now advertise per-pixel resolve
+    passes with zero polygon shadow/reflection contribution.
 
 - **Changed**
   - README now documents the delivered hybrid realtime kernel scope alongside
@@ -147,8 +154,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 - **Changed**
 - `gpu-lighting/demo/` now delegates its 3D harbor scene to the shared
-    `@plasius/gpu-shared` showcase runtime instead of carrying a package-local copy
-    of the renderer and loader logic.
+  `@plasius/gpu-shared` showcase runtime instead of carrying a package-local copy
+  of the renderer and loader logic.
   - The harbor runtime now renders stronger near-field shadow projection and
     reflection accents so the lighting bands read closer to the intended
     ray-traced lighting path.
@@ -282,7 +289,6 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - Loader APIs for technique WGSL modules and profile-driven planning.
   - ADR set documenting the advanced lighting architecture.
 
-
 [0.1.0]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.0
 
 ## [0.1.0] - 2026-02-11
@@ -298,17 +304,17 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 - **Security**
   - (placeholder)
-[0.1.1]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.1
-[0.1.2]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.2
-[0.1.6]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.6
-[0.1.7]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.7
-[0.1.8]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.8
-[0.1.9]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.9
-[0.1.10]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.10
-[0.1.11]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.11
-[0.1.12]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.12
-[0.1.13]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.13
-[0.1.14]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.14
-[0.1.15]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.15
-[0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
-[0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
+    [0.1.1]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.1
+    [0.1.2]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.2
+    [0.1.6]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.6
+    [0.1.7]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.7
+    [0.1.8]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.8
+    [0.1.9]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.9
+    [0.1.10]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.10
+    [0.1.11]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.11
+    [0.1.12]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.12
+    [0.1.13]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.13
+    [0.1.14]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.14
+    [0.1.15]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.15
+    [0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
+    [0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
