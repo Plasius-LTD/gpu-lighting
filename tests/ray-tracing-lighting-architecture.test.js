@@ -5,6 +5,8 @@ const originalImportMetaUrl = globalThis.__IMPORT_META_URL__;
 globalThis.__IMPORT_META_URL__ = new URL("../src/index.js", import.meta.url);
 const {
   createLightingBandPlan,
+  createRayTracedShadowPostProcessPlan,
+  createWaterRayTraceLightingPlan,
   getLightingProfileWorkerManifest,
   lightingDistanceBands,
 } = await import("../src/index.js");
@@ -61,6 +63,49 @@ test("lighting band plans scale RT shadows, reflections, and GI independently", 
     reflections: "proxy",
     globalIllumination: "disabled",
   });
+});
+
+test("water ray-trace lighting plans expose renderer passes for reflections and shadows", () => {
+  const plan = createWaterRayTraceLightingPlan({
+    reflections: "premium",
+    directShadows: "premium",
+    quality: "ultra",
+    primaryShadowSource: "ray-traced-primary",
+  });
+
+  assert.equal(plan.pass, "water-ray-trace");
+  assert.equal(plan.reflectionGeometry, "per-pixel-mirrored-scene-ray-field");
+  assert.equal(plan.shadowOcclusion, "per-pixel-soft-shadow-mask");
+  assert.equal(plan.reflectionResolve, "per-pixel-water-raytrace-resolve");
+  assert.equal(plan.shadowResolve, "per-pixel-water-shadow-resolve");
+  assert.equal(plan.polygonReflectionContribution, 0);
+  assert.equal(plan.polygonShadowContribution, 0);
+  assert.ok(plan.reflectionStrengthMultiplier > 1);
+  assert.ok(plan.shadowStrengthMultiplier > 1);
+  assert.deepEqual(plan.rendererPasses, [
+    "water.reflection.per-pixel-resolve",
+    "water.shadow.per-pixel-occlusion",
+  ]);
+});
+
+test("ray-traced shadow plans prefer post-processed lighting over polygon shadows", () => {
+  const plan = createRayTracedShadowPostProcessPlan({
+    directShadows: "premium",
+    quality: "ultra",
+    primaryShadowSource: "ray-traced-primary",
+  });
+
+  assert.equal(plan.pass, "ray-traced-shadow-postprocess");
+  assert.equal(plan.sampleMode, "per-pixel");
+  assert.equal(plan.shadowMask, "per-pixel-screen-space-ray-mask");
+  assert.equal(plan.lightingIntegration, "per-pixel-post-processed-shadow-lighting");
+  assert.equal(plan.polygonShadowContribution, 0);
+  assert.equal(plan.polygonLightingContribution, 0);
+  assert.ok(plan.softnessMultiplier > 1);
+  assert.deepEqual(plan.rendererPasses, [
+    "scene.shadow-mask.per-pixel-resolve",
+    "scene.lighting.per-pixel-postprocess",
+  ]);
 });
 
 test("lighting band plans make temporal reuse and update cadence explicit", () => {

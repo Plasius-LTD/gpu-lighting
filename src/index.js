@@ -266,6 +266,214 @@ function resolveBandParticipation(profileName, band, importance) {
   });
 }
 
+const lightingRtParticipationLevels = Object.freeze([
+  "premium",
+  "selective",
+  "proxy",
+  "disabled",
+]);
+
+function normalizeRtParticipation(name, value, fallback = "disabled") {
+  const resolved = value ?? fallback;
+  if (!lightingRtParticipationLevels.includes(resolved)) {
+    throw new Error(
+      `${name} must be one of: ${lightingRtParticipationLevels.join(", ")}.`
+    );
+  }
+  return resolved;
+}
+
+function strengthForParticipation(value) {
+  switch (value) {
+    case "premium":
+      return 1.2;
+    case "selective":
+      return 0.78;
+    case "proxy":
+      return 0.42;
+    default:
+      return 0;
+  }
+}
+
+function qualityMultiplier(value) {
+  switch (value) {
+    case "ultra":
+      return 1.32;
+    case "high":
+      return 1;
+    case "medium":
+      return 0.76;
+    case "low":
+      return 0.52;
+    default:
+      return 1;
+  }
+}
+
+export function createWaterRayTraceLightingPlan(options = {}) {
+  const reflections = normalizeRtParticipation(
+    "reflections",
+    options.reflections ?? options.reflectionParticipation,
+    "disabled"
+  );
+  const directShadows = normalizeRtParticipation(
+    "directShadows",
+    options.directShadows ?? options.shadowParticipation,
+    "disabled"
+  );
+  const quality = typeof options.quality === "string" ? options.quality : "high";
+  const multiplier = qualityMultiplier(quality);
+  const reflectionStrengthMultiplier = strengthForParticipation(reflections) * multiplier;
+  const shadowStrengthMultiplier = strengthForParticipation(directShadows) * multiplier;
+  const perPixelReflections = quality === "ultra" && reflections !== "disabled";
+  const perPixelShadows = quality === "ultra" && directShadows !== "disabled";
+
+  return Object.freeze({
+    schemaVersion: 1,
+    owner: lightingDebugOwner,
+    pass: "water-ray-trace",
+    quality,
+    primaryShadowSource: options.primaryShadowSource ?? "ray-traced-primary",
+    reflections,
+    directShadows,
+    reflectionGeometry:
+      perPixelReflections && reflections === "premium"
+        ? "per-pixel-mirrored-scene-ray-field"
+        : perPixelReflections
+          ? "per-pixel-selective-reflection-field"
+          : reflections === "premium"
+        ? "mirrored-scene-geometry"
+        : reflections === "selective"
+          ? "selective-mirrored-casters"
+          : reflections === "proxy"
+            ? "proxy-reflection-impression"
+            : "disabled",
+    shadowOcclusion:
+      perPixelShadows
+        ? "per-pixel-soft-shadow-mask"
+        : directShadows === "premium"
+        ? "sampled-soft-occlusion"
+        : directShadows === "selective"
+          ? "selective-contact-occlusion"
+          : directShadows === "proxy"
+            ? "proxy-occlusion-impression"
+            : "disabled",
+    reflectionStrengthMultiplier,
+    shadowStrengthMultiplier,
+    reflectionResolve: perPixelReflections
+      ? "per-pixel-water-raytrace-resolve"
+      : reflections !== "disabled"
+        ? "geometry-projected-reflection-resolve"
+        : "disabled",
+    shadowResolve: perPixelShadows
+      ? "per-pixel-water-shadow-resolve"
+      : directShadows !== "disabled"
+        ? "sampled-water-shadow-resolve"
+        : "disabled",
+    polygonReflectionContribution: perPixelReflections ? 0 : 1,
+    polygonShadowContribution: perPixelShadows ? 0 : directShadows !== "disabled" ? 0.35 : 1,
+    sceneReflectionIntensity: clampPositive(reflectionStrengthMultiplier, 0, 1.6),
+    waterShadowIntensity: clampPositive(shadowStrengthMultiplier, 0, 1.6),
+    rendererPasses: Object.freeze(
+      [
+        reflections !== "disabled"
+          ? perPixelReflections
+            ? "water.reflection.per-pixel-resolve"
+            : "water.reflection.resolve"
+          : null,
+        directShadows !== "disabled"
+          ? perPixelShadows
+            ? "water.shadow.per-pixel-occlusion"
+            : "water.shadow.occlusion"
+          : null,
+      ].filter(Boolean)
+    ),
+  });
+}
+
+export function createRayTracedShadowPostProcessPlan(options = {}) {
+  const directShadows = normalizeRtParticipation(
+    "directShadows",
+    options.directShadows ?? options.shadowParticipation,
+    "disabled"
+  );
+  const quality = typeof options.quality === "string" ? options.quality : "high";
+  const multiplier = qualityMultiplier(quality);
+  const shadowStrengthMultiplier = strengthForParticipation(directShadows) * multiplier;
+  const postProcessEnabled = directShadows !== "disabled";
+  const perPixelShadows = quality === "ultra" && postProcessEnabled;
+
+  return Object.freeze({
+    schemaVersion: 1,
+    owner: lightingDebugOwner,
+    pass: "ray-traced-shadow-postprocess",
+    quality,
+    primaryShadowSource: options.primaryShadowSource ?? "ray-traced-primary",
+    directShadows,
+    sampleMode: perPixelShadows ? "per-pixel" : postProcessEnabled ? "screen-space" : "polygon",
+    shadowMask:
+      perPixelShadows
+        ? "per-pixel-screen-space-ray-mask"
+        : directShadows === "premium"
+        ? "screen-space-soft-ray-mask"
+        : directShadows === "selective"
+          ? "selective-soft-contact-mask"
+          : directShadows === "proxy"
+            ? "proxy-contact-impression"
+            : "disabled",
+    lightingIntegration:
+      perPixelShadows
+        ? "per-pixel-post-processed-shadow-lighting"
+        : directShadows === "premium"
+        ? "post-processed-shadow-lighting"
+        : directShadows === "selective"
+          ? "post-processed-contact-lighting"
+          : directShadows === "proxy"
+            ? "softened-proxy-shadow-lighting"
+            : "polygon-fallback-lighting",
+    shadowStrengthMultiplier,
+    polygonShadowContribution: postProcessEnabled ? 0 : 1,
+    polygonLightingContribution:
+      perPixelShadows
+        ? 0
+        : directShadows === "premium"
+        ? 0.18
+        : directShadows === "selective"
+          ? 0.34
+          : directShadows === "proxy"
+            ? 0.5
+            : 1,
+    softnessMultiplier:
+      directShadows === "premium"
+        ? 1.55
+        : directShadows === "selective"
+          ? 1.28
+          : directShadows === "proxy"
+            ? 1.1
+            : 0.85,
+    contactHardening:
+      directShadows === "premium"
+        ? 0.72
+        : directShadows === "selective"
+          ? 0.54
+          : directShadows === "proxy"
+            ? 0.38
+            : 0.2,
+    rendererPasses: Object.freeze(
+      postProcessEnabled
+        ? perPixelShadows
+          ? ["scene.shadow-mask.per-pixel-resolve", "scene.lighting.per-pixel-postprocess"]
+          : ["scene.shadow-mask.resolve", "scene.lighting.postprocess"]
+        : ["scene.polygon-lighting.fallback"]
+    ),
+  });
+}
+
+function clampPositive(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
 export function createLightingBandPlan(options = {}) {
   const profileName = options.profile ?? defaultLightingProfile;
   const profile = getLightingProfile(profileName);

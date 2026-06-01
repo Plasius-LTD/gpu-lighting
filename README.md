@@ -90,20 +90,43 @@ console.log(profileManifest.jobs.map((job) => job.worker.jobType));
 ## Distance-Banded Lighting
 
 ```js
-import { createLightingBandPlan } from "@plasius/gpu-lighting";
+import {
+  createLightingBandPlan,
+  createRayTracedShadowPostProcessPlan,
+  createWaterRayTraceLightingPlan,
+} from "@plasius/gpu-lighting";
 
 const bandPlan = createLightingBandPlan({
   profile: "realtime",
   importance: "high",
 });
+const nearBand = bandPlan.bands.find((band) => band.band === "near");
+const waterRt = createWaterRayTraceLightingPlan({
+  reflections: nearBand.rtParticipation.reflections,
+  directShadows: nearBand.rtParticipation.directShadows,
+  quality: "ultra",
+  primaryShadowSource: nearBand.primaryShadowSource,
+});
+const shadowPost = createRayTracedShadowPostProcessPlan({
+  directShadows: nearBand.rtParticipation.directShadows,
+  quality: "ultra",
+  primaryShadowSource: nearBand.primaryShadowSource,
+});
 
 console.log(bandPlan.bands.map((band) => band.primaryShadowSource));
-console.log(bandPlan.bands.find((band) => band.band === "near").rtParticipation);
+console.log(nearBand.rtParticipation, waterRt.rendererPasses, shadowPost.rendererPasses);
 ```
 
 Band plans make near, mid, far, and horizon shadow sources explicit, keep RT
 shadow/reflection/GI participation independent, and publish temporal reuse plus
 update cadence expectations for downstream renderer and performance packages.
+`createWaterRayTraceLightingPlan()` turns those participation decisions into
+renderer-facing water reflection and sampled soft-shadow pass metadata.
+`createRayTracedShadowPostProcessPlan()` makes the scene shadow mask and
+post-processed lighting pass explicit so renderers can avoid polygon shadow
+darkening when RT shadows are active.
+At `quality: "ultra"`, both helpers advertise per-pixel resolve passes and zero
+polygon shadow/reflection contribution for RT-owned effects.
 
 ## DAG Scheduling
 
