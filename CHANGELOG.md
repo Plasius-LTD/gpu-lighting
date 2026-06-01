@@ -9,6 +9,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.1.18] - 2026-06-01
+
+- **Added**
   - Concrete hybrid realtime WGSL kernels for `directLighting`,
     `screenTrace`, `radianceCache`, and `finalGather`.
 
@@ -312,3 +326,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.15]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.15
 [0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
 [0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
+[0.1.18]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.18
