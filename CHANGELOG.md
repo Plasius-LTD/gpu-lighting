@@ -9,6 +9,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - Added `createEnvironmentLightingConfig(...)` and
+    `createWavefrontEnvironmentLightingOptions(...)` so renderers and demos can
+    consume lighting-owned environment presets without embedding local ambient
+    or sky constants.
   - Concrete hybrid realtime WGSL kernels for `directLighting`,
     `screenTrace`, `radianceCache`, and `finalGather`.
 

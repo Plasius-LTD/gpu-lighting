@@ -105,6 +105,31 @@ Band plans make near, mid, far, and horizon shadow sources explicit, keep RT
 shadow/reflection/GI participation independent, and publish temporal reuse plus
 update cadence expectations for downstream renderer and performance packages.
 
+## Environment Lighting Presets
+
+```js
+import {
+  createEnvironmentLightingConfig,
+  createWavefrontEnvironmentLightingOptions,
+} from "@plasius/gpu-lighting";
+
+const lighting = createEnvironmentLightingConfig({
+  preset: "product-studio",
+  intensity: 1.05,
+});
+
+const wavefrontLighting = createWavefrontEnvironmentLightingOptions({
+  preset: "moonlit-harbor",
+});
+```
+
+`createEnvironmentLightingConfig(...)` owns the reusable sky/environment
+semantics: horizon and zenith colours, key-light direction, key-light colour,
+environment intensity, exposure, and ambient residual colour.
+`createWavefrontEnvironmentLightingOptions(...)` projects that contract into the
+current `@plasius/gpu-renderer` wavefront renderer options without making the
+renderer depend on this package directly.
+
 ## DAG Scheduling
 
 Lighting worker manifests now publish `schedulerMode: "dag"` plus per-job

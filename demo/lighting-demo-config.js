@@ -93,5 +93,8 @@ export function createLightingDemoMountOptions(root) {
     createState: createLightingDemoState,
     updateState: updateLightingDemoState,
     describeState: describeLightingDemoState,
+    __showcaseFeatureLoaders: {
+      lighting: async () => import("../dist/index.js"),
+    },
   };
 }
