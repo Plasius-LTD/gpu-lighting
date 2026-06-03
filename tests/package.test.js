@@ -8,6 +8,8 @@ const originalImportMetaUrl = globalThis.__IMPORT_META_URL__;
 globalThis.__IMPORT_META_URL__ = new URL("../src/index.js", import.meta.url);
 const {
   createLightingProfileModeLadder,
+  createEnvironmentLightingConfig,
+  createWavefrontEnvironmentLightingOptions,
   defaultAdaptiveLightingProfilePolicy,
   defaultLightingProfile,
   defaultLightingTechnique,
@@ -19,6 +21,7 @@ const {
   lightingProfileNames,
   lightingProfiles,
   lightingPreludeWgslUrl,
+  lightingEnvironmentPresetNames,
   lightingTechniqueNames,
   lightingTechniques,
   loadLightingJobs,
@@ -76,6 +79,45 @@ test("default lighting technique prelude URL points at hybrid prelude", () => {
     lightingPreludeWgslUrl.pathname.endsWith(
       `/techniques/${defaultLightingTechnique}/prelude.wgsl`
     )
+  );
+});
+
+test("environment lighting config exposes named presets for renderers", () => {
+  const config = createEnvironmentLightingConfig({
+    preset: "product-studio",
+    intensity: 1.2,
+  });
+
+  assert.deepEqual(lightingEnvironmentPresetNames, [
+    "moonlit-harbor",
+    "product-studio",
+    "neutral-studio",
+  ]);
+  assert.equal(config.preset, "product-studio");
+  assert.equal(config.environmentIntensity, 1.2);
+  assert.equal(config.wavefront.environmentLighting.intensity, 1.2);
+  assert.equal(config.wavefront.environmentColor.length, 4);
+  assert.equal(config.wavefront.ambientColor.length, 4);
+  assert.ok(config.wavefront.environmentLighting.sunDirection.every(Number.isFinite));
+});
+
+test("wavefront environment lighting options provide renderer-ready fields", () => {
+  const options = createWavefrontEnvironmentLightingOptions({
+    preset: "moonlit-harbor",
+  });
+
+  assert.equal(options.lightingEnvironment.preset, "moonlit-harbor");
+  assert.deepEqual(options.environmentColor, options.lightingEnvironment.environmentColor);
+  assert.deepEqual(options.ambientColor, options.lightingEnvironment.ambientColor);
+  assert.equal(options.environmentLighting.horizonColor.length, 4);
+  assert.equal(options.environmentLighting.zenithColor.length, 4);
+  assert.equal(options.environmentLighting.sunColor.length, 4);
+});
+
+test("environment lighting config rejects unknown presets", () => {
+  assert.throws(
+    () => createEnvironmentLightingConfig({ preset: "unknown" }),
+    /Unknown lighting environment preset/
   );
 });
 

@@ -136,6 +136,11 @@ export const lightingProfileModeOrder = Object.freeze([
   "hybrid",
   "reference",
 ]);
+export const lightingEnvironmentPresetNames = Object.freeze([
+  "moonlit-harbor",
+  "product-studio",
+  "neutral-studio",
+]);
 export const defaultAdaptiveLightingProfilePolicy = Object.freeze({
   preferredProfile: "reference",
   minimumFrameRate: 30,
@@ -150,6 +155,153 @@ export const lightingDistanceBands = Object.freeze([
 
 export const lightingWorkerQueueClass = "lighting";
 export const lightingDebugOwner = "lighting";
+
+function freezeVec4(value) {
+  return Object.freeze([value[0], value[1], value[2], value[3] ?? 1]);
+}
+
+function normalizeVector3(value, fallback) {
+  if (!Array.isArray(value) || value.length < 3) {
+    return [...fallback];
+  }
+  const vector = [
+    Number.isFinite(value[0]) ? value[0] : fallback[0],
+    Number.isFinite(value[1]) ? value[1] : fallback[1],
+    Number.isFinite(value[2]) ? value[2] : fallback[2],
+  ];
+  const length = Math.hypot(vector[0], vector[1], vector[2]);
+  if (!Number.isFinite(length) || length <= 0.000001) {
+    return [...fallback];
+  }
+  return vector.map((component) => component / length);
+}
+
+function readColor(value, fallback) {
+  if (!Array.isArray(value) || value.length < 3) {
+    return freezeVec4(fallback);
+  }
+  return freezeVec4([
+    Number.isFinite(value[0]) ? Math.max(0, value[0]) : fallback[0],
+    Number.isFinite(value[1]) ? Math.max(0, value[1]) : fallback[1],
+    Number.isFinite(value[2]) ? Math.max(0, value[2]) : fallback[2],
+    Number.isFinite(value[3]) ? Math.max(0, Math.min(1, value[3])) : fallback[3] ?? 1,
+  ]);
+}
+
+function readFinite(value, fallback) {
+  return Number.isFinite(value) ? value : fallback;
+}
+
+const environmentLightingPresets = Object.freeze({
+  "moonlit-harbor": Object.freeze({
+    preset: "moonlit-harbor",
+    environmentMode: 0,
+    environmentIntensity: 0.86,
+    exposure: 1,
+    horizonColor: freezeVec4([0.33, 0.43, 0.53, 1]),
+    zenithColor: freezeVec4([0.035, 0.07, 0.14, 1]),
+    sunDirection: Object.freeze(normalizeVector3([0.22, 0.88, 0.42], [0, 1, 0])),
+    sunColor: freezeVec4([2.1, 2.25, 2.65, 1]),
+    ambientColor: freezeVec4([0.018, 0.023, 0.03, 1]),
+  }),
+  "product-studio": Object.freeze({
+    preset: "product-studio",
+    environmentMode: 1,
+    environmentIntensity: 1.05,
+    exposure: 1,
+    horizonColor: freezeVec4([0.52, 0.61, 0.65, 1]),
+    zenithColor: freezeVec4([0.18, 0.22, 0.26, 1]),
+    sunDirection: Object.freeze(normalizeVector3([0.18, 0.93, 0.24], [0, 1, 0])),
+    sunColor: freezeVec4([3.8, 3.55, 2.85, 1]),
+    ambientColor: freezeVec4([0.024, 0.027, 0.03, 1]),
+  }),
+  "neutral-studio": Object.freeze({
+    preset: "neutral-studio",
+    environmentMode: 2,
+    environmentIntensity: 0.95,
+    exposure: 1,
+    horizonColor: freezeVec4([0.48, 0.53, 0.55, 1]),
+    zenithColor: freezeVec4([0.24, 0.26, 0.29, 1]),
+    sunDirection: Object.freeze(normalizeVector3([-0.24, 0.86, 0.36], [0, 1, 0])),
+    sunColor: freezeVec4([2.4, 2.35, 2.2, 1]),
+    ambientColor: freezeVec4([0.028, 0.029, 0.03, 1]),
+  }),
+});
+
+function resolveEnvironmentPreset(name) {
+  const presetName = typeof name === "string" && name.length > 0 ? name : "product-studio";
+  const preset = environmentLightingPresets[presetName];
+  if (!preset) {
+    throw new Error(
+      `Unknown lighting environment preset "${presetName}". Expected one of: ${lightingEnvironmentPresetNames.join(", ")}.`
+    );
+  }
+  return preset;
+}
+
+function estimateEnvironmentColor(config) {
+  const horizonWeight = 0.58;
+  const zenithWeight = 1 - horizonWeight;
+  const glowWeight = 0.055;
+  const intensity = Math.max(config.environmentIntensity, 0.0001);
+  return freezeVec4([
+    (config.horizonColor[0] * horizonWeight + config.zenithColor[0] * zenithWeight + config.sunColor[0] * glowWeight) * intensity,
+    (config.horizonColor[1] * horizonWeight + config.zenithColor[1] * zenithWeight + config.sunColor[1] * glowWeight) * intensity,
+    (config.horizonColor[2] * horizonWeight + config.zenithColor[2] * zenithWeight + config.sunColor[2] * glowWeight) * intensity,
+    1,
+  ]);
+}
+
+export function createEnvironmentLightingConfig(options = {}) {
+  const preset = resolveEnvironmentPreset(options.preset ?? options.name);
+  const environmentIntensity = Math.max(
+    readFinite(options.environmentIntensity ?? options.intensity, preset.environmentIntensity),
+    0.0001
+  );
+  const config = {
+    preset: preset.preset,
+    profile: typeof options.profile === "string" ? options.profile : defaultLightingProfile,
+    environmentMode: Math.max(0, Math.trunc(readFinite(options.environmentMode, preset.environmentMode))),
+    environmentIntensity,
+    exposure: Math.max(0.0001, readFinite(options.exposure, preset.exposure)),
+    horizonColor: readColor(options.horizonColor, preset.horizonColor),
+    zenithColor: readColor(options.zenithColor, preset.zenithColor),
+    sunDirection: Object.freeze(
+      normalizeVector3(options.sunDirection, preset.sunDirection)
+    ),
+    sunColor: readColor(options.sunColor, preset.sunColor),
+    ambientColor: readColor(options.ambientColor, preset.ambientColor),
+  };
+  const environmentColor = estimateEnvironmentColor(config);
+
+  return Object.freeze({
+    ...config,
+    environmentColor,
+    wavefront: Object.freeze({
+      environmentColor,
+      ambientColor: config.ambientColor,
+      environmentLighting: Object.freeze({
+        horizonColor: config.horizonColor,
+        zenithColor: config.zenithColor,
+        sunDirection: Object.freeze([...config.sunDirection]),
+        sunColor: config.sunColor,
+        intensity: config.environmentIntensity,
+        mode: config.environmentMode,
+        exposure: config.exposure,
+      }),
+    }),
+  });
+}
+
+export function createWavefrontEnvironmentLightingOptions(options = {}) {
+  const config = createEnvironmentLightingConfig(options);
+  return Object.freeze({
+    environmentColor: config.wavefront.environmentColor,
+    ambientColor: config.wavefront.ambientColor,
+    environmentLighting: config.wavefront.environmentLighting,
+    lightingEnvironment: config,
+  });
+}
 
 const lightingImportanceLevels = Object.freeze([
   "low",
