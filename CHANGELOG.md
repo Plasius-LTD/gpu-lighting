@@ -9,6 +9,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.1.19] - 2026-06-03
+
+- **Added**
   - Added `createEnvironmentLightingConfig(...)` and
     `createWavefrontEnvironmentLightingOptions(...)` so renderers and demos can
     consume lighting-owned environment presets without embedding local ambient
@@ -316,3 +330,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.15]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.15
 [0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
 [0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
+[0.1.19]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.19
