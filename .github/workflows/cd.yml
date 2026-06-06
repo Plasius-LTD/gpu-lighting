@@ -85,7 +85,16 @@ jobs:
           fi
 
           echo "New version: $NEW_VER"
-          git push --follow-tags
+          if [ "${BUMP}" = "none" ]; then
+            if git ls-remote --exit-code --tags origin "refs/tags/${NEW_VER}" >/dev/null 2>&1; then
+              echo "Tag ${NEW_VER} already exists on origin."
+            else
+              git tag -a "$NEW_VER" -m "chore: release ${NEW_VER}"
+              git push origin "refs/tags/${NEW_VER}"
+            fi
+          else
+            git push --follow-tags
+          fi
 
           # Expose tag (vX.Y.Z) and version (X.Y.Z) for later steps
           VER_NO_V=${NEW_VER#v}

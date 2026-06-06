@@ -9,6 +9,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.2.0] - 2026-06-06
+
+- **Added**
   - Added environment-light portal contracts to the reusable environment
     lighting config so renderers can guide and gate sky/HDRI contribution
     through room openings such as windows.
@@ -340,3 +354,5 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
 [0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
 [0.1.19]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.19
+[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.0
