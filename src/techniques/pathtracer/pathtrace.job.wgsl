@@ -182,7 +182,9 @@ fn evaluate_direct_sun(
   view_direction: vec3<f32>
 ) -> vec3<f32> {
   let surface_normal = faceforward_normal(hit.normal, -view_direction);
-  let sun_direction = safe_normalize(vec3<f32>(0.32, 0.91, 0.21));
+  let sun_direction = safe_normalize(
+    environment_key_direction(pathTracerParams.environment_mode)
+  );
   let ndotl = saturate(dot(surface_normal, sun_direction));
   if (ndotl <= 0.0) {
     return vec3<f32>(0.0);
@@ -205,7 +207,9 @@ fn evaluate_direct_sun(
     ndotl *
     PATH_TRACER_INV_PI *
     (1.0 - material.metalness);
-  let sun_color = vec3<f32>(10.0, 9.4, 8.6) * max(pathTracerParams.environment_intensity, 0.0001);
+  let sun_color =
+    environment_key_color(pathTracerParams.environment_mode) *
+    max(pathTracerParams.environment_intensity, 0.0001);
   return (diffuse + specular) * sun_color;
 }
 
@@ -319,11 +323,12 @@ fn process_job(@builtin(global_invocation_id) global_id: vec3<u32>) {
     for (var bounce_index = 0u; bounce_index < bounce_count; bounce_index = bounce_index + 1u) {
       let hit = trace_scene(ray);
       if (hit.hit == 0u) {
-        sample_radiance = sample_radiance + throughput * environment_radiance(
+        let environment_sample = environment_radiance(
           ray.direction,
           pathTracerParams.environment_intensity,
           pathTracerParams.environment_mode
         );
+        sample_radiance = sample_radiance + throughput * environment_sample;
         terminal_origin = ray.origin;
         terminal_direction = ray.direction;
         current_hit_kind = 0u;
@@ -342,7 +347,15 @@ fn process_job(@builtin(global_invocation_id) global_id: vec3<u32>) {
         captured_primary_hit = true;
       }
 
-      sample_radiance = sample_radiance + throughput * material.emission;
+      let emissive_radiance = sanitize_radiance(material.emission);
+      if (luminance(emissive_radiance) > 0.0001) {
+        sample_radiance = sample_radiance + throughput * emissive_radiance;
+        terminal_origin = hit.position;
+        terminal_direction = ray.direction;
+        current_hit_kind = hit.primitive_kind;
+        break;
+      }
+
       if (pathTracerParams.enable_next_event_estimation != 0u) {
         sample_radiance = sample_radiance + throughput * evaluate_direct_sun(
           hit,
