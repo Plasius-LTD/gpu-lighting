@@ -20,8 +20,13 @@ const {
   lightingProfileModeOrder,
   lightingProfileNames,
   lightingProfiles,
+  lightingEnvironmentLightSourceKinds,
+  lightingEnvironmentPortalModes,
+  lightingEnvironmentPortalShapes,
   lightingPreludeWgslUrl,
   lightingEnvironmentPresetNames,
+  lightingEnvironmentSceneNames,
+  lightingEnvironmentTimeOfDayNames,
   lightingTechniqueNames,
   lightingTechniques,
   loadLightingJobs,
@@ -88,27 +93,173 @@ test("environment lighting config exposes named presets for renderers", () => {
     intensity: 1.2,
   });
 
-  assert.deepEqual(lightingEnvironmentPresetNames, [
-    "moonlit-harbor",
-    "product-studio",
-    "neutral-studio",
-  ]);
+  assert.ok(lightingEnvironmentPresetNames.includes("product-studio"));
+  assert.ok(lightingEnvironmentPresetNames.includes("grass-field-midday"));
+  assert.ok(lightingEnvironmentPresetNames.includes("forest-dusk"));
+  assert.ok(lightingEnvironmentPresetNames.includes("warehouse-night"));
+  assert.ok(lightingEnvironmentPresetNames.includes("cavern-dawn"));
   assert.equal(config.preset, "product-studio");
   assert.equal(config.environmentIntensity, 1.2);
   assert.equal(config.wavefront.environmentLighting.intensity, 1.2);
   assert.equal(config.wavefront.environmentColor.length, 4);
   assert.equal(config.wavefront.ambientColor.length, 4);
+  assert.equal(config.wavefront.environmentPortalMode, "disabled");
+  assert.deepEqual(config.wavefront.environmentPortals, []);
   assert.ok(config.wavefront.environmentLighting.sunDirection.every(Number.isFinite));
+});
+
+test("environment presets cover outdoor, interior, and underground time-of-day variants", () => {
+  assert.deepEqual(lightingEnvironmentTimeOfDayNames, [
+    "dawn",
+    "midday",
+    "dusk",
+    "night",
+  ]);
+  assert.deepEqual(lightingEnvironmentSceneNames, [
+    "studio",
+    "harbor",
+    "grass-field",
+    "forest",
+    "warehouse",
+    "cavern",
+  ]);
+  assert.ok(lightingEnvironmentLightSourceKinds.includes("sun"));
+  assert.ok(lightingEnvironmentLightSourceKinds.includes("fluorescent-strip"));
+  assert.ok(lightingEnvironmentLightSourceKinds.includes("torch"));
+
+  const requiredScenes = ["grass-field", "forest", "warehouse", "cavern"];
+  for (const scene of requiredScenes) {
+    for (const timeOfDay of lightingEnvironmentTimeOfDayNames) {
+      const presetName = `${scene}-${timeOfDay}`;
+      assert.ok(
+        lightingEnvironmentPresetNames.includes(presetName),
+        `Missing environment preset: ${presetName}`
+      );
+      const config = createEnvironmentLightingConfig({ preset: presetName });
+      assert.equal(config.scene, scene);
+      assert.equal(config.timeOfDay, timeOfDay);
+      assert.ok(config.environmentLightSources.length >= 2);
+      assert.ok(config.dominantLightSource);
+      assert.equal(config.environmentMissLighting.sourceId, config.dominantLightSource.id);
+      assert.ok(config.environmentMissLighting.luminance > 0);
+      assert.ok(config.environmentColor.slice(0, 3).every((component) => component > 0));
+      assert.ok(
+        config.environmentLightSources.every((source) =>
+          source.radiance.slice(0, 3).every((component) => component >= 0)
+        )
+      );
+      assert.deepEqual(
+        config.wavefront.environmentLighting.environmentMissLighting,
+        config.environmentMissLighting
+      );
+    }
+  }
+});
+
+test("environment preset resolution accepts scene and time-of-day aliases", () => {
+  const config = createEnvironmentLightingConfig({
+    scene: "grass-field",
+    timeOfDay: "dawn",
+  });
+  const defaultTimeConfig = createEnvironmentLightingConfig({
+    preset: "warehouse",
+  });
+
+  assert.equal(config.preset, "grass-field-dawn");
+  assert.equal(config.scene, "grass-field");
+  assert.equal(config.timeOfDay, "dawn");
+  assert.equal(defaultTimeConfig.preset, "warehouse-midday");
+  assert.throws(
+    () =>
+      createEnvironmentLightingConfig({
+        scene: "forest",
+        timeOfDay: "afternoon",
+      }),
+    /timeOfDay must be one of/
+  );
+});
+
+test("environment lighting sources sanitize invalid color and intensity for render checks", () => {
+  const config = createEnvironmentLightingConfig({
+    preset: "cavern-night",
+    environmentLightSources: [
+      {
+        id: "broken-negative-source",
+        kind: "torch",
+        color: [-8, Number.NaN, 0, 1],
+        intensity: -4,
+        direction: [0, 0, 0],
+      },
+    ],
+  });
+
+  assert.equal(config.environmentLightSources.length, 1);
+  assert.equal(config.dominantLightSource.id, "broken-negative-source");
+  assert.ok(config.dominantLightSource.intensity > 0);
+  assert.ok(config.dominantLightSource.luminance > 0);
+  assert.ok(config.environmentMissLighting.color.slice(0, 3).every((component) => component > 0));
+  assert.ok(config.environmentMissLighting.radiance.slice(0, 3).every((component) => component > 0));
+});
+
+test("environment lighting config normalizes window portals for environment lighting", () => {
+  const config = createEnvironmentLightingConfig({
+    preset: "neutral-studio",
+    environmentPortals: [
+      {
+        id: "north-window",
+        position: [0, 1.2, -2.4],
+        normal: [0, 0, 1],
+        tangent: [1, 0, 0],
+        width: 1.8,
+        height: 1.1,
+        intensity: 1.4,
+        color: [0.85, 0.92, 1, 0.75],
+      },
+    ],
+  });
+
+  assert.deepEqual(lightingEnvironmentPortalShapes, ["rectangle"]);
+  assert.deepEqual(lightingEnvironmentPortalModes, [
+    "disabled",
+    "guide",
+    "guide-and-gate",
+  ]);
+  assert.equal(config.environmentPortalMode, "guide-and-gate");
+  assert.equal(config.environmentPortals.length, 1);
+  assert.equal(config.environmentPortals[0].id, "north-window");
+  assert.equal(config.environmentPortals[0].shape, "rectangle");
+  assert.deepEqual(config.environmentPortals[0].position, [0, 1.2, -2.4]);
+  assert.deepEqual(config.environmentPortals[0].normal, [0, 0, 1]);
+  assert.deepEqual(config.environmentPortals[0].tangent, [1, 0, 0]);
+  assert.deepEqual(config.environmentPortals[0].bitangent, [0, 1, 0]);
+  assert.equal(config.environmentPortals[0].width, 1.8);
+  assert.equal(config.environmentPortals[0].height, 1.1);
+  assert.equal(config.environmentPortals[0].radianceScale, 1.4);
+  assert.deepEqual(config.environmentPortals[0].color, [0.85, 0.92, 1, 0.75]);
+  assert.equal(config.wavefront.environmentLighting.environmentPortalCount, 1);
 });
 
 test("wavefront environment lighting options provide renderer-ready fields", () => {
   const options = createWavefrontEnvironmentLightingOptions({
     preset: "moonlit-harbor",
+    environmentPortalMode: "guide",
+    environmentPortals: [
+      {
+        center: [1, 1.4, -3],
+        normal: [0, 0, 1],
+        halfWidth: 0.5,
+        halfHeight: 0.25,
+      },
+    ],
   });
 
   assert.equal(options.lightingEnvironment.preset, "moonlit-harbor");
   assert.deepEqual(options.environmentColor, options.lightingEnvironment.environmentColor);
   assert.deepEqual(options.ambientColor, options.lightingEnvironment.ambientColor);
+  assert.equal(options.environmentPortalMode, "guide");
+  assert.equal(options.environmentPortals.length, 1);
+  assert.equal(options.environmentPortals[0].width, 1);
+  assert.equal(options.environmentPortals[0].height, 0.5);
   assert.equal(options.environmentLighting.horizonColor.length, 4);
   assert.equal(options.environmentLighting.zenithColor.length, 4);
   assert.equal(options.environmentLighting.sunColor.length, 4);
@@ -118,6 +269,20 @@ test("environment lighting config rejects unknown presets", () => {
   assert.throws(
     () => createEnvironmentLightingConfig({ preset: "unknown" }),
     /Unknown lighting environment preset/
+  );
+});
+
+test("environment lighting config rejects invalid portal settings", () => {
+  assert.throws(
+    () => createEnvironmentLightingConfig({ environmentPortalMode: "wrong" }),
+    /environmentPortalMode must be one of/
+  );
+  assert.throws(
+    () =>
+      createEnvironmentLightingConfig({
+        environmentPortals: [{ shape: "circle" }],
+      }),
+    /environmentPortals\[0\]\.shape must be one of/
   );
 });
 
@@ -178,6 +343,24 @@ test("pathtracer prelude publishes concrete scene, history, and environment cont
   assert.match(source, /struct PathTracerSceneMetadata/);
   assert.match(source, /struct PathAccumulationPixel/);
   assert.match(source, /fn environment_radiance/);
+});
+
+test("pathtracer environment and emissive paths publish non-null radiance guards", () => {
+  const base = path.resolve(
+    __dirname,
+    "..",
+    "src",
+    "techniques",
+    "pathtracer"
+  );
+  const prelude = fs.readFileSync(path.join(base, "prelude.wgsl"), "utf8");
+  const pathTrace = fs.readFileSync(path.join(base, "pathtrace.job.wgsl"), "utf8");
+
+  assert.match(prelude, /fn ensure_non_null_radiance/);
+  assert.match(prelude, /mode == 18u/);
+  assert.match(pathTrace, /let environment_sample = environment_radiance/);
+  assert.match(pathTrace, /let emissive_radiance = sanitize_radiance\(material\.emission\)/);
+  assert.match(pathTrace, /luminance\(emissive_radiance\) > 0\.0001/);
 });
 
 test("reference pathtracer WGSL stages are real kernels rather than placeholders", () => {

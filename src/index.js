@@ -136,10 +136,45 @@ export const lightingProfileModeOrder = Object.freeze([
   "hybrid",
   "reference",
 ]);
-export const lightingEnvironmentPresetNames = Object.freeze([
-  "moonlit-harbor",
-  "product-studio",
-  "neutral-studio",
+export const lightingEnvironmentTimeOfDayNames = Object.freeze([
+  "dawn",
+  "midday",
+  "dusk",
+  "night",
+]);
+export const lightingEnvironmentSceneNames = Object.freeze([
+  "studio",
+  "harbor",
+  "grass-field",
+  "forest",
+  "warehouse",
+  "cavern",
+]);
+export const lightingEnvironmentLightSourceKinds = Object.freeze([
+  "sky",
+  "sun",
+  "moon",
+  "stars",
+  "horizon-glow",
+  "ground-bounce",
+  "studio-softbox",
+  "canopy-transmission",
+  "window-portal",
+  "fluorescent-strip",
+  "sodium-door",
+  "emergency-beacon",
+  "cave-mouth",
+  "torch",
+  "bioluminescence",
+  "lava-fissure",
+  "crystal",
+  "custom",
+]);
+export const lightingEnvironmentPortalShapes = Object.freeze(["rectangle"]);
+export const lightingEnvironmentPortalModes = Object.freeze([
+  "disabled",
+  "guide",
+  "guide-and-gate",
 ]);
 export const defaultAdaptiveLightingProfilePolicy = Object.freeze({
   preferredProfile: "reference",
@@ -188,13 +223,301 @@ function readColor(value, fallback) {
   ]);
 }
 
+function colorLuminance(value) {
+  return value[0] * 0.2126 + value[1] * 0.7152 + value[2] * 0.0722;
+}
+
+function readPositiveColor(value, fallback) {
+  const color = readColor(value, fallback);
+  const fallbackColor = readColor(fallback, [1, 1, 1, 1]);
+  return freezeVec4([
+    color[0] > 0 ? color[0] : Math.max(fallbackColor[0], 0.0001),
+    color[1] > 0 ? color[1] : Math.max(fallbackColor[1], 0.0001),
+    color[2] > 0 ? color[2] : Math.max(fallbackColor[2], 0.0001),
+    color[3],
+  ]);
+}
+
+function ensureNonNullColor(value, fallback = [1, 1, 1, 1]) {
+  const color = readColor(value, fallback);
+  if (colorLuminance(color) > 0.000001) {
+    return color;
+  }
+  return readPositiveColor(fallback, [1, 1, 1, 1]);
+}
+
 function readFinite(value, fallback) {
   return Number.isFinite(value) ? value : fallback;
 }
 
+function readVector3(value, fallback) {
+  if (!Array.isArray(value) || value.length < 3) {
+    return [...fallback];
+  }
+  return [
+    Number.isFinite(value[0]) ? value[0] : fallback[0],
+    Number.isFinite(value[1]) ? value[1] : fallback[1],
+    Number.isFinite(value[2]) ? value[2] : fallback[2],
+  ];
+}
+
+function dot3(a, b) {
+  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+}
+
+function cross3(a, b) {
+  return [
+    a[1] * b[2] - a[2] * b[1],
+    a[2] * b[0] - a[0] * b[2],
+    a[0] * b[1] - a[1] * b[0],
+  ];
+}
+
+function normalizeRawVector3(value, fallback) {
+  const length = Math.hypot(value[0], value[1], value[2]);
+  if (!Number.isFinite(length) || length <= 0.000001) {
+    return [...fallback];
+  }
+  return value.map((component) => component / length);
+}
+
+function orthogonalFallback(normal) {
+  if (Math.abs(normal[1]) < 0.92) {
+    return normalizeRawVector3(cross3([0, 1, 0], normal), [1, 0, 0]);
+  }
+  return normalizeRawVector3(cross3([1, 0, 0], normal), [0, 0, 1]);
+}
+
+function normalizePortalTangent(value, normal) {
+  const raw = normalizeVector3(value, orthogonalFallback(normal));
+  const projected = [
+    raw[0] - normal[0] * dot3(raw, normal),
+    raw[1] - normal[1] * dot3(raw, normal),
+    raw[2] - normal[2] * dot3(raw, normal),
+  ];
+  return normalizeRawVector3(projected, orthogonalFallback(normal));
+}
+
+function readPositiveFinite(value, fallback) {
+  const number = Number(value ?? fallback);
+  if (!Number.isFinite(number)) {
+    return fallback;
+  }
+  return Math.max(number, 0.0001);
+}
+
+function normalizeEnvironmentPortalMode(value, hasPortals) {
+  if (value == null) {
+    return hasPortals ? "guide-and-gate" : "disabled";
+  }
+  if (value === "gate") {
+    return "guide-and-gate";
+  }
+  if (lightingEnvironmentPortalModes.includes(value)) {
+    return value;
+  }
+  throw new Error(
+    `environmentPortalMode must be one of: ${lightingEnvironmentPortalModes.join(", ")}.`
+  );
+}
+
+function normalizeEnvironmentPortal(portal, index) {
+  if (!portal || typeof portal !== "object") {
+    throw new Error(`environmentPortals[${index}] must be an object.`);
+  }
+  const shape = portal.shape ?? portal.kind ?? "rectangle";
+  if (!lightingEnvironmentPortalShapes.includes(shape)) {
+    throw new Error(
+      `environmentPortals[${index}].shape must be one of: ${lightingEnvironmentPortalShapes.join(", ")}.`
+    );
+  }
+  const normal = Object.freeze(
+    normalizeVector3(portal.normal, [0, 0, 1])
+  );
+  const tangent = Object.freeze(normalizePortalTangent(portal.tangent, normal));
+  const bitangent = Object.freeze(
+    normalizeRawVector3(cross3(normal, tangent), [0, 1, 0])
+  );
+  const width = readPositiveFinite(
+    portal.width,
+    readPositiveFinite(portal.halfWidth, 0.5) * 2
+  );
+  const height = readPositiveFinite(
+    portal.height,
+    readPositiveFinite(portal.halfHeight, 0.5) * 2
+  );
+  const radianceScale = Math.max(
+    0,
+    readFinite(portal.radianceScale ?? portal.intensity, 1)
+  );
+  return Object.freeze({
+    id: typeof portal.id === "string" && portal.id.length > 0
+      ? portal.id
+      : `environment-portal-${index}`,
+    shape,
+    position: Object.freeze(readVector3(portal.position ?? portal.center, [0, 0, 0])),
+    normal,
+    tangent,
+    bitangent,
+    width,
+    height,
+    radianceScale,
+    color: readColor(portal.color, [1, 1, 1, 1]),
+    twoSided: portal.twoSided !== false,
+  });
+}
+
+function normalizeEnvironmentPortals(value) {
+  if (value == null) {
+    return Object.freeze([]);
+  }
+  if (!Array.isArray(value)) {
+    throw new Error("environmentPortals must be an array when provided.");
+  }
+  return Object.freeze(value.map(normalizeEnvironmentPortal));
+}
+
+function freezeLightSourceSpec(source) {
+  return Object.freeze({
+    ...source,
+    color: source.color ? freezeVec4(source.color) : undefined,
+    direction: source.direction
+      ? Object.freeze(normalizeVector3(source.direction, [0, 1, 0]))
+      : undefined,
+    position: source.position
+      ? Object.freeze(readVector3(source.position, [0, 0, 0]))
+      : undefined,
+  });
+}
+
+function defineEnvironmentPreset(spec) {
+  return Object.freeze({
+    ...spec,
+    scene: spec.scene ?? "studio",
+    timeOfDay: spec.timeOfDay ?? "midday",
+    horizonColor: freezeVec4(spec.horizonColor),
+    zenithColor: freezeVec4(spec.zenithColor),
+    sunDirection: Object.freeze(normalizeVector3(spec.sunDirection, [0, 1, 0])),
+    sunColor: freezeVec4(spec.sunColor),
+    ambientColor: freezeVec4(spec.ambientColor),
+    environmentLightSources: Object.freeze(
+      (spec.environmentLightSources ?? []).map(freezeLightSourceSpec)
+    ),
+  });
+}
+
+function buildEnvironmentLightSourceFallback(config, preset) {
+  const firstPresetSource = preset.environmentLightSources[0] ?? {};
+  return {
+    kind: firstPresetSource.kind ?? "sky",
+    role: firstPresetSource.role ?? "fill",
+    color: firstPresetSource.color ?? config.sunColor,
+    intensity:
+      firstPresetSource.intensity ??
+      Math.max(config.environmentIntensity, 0.0001),
+    direction: firstPresetSource.direction ?? config.sunDirection,
+    angularRadiusRadians: firstPresetSource.angularRadiusRadians ?? 0.25,
+    reach: firstPresetSource.reach ?? 1000,
+  };
+}
+
+function normalizeEnvironmentLightSource(source, index, fallback) {
+  if (!source || typeof source !== "object") {
+    throw new Error(`environmentLightSources[${index}] must be an object.`);
+  }
+  const requestedKind = source.kind ?? source.type ?? fallback.kind ?? "custom";
+  const kind = lightingEnvironmentLightSourceKinds.includes(requestedKind)
+    ? requestedKind
+    : "custom";
+  const color = readPositiveColor(source.color, fallback.color ?? [1, 1, 1, 1]);
+  const intensity = readPositiveFinite(
+    source.intensity ?? source.radianceScale,
+    fallback.intensity ?? 1
+  );
+  const radiance = freezeVec4([
+    color[0] * intensity,
+    color[1] * intensity,
+    color[2] * intensity,
+    color[3],
+  ]);
+  return Object.freeze({
+    id:
+      typeof source.id === "string" && source.id.length > 0
+        ? source.id
+        : `environment-light-source-${index}`,
+    kind,
+    type: kind,
+    role:
+      typeof source.role === "string" && source.role.length > 0
+        ? source.role
+        : fallback.role ?? "fill",
+    direction: Object.freeze(
+      normalizeVector3(source.direction, fallback.direction ?? [0, 1, 0])
+    ),
+    position: Object.freeze(
+      readVector3(source.position ?? source.origin, fallback.position ?? [0, 0, 0])
+    ),
+    color,
+    intensity,
+    radiance,
+    luminance: colorLuminance(radiance),
+    angularRadiusRadians: readPositiveFinite(
+      source.angularRadiusRadians ?? source.angularRadius,
+      fallback.angularRadiusRadians ?? 0.25
+    ),
+    reach: readPositiveFinite(
+      source.reach ?? source.distance,
+      fallback.reach ?? 1000
+    ),
+    castsShadows: source.castsShadows !== false,
+    contributesToEnvironment: source.contributesToEnvironment !== false,
+  });
+}
+
+function normalizeEnvironmentLightSources(value, preset, config) {
+  const baseSources = value ?? preset.environmentLightSources;
+  const fallback = buildEnvironmentLightSourceFallback(config, preset);
+  if (!Array.isArray(baseSources)) {
+    throw new Error("environmentLightSources must be an array when provided.");
+  }
+  const normalizedSources = baseSources.length > 0
+    ? baseSources.map((source, index) =>
+        normalizeEnvironmentLightSource(source, index, fallback)
+      )
+    : [normalizeEnvironmentLightSource(fallback, 0, fallback)];
+  return Object.freeze(normalizedSources);
+}
+
+function findDominantEnvironmentLightSource(sources) {
+  return sources.reduce((dominant, source) =>
+    source.luminance > dominant.luminance ? source : dominant
+  );
+}
+
+function createEnvironmentMissLighting(source, environmentColor) {
+  const fallbackRadiance = readPositiveColor(environmentColor, source.radiance);
+  const radiance = ensureNonNullColor(source.radiance, fallbackRadiance);
+  const color = readPositiveColor(source.color, environmentColor);
+  return Object.freeze({
+    sourceId: source.id,
+    kind: source.kind,
+    role: source.role,
+    contribution: "inferred-environment",
+    startingPoint: "environment-miss",
+    direction: source.direction,
+    position: source.position,
+    color,
+    intensity: Math.max(source.intensity, 0.0001),
+    radiance,
+    luminance: Math.max(colorLuminance(radiance), 0.0001),
+  });
+}
+
 const environmentLightingPresets = Object.freeze({
-  "moonlit-harbor": Object.freeze({
+  "moonlit-harbor": defineEnvironmentPreset({
     preset: "moonlit-harbor",
+    scene: "harbor",
+    timeOfDay: "night",
     environmentMode: 0,
     environmentIntensity: 0.86,
     exposure: 1,
@@ -203,9 +526,30 @@ const environmentLightingPresets = Object.freeze({
     sunDirection: Object.freeze(normalizeVector3([0.22, 0.88, 0.42], [0, 1, 0])),
     sunColor: freezeVec4([2.1, 2.25, 2.65, 1]),
     ambientColor: freezeVec4([0.018, 0.023, 0.03, 1]),
+    environmentLightSources: [
+      {
+        id: "harbor-moon",
+        kind: "moon",
+        role: "key",
+        direction: [0.22, 0.88, 0.42],
+        color: [0.7, 0.76, 0.9, 1],
+        intensity: 2.2,
+        angularRadiusRadians: 0.018,
+      },
+      {
+        id: "harbor-sky",
+        kind: "sky",
+        role: "fill",
+        direction: [0, 1, 0],
+        color: [0.22, 0.31, 0.48, 1],
+        intensity: 0.35,
+      },
+    ],
   }),
-  "product-studio": Object.freeze({
+  "product-studio": defineEnvironmentPreset({
     preset: "product-studio",
+    scene: "studio",
+    timeOfDay: "midday",
     environmentMode: 1,
     environmentIntensity: 1.05,
     exposure: 1,
@@ -214,9 +558,31 @@ const environmentLightingPresets = Object.freeze({
     sunDirection: Object.freeze(normalizeVector3([0.18, 0.93, 0.24], [0, 1, 0])),
     sunColor: freezeVec4([3.8, 3.55, 2.85, 1]),
     ambientColor: freezeVec4([0.024, 0.027, 0.03, 1]),
+    environmentLightSources: [
+      {
+        id: "studio-key-softbox",
+        kind: "studio-softbox",
+        role: "key",
+        direction: [0.18, 0.93, 0.24],
+        color: [1, 0.94, 0.82, 1],
+        intensity: 4.1,
+        angularRadiusRadians: 0.42,
+      },
+      {
+        id: "studio-fill-panel",
+        kind: "studio-softbox",
+        role: "fill",
+        direction: [-0.56, 0.62, -0.2],
+        color: [0.75, 0.84, 1, 1],
+        intensity: 1.3,
+        angularRadiusRadians: 0.55,
+      },
+    ],
   }),
-  "neutral-studio": Object.freeze({
+  "neutral-studio": defineEnvironmentPreset({
     preset: "neutral-studio",
+    scene: "studio",
+    timeOfDay: "midday",
     environmentMode: 2,
     environmentIntensity: 0.95,
     exposure: 1,
@@ -225,13 +591,339 @@ const environmentLightingPresets = Object.freeze({
     sunDirection: Object.freeze(normalizeVector3([-0.24, 0.86, 0.36], [0, 1, 0])),
     sunColor: freezeVec4([2.4, 2.35, 2.2, 1]),
     ambientColor: freezeVec4([0.028, 0.029, 0.03, 1]),
+    environmentLightSources: [
+      {
+        id: "neutral-studio-overhead",
+        kind: "studio-softbox",
+        role: "key",
+        direction: [-0.24, 0.86, 0.36],
+        color: [0.96, 0.97, 1, 1],
+        intensity: 2.5,
+        angularRadiusRadians: 0.5,
+      },
+      {
+        id: "neutral-studio-wall-bounce",
+        kind: "ground-bounce",
+        role: "fill",
+        direction: [0.2, 0.3, -0.9],
+        color: [0.55, 0.58, 0.62, 1],
+        intensity: 0.8,
+      },
+    ],
+  }),
+  "grass-field-dawn": defineEnvironmentPreset({
+    preset: "grass-field-dawn",
+    scene: "grass-field",
+    timeOfDay: "dawn",
+    environmentMode: 3,
+    environmentIntensity: 0.92,
+    exposure: 1.06,
+    horizonColor: [0.92, 0.54, 0.32, 1],
+    zenithColor: [0.16, 0.28, 0.5, 1],
+    sunDirection: [0.64, 0.32, 0.18],
+    sunColor: [5.6, 3.15, 1.55, 1],
+    ambientColor: [0.034, 0.047, 0.032, 1],
+    environmentLightSources: [
+      { id: "field-dawn-sun", kind: "sun", role: "key", direction: [0.64, 0.32, 0.18], color: [1, 0.58, 0.28, 1], intensity: 5.6, angularRadiusRadians: 0.012 },
+      { id: "field-dawn-sky", kind: "sky", role: "fill", direction: [0, 1, 0], color: [0.36, 0.52, 0.82, 1], intensity: 0.9 },
+      { id: "field-dawn-grass-bounce", kind: "ground-bounce", role: "bounce", direction: [0, 0.25, 0.1], color: [0.22, 0.44, 0.12, 1], intensity: 0.45 },
+    ],
+  }),
+  "grass-field-midday": defineEnvironmentPreset({
+    preset: "grass-field-midday",
+    scene: "grass-field",
+    timeOfDay: "midday",
+    environmentMode: 4,
+    environmentIntensity: 1.18,
+    exposure: 0.96,
+    horizonColor: [0.58, 0.78, 0.96, 1],
+    zenithColor: [0.1, 0.34, 0.82, 1],
+    sunDirection: [0.18, 0.98, 0.08],
+    sunColor: [9.8, 9.4, 8.55, 1],
+    ambientColor: [0.048, 0.062, 0.04, 1],
+    environmentLightSources: [
+      { id: "field-midday-sun", kind: "sun", role: "key", direction: [0.18, 0.98, 0.08], color: [1, 0.96, 0.86, 1], intensity: 9.8, angularRadiusRadians: 0.0093 },
+      { id: "field-midday-sky", kind: "sky", role: "fill", direction: [0, 1, 0], color: [0.48, 0.7, 1, 1], intensity: 1.8 },
+      { id: "field-midday-ground", kind: "ground-bounce", role: "bounce", direction: [0, 0.35, -0.15], color: [0.28, 0.56, 0.16, 1], intensity: 0.65 },
+    ],
+  }),
+  "grass-field-dusk": defineEnvironmentPreset({
+    preset: "grass-field-dusk",
+    scene: "grass-field",
+    timeOfDay: "dusk",
+    environmentMode: 5,
+    environmentIntensity: 0.82,
+    exposure: 1.12,
+    horizonColor: [1.08, 0.42, 0.24, 1],
+    zenithColor: [0.09, 0.1, 0.32, 1],
+    sunDirection: [-0.76, 0.24, 0.22],
+    sunColor: [4.8, 1.65, 0.72, 1],
+    ambientColor: [0.026, 0.026, 0.034, 1],
+    environmentLightSources: [
+      { id: "field-dusk-sun", kind: "sun", role: "key", direction: [-0.76, 0.24, 0.22], color: [1, 0.34, 0.16, 1], intensity: 4.8, angularRadiusRadians: 0.014 },
+      { id: "field-dusk-horizon", kind: "horizon-glow", role: "fill", direction: [-0.9, 0.08, 0.1], color: [0.92, 0.28, 0.16, 1], intensity: 1.2 },
+      { id: "field-dusk-grass", kind: "ground-bounce", role: "bounce", direction: [0, 0.22, 0.2], color: [0.12, 0.28, 0.11, 1], intensity: 0.35 },
+    ],
+  }),
+  "grass-field-night": defineEnvironmentPreset({
+    preset: "grass-field-night",
+    scene: "grass-field",
+    timeOfDay: "night",
+    environmentMode: 6,
+    environmentIntensity: 0.48,
+    exposure: 1.35,
+    horizonColor: [0.08, 0.13, 0.2, 1],
+    zenithColor: [0.018, 0.035, 0.09, 1],
+    sunDirection: [-0.22, 0.86, -0.34],
+    sunColor: [0.72, 0.82, 1.35, 1],
+    ambientColor: [0.012, 0.017, 0.026, 1],
+    environmentLightSources: [
+      { id: "field-night-moon", kind: "moon", role: "key", direction: [-0.22, 0.86, -0.34], color: [0.52, 0.62, 1, 1], intensity: 1.25, angularRadiusRadians: 0.018 },
+      { id: "field-night-stars", kind: "stars", role: "fill", direction: [0, 1, 0], color: [0.32, 0.38, 0.6, 1], intensity: 0.24 },
+      { id: "field-night-horizon", kind: "horizon-glow", role: "rim", direction: [0.8, 0.08, -0.15], color: [0.08, 0.14, 0.26, 1], intensity: 0.28 },
+    ],
+  }),
+  "forest-dawn": defineEnvironmentPreset({
+    preset: "forest-dawn",
+    scene: "forest",
+    timeOfDay: "dawn",
+    environmentMode: 7,
+    environmentIntensity: 0.78,
+    exposure: 1.14,
+    horizonColor: [0.72, 0.48, 0.28, 1],
+    zenithColor: [0.08, 0.18, 0.18, 1],
+    sunDirection: [0.58, 0.42, -0.24],
+    sunColor: [4.4, 2.65, 1.32, 1],
+    ambientColor: [0.024, 0.04, 0.026, 1],
+    environmentLightSources: [
+      { id: "forest-dawn-sun-shaft", kind: "sun", role: "key", direction: [0.58, 0.42, -0.24], color: [1, 0.62, 0.32, 1], intensity: 4.4, angularRadiusRadians: 0.018 },
+      { id: "forest-dawn-canopy", kind: "canopy-transmission", role: "filter", direction: [0.12, 0.78, 0.2], color: [0.34, 0.68, 0.24, 1], intensity: 0.86 },
+      { id: "forest-dawn-sky-gap", kind: "sky", role: "fill", direction: [-0.18, 0.92, 0.12], color: [0.28, 0.46, 0.62, 1], intensity: 0.48 },
+    ],
+  }),
+  "forest-midday": defineEnvironmentPreset({
+    preset: "forest-midday",
+    scene: "forest",
+    timeOfDay: "midday",
+    environmentMode: 8,
+    environmentIntensity: 0.96,
+    exposure: 1.02,
+    horizonColor: [0.38, 0.62, 0.42, 1],
+    zenithColor: [0.08, 0.28, 0.32, 1],
+    sunDirection: [0.08, 0.96, -0.18],
+    sunColor: [7.2, 6.9, 5.25, 1],
+    ambientColor: [0.034, 0.055, 0.032, 1],
+    environmentLightSources: [
+      { id: "forest-midday-sun-gap", kind: "sun", role: "key", direction: [0.08, 0.96, -0.18], color: [1, 0.96, 0.74, 1], intensity: 7.2, angularRadiusRadians: 0.013 },
+      { id: "forest-midday-leaves", kind: "canopy-transmission", role: "filter", direction: [0.32, 0.75, 0.12], color: [0.24, 0.72, 0.28, 1], intensity: 1.35 },
+      { id: "forest-midday-floor", kind: "ground-bounce", role: "bounce", direction: [-0.1, 0.25, 0.18], color: [0.18, 0.35, 0.13, 1], intensity: 0.42 },
+    ],
+  }),
+  "forest-dusk": defineEnvironmentPreset({
+    preset: "forest-dusk",
+    scene: "forest",
+    timeOfDay: "dusk",
+    environmentMode: 9,
+    environmentIntensity: 0.68,
+    exposure: 1.2,
+    horizonColor: [0.72, 0.28, 0.2, 1],
+    zenithColor: [0.04, 0.07, 0.18, 1],
+    sunDirection: [-0.7, 0.28, -0.18],
+    sunColor: [3.2, 1.18, 0.56, 1],
+    ambientColor: [0.018, 0.026, 0.024, 1],
+    environmentLightSources: [
+      { id: "forest-dusk-horizon", kind: "horizon-glow", role: "key", direction: [-0.7, 0.18, -0.18], color: [1, 0.34, 0.2, 1], intensity: 2.2, angularRadiusRadians: 0.1 },
+      { id: "forest-dusk-canopy", kind: "canopy-transmission", role: "filter", direction: [0.18, 0.7, 0.26], color: [0.18, 0.38, 0.2, 1], intensity: 0.52 },
+      { id: "forest-dusk-sky-gap", kind: "sky", role: "fill", direction: [0, 1, 0], color: [0.12, 0.16, 0.34, 1], intensity: 0.42 },
+    ],
+  }),
+  "forest-night": defineEnvironmentPreset({
+    preset: "forest-night",
+    scene: "forest",
+    timeOfDay: "night",
+    environmentMode: 10,
+    environmentIntensity: 0.42,
+    exposure: 1.42,
+    horizonColor: [0.035, 0.08, 0.1, 1],
+    zenithColor: [0.012, 0.025, 0.06, 1],
+    sunDirection: [0.2, 0.82, -0.46],
+    sunColor: [0.42, 0.56, 1.1, 1],
+    ambientColor: [0.01, 0.016, 0.02, 1],
+    environmentLightSources: [
+      { id: "forest-night-moon-gap", kind: "moon", role: "key", direction: [0.2, 0.82, -0.46], color: [0.42, 0.56, 1, 1], intensity: 0.95, angularRadiusRadians: 0.025 },
+      { id: "forest-night-canopy", kind: "canopy-transmission", role: "filter", direction: [-0.16, 0.66, 0.1], color: [0.08, 0.18, 0.12, 1], intensity: 0.28 },
+      { id: "forest-night-stars", kind: "stars", role: "fill", direction: [0, 1, 0], color: [0.22, 0.28, 0.5, 1], intensity: 0.18 },
+    ],
+  }),
+  "warehouse-dawn": defineEnvironmentPreset({
+    preset: "warehouse-dawn",
+    scene: "warehouse",
+    timeOfDay: "dawn",
+    environmentMode: 11,
+    environmentIntensity: 0.74,
+    exposure: 1.08,
+    horizonColor: [0.58, 0.44, 0.34, 1],
+    zenithColor: [0.16, 0.19, 0.24, 1],
+    sunDirection: [0.82, 0.28, 0.18],
+    sunColor: [2.8, 1.7, 0.92, 1],
+    ambientColor: [0.028, 0.03, 0.032, 1],
+    environmentLightSources: [
+      { id: "warehouse-dawn-loading-door", kind: "window-portal", role: "key", direction: [0.82, 0.28, 0.18], color: [1, 0.62, 0.34, 1], intensity: 2.8, angularRadiusRadians: 0.22 },
+      { id: "warehouse-dawn-fluorescent", kind: "fluorescent-strip", role: "fill", direction: [0, 1, 0], color: [0.78, 0.9, 1, 1], intensity: 1.1, angularRadiusRadians: 0.35 },
+      { id: "warehouse-dawn-concrete-bounce", kind: "ground-bounce", role: "bounce", direction: [0, 0.28, -0.2], color: [0.34, 0.36, 0.38, 1], intensity: 0.42 },
+    ],
+  }),
+  "warehouse-midday": defineEnvironmentPreset({
+    preset: "warehouse-midday",
+    scene: "warehouse",
+    timeOfDay: "midday",
+    environmentMode: 12,
+    environmentIntensity: 0.92,
+    exposure: 0.98,
+    horizonColor: [0.64, 0.7, 0.74, 1],
+    zenithColor: [0.28, 0.34, 0.42, 1],
+    sunDirection: [0.35, 0.86, 0.16],
+    sunColor: [4.2, 4, 3.45, 1],
+    ambientColor: [0.034, 0.036, 0.038, 1],
+    environmentLightSources: [
+      { id: "warehouse-midday-skylights", kind: "window-portal", role: "key", direction: [0.35, 0.86, 0.16], color: [0.92, 0.96, 1, 1], intensity: 4.2, angularRadiusRadians: 0.18 },
+      { id: "warehouse-midday-fluorescent", kind: "fluorescent-strip", role: "fill", direction: [-0.2, 0.92, 0.1], color: [0.78, 0.92, 1, 1], intensity: 1.6, angularRadiusRadians: 0.45 },
+      { id: "warehouse-midday-door-spill", kind: "sodium-door", role: "rim", direction: [-0.82, 0.18, -0.12], color: [1, 0.58, 0.24, 1], intensity: 0.68 },
+    ],
+  }),
+  "warehouse-dusk": defineEnvironmentPreset({
+    preset: "warehouse-dusk",
+    scene: "warehouse",
+    timeOfDay: "dusk",
+    environmentMode: 13,
+    environmentIntensity: 0.7,
+    exposure: 1.16,
+    horizonColor: [0.7, 0.32, 0.24, 1],
+    zenithColor: [0.08, 0.1, 0.18, 1],
+    sunDirection: [-0.78, 0.18, 0.16],
+    sunColor: [2.4, 0.94, 0.48, 1],
+    ambientColor: [0.022, 0.024, 0.03, 1],
+    environmentLightSources: [
+      { id: "warehouse-dusk-door-glow", kind: "sodium-door", role: "key", direction: [-0.78, 0.18, 0.16], color: [1, 0.42, 0.2, 1], intensity: 2.4, angularRadiusRadians: 0.18 },
+      { id: "warehouse-dusk-fluorescent", kind: "fluorescent-strip", role: "fill", direction: [0, 0.95, -0.08], color: [0.72, 0.88, 1, 1], intensity: 1.35, angularRadiusRadians: 0.4 },
+      { id: "warehouse-dusk-emergency", kind: "emergency-beacon", role: "accent", direction: [0.2, 0.35, -0.8], color: [1, 0.08, 0.04, 1], intensity: 0.32 },
+    ],
+  }),
+  "warehouse-night": defineEnvironmentPreset({
+    preset: "warehouse-night",
+    scene: "warehouse",
+    timeOfDay: "night",
+    environmentMode: 14,
+    environmentIntensity: 0.58,
+    exposure: 1.28,
+    horizonColor: [0.06, 0.08, 0.12, 1],
+    zenithColor: [0.02, 0.03, 0.055, 1],
+    sunDirection: [0.1, 0.94, -0.12],
+    sunColor: [1.2, 1.65, 2.25, 1],
+    ambientColor: [0.014, 0.018, 0.024, 1],
+    environmentLightSources: [
+      { id: "warehouse-night-fluorescent", kind: "fluorescent-strip", role: "key", direction: [0.1, 0.94, -0.12], color: [0.68, 0.88, 1, 1], intensity: 2.25, angularRadiusRadians: 0.5 },
+      { id: "warehouse-night-emergency", kind: "emergency-beacon", role: "accent", direction: [-0.4, 0.3, 0.7], color: [1, 0.05, 0.025, 1], intensity: 0.4 },
+      { id: "warehouse-night-door-leak", kind: "window-portal", role: "rim", direction: [0.82, 0.08, -0.2], color: [0.12, 0.22, 0.42, 1], intensity: 0.34 },
+    ],
+  }),
+  "cavern-dawn": defineEnvironmentPreset({
+    preset: "cavern-dawn",
+    scene: "cavern",
+    timeOfDay: "dawn",
+    environmentMode: 15,
+    environmentIntensity: 0.62,
+    exposure: 1.24,
+    horizonColor: [0.5, 0.3, 0.2, 1],
+    zenithColor: [0.04, 0.07, 0.09, 1],
+    sunDirection: [0.72, 0.32, 0.26],
+    sunColor: [2.1, 1.22, 0.64, 1],
+    ambientColor: [0.018, 0.018, 0.016, 1],
+    environmentLightSources: [
+      { id: "cavern-dawn-mouth", kind: "cave-mouth", role: "key", direction: [0.72, 0.32, 0.26], color: [1, 0.58, 0.3, 1], intensity: 2.1, angularRadiusRadians: 0.24 },
+      { id: "cavern-dawn-torch", kind: "torch", role: "emissive", direction: [-0.35, 0.28, -0.6], color: [1, 0.42, 0.16, 1], intensity: 1.35, reach: 18 },
+      { id: "cavern-dawn-crystal", kind: "crystal", role: "accent", direction: [0.08, 0.22, 0.9], color: [0.22, 0.72, 1, 1], intensity: 0.28, reach: 10 },
+    ],
+  }),
+  "cavern-midday": defineEnvironmentPreset({
+    preset: "cavern-midday",
+    scene: "cavern",
+    timeOfDay: "midday",
+    environmentMode: 16,
+    environmentIntensity: 0.72,
+    exposure: 1.16,
+    horizonColor: [0.6, 0.56, 0.48, 1],
+    zenithColor: [0.08, 0.12, 0.14, 1],
+    sunDirection: [0.36, 0.82, 0.14],
+    sunColor: [3.4, 3.05, 2.2, 1],
+    ambientColor: [0.02, 0.022, 0.02, 1],
+    environmentLightSources: [
+      { id: "cavern-midday-mouth", kind: "cave-mouth", role: "key", direction: [0.36, 0.82, 0.14], color: [1, 0.9, 0.66, 1], intensity: 3.4, angularRadiusRadians: 0.18 },
+      { id: "cavern-midday-biolume", kind: "bioluminescence", role: "fill", direction: [-0.25, 0.25, 0.7], color: [0.1, 0.82, 0.64, 1], intensity: 0.46, reach: 14 },
+      { id: "cavern-midday-wet-rock", kind: "ground-bounce", role: "bounce", direction: [0.1, 0.2, -0.3], color: [0.18, 0.2, 0.18, 1], intensity: 0.22 },
+    ],
+  }),
+  "cavern-dusk": defineEnvironmentPreset({
+    preset: "cavern-dusk",
+    scene: "cavern",
+    timeOfDay: "dusk",
+    environmentMode: 17,
+    environmentIntensity: 0.56,
+    exposure: 1.32,
+    horizonColor: [0.46, 0.18, 0.14, 1],
+    zenithColor: [0.035, 0.045, 0.08, 1],
+    sunDirection: [-0.62, 0.22, 0.22],
+    sunColor: [1.55, 0.56, 0.28, 1],
+    ambientColor: [0.014, 0.014, 0.018, 1],
+    environmentLightSources: [
+      { id: "cavern-dusk-mouth", kind: "cave-mouth", role: "rim", direction: [-0.62, 0.22, 0.22], color: [1, 0.36, 0.18, 1], intensity: 1.55, angularRadiusRadians: 0.22 },
+      { id: "cavern-dusk-torch", kind: "torch", role: "key", direction: [0.32, 0.34, -0.54], color: [1, 0.38, 0.12, 1], intensity: 1.85, reach: 20 },
+      { id: "cavern-dusk-biolume", kind: "bioluminescence", role: "fill", direction: [-0.18, 0.18, 0.74], color: [0.08, 0.58, 0.72, 1], intensity: 0.34, reach: 12 },
+    ],
+  }),
+  "cavern-night": defineEnvironmentPreset({
+    preset: "cavern-night",
+    scene: "cavern",
+    timeOfDay: "night",
+    environmentMode: 18,
+    environmentIntensity: 0.5,
+    exposure: 1.45,
+    horizonColor: [0.025, 0.035, 0.06, 1],
+    zenithColor: [0.008, 0.014, 0.03, 1],
+    sunDirection: [0.18, 0.28, -0.68],
+    sunColor: [1.9, 0.72, 0.24, 1],
+    ambientColor: [0.01, 0.012, 0.018, 1],
+    environmentLightSources: [
+      { id: "cavern-night-torch", kind: "torch", role: "key", direction: [0.18, 0.28, -0.68], color: [1, 0.36, 0.12, 1], intensity: 1.9, reach: 18 },
+      { id: "cavern-night-biolume", kind: "bioluminescence", role: "fill", direction: [-0.32, 0.16, 0.72], color: [0.06, 0.62, 0.76, 1], intensity: 0.52, reach: 16 },
+      { id: "cavern-night-lava", kind: "lava-fissure", role: "emissive", direction: [0.42, 0.12, 0.28], color: [1, 0.18, 0.04, 1], intensity: 0.8, reach: 12 },
+    ],
   }),
 });
 
-function resolveEnvironmentPreset(name) {
+export const lightingEnvironmentPresetNames = Object.freeze(
+  Object.keys(environmentLightingPresets)
+);
+
+function resolveEnvironmentPreset(name, timeOfDay) {
   const presetName = typeof name === "string" && name.length > 0 ? name : "product-studio";
   const preset = environmentLightingPresets[presetName];
   if (!preset) {
+    if (lightingEnvironmentSceneNames.includes(presetName)) {
+      if (
+        timeOfDay != null &&
+        !lightingEnvironmentTimeOfDayNames.includes(timeOfDay)
+      ) {
+        throw new Error(
+          `timeOfDay must be one of: ${lightingEnvironmentTimeOfDayNames.join(", ")}.`
+        );
+      }
+      const scenePresetName = `${presetName}-${timeOfDay ?? "midday"}`;
+      const scenePreset = environmentLightingPresets[scenePresetName];
+      if (scenePreset) {
+        return scenePreset;
+      }
+    }
     throw new Error(
       `Unknown lighting environment preset "${presetName}". Expected one of: ${lightingEnvironmentPresetNames.join(", ")}.`
     );
@@ -244,22 +936,34 @@ function estimateEnvironmentColor(config) {
   const zenithWeight = 1 - horizonWeight;
   const glowWeight = 0.055;
   const intensity = Math.max(config.environmentIntensity, 0.0001);
-  return freezeVec4([
+  return ensureNonNullColor([
     (config.horizonColor[0] * horizonWeight + config.zenithColor[0] * zenithWeight + config.sunColor[0] * glowWeight) * intensity,
     (config.horizonColor[1] * horizonWeight + config.zenithColor[1] * zenithWeight + config.sunColor[1] * glowWeight) * intensity,
     (config.horizonColor[2] * horizonWeight + config.zenithColor[2] * zenithWeight + config.sunColor[2] * glowWeight) * intensity,
     1,
-  ]);
+  ], config.dominantLightSource?.radiance ?? config.sunColor);
 }
 
 export function createEnvironmentLightingConfig(options = {}) {
-  const preset = resolveEnvironmentPreset(options.preset ?? options.name);
+  const preset = resolveEnvironmentPreset(
+    options.preset ?? options.name ?? options.scene,
+    options.timeOfDay
+  );
+  const environmentPortals = normalizeEnvironmentPortals(
+    options.environmentPortals ?? options.portals
+  );
+  const environmentPortalMode = normalizeEnvironmentPortalMode(
+    options.environmentPortalMode ?? options.portalMode,
+    environmentPortals.length > 0
+  );
   const environmentIntensity = Math.max(
     readFinite(options.environmentIntensity ?? options.intensity, preset.environmentIntensity),
     0.0001
   );
-  const config = {
+  const baseConfig = {
     preset: preset.preset,
+    scene: preset.scene,
+    timeOfDay: preset.timeOfDay,
     profile: typeof options.profile === "string" ? options.profile : defaultLightingProfile,
     environmentMode: Math.max(0, Math.trunc(readFinite(options.environmentMode, preset.environmentMode))),
     environmentIntensity,
@@ -271,15 +975,42 @@ export function createEnvironmentLightingConfig(options = {}) {
     ),
     sunColor: readColor(options.sunColor, preset.sunColor),
     ambientColor: readColor(options.ambientColor, preset.ambientColor),
+    environmentPortalMode,
+    environmentPortals,
+  };
+  const environmentLightSources = normalizeEnvironmentLightSources(
+    options.environmentLightSources ?? options.lightSources,
+    preset,
+    baseConfig
+  );
+  const dominantLightSource = findDominantEnvironmentLightSource(
+    environmentLightSources
+  );
+  const config = {
+    ...baseConfig,
+    environmentLightSources,
+    lightSources: environmentLightSources,
+    dominantLightSource,
   };
   const environmentColor = estimateEnvironmentColor(config);
+  const environmentMissLighting = createEnvironmentMissLighting(
+    dominantLightSource,
+    environmentColor
+  );
 
   return Object.freeze({
     ...config,
     environmentColor,
+    environmentMissLighting,
     wavefront: Object.freeze({
       environmentColor,
       ambientColor: config.ambientColor,
+      environmentPortalMode: config.environmentPortalMode,
+      environmentPortals: config.environmentPortals,
+      environmentLightSources: config.environmentLightSources,
+      lightSources: config.environmentLightSources,
+      dominantLightSource,
+      environmentMissLighting,
       environmentLighting: Object.freeze({
         horizonColor: config.horizonColor,
         zenithColor: config.zenithColor,
@@ -288,6 +1019,12 @@ export function createEnvironmentLightingConfig(options = {}) {
         intensity: config.environmentIntensity,
         mode: config.environmentMode,
         exposure: config.exposure,
+        environmentPortalMode: config.environmentPortalMode,
+        environmentPortalCount: config.environmentPortals.length,
+        environmentLightSources: config.environmentLightSources,
+        environmentLightSourceCount: config.environmentLightSources.length,
+        dominantLightSource,
+        environmentMissLighting,
       }),
     }),
   });
@@ -298,6 +1035,12 @@ export function createWavefrontEnvironmentLightingOptions(options = {}) {
   return Object.freeze({
     environmentColor: config.wavefront.environmentColor,
     ambientColor: config.wavefront.ambientColor,
+    environmentPortalMode: config.wavefront.environmentPortalMode,
+    environmentPortals: config.wavefront.environmentPortals,
+    environmentLightSources: config.wavefront.environmentLightSources,
+    lightSources: config.wavefront.environmentLightSources,
+    dominantLightSource: config.wavefront.dominantLightSource,
+    environmentMissLighting: config.wavefront.environmentMissLighting,
     environmentLighting: config.wavefront.environmentLighting,
     lightingEnvironment: config,
   });

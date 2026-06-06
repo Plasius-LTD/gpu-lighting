@@ -9,10 +9,19 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
-  - (placeholder)
+  - Added environment-light portal contracts to the reusable environment
+    lighting config so renderers can guide and gate sky/HDRI contribution
+    through room openings such as windows.
+  - Added grass-field, forest, warehouse, and cavern environment lighting
+    preset families with dawn, midday, dusk, and night variants plus normalized
+    light-source metadata for environment-miss inference.
+  - Added scene/time-of-day preset aliases so callers can request environments
+    with `scene` plus `timeOfDay` instead of only combined preset names.
 
 - **Changed**
-  - (placeholder)
+  - Pathtracer environment misses now resolve through non-null inferred
+    environment radiance, and emissive material hits contribute once before
+    terminating the active sample path.
 
 - **Fixed**
   - (placeholder)

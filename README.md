@@ -114,18 +114,58 @@ import {
 } from "@plasius/gpu-lighting";
 
 const lighting = createEnvironmentLightingConfig({
-  preset: "product-studio",
+  scene: "forest",
+  timeOfDay: "dusk",
   intensity: 1.05,
+  environmentPortals: [
+    {
+      id: "north-window",
+      position: [0, 1.2, -2.4],
+      normal: [0, 0, 1],
+      tangent: [1, 0, 0],
+      width: 1.8,
+      height: 1.1,
+      intensity: 1.4,
+    },
+  ],
 });
 
 const wavefrontLighting = createWavefrontEnvironmentLightingOptions({
-  preset: "moonlit-harbor",
+  preset: "cavern-night",
 });
+
+console.log(lighting.environmentLightSources.map((source) => source.kind));
+console.log(wavefrontLighting.environmentMissLighting.startingPoint);
 ```
 
 `createEnvironmentLightingConfig(...)` owns the reusable sky/environment
 semantics: horizon and zenith colours, key-light direction, key-light colour,
-environment intensity, exposure, and ambient residual colour.
+environment intensity, exposure, ambient residual colour, and optional
+environment-light portals.
+
+Preset families now cover:
+
+- `grass-field-{dawn,midday,dusk,night}`
+- `forest-{dawn,midday,dusk,night}`
+- `warehouse-{dawn,midday,dusk,night}`
+- `cavern-{dawn,midday,dusk,night}`
+
+Callers can pass the combined `preset` name directly or pass `scene` plus
+`timeOfDay`; scene-only aliases default to `midday`.
+
+Each preset publishes `scene`, `timeOfDay`, normalized
+`environmentLightSources`, a `dominantLightSource`, and
+`environmentMissLighting`. Source metadata includes source kind, role, direction,
+position, colour, intensity, radiance, luminance, reach, and angular radius.
+Renderers can use `environmentMissLighting` when a path ray misses scene
+geometry: the miss has an inferred source colour/brightness and a stable
+`startingPoint` of `environment-miss` instead of an unbounded null/negative sky
+sample. Emissive material hits remain explicit light-source hits and should not
+be double-counted by environment inference.
+
+Portals describe physical openings such as windows where outside radiance can
+enter an interior. They are normalized as rectangle apertures with position,
+normal, tangent, dimensions, colour, and radiance scale.
 `createWavefrontEnvironmentLightingOptions(...)` projects that contract into the
 current `@plasius/gpu-renderer` wavefront renderer options without making the
 renderer depend on this package directly.

@@ -142,6 +142,19 @@ fn saturate(value: f32) -> f32 {
   return clamp(value, 0.0, 1.0);
 }
 
+fn sanitize_radiance(value: vec3<f32>) -> vec3<f32> {
+  return max(value, vec3<f32>(0.0));
+}
+
+fn ensure_non_null_radiance(value: vec3<f32>) -> vec3<f32> {
+  let radiance = sanitize_radiance(value);
+  if (luminance(radiance) <= 0.000001) {
+    return vec3<f32>(0.0001);
+  }
+
+  return radiance;
+}
+
 fn safe_rcp(value: f32) -> f32 {
   if (abs(value) <= PATH_TRACER_EPSILON) {
     return 0.0;
@@ -170,7 +183,7 @@ fn unpack_material(material: PathTracerMaterial) -> MaterialSample {
   return MaterialSample(
     material.albedo_roughness.xyz,
     clamp(material.albedo_roughness.w, 0.02, 1.0),
-    material.emission_metalness.xyz,
+    sanitize_radiance(material.emission_metalness.xyz),
     saturate(material.emission_metalness.w),
     material.transmittance_ior.xyz,
     max(material.transmittance_ior.w, 1.0)
@@ -229,32 +242,182 @@ fn fresnel_schlick(cos_theta: f32, f0: vec3<f32>) -> vec3<f32> {
   return f0 + (vec3<f32>(1.0) - f0) * factor;
 }
 
+fn environment_horizon_color(mode: u32) -> vec3<f32> {
+  var color = vec3<f32>(0.65, 0.74, 0.86);
+  if (mode == 0u) { color = vec3<f32>(0.33, 0.43, 0.53); }
+  if (mode == 1u) { color = vec3<f32>(0.52, 0.61, 0.65); }
+  if (mode == 2u) { color = vec3<f32>(0.48, 0.53, 0.55); }
+  if (mode == 3u) { color = vec3<f32>(0.92, 0.54, 0.32); }
+  if (mode == 4u) { color = vec3<f32>(0.58, 0.78, 0.96); }
+  if (mode == 5u) { color = vec3<f32>(1.08, 0.42, 0.24); }
+  if (mode == 6u) { color = vec3<f32>(0.08, 0.13, 0.2); }
+  if (mode == 7u) { color = vec3<f32>(0.72, 0.48, 0.28); }
+  if (mode == 8u) { color = vec3<f32>(0.38, 0.62, 0.42); }
+  if (mode == 9u) { color = vec3<f32>(0.72, 0.28, 0.2); }
+  if (mode == 10u) { color = vec3<f32>(0.035, 0.08, 0.1); }
+  if (mode == 11u) { color = vec3<f32>(0.58, 0.44, 0.34); }
+  if (mode == 12u) { color = vec3<f32>(0.64, 0.7, 0.74); }
+  if (mode == 13u) { color = vec3<f32>(0.7, 0.32, 0.24); }
+  if (mode == 14u) { color = vec3<f32>(0.06, 0.08, 0.12); }
+  if (mode == 15u) { color = vec3<f32>(0.5, 0.3, 0.2); }
+  if (mode == 16u) { color = vec3<f32>(0.6, 0.56, 0.48); }
+  if (mode == 17u) { color = vec3<f32>(0.46, 0.18, 0.14); }
+  if (mode == 18u) { color = vec3<f32>(0.025, 0.035, 0.06); }
+  return ensure_non_null_radiance(color);
+}
+
+fn environment_zenith_color(mode: u32) -> vec3<f32> {
+  var color = vec3<f32>(0.05, 0.12, 0.24);
+  if (mode == 0u) { color = vec3<f32>(0.035, 0.07, 0.14); }
+  if (mode == 1u) { color = vec3<f32>(0.18, 0.22, 0.26); }
+  if (mode == 2u) { color = vec3<f32>(0.24, 0.26, 0.29); }
+  if (mode == 3u) { color = vec3<f32>(0.16, 0.28, 0.5); }
+  if (mode == 4u) { color = vec3<f32>(0.1, 0.34, 0.82); }
+  if (mode == 5u) { color = vec3<f32>(0.09, 0.1, 0.32); }
+  if (mode == 6u) { color = vec3<f32>(0.018, 0.035, 0.09); }
+  if (mode == 7u) { color = vec3<f32>(0.08, 0.18, 0.18); }
+  if (mode == 8u) { color = vec3<f32>(0.08, 0.28, 0.32); }
+  if (mode == 9u) { color = vec3<f32>(0.04, 0.07, 0.18); }
+  if (mode == 10u) { color = vec3<f32>(0.012, 0.025, 0.06); }
+  if (mode == 11u) { color = vec3<f32>(0.16, 0.19, 0.24); }
+  if (mode == 12u) { color = vec3<f32>(0.28, 0.34, 0.42); }
+  if (mode == 13u) { color = vec3<f32>(0.08, 0.1, 0.18); }
+  if (mode == 14u) { color = vec3<f32>(0.02, 0.03, 0.055); }
+  if (mode == 15u) { color = vec3<f32>(0.04, 0.07, 0.09); }
+  if (mode == 16u) { color = vec3<f32>(0.08, 0.12, 0.14); }
+  if (mode == 17u) { color = vec3<f32>(0.035, 0.045, 0.08); }
+  if (mode == 18u) { color = vec3<f32>(0.008, 0.014, 0.03); }
+  return ensure_non_null_radiance(color);
+}
+
+fn environment_key_direction(mode: u32) -> vec3<f32> {
+  var direction = vec3<f32>(0.35, 0.92, 0.18);
+  if (mode == 0u) { direction = vec3<f32>(0.22, 0.88, 0.42); }
+  if (mode == 1u) { direction = vec3<f32>(0.18, 0.93, 0.24); }
+  if (mode == 2u) { direction = vec3<f32>(-0.24, 0.86, 0.36); }
+  if (mode == 3u) { direction = vec3<f32>(0.64, 0.32, 0.18); }
+  if (mode == 4u) { direction = vec3<f32>(0.18, 0.98, 0.08); }
+  if (mode == 5u) { direction = vec3<f32>(-0.76, 0.24, 0.22); }
+  if (mode == 6u) { direction = vec3<f32>(-0.22, 0.86, -0.34); }
+  if (mode == 7u) { direction = vec3<f32>(0.58, 0.42, -0.24); }
+  if (mode == 8u) { direction = vec3<f32>(0.08, 0.96, -0.18); }
+  if (mode == 9u) { direction = vec3<f32>(-0.7, 0.18, -0.18); }
+  if (mode == 10u) { direction = vec3<f32>(0.2, 0.82, -0.46); }
+  if (mode == 11u) { direction = vec3<f32>(0.82, 0.28, 0.18); }
+  if (mode == 12u) { direction = vec3<f32>(0.35, 0.86, 0.16); }
+  if (mode == 13u) { direction = vec3<f32>(-0.78, 0.18, 0.16); }
+  if (mode == 14u) { direction = vec3<f32>(0.1, 0.94, -0.12); }
+  if (mode == 15u) { direction = vec3<f32>(0.72, 0.32, 0.26); }
+  if (mode == 16u) { direction = vec3<f32>(0.36, 0.82, 0.14); }
+  if (mode == 17u) { direction = vec3<f32>(0.32, 0.34, -0.54); }
+  if (mode == 18u) { direction = vec3<f32>(0.18, 0.28, -0.68); }
+  return safe_normalize(direction);
+}
+
+fn environment_fill_direction(mode: u32) -> vec3<f32> {
+  var direction = vec3<f32>(0.0, 1.0, 0.0);
+  if (mode == 3u || mode == 4u || mode == 5u) { direction = vec3<f32>(0.0, 0.35, 0.1); }
+  if (mode == 6u) { direction = vec3<f32>(0.0, 1.0, 0.0); }
+  if (mode >= 7u && mode <= 10u) { direction = vec3<f32>(0.18, 0.75, 0.2); }
+  if (mode >= 11u && mode <= 14u) { direction = vec3<f32>(0.0, 0.95, -0.08); }
+  if (mode >= 15u && mode <= 18u) { direction = vec3<f32>(-0.25, 0.22, 0.7); }
+  return safe_normalize(direction);
+}
+
+fn environment_key_color(mode: u32) -> vec3<f32> {
+  var color = vec3<f32>(8.0, 7.6, 6.8);
+  if (mode == 0u) { color = vec3<f32>(0.7, 0.76, 0.9) * 2.2; }
+  if (mode == 1u) { color = vec3<f32>(1.0, 0.94, 0.82) * 4.1; }
+  if (mode == 2u) { color = vec3<f32>(0.96, 0.97, 1.0) * 2.5; }
+  if (mode == 3u) { color = vec3<f32>(1.0, 0.58, 0.28) * 5.6; }
+  if (mode == 4u) { color = vec3<f32>(1.0, 0.96, 0.86) * 9.8; }
+  if (mode == 5u) { color = vec3<f32>(1.0, 0.34, 0.16) * 4.8; }
+  if (mode == 6u) { color = vec3<f32>(0.52, 0.62, 1.0) * 1.25; }
+  if (mode == 7u) { color = vec3<f32>(1.0, 0.62, 0.32) * 4.4; }
+  if (mode == 8u) { color = vec3<f32>(1.0, 0.96, 0.74) * 7.2; }
+  if (mode == 9u) { color = vec3<f32>(1.0, 0.34, 0.2) * 2.2; }
+  if (mode == 10u) { color = vec3<f32>(0.42, 0.56, 1.0) * 0.95; }
+  if (mode == 11u) { color = vec3<f32>(1.0, 0.62, 0.34) * 2.8; }
+  if (mode == 12u) { color = vec3<f32>(0.92, 0.96, 1.0) * 4.2; }
+  if (mode == 13u) { color = vec3<f32>(1.0, 0.42, 0.2) * 2.4; }
+  if (mode == 14u) { color = vec3<f32>(0.68, 0.88, 1.0) * 2.25; }
+  if (mode == 15u) { color = vec3<f32>(1.0, 0.58, 0.3) * 2.1; }
+  if (mode == 16u) { color = vec3<f32>(1.0, 0.9, 0.66) * 3.4; }
+  if (mode == 17u) { color = vec3<f32>(1.0, 0.38, 0.12) * 1.85; }
+  if (mode == 18u) { color = vec3<f32>(1.0, 0.36, 0.12) * 1.9; }
+  return ensure_non_null_radiance(color);
+}
+
+fn environment_fill_color(mode: u32) -> vec3<f32> {
+  var color = vec3<f32>(0.3, 0.4, 0.6);
+  if (mode == 0u) { color = vec3<f32>(0.22, 0.31, 0.48) * 0.35; }
+  if (mode == 1u) { color = vec3<f32>(0.75, 0.84, 1.0) * 1.3; }
+  if (mode == 2u) { color = vec3<f32>(0.55, 0.58, 0.62) * 0.8; }
+  if (mode == 3u) { color = vec3<f32>(0.22, 0.44, 0.12) * 0.45; }
+  if (mode == 4u) { color = vec3<f32>(0.28, 0.56, 0.16) * 0.65; }
+  if (mode == 5u) { color = vec3<f32>(0.12, 0.28, 0.11) * 0.35; }
+  if (mode == 6u) { color = vec3<f32>(0.32, 0.38, 0.6) * 0.24; }
+  if (mode == 7u) { color = vec3<f32>(0.34, 0.68, 0.24) * 0.86; }
+  if (mode == 8u) { color = vec3<f32>(0.24, 0.72, 0.28) * 1.35; }
+  if (mode == 9u) { color = vec3<f32>(0.18, 0.38, 0.2) * 0.52; }
+  if (mode == 10u) { color = vec3<f32>(0.08, 0.18, 0.12) * 0.28; }
+  if (mode == 11u) { color = vec3<f32>(0.78, 0.9, 1.0) * 1.1; }
+  if (mode == 12u) { color = vec3<f32>(0.78, 0.92, 1.0) * 1.6; }
+  if (mode == 13u) { color = vec3<f32>(0.72, 0.88, 1.0) * 1.35; }
+  if (mode == 14u) { color = vec3<f32>(1.0, 0.05, 0.025) * 0.4; }
+  if (mode == 15u) { color = vec3<f32>(1.0, 0.42, 0.16) * 1.35; }
+  if (mode == 16u) { color = vec3<f32>(0.1, 0.82, 0.64) * 0.46; }
+  if (mode == 17u) { color = vec3<f32>(0.08, 0.58, 0.72) * 0.34; }
+  if (mode == 18u) { color = vec3<f32>(0.06, 0.62, 0.76) * 0.52; }
+  return ensure_non_null_radiance(color);
+}
+
+fn environment_horizon_glow(mode: u32) -> vec3<f32> {
+  var color = environment_horizon_color(mode) * 0.2;
+  if (mode == 5u || mode == 9u || mode == 13u || mode == 17u) {
+    color = color + vec3<f32>(0.8, 0.22, 0.12);
+  }
+  if (mode == 14u || mode == 18u) {
+    color = color + vec3<f32>(0.08, 0.12, 0.22);
+  }
+  return ensure_non_null_radiance(color);
+}
+
+fn environment_key_focus(mode: u32) -> f32 {
+  var focus = 192.0;
+  if (mode == 1u || mode == 2u || (mode >= 11u && mode <= 14u)) {
+    focus = 48.0;
+  }
+  if (mode >= 15u && mode <= 18u) {
+    focus = 28.0;
+  }
+  if (mode == 6u || mode == 10u) {
+    focus = 384.0;
+  }
+  return focus;
+}
+
 fn environment_radiance(
   direction: vec3<f32>,
   intensity: f32,
   mode: u32
 ) -> vec3<f32> {
   let up_factor = saturate(direction.y * 0.5 + 0.5);
-  let horizon_color = vec3<f32>(0.65, 0.74, 0.86);
-  let zenith_color = select(
-    vec3<f32>(0.05, 0.12, 0.24),
-    vec3<f32>(0.11, 0.08, 0.18),
-    mode == 1u
+  let horizon_color = environment_horizon_color(mode);
+  let zenith_color = environment_zenith_color(mode);
+  let key_direction = safe_normalize(environment_key_direction(mode));
+  let fill_direction = safe_normalize(environment_fill_direction(mode));
+  let key_glow = pow(saturate(dot(direction, key_direction)), environment_key_focus(mode));
+  let fill_glow = pow(saturate(dot(direction, fill_direction)), 32.0);
+  let horizon_band = pow(1.0 - abs(direction.y), 2.0);
+  let sky = horizon_color * (1.0 - up_factor) + zenith_color * up_factor;
+  let inferred_source =
+    environment_key_color(mode) * key_glow +
+    environment_fill_color(mode) * fill_glow * 0.35 +
+    environment_horizon_glow(mode) * horizon_band;
+  return ensure_non_null_radiance(
+    (sky + inferred_source) * max(intensity, 0.0001)
   );
-  let sunset_color = vec3<f32>(1.1, 0.64, 0.32);
-  let sun_direction = safe_normalize(vec3<f32>(0.35, 0.92, 0.18));
-  let moon_direction = safe_normalize(vec3<f32>(-0.2, 0.98, -0.1));
-  let sun_glow = pow(saturate(dot(direction, sun_direction)), 256.0);
-  let moon_glow = pow(saturate(dot(direction, moon_direction)), 512.0);
-  var sky = horizon_color * (1.0 - up_factor) + zenith_color * up_factor;
-  if (mode == 1u) {
-    sky = sky * (1.0 - up_factor * 0.4) + sunset_color * sun_glow * 0.25;
-  }
-  return (
-    sky +
-    vec3<f32>(8.0, 7.6, 6.8) * sun_glow +
-    vec3<f32>(0.7, 0.76, 0.9) * moon_glow * 0.3
-  ) * max(intensity, 0.0001);
 }
 
 fn miss_hit(ray: Ray) -> PathHit {
