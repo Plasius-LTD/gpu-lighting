@@ -191,8 +191,40 @@ export const lightingDistanceBands = Object.freeze([
 export const lightingWorkerQueueClass = "lighting";
 export const lightingDebugOwner = "lighting";
 
+const environmentPresetAmbientScales = Object.freeze({
+  "grass-field": 0.78,
+  forest: 0.78,
+  warehouse: 0.82,
+  cavern: 0.78,
+});
+
+const environmentSunlitBaselineByTimeOfDay = Object.freeze({
+  dawn: 0.18,
+  midday: 0.28,
+  dusk: 0.14,
+  night: 0.035,
+});
+
+const environmentSunlitBaselineSceneScales = Object.freeze({
+  "grass-field": 1,
+  forest: 0.78,
+  warehouse: 0.62,
+  cavern: 0.42,
+  harbor: 0.85,
+  studio: 0.58,
+});
+
 function freezeVec4(value) {
   return Object.freeze([value[0], value[1], value[2], value[3] ?? 1]);
+}
+
+function scaleVec4(value, scale) {
+  return [
+    value[0] * scale,
+    value[1] * scale,
+    value[2] * scale,
+    value[3] ?? 1,
+  ];
 }
 
 function normalizeVector3(value, fallback) {
@@ -377,6 +409,27 @@ function normalizeEnvironmentPortals(value) {
   return Object.freeze(value.map(normalizeEnvironmentPortal));
 }
 
+function normalizeEnvironmentMap(value) {
+  if (value == null) {
+    return null;
+  }
+  if (!value || typeof value !== "object") {
+    throw new Error("environmentMap must be an object when provided.");
+  }
+  return Object.freeze({
+    ...value,
+    id: typeof value.id === "string" && value.id.length > 0
+      ? value.id
+      : "environment-map",
+    projection: typeof value.projection === "string" && value.projection.length > 0
+      ? value.projection
+      : "equirectangular",
+    intensity: readPositiveFinite(value.intensity ?? value.radianceScale, 1),
+    rotationRadians: readFinite(value.rotationRadians ?? value.rotation, 0),
+    ambientStrength: Math.max(0, readFinite(value.ambientStrength, 0.32)),
+  });
+}
+
 function freezeLightSourceSpec(source) {
   return Object.freeze({
     ...source,
@@ -391,15 +444,30 @@ function freezeLightSourceSpec(source) {
 }
 
 function defineEnvironmentPreset(spec) {
+  const scene = spec.scene ?? "studio";
+  const timeOfDay = spec.timeOfDay ?? "midday";
+  const ambientScale = Math.max(
+    0,
+    readFinite(spec.ambientScale, environmentPresetAmbientScales[scene] ?? 1)
+  );
+  const defaultSunlitBaseline =
+    (environmentSunlitBaselineByTimeOfDay[timeOfDay] ??
+      environmentSunlitBaselineByTimeOfDay.midday) *
+    (environmentSunlitBaselineSceneScales[scene] ?? 0.58);
+  const sunlitBaseline = Math.max(
+    0,
+    readFinite(spec.sunlitBaseline, defaultSunlitBaseline)
+  );
   return Object.freeze({
     ...spec,
-    scene: spec.scene ?? "studio",
-    timeOfDay: spec.timeOfDay ?? "midday",
+    scene,
+    timeOfDay,
     horizonColor: freezeVec4(spec.horizonColor),
     zenithColor: freezeVec4(spec.zenithColor),
     sunDirection: Object.freeze(normalizeVector3(spec.sunDirection, [0, 1, 0])),
     sunColor: freezeVec4(spec.sunColor),
-    ambientColor: freezeVec4(spec.ambientColor),
+    ambientColor: freezeVec4(scaleVec4(spec.ambientColor, ambientScale)),
+    sunlitBaseline,
     environmentLightSources: Object.freeze(
       (spec.environmentLightSources ?? []).map(freezeLightSourceSpec)
     ),
@@ -952,6 +1020,9 @@ export function createEnvironmentLightingConfig(options = {}) {
   const environmentPortals = normalizeEnvironmentPortals(
     options.environmentPortals ?? options.portals
   );
+  const environmentMap = normalizeEnvironmentMap(
+    options.environmentMap ?? options.hdri ?? preset.environmentMap
+  );
   const environmentPortalMode = normalizeEnvironmentPortalMode(
     options.environmentPortalMode ?? options.portalMode,
     environmentPortals.length > 0
@@ -975,8 +1046,13 @@ export function createEnvironmentLightingConfig(options = {}) {
     ),
     sunColor: readColor(options.sunColor, preset.sunColor),
     ambientColor: readColor(options.ambientColor, preset.ambientColor),
+    sunlitBaseline: Math.max(
+      0,
+      readFinite(options.sunlitBaseline ?? options.daylightBaseline, preset.sunlitBaseline)
+    ),
     environmentPortalMode,
     environmentPortals,
+    environmentMap,
   };
   const environmentLightSources = normalizeEnvironmentLightSources(
     options.environmentLightSources ?? options.lightSources,
@@ -1005,8 +1081,10 @@ export function createEnvironmentLightingConfig(options = {}) {
     wavefront: Object.freeze({
       environmentColor,
       ambientColor: config.ambientColor,
+      sunlitBaseline: config.sunlitBaseline,
       environmentPortalMode: config.environmentPortalMode,
       environmentPortals: config.environmentPortals,
+      environmentMap: config.environmentMap,
       environmentLightSources: config.environmentLightSources,
       lightSources: config.environmentLightSources,
       dominantLightSource,
@@ -1019,8 +1097,10 @@ export function createEnvironmentLightingConfig(options = {}) {
         intensity: config.environmentIntensity,
         mode: config.environmentMode,
         exposure: config.exposure,
+        sunlitBaseline: config.sunlitBaseline,
         environmentPortalMode: config.environmentPortalMode,
         environmentPortalCount: config.environmentPortals.length,
+        environmentMap: config.environmentMap,
         environmentLightSources: config.environmentLightSources,
         environmentLightSourceCount: config.environmentLightSources.length,
         dominantLightSource,
@@ -1035,8 +1115,10 @@ export function createWavefrontEnvironmentLightingOptions(options = {}) {
   return Object.freeze({
     environmentColor: config.wavefront.environmentColor,
     ambientColor: config.wavefront.ambientColor,
+    sunlitBaseline: config.wavefront.sunlitBaseline,
     environmentPortalMode: config.wavefront.environmentPortalMode,
     environmentPortals: config.wavefront.environmentPortals,
+    environmentMap: config.wavefront.environmentMap,
     environmentLightSources: config.wavefront.environmentLightSources,
     lightSources: config.wavefront.environmentLightSources,
     dominantLightSource: config.wavefront.dominantLightSource,

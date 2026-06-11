@@ -51,6 +51,14 @@ function urlToPath(url) {
   return fileURLToPath(url);
 }
 
+function roundColor(value) {
+  return value.map((component) => Number(component.toFixed(4)));
+}
+
+function luminance(value) {
+  return value[0] * 0.2126 + value[1] * 0.7152 + value[2] * 0.0722;
+}
+
 async function importLightingModuleWithBase(metaUrl, querySuffix) {
   const previous = globalThis.__IMPORT_META_URL__;
   globalThis.__IMPORT_META_URL__ = metaUrl;
@@ -143,6 +151,12 @@ test("environment presets cover outdoor, interior, and underground time-of-day v
       assert.equal(config.environmentMissLighting.sourceId, config.dominantLightSource.id);
       assert.ok(config.environmentMissLighting.luminance > 0);
       assert.ok(config.environmentColor.slice(0, 3).every((component) => component > 0));
+      assert.ok(config.sunlitBaseline > 0);
+      assert.equal(config.wavefront.sunlitBaseline, config.sunlitBaseline);
+      assert.equal(
+        config.wavefront.environmentLighting.sunlitBaseline,
+        config.sunlitBaseline
+      );
       assert.ok(
         config.environmentLightSources.every((source) =>
           source.radiance.slice(0, 3).every((component) => component >= 0)
@@ -154,6 +168,46 @@ test("environment presets cover outdoor, interior, and underground time-of-day v
       );
     }
   }
+});
+
+test("environment scene presets use restrained ambient residuals", () => {
+  const field = createEnvironmentLightingConfig({ preset: "grass-field-midday" });
+  const warehouse = createEnvironmentLightingConfig({ preset: "warehouse-midday" });
+  const studio = createEnvironmentLightingConfig({ preset: "product-studio" });
+  const override = createEnvironmentLightingConfig({
+    preset: "forest-midday",
+    ambientColor: [0.08, 0.09, 0.1, 1],
+  });
+
+  assert.deepEqual(roundColor(field.ambientColor), [0.0374, 0.0484, 0.0312, 1]);
+  assert.deepEqual(roundColor(warehouse.ambientColor), [0.0279, 0.0295, 0.0312, 1]);
+  assert.ok(luminance(field.ambientColor) < luminance([0.048, 0.062, 0.04, 1]));
+  assert.ok(luminance(warehouse.ambientColor) < luminance([0.034, 0.036, 0.038, 1]));
+  assert.deepEqual(studio.ambientColor, [0.024, 0.027, 0.03, 1]);
+  assert.deepEqual(override.ambientColor, [0.08, 0.09, 0.1, 1]);
+});
+
+test("environment presets expose time-of-day sunlit baselines", () => {
+  const fieldDawn = createEnvironmentLightingConfig({ preset: "grass-field-dawn" });
+  const fieldMidday = createEnvironmentLightingConfig({ preset: "grass-field-midday" });
+  const fieldDusk = createEnvironmentLightingConfig({ preset: "grass-field-dusk" });
+  const fieldNight = createEnvironmentLightingConfig({ preset: "grass-field-night" });
+  const forestMidday = createEnvironmentLightingConfig({ preset: "forest-midday" });
+  const warehouseMidday = createEnvironmentLightingConfig({ preset: "warehouse-midday" });
+  const cavernMidday = createEnvironmentLightingConfig({ preset: "cavern-midday" });
+  const override = createEnvironmentLightingConfig({
+    preset: "cavern-night",
+    sunlitBaseline: 0.21,
+  });
+
+  assert.ok(fieldMidday.sunlitBaseline > fieldDawn.sunlitBaseline);
+  assert.ok(fieldDawn.sunlitBaseline > fieldDusk.sunlitBaseline);
+  assert.ok(fieldDusk.sunlitBaseline > fieldNight.sunlitBaseline);
+  assert.ok(forestMidday.sunlitBaseline < fieldMidday.sunlitBaseline);
+  assert.ok(warehouseMidday.sunlitBaseline < forestMidday.sunlitBaseline);
+  assert.ok(cavernMidday.sunlitBaseline < warehouseMidday.sunlitBaseline);
+  assert.equal(override.sunlitBaseline, 0.21);
+  assert.equal(override.wavefront.environmentLighting.sunlitBaseline, 0.21);
 });
 
 test("environment preset resolution accepts scene and time-of-day aliases", () => {
@@ -240,8 +294,18 @@ test("environment lighting config normalizes window portals for environment ligh
 });
 
 test("wavefront environment lighting options provide renderer-ready fields", () => {
+  const environmentMap = {
+    id: "studio-hdri",
+    projection: "equirectangular",
+    width: 4,
+    height: 2,
+    intensity: 1.6,
+    rotationRadians: 0.5,
+    ambientStrength: 0.42,
+  };
   const options = createWavefrontEnvironmentLightingOptions({
     preset: "moonlit-harbor",
+    environmentMap,
     environmentPortalMode: "guide",
     environmentPortals: [
       {
@@ -260,6 +324,14 @@ test("wavefront environment lighting options provide renderer-ready fields", () 
   assert.equal(options.environmentPortals.length, 1);
   assert.equal(options.environmentPortals[0].width, 1);
   assert.equal(options.environmentPortals[0].height, 0.5);
+  assert.equal(options.environmentMap.id, "studio-hdri");
+  assert.equal(options.environmentMap.projection, "equirectangular");
+  assert.equal(options.environmentMap.intensity, 1.6);
+  assert.equal(options.environmentMap.rotationRadians, 0.5);
+  assert.equal(options.environmentMap.ambientStrength, 0.42);
+  assert.equal(options.sunlitBaseline, options.lightingEnvironment.sunlitBaseline);
+  assert.equal(options.environmentLighting.sunlitBaseline, options.sunlitBaseline);
+  assert.deepEqual(options.environmentLighting.environmentMap, options.environmentMap);
   assert.equal(options.environmentLighting.horizonColor.length, 4);
   assert.equal(options.environmentLighting.zenithColor.length, 4);
   assert.equal(options.environmentLighting.sunColor.length, 4);
