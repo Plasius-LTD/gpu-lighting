@@ -9,10 +9,17 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - Added `environmentMap`/`hdri` passthrough in wavefront lighting options so
+    renderers can use HDRI/equirectangular radiance textures as environment
+    light sources instead of relying primarily on static ambient colours.
+  - Added `sunlitBaseline` to environment lighting presets and wavefront
+    lighting options so renderers can apply a time-of-day daylight floor at
+    terminal path collisions without raising ambient residual colour.
   - (placeholder)
 
 - **Changed**
-  - (placeholder)
+  - Reduced ambient residual strength for the grass-field, forest, warehouse,
+    and cavern environment preset families to avoid low-sample whitewash.
 
 - **Fixed**
   - (placeholder)

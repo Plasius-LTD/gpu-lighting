@@ -141,7 +141,12 @@ console.log(wavefrontLighting.environmentMissLighting.startingPoint);
 `createEnvironmentLightingConfig(...)` owns the reusable sky/environment
 semantics: horizon and zenith colours, key-light direction, key-light colour,
 environment intensity, exposure, ambient residual colour, and optional
-environment-light portals.
+environment-light portals. The grass-field, forest, warehouse, and cavern
+families use restrained ambient residual scaling so low-sample renderers keep
+some final-bounce colour without washing dark materials toward white. They also
+publish `sunlitBaseline`, a scene-scaled time-of-day daylight floor that
+renderers can use at terminal path collisions without raising the global
+ambient colour.
 
 Preset families now cover:
 
@@ -154,14 +159,18 @@ Callers can pass the combined `preset` name directly or pass `scene` plus
 `timeOfDay`; scene-only aliases default to `midday`.
 
 Each preset publishes `scene`, `timeOfDay`, normalized
-`environmentLightSources`, a `dominantLightSource`, and
+`sunlitBaseline`, `environmentLightSources`, a `dominantLightSource`, and
 `environmentMissLighting`. Source metadata includes source kind, role, direction,
 position, colour, intensity, radiance, luminance, reach, and angular radius.
 Renderers can use `environmentMissLighting` when a path ray misses scene
 geometry: the miss has an inferred source colour/brightness and a stable
 `startingPoint` of `environment-miss` instead of an unbounded null/negative sky
 sample. Emissive material hits remain explicit light-source hits and should not
-be double-counted by environment inference.
+be double-counted by environment inference. Callers can also pass an
+`environmentMap`/`hdri` descriptor; the lighting config preserves it in
+`createWavefrontEnvironmentLightingOptions(...)` so the wavefront renderer can
+sample an equirectangular radiance map for environment misses and ambient
+residuals instead of relying primarily on static ambient values.
 
 Portals describe physical openings such as windows where outside radiance can
 enter an interior. They are normalized as rectangle apertures with position,
