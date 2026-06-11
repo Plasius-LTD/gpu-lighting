@@ -71,8 +71,16 @@ jobs:
             esac
 
             REGISTRY_VER=$(npm view "$NAME" version 2>/dev/null || true)
+            TAG_VER=$(
+              git ls-remote --tags origin "refs/tags/v*" |
+                awk '{ print $2 }' |
+                sed -E 's#refs/tags/v##; s#\^\{\}##' |
+                grep -E '^[0-9]+\.[0-9]+\.[0-9]+($|-)' |
+                sort -V |
+                tail -n 1 || true
+            )
             TARGET_VER=$(node -e '
-          const [localVersion, registryVersion, bump, preid] = process.argv.slice(1);
+          const [localVersion, registryVersion, tagVersion, bump, preid] = process.argv.slice(1);
           const clean = (value) => String(value || "").replace(/^v/, "").trim();
           const parse = (value) => {
             const [core] = clean(value).split("-");
@@ -92,7 +100,10 @@ jobs:
 
           const local = parse(localVersion);
           const registry = registryVersion ? parse(registryVersion) : local;
-          const base = compare(registry, local) > 0 ? registry : local;
+          const tag = tagVersion ? parse(tagVersion) : local;
+          let base = local;
+          if (compare(registry, base) > 0) base = registry;
+          if (compare(tag, base) > 0) base = tag;
           let next;
           switch (bump) {
             case "major":
@@ -113,7 +124,7 @@ jobs:
             version = `${version}-${preid}.0`;
           }
           process.stdout.write(version);
-          ' "$CURRENT_VER" "$REGISTRY_VER" "$BUMP" "${PREID:-}")
+          ' "$CURRENT_VER" "$REGISTRY_VER" "$TAG_VER" "$BUMP" "${PREID:-}")
             NEW_VER=$(npm version "$TARGET_VER" --no-git-tag-version --allow-same-version)
           fi
 
