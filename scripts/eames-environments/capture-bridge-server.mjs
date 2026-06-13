@@ -82,7 +82,7 @@ async function writeCaptureArtifact(request, response) {
 
 async function serveStaticAsset(requestPath, response) {
   let filePath = resolveWorkspacePath(requestPath);
-  let stats = null;
+  let stats;
   try {
     stats = await fs.stat(filePath);
   } catch {
