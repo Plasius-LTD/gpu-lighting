@@ -1,23 +1,20 @@
 import fs from "node:fs/promises";
-import net from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { spawn } from "node:child_process";
 import {
   ensureCaptureArtifactDirectory,
   formatCaptureDiagnostic,
   openCaptureBrowser,
   readCanvasCapture,
-  resolveCaptureWorkspaceRoot,
   readPageDiagnostic,
   summarizeRgbaPixels,
   waitForCaptureReady,
   writePngDataUrl,
 } from "./capture-runtime.mjs";
+import { openCaptureServerSession } from "./capture-server.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "../../..");
-const workspaceRoot = resolveCaptureWorkspaceRoot();
 const artifactDirectoryPromise = ensureCaptureArtifactDirectory();
 const defaultCaptureWidth = readCaptureInteger("PLASIUS_CAPTURE_WIDTH", 1280, 320, 4096);
 const defaultCaptureHeight = readCaptureInteger("PLASIUS_CAPTURE_HEIGHT", 720, 180, 2304);
@@ -81,101 +78,6 @@ function readCapturePresets(value, fallback) {
     }
   }
   return selected;
-}
-
-async function portIsFree(port) {
-  return new Promise((resolve) => {
-    const server = net.createServer();
-    server.once("error", () => resolve(false));
-    server.once("listening", () => {
-      server.close(() => resolve(true));
-    });
-    server.listen(port, "127.0.0.1");
-  });
-}
-
-async function findFreePort(start = 8765) {
-  for (let port = start; port < start + 100; port += 1) {
-    if (await portIsFree(port)) {
-      return port;
-    }
-  }
-  throw new Error("Unable to find a free local HTTP port for screenshot capture.");
-}
-
-async function canReuseStaticServer(port) {
-  try {
-    const response = await fetch(
-      `http://127.0.0.1:${port}/gpu-lighting/demo/eames-environments/index.html`
-    );
-    return response.ok;
-  } catch {
-    return false;
-  }
-}
-
-async function findServerPort(start = 8765) {
-  for (let port = start; port < start + 100; port += 1) {
-    if (await canReuseStaticServer(port)) {
-      return { port, reuse: true };
-    }
-    if (await portIsFree(port)) {
-      return { port, reuse: false };
-    }
-  }
-  throw new Error("Unable to find or start a local HTTP port for screenshot capture.");
-}
-
-async function waitForServer(url, server) {
-  const deadline = Date.now() + 20_000;
-  while (Date.now() < deadline) {
-    if (server.exitCode !== null) {
-      throw new Error(`Static server exited early with code ${server.exitCode}.`);
-    }
-    try {
-      const response = await fetch(url);
-      if (response.ok) {
-        return;
-      }
-    } catch {
-      // Retry until the server is listening.
-    }
-    await new Promise((resolve) => setTimeout(resolve, 200));
-  }
-  throw new Error(`Timed out waiting for static server at ${url}.`);
-}
-
-function startStaticServer(port) {
-  const server = spawn(
-    "python3",
-    ["-m", "http.server", String(port), "--bind", "127.0.0.1", "--directory", workspaceRoot],
-    {
-      stdio: ["ignore", "pipe", "pipe"],
-    }
-  );
-  server.stdout.on("data", (chunk) => process.stdout.write(`[server] ${chunk}`));
-  server.stderr.on("data", (chunk) => process.stderr.write(`[server] ${chunk}`));
-  return server;
-}
-
-async function stopStaticServer(server) {
-  if (!server) {
-    return;
-  }
-  if (server.exitCode !== null) {
-    return;
-  }
-  server.kill("SIGTERM");
-  await new Promise((resolve) => {
-    const timer = setTimeout(resolve, 2500);
-    server.once("exit", () => {
-      clearTimeout(timer);
-      resolve();
-    });
-  });
-  if (server.exitCode === null) {
-    server.kill("SIGKILL");
-  }
 }
 
 async function capturePreset(page, baseUrl, preset, geometry) {
@@ -261,16 +163,11 @@ async function capturePreset(page, baseUrl, preset, geometry) {
 }
 
 async function captureMatrix(geometry) {
-  const { port, reuse } = await findServerPort();
-  const baseUrl = `http://127.0.0.1:${port}`;
-  const server = reuse ? null : startStaticServer(port);
-  await waitForServer(
-    `${baseUrl}/gpu-lighting/demo/eames-environments/index.html`,
-    server ?? { exitCode: null }
-  );
+  const serverSession = await openCaptureServerSession();
 
   let browserSession;
   try {
+    const baseUrl = serverSession.baseUrl;
     browserSession = await openCaptureBrowser();
     const page = await browserSession.context.newPage({
       viewport: { width: defaultCaptureWidth, height: defaultCaptureHeight },
@@ -304,12 +201,12 @@ async function captureMatrix(geometry) {
     }
     return {
       geometry,
-      baseUrl,
+      baseUrl: serverSession.baseUrl,
       results,
     };
   } finally {
     await browserSession?.close();
-    await stopStaticServer(server);
+    await serverSession.close();
   }
 }
 

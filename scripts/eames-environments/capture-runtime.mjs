@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
@@ -15,6 +16,13 @@ const defaultCaptureArtifactDirectory = path.join(
 export function readOptionalString(value) {
   const text = String(value ?? "").trim();
   return text.length > 0 ? text : null;
+}
+
+export function resolveCaptureBrowserProfileDirectory(
+  tempRoot = os.tmpdir(),
+  processId = process.pid
+) {
+  return path.join(tempRoot, `plasius-playwright-eames-${processId}`);
 }
 
 export function resolveCaptureArtifactDirectory(value = process.env.PLASIUS_CAPTURE_OUTPUT_DIR) {
@@ -192,7 +200,7 @@ export async function openCaptureBrowser() {
     };
   }
 
-  const userDataDir = path.join("/private/tmp", `plasius-playwright-eames-${process.pid}`);
+  const userDataDir = resolveCaptureBrowserProfileDirectory();
   const launchOptions = {
     args: [
       "--enable-unsafe-webgpu",

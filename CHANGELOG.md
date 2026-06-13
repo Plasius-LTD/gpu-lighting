@@ -56,6 +56,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - Eames validation page can now freeze its own canvas and POST the PNG back
     to a local bridge endpoint, which provides a browser-driven screenshot
     fallback when Playwright cannot own the Chromium process directly.
+  - Eames validation capture and reverse-pass debug entry points now share one
+    server-selection helper so port reuse, static serving, and bridge-ready
+    startup rules stay aligned across local runs and CI.
 
 - **Fixed**
   - Eames Playwright validation pages and capture scripts now surface import,
@@ -64,6 +67,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - Eames validation renders now collect optional output-probe figures after the
     frame render completes instead of coupling probe readback to the heavy
     high-SPP render submission itself.
+  - Eames capture helpers now resolve browser profile and temporary output paths
+    through the host OS temp directory instead of assuming macOS-only
+    `/private/tmp`, which fixes Linux CI validation.
 
 - **Security**
   - (placeholder)

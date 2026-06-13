@@ -77,6 +77,11 @@ pass
 freeze its own canvas and POST the PNG back to the bridge server once the
 render completes.
 
+The main capture and reverse-pass debug capture entry points now share the same
+server-selection helper, so local reuse, fresh static-server startup, and
+bridge fallback all follow the same port and readiness rules across macOS and
+Linux.
+
 The capture scripts now pin deterministic validation settings unless explicitly
 overridden:
 

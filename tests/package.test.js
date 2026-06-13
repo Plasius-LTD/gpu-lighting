@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -65,10 +66,15 @@ const {
   formatCaptureDiagnostic,
   looksLikeBrowserBootstrapFailure,
   readOptionalString,
+  resolveCaptureBrowserProfileDirectory,
   resolveCaptureArtifactDirectory,
   resolveCaptureWorkspaceRoot,
   summarizeRgbaPixels,
 } = await import("../scripts/eames-environments/capture-runtime.mjs");
+const {
+  buildCaptureAssetUrl,
+  findCaptureServerPort,
+} = await import("../scripts/eames-environments/capture-server.mjs");
 const { loadEamesGltfModel } = await import("../demo/eames-environments/eames-loader.js");
 if (typeof previousEamesModuleOnly === "undefined") {
   delete globalThis.__PLASIUS_EAMES_ENVIRONMENT_MODULE_ONLY__;
@@ -403,6 +409,7 @@ test("playwright capture helpers surface browser bootstrap failures and trim opt
 });
 
 test("playwright capture helpers normalize output directories and summarize canvas pixels", async () => {
+  const tempDirectory = path.join(os.tmpdir(), "plasius-capture-helper-test");
   const defaultOutputDirectory = resolveCaptureArtifactDirectory();
   assert.ok(defaultOutputDirectory.endsWith("/output/playwright/eames-environments"));
   assert.equal(
@@ -411,8 +418,12 @@ test("playwright capture helpers normalize output directories and summarize canv
   );
   assert.equal(resolveCaptureWorkspaceRoot(), path.resolve(process.cwd(), ".."));
   assert.equal(
-    resolveCaptureArtifactDirectory("/private/tmp/plasius-captures"),
-    "/private/tmp/plasius-captures"
+    resolveCaptureArtifactDirectory(tempDirectory),
+    tempDirectory
+  );
+  assert.equal(
+    resolveCaptureBrowserProfileDirectory("/tmp/playwright", 42),
+    path.join("/tmp/playwright", "plasius-playwright-eames-42")
   );
 
   const summary = summarizeRgbaPixels(
@@ -429,8 +440,8 @@ test("playwright capture helpers normalize output directories and summarize canv
   assert.equal(summary.opaquePixels, 4);
   assert.ok(summary.averageLuminance > 0);
 
-  const outputDirectory = await ensureCaptureArtifactDirectory("/private/tmp/plasius-capture-helper-test");
-  assert.equal(outputDirectory, "/private/tmp/plasius-capture-helper-test");
+  const outputDirectory = await ensureCaptureArtifactDirectory(tempDirectory);
+  assert.equal(outputDirectory, tempDirectory);
   assert.ok(fs.existsSync(outputDirectory));
 
   const pngBuffer = decodePngDataUrl(
@@ -443,6 +454,55 @@ test("playwright capture helpers normalize output directories and summarize canv
     () => decodePngDataUrl("data:text/plain;base64,SGVsbG8="),
     /Expected a PNG data URL/
   );
+});
+
+test("playwright capture server helpers prefer reusable servers before free-port fallback", async () => {
+  const checks = [];
+  const selection = await findCaptureServerPort({
+    startPort: 9100,
+    attempts: 3,
+    canReuse: async (port) => {
+      checks.push(`reuse:${port}`);
+      return port === 9101;
+    },
+    isPortFree: async (port) => {
+      checks.push(`free:${port}`);
+      return false;
+    },
+  });
+
+  assert.deepEqual(selection, { port: 9101, reuse: true });
+  assert.deepEqual(checks, ["reuse:9100", "free:9100", "reuse:9101"]);
+  assert.equal(
+    buildCaptureAssetUrl("http://127.0.0.1:9101"),
+    "http://127.0.0.1:9101/gpu-lighting/demo/eames-environments/index.html"
+  );
+});
+
+test("playwright capture server helpers fall back to a free port when no server can be reused", async () => {
+  const checks = [];
+  const selection = await findCaptureServerPort({
+    startPort: 9200,
+    attempts: 4,
+    canReuse: async (port) => {
+      checks.push(`reuse:${port}`);
+      return false;
+    },
+    isPortFree: async (port) => {
+      checks.push(`free:${port}`);
+      return port === 9202;
+    },
+  });
+
+  assert.deepEqual(selection, { port: 9202, reuse: false });
+  assert.deepEqual(checks, [
+    "reuse:9200",
+    "free:9200",
+    "reuse:9201",
+    "free:9201",
+    "reuse:9202",
+    "free:9202",
+  ]);
 });
 
 test("validation page bootstrap helpers expose explicit WebGPU diagnostics", () => {
