@@ -44,6 +44,38 @@ if (typeof originalImportMetaUrl === "undefined") {
   globalThis.__IMPORT_META_URL__ = originalImportMetaUrl;
 }
 
+const previousEamesModuleOnly = globalThis.__PLASIUS_EAMES_ENVIRONMENT_MODULE_ONLY__;
+globalThis.__PLASIUS_EAMES_ENVIRONMENT_MODULE_ONLY__ = true;
+const {
+  buildEamesMeshes,
+  buildEnvironmentSceneObjects,
+  computeCaptureBootTimeoutMs,
+  createAdaptiveSamplingController,
+  createEnvironmentCamera,
+  createCaptureState,
+  listCaptureUploadUrlCandidates,
+  normalizeCaptureError,
+  readWebGpuBootstrapSnapshot,
+  renderEamesEnvironment,
+  resolveCaptureUploadUrl,
+} = await import("../demo/eames-environments/page.js");
+const {
+  decodePngDataUrl,
+  ensureCaptureArtifactDirectory,
+  formatCaptureDiagnostic,
+  looksLikeBrowserBootstrapFailure,
+  readOptionalString,
+  resolveCaptureArtifactDirectory,
+  resolveCaptureWorkspaceRoot,
+  summarizeRgbaPixels,
+} = await import("../scripts/eames-environments/capture-runtime.mjs");
+const { loadEamesGltfModel } = await import("../demo/eames-environments/eames-loader.js");
+if (typeof previousEamesModuleOnly === "undefined") {
+  delete globalThis.__PLASIUS_EAMES_ENVIRONMENT_MODULE_ONLY__;
+} else {
+  globalThis.__PLASIUS_EAMES_ENVIRONMENT_MODULE_ONLY__ = previousEamesModuleOnly;
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -356,6 +388,679 @@ test("environment lighting config rejects invalid portal settings", () => {
       }),
     /environmentPortals\[0\]\.shape must be one of/
   );
+});
+
+test("playwright capture helpers surface browser bootstrap failures and trim optional strings", () => {
+  assert.equal(readOptionalString("  http://127.0.0.1:9222 "), "http://127.0.0.1:9222");
+  assert.equal(readOptionalString("   "), null);
+  assert.equal(
+    looksLikeBrowserBootstrapFailure(
+      new Error("MachPortRendezvousServer bootstrap_check_in Permission denied")
+    ),
+    true
+  );
+  assert.equal(looksLikeBrowserBootstrapFailure(new Error("ordinary timeout")), false);
+});
+
+test("playwright capture helpers normalize output directories and summarize canvas pixels", async () => {
+  const defaultOutputDirectory = resolveCaptureArtifactDirectory();
+  assert.ok(defaultOutputDirectory.endsWith("/output/playwright/eames-environments"));
+  assert.equal(
+    resolveCaptureArtifactDirectory("output/playwright/eames-environments/custom"),
+    path.resolve(process.cwd(), "..", "output/playwright/eames-environments/custom")
+  );
+  assert.equal(resolveCaptureWorkspaceRoot(), path.resolve(process.cwd(), ".."));
+  assert.equal(
+    resolveCaptureArtifactDirectory("/private/tmp/plasius-captures"),
+    "/private/tmp/plasius-captures"
+  );
+
+  const summary = summarizeRgbaPixels(
+    new Uint8Array([
+      0, 0, 0, 255,
+      4, 8, 6, 255,
+      12, 16, 14, 255,
+      32, 48, 64, 255,
+    ])
+  );
+  assert.equal(summary.exactBlackPixels, 1);
+  assert.equal(summary.nearBlackPixels8, 2);
+  assert.equal(summary.nearBlackPixels16, 3);
+  assert.equal(summary.opaquePixels, 4);
+  assert.ok(summary.averageLuminance > 0);
+
+  const outputDirectory = await ensureCaptureArtifactDirectory("/private/tmp/plasius-capture-helper-test");
+  assert.equal(outputDirectory, "/private/tmp/plasius-capture-helper-test");
+  assert.ok(fs.existsSync(outputDirectory));
+
+  const pngBuffer = decodePngDataUrl(
+    "data:image/png;base64," +
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wn7Y6sAAAAASUVORK5CYII="
+  );
+  assert.ok(Buffer.isBuffer(pngBuffer));
+  assert.ok(pngBuffer.length > 16);
+  assert.throws(
+    () => decodePngDataUrl("data:text/plain;base64,SGVsbG8="),
+    /Expected a PNG data URL/
+  );
+});
+
+test("validation page bootstrap helpers expose explicit WebGPU diagnostics", () => {
+  const runtime = {
+    navigator: {
+      gpu: {},
+      userAgent: "Unit Test Browser",
+    },
+    isSecureContext: true,
+    location: { href: "http://127.0.0.1:8765/demo" },
+  };
+
+  const snapshot = readWebGpuBootstrapSnapshot(runtime);
+  const state = createCaptureState(runtime);
+  state.step = "Creating renderer";
+  state.detail = "Requesting WebGPU renderer and scene buffers.";
+  const error = normalizeCaptureError(new Error("navigator.gpu missing"), state, runtime);
+  const diagnostic = formatCaptureDiagnostic("grass-field-midday", {
+    state,
+    error,
+    hudText: "Creating renderer Requesting WebGPU renderer and scene buffers.",
+  });
+
+  assert.deepEqual(snapshot, {
+    hasNavigator: true,
+    hasGpu: true,
+    secureContext: true,
+    userAgent: "Unit Test Browser",
+    location: "http://127.0.0.1:8765/demo",
+  });
+  assert.equal(state.webgpu.hasGpu, true);
+  assert.equal(error.status, "error");
+  assert.match(diagnostic, /grass-field-midday failed/);
+  assert.match(diagnostic, /step: Creating renderer/);
+  assert.match(diagnostic, /webgpu\.hasGpu: true/);
+  assert.match(diagnostic, /hud: Creating renderer Requesting WebGPU renderer and scene buffers\./);
+});
+
+test("validation page resolves capture upload URLs against the active page origin", () => {
+  const runtime = {
+    location: { href: "http://127.0.0.1:8011/gpu-lighting/demo/eames-environments/index.html?preset=grass-field-midday" },
+  };
+
+  assert.equal(
+    resolveCaptureUploadUrl(null, runtime),
+    "http://127.0.0.1:8011/__plasius-capture"
+  );
+  assert.equal(
+    resolveCaptureUploadUrl("http://127.0.0.1:8001/__plasius-capture", runtime),
+    "http://127.0.0.1:8001/__plasius-capture"
+  );
+  assert.equal(
+    resolveCaptureUploadUrl("../capture-endpoint", runtime),
+    "http://127.0.0.1:8011/gpu-lighting/demo/capture-endpoint"
+  );
+});
+
+test("validation page proposes local bridge upload candidates for localhost captures", () => {
+  const runtime = {
+    location: { href: "http://127.0.0.1:8011/gpu-lighting/demo/eames-environments/index.html" },
+  };
+
+  assert.deepEqual(listCaptureUploadUrlCandidates(null, runtime), [
+    "http://127.0.0.1:8011/__plasius-capture",
+    "http://127.0.0.1:8001/__plasius-capture",
+    "http://127.0.0.1:8123/__plasius-capture",
+  ]);
+  assert.deepEqual(
+    listCaptureUploadUrlCandidates("http://127.0.0.1:9000/__plasius-capture", runtime),
+    ["http://127.0.0.1:9000/__plasius-capture"]
+  );
+});
+
+test("validation page reference camera is tighter than the wide orbit camera", () => {
+  const referenceCamera = createEnvironmentCamera("reference", 0);
+  const wideCamera = createEnvironmentCamera("wide", 0);
+  const referenceDistance = Math.hypot(
+    referenceCamera.position[0] - referenceCamera.target[0],
+    referenceCamera.position[1] - referenceCamera.target[1],
+    referenceCamera.position[2] - referenceCamera.target[2]
+  );
+  const wideDistance = Math.hypot(
+    wideCamera.position[0] - wideCamera.target[0],
+    wideCamera.position[1] - wideCamera.target[1],
+    wideCamera.position[2] - wideCamera.target[2]
+  );
+
+  assert.ok(referenceDistance < wideDistance);
+  assert.ok(referenceCamera.fovYDegrees < wideCamera.fovYDegrees);
+});
+
+test("validation page scales capture boot timeout with render workload", () => {
+  const lowWorkloadTimeout = computeCaptureBootTimeoutMs({
+    width: 640,
+    height: 360,
+    frames: 1,
+    maxDepth: 8,
+    samplesPerPixel: 1,
+  });
+  assert.ok(lowWorkloadTimeout > 60_000);
+  assert.ok(
+    computeCaptureBootTimeoutMs({ width: 640, height: 360, frames: 1, maxDepth: 8, samplesPerPixel: 32 }) >
+      computeCaptureBootTimeoutMs({ width: 640, height: 360, frames: 1, maxDepth: 8, samplesPerPixel: 8 })
+  );
+  assert.equal(
+    computeCaptureBootTimeoutMs({ width: 3840, height: 2160, frames: 8, maxDepth: 12, samplesPerPixel: 256 }),
+    900_000
+  );
+});
+
+test("validation page adaptive sampling controller uses gpu-performance-style ladders", () => {
+  let currentLevelIndex = 5;
+  const levels = [];
+  const performanceModule = {
+    createDeviceProfile(device) {
+      return device;
+    },
+    createQualityLadderAdapter(options) {
+      levels.push(...options.levels);
+      currentLevelIndex = options.levels.length - 1;
+      return {
+        getCurrentLevel() {
+          return options.levels[currentLevelIndex];
+        },
+        stepDown() {
+          if (currentLevelIndex <= 0) {
+            return null;
+          }
+          currentLevelIndex -= 1;
+          return { moduleId: options.id, toLevelId: options.levels[currentLevelIndex].id };
+        },
+        stepUp() {
+          if (currentLevelIndex >= options.levels.length - 1) {
+            return null;
+          }
+          currentLevelIndex += 1;
+          return { moduleId: options.id, toLevelId: options.levels[currentLevelIndex].id };
+        },
+      };
+    },
+    createGpuPerformanceGovernor() {
+      return {
+        recordFrame({ frameTimeMs }) {
+          if (frameTimeMs > 20) {
+            return { pressureLevel: "critical", adjustments: [{ moduleId: "eames-wavefront-samples" }] };
+          }
+          return { pressureLevel: "stable", adjustments: [] };
+        },
+      };
+    },
+  };
+
+  const controller = createAdaptiveSamplingController({
+    samplesPerPixel: 32,
+    frameTimeBudgetMs: 16,
+    minimumSamplesPerPixel: 1,
+    motion: true,
+    createWavefrontAdaptiveSamplingLevels() {
+      return {
+        requestedSamplesPerPixel: 32,
+        minimumSamplesPerPixel: 1,
+        frameTimeBudgetMs: 16,
+        levels: [1, 2, 4, 8, 16, 32].map((samplesPerPixel) => ({
+          id: `${samplesPerPixel}spp`,
+          label: `${samplesPerPixel} spp`,
+          estimatedCostMs: samplesPerPixel,
+          config: {
+            samplesPerPixel,
+            frameTimeBudgetMs: 16,
+            minimumSamplesPerPixel: 1,
+          },
+        })),
+      };
+    },
+    performanceModule,
+  });
+
+  assert.equal(controller.enabled, true);
+  assert.deepEqual(
+    levels.map((level) => level.config.samplesPerPixel),
+    [1, 2, 4, 8, 16, 32]
+  );
+  assert.equal(controller.getFrameOptions().samplesPerPixel, 32);
+  controller.recordFrame({ gpuWorkerJobs: { frameTimeMs: 24 } });
+  assert.equal(controller.getSnapshot().pressureLevel, "critical");
+});
+
+test("Eames glTF loader preserves UVs and material maps when textures are present", async () => {
+  const positions = new Float32Array([
+    -1, 0, 0,
+    1, 0, 0,
+    0, 1, 0,
+  ]);
+  const normals = new Float32Array([
+    0, 0, 1,
+    0, 0, 1,
+    0, 0, 1,
+  ]);
+  const uvs = new Float32Array([
+    0, 0,
+    1, 0,
+    0.5, 1,
+  ]);
+  const indices = new Uint32Array([0, 1, 2]);
+  const buffer = new ArrayBuffer(
+    positions.byteLength + normals.byteLength + uvs.byteLength + indices.byteLength
+  );
+  const bufferBytes = new Uint8Array(buffer);
+  bufferBytes.set(new Uint8Array(positions.buffer), 0);
+  bufferBytes.set(new Uint8Array(normals.buffer), positions.byteLength);
+  bufferBytes.set(
+    new Uint8Array(uvs.buffer),
+    positions.byteLength + normals.byteLength
+  );
+  bufferBytes.set(
+    new Uint8Array(indices.buffer),
+    positions.byteLength + normals.byteLength + uvs.byteLength
+  );
+
+  const modelUrl = "https://example.test/eames/model.gltf";
+  const modelDocument = {
+    asset: { version: "2.0" },
+    scene: 0,
+    scenes: [{ nodes: [0] }],
+    nodes: [{ mesh: 0 }],
+    meshes: [
+      {
+        primitives: [
+          {
+            attributes: {
+              POSITION: 0,
+              NORMAL: 1,
+              TEXCOORD_0: 2,
+            },
+            indices: 3,
+            material: 0,
+          },
+        ],
+      },
+    ],
+    materials: [
+      {
+        name: "Leather",
+        pbrMetallicRoughness: {
+          baseColorFactor: [0.25, 0.2, 0.18, 1],
+          metallicFactor: 0,
+          roughnessFactor: 0.61,
+          baseColorTexture: { index: 0, texCoord: 0 },
+          metallicRoughnessTexture: { index: 1, texCoord: 0 },
+        },
+        normalTexture: { index: 2, texCoord: 0, scale: 0.75 },
+      },
+    ],
+    textures: [{ source: 0 }, { source: 1 }, { source: 2 }],
+    images: [
+      { uri: "leather-base.png" },
+      { uri: "leather-orm.png" },
+      { uri: "leather-normal.png" },
+    ],
+    buffers: [{ uri: "mesh.bin", byteLength: buffer.byteLength }],
+    bufferViews: [
+      { buffer: 0, byteOffset: 0, byteLength: positions.byteLength },
+      {
+        buffer: 0,
+        byteOffset: positions.byteLength,
+        byteLength: normals.byteLength,
+      },
+      {
+        buffer: 0,
+        byteOffset: positions.byteLength + normals.byteLength,
+        byteLength: uvs.byteLength,
+      },
+      {
+        buffer: 0,
+        byteOffset: positions.byteLength + normals.byteLength + uvs.byteLength,
+        byteLength: indices.byteLength,
+      },
+    ],
+    accessors: [
+      { bufferView: 0, componentType: 5126, count: 3, type: "VEC3" },
+      { bufferView: 1, componentType: 5126, count: 3, type: "VEC3" },
+      { bufferView: 2, componentType: 5126, count: 3, type: "VEC2" },
+      { bufferView: 3, componentType: 5125, count: 3, type: "SCALAR" },
+    ],
+  };
+
+  const previousFetch = globalThis.fetch;
+  const previousCreateImageBitmap = globalThis.createImageBitmap;
+  const previousOffscreenCanvas = globalThis.OffscreenCanvas;
+  globalThis.fetch = async (resource) => {
+    const href = String(resource);
+    if (href === modelUrl) {
+      return {
+        ok: true,
+        url: modelUrl,
+        async json() {
+          return modelDocument;
+        },
+      };
+    }
+    if (href === "https://example.test/eames/mesh.bin") {
+      return {
+        ok: true,
+        url: href,
+        async arrayBuffer() {
+          return buffer;
+        },
+      };
+    }
+    if (
+      href === "https://example.test/eames/leather-base.png" ||
+      href === "https://example.test/eames/leather-orm.png" ||
+      href === "https://example.test/eames/leather-normal.png"
+    ) {
+      return {
+        ok: true,
+        url: href,
+        async blob() {
+          return new Blob([new Uint8Array([1, 2, 3, 4])], { type: "image/png" });
+        },
+      };
+    }
+    throw new Error(`Unexpected fetch: ${href}`);
+  };
+  globalThis.createImageBitmap = async () => ({
+    width: 2,
+    height: 2,
+    close() {},
+  });
+  globalThis.OffscreenCanvas = class OffscreenCanvasMock {
+    constructor(width, height) {
+      this.width = width;
+      this.height = height;
+    }
+
+    getContext() {
+      return {
+        drawImage() {},
+        getImageData: () => ({
+          data: new Uint8ClampedArray([
+            255, 128, 64, 255,
+            192, 160, 96, 255,
+            128, 96, 64, 255,
+            32, 16, 8, 255,
+          ]),
+        }),
+      };
+    }
+  };
+
+  try {
+    const model = await loadEamesGltfModel(modelUrl);
+    const primitive = model.primitives[0];
+
+    assert.deepEqual(primitive.uvs, [0, 0, 1, 0, 0.5, 1]);
+    assert.equal(primitive.material.name, "Leather");
+    assert.equal(primitive.material.roughness, 0.61);
+    assert.equal(primitive.material.baseColorTexture.width, 2);
+    assert.equal(primitive.material.baseColorTexture.height, 2);
+    assert.equal(primitive.material.metallicRoughnessTexture.width, 2);
+    assert.equal(primitive.material.normalTexture.scale, 0.75);
+    assert.equal(primitive.material.normalTexture.height, 2);
+    assert.equal(primitive.material.baseColorTexture.data.length, 16);
+  } finally {
+    globalThis.fetch = previousFetch;
+    globalThis.createImageBitmap = previousCreateImageBitmap;
+    globalThis.OffscreenCanvas = previousOffscreenCanvas;
+  }
+});
+
+test("validation scene builder can be exercised with injected runtime helpers", () => {
+  const lightingOptions = createWavefrontEnvironmentLightingOptions({
+    preset: "warehouse-dusk",
+  });
+  const model = {
+    bounds: {
+      min: [-1, -1, -1],
+      max: [1, 1, 1],
+    },
+    primitives: [
+      {
+        positions: [-1, 0, 0, 1, 0, 0, 0, 1, 0],
+        indices: [0, 1, 2],
+        normals: [0, 1, 0, 0, 1, 0, 0, 1, 0],
+        material: {
+          name: "chrome",
+          roughness: 0.05,
+          metallic: 0.9,
+        },
+      },
+    ],
+  };
+  const sceneObjects = buildEnvironmentSceneObjects(
+    model,
+    lightingOptions,
+    { showSources: true, motionPhase: 0.25 },
+    {
+      buildProductStudioSceneObjects() {
+        return [
+          { id: 1, color: [1, 1, 1, 1], materialKind: "diffuse", roughness: 1 },
+          { id: 2, color: [1, 1, 1, 1], materialKind: "diffuse", roughness: 1 },
+        ];
+      },
+    }
+  );
+
+  assert.equal(sceneObjects.length >= 2, true);
+  assert.deepEqual(sceneObjects[0].color, [0.35, 0.37, 0.38, 1]);
+  assert.deepEqual(sceneObjects[1].color, [0.31, 0.33, 0.35, 1]);
+});
+
+test("validation mesh builder preserves generic material inputs and texture maps", () => {
+  const normalTexture = {
+    texCoord: 0,
+    scale: 1,
+    width: 2,
+    height: 2,
+    data: new Uint8ClampedArray(16),
+  };
+  const baseColorTexture = {
+    texCoord: 0,
+    width: 2,
+    height: 2,
+    data: new Uint8ClampedArray(16),
+  };
+  const metallicRoughnessTexture = {
+    texCoord: 0,
+    width: 2,
+    height: 2,
+    data: new Uint8ClampedArray(16),
+  };
+  const emissiveTexture = {
+    texCoord: 0,
+    width: 2,
+    height: 2,
+    data: new Uint8ClampedArray(16),
+  };
+  const model = {
+    bounds: {
+      min: [-1, -1, -1],
+      max: [1, 1, 1],
+    },
+    primitives: [
+      {
+        positions: [-1, 0, 0, 1, 0, 0, 0, 1, 0],
+        indices: [0, 1, 2],
+        normals: [0, 1, 0, 0, 1, 0, 0, 1, 0],
+        uvs: [0, 0, 1, 0, 0, 1],
+        material: {
+          name: "chrome",
+          roughness: 0.03,
+          metallic: 1,
+          specular: 0.92,
+          specularColor: [0.84, 0.85, 0.88],
+          clearcoat: 0.02,
+          clearcoatRoughness: 0.04,
+          baseColorTexture,
+          metallicRoughnessTexture,
+          normalTexture,
+          emissiveTexture,
+        },
+      },
+      {
+        positions: [-1, 0, 0, 1, 0, 0, 0, -1, 0],
+        indices: [0, 1, 2],
+        normals: [0, 1, 0, 0, 1, 0, 0, 1, 0],
+        uvs: [0, 0, 1, 0, 0, 1],
+        material: {
+          name: "leather",
+          roughness: 0.58,
+          metallic: 0,
+          sheenColor: [0.44, 0.37, 0.31],
+          clearcoat: 0.16,
+          clearcoatRoughness: 0.24,
+          baseColorTexture,
+          metallicRoughnessTexture,
+          normalTexture,
+        },
+      },
+    ],
+  };
+
+  const meshes = buildEamesMeshes(model);
+  const chrome = meshes[0];
+  const leather = meshes[1];
+
+  assert.equal(chrome.materialKind, "metal");
+  assert.equal(chrome.metallic, 1);
+  assert.equal(chrome.specular, 0.92);
+  assert.deepEqual(chrome.specularColor, [0.84, 0.85, 0.88, 1]);
+  assert.equal(chrome.clearcoat, 0.02);
+  assert.equal(chrome.clearcoatRoughness, 0.04);
+  assert.deepEqual(chrome.uvs, [0, 0, 1, 0, 0, 1]);
+  assert.equal(chrome.material.baseColorTexture, baseColorTexture);
+  assert.equal(chrome.material.metallicRoughnessTexture, metallicRoughnessTexture);
+  assert.equal(chrome.material.normalTexture, normalTexture);
+  assert.equal(chrome.material.emissiveTexture, emissiveTexture);
+
+  assert.equal(leather.materialKind, "diffuse");
+  assert.deepEqual(leather.sheenColor, [0.44, 0.37, 0.31, 1]);
+  assert.equal(leather.clearcoat, 0.16);
+  assert.equal(leather.clearcoatRoughness, 0.24);
+});
+
+test("validation render decouples frame rendering from optional probe readback", async () => {
+  const lightingOptions = createWavefrontEnvironmentLightingOptions({
+    preset: "grass-field-midday",
+  });
+  let rendererOptions = null;
+  const renderFrameCalls = [];
+  const readProbeCalls = [];
+  const renderer = {
+    async renderFrame(options = {}) {
+      renderFrameCalls.push(options);
+      assert.equal(options.readOutputProbe, false);
+      return {
+        frame: 1,
+        samplesPerPixel: options.samplesPerPixel ?? 4,
+        triangleCount: 1,
+        emissiveTriangleCount: 0,
+        bvhNodeCount: 1,
+        accelerationBuildMode: "gpu",
+        accelerationBuildSubmitted: true,
+        deferredPathResolve: true,
+        gpuWorkerJobs: {
+          completedPerFrame: 42,
+          completedPerSecond: 420,
+          completedPerSubmission: 14,
+          directDispatchesCompleted: 18,
+          indirectDispatchesCompleted: 24,
+          frameTimeMs: 100,
+          awaitedGpuCompletion: true,
+        },
+        gpuParallelism: { exposesMultiWorkgroupParallelism: true },
+        outputProbe: null,
+      };
+    },
+    async readOutputProbe({ x, y }) {
+      readProbeCalls.push({ x, y });
+      return {
+        x,
+        y,
+        rgba: [32, 64, 128, 255],
+        luminance: (0.2126 * 32 + 0.7152 * 64 + 0.0722 * 128) / 255,
+      };
+    },
+    updateCamera() {},
+    updateSceneObjects() {},
+  };
+  const canvas = { width: 0, height: 0 };
+  const model = {
+    name: "test-model",
+    bounds: {
+      min: [-1, -1, -1],
+      max: [1, 1, 1],
+    },
+    primitives: [
+      {
+        positions: [-1, 0, 0, 1, 0, 0, 0, 1, 0],
+        indices: [0, 1, 2],
+        normals: [0, 1, 0, 0, 1, 0, 0, 1, 0],
+        material: {
+          name: "chrome",
+          roughness: 0.05,
+          metallic: 0.9,
+        },
+      },
+    ],
+    indices: [0, 1, 2],
+  };
+
+  const { result } = await renderEamesEnvironment({
+    canvas,
+    width: 640,
+    height: 480,
+    frames: 1,
+    maxDepth: 8,
+    samplesPerPixel: 4,
+    denoise: true,
+    deferredPathResolve: true,
+    motion: false,
+    readOutputProbe: true,
+    runtimeModules: {
+      createWavefrontEnvironmentLightingOptions() {
+        return lightingOptions;
+      },
+      async loadEamesGltfModel() {
+        return model;
+      },
+      buildProductStudioSceneObjects() {
+        return [
+          { id: 1, color: [1, 1, 1, 1], materialKind: "diffuse", roughness: 1 },
+          { id: 2, color: [1, 1, 1, 1], materialKind: "diffuse", roughness: 1 },
+        ];
+      },
+      async createWavefrontPathTracingComputeRenderer(options = {}) {
+        rendererOptions = options;
+        return renderer;
+      },
+    },
+  });
+
+  assert.equal(renderFrameCalls.length, 1);
+  assert.equal(readProbeCalls.length, 5);
+  assert.equal(rendererOptions.camera.fovYDegrees, createEnvironmentCamera("reference", 0).fovYDegrees);
+  assert.equal(result.cameraPreset, "reference");
+  assert.equal(renderFrameCalls[0].samplesPerPixel, 4);
+  assert.equal(result.renderer.outputProbe.sampledPixels, 1);
+  assert.equal(result.renderer.outputProbe.nonZeroSamples, 1);
+  assert.equal(result.renderer.outputProbe.maxChannel, 128);
+  assert.deepEqual(result.renderer.outputProbe.rgba, [32, 64, 128, 255]);
+  assert.equal(result.renderer.cameraPreset, "reference");
+  assert.equal(result.renderer.targetSamplesPerPixel, 4);
+  assert.equal(result.renderer.adaptiveSampling.enabled, false);
+  assert.equal(result.renderer.gpuWorkerJobs.completedPerFrame, 42);
+  assert.equal(result.renderer.gpuWorkerJobs.completedPerSecond, 420);
+  assert.equal(result.renderer.gpuWorkerJobs.completedPerSubmission, 14);
+  assert.equal(result.probeSummary.sampledPixels, 5);
 });
 
 test("module base does not use a browser-bundler asset URL pattern", () => {
