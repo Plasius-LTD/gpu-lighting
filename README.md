@@ -46,8 +46,10 @@ package-private source path.
 
 The repo also carries the Eames-chair environment validation harness under
 `demo/eames-environments/` plus tracked Playwright helpers under
-`scripts/eames-environments/`. Build `gpu-performance`, `gpu-renderer`, and
-`gpu-lighting` first, then run:
+`scripts/eames-environments/`. The referenced chair asset is tracked under
+`data/models/eames-lounge-chair-ottoman/` so fresh repo checkouts can run the
+validation page without depending on a parent monorepo checkout. Build
+`gpu-performance`, `gpu-renderer`, and `gpu-lighting` first, then run:
 
 ```bash
 node scripts/eames-environments/capture.mjs
@@ -75,7 +77,9 @@ is being served by a plain static server such as `python -m http.server`, also
 pass
 `captureUploadUrl=http://127.0.0.1:<port>/__plasius-capture`. The page will
 freeze its own canvas and POST the PNG back to the bridge server once the
-render completes.
+render completes. The browser-side upload helper now rejects non-loopback
+capture endpoints so this fallback cannot be redirected at arbitrary remote
+origins.
 
 The main capture and reverse-pass debug capture entry points now share the same
 server-selection helper, so local reuse, fresh static-server startup, and

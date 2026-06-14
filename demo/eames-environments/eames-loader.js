@@ -28,6 +28,35 @@ function getTypeSize(type) {
   }
 }
 
+function getComponentByteSize(componentType) {
+  switch (componentType) {
+    case 5121:
+      return 1;
+    case 5123:
+      return 2;
+    case 5125:
+    case 5126:
+      return 4;
+    default:
+      throw new Error(`Unsupported glTF componentType: ${componentType}`);
+  }
+}
+
+function readComponentValue(view, componentType, byteOffset) {
+  switch (componentType) {
+    case 5121:
+      return view.getUint8(byteOffset);
+    case 5123:
+      return view.getUint16(byteOffset, true);
+    case 5125:
+      return view.getUint32(byteOffset, true);
+    case 5126:
+      return view.getFloat32(byteOffset, true);
+    default:
+      throw new Error(`Unsupported glTF componentType: ${componentType}`);
+  }
+}
+
 function readAccessor(document, accessorIndex, buffers) {
   const accessor = document.accessors?.[accessorIndex];
   if (!accessor) {
@@ -39,10 +68,32 @@ function readAccessor(document, accessorIndex, buffers) {
   }
   const componentCount = getTypeSize(accessor.type);
   const byteOffset = (bufferView.byteOffset ?? 0) + (accessor.byteOffset ?? 0);
-  const valueCount = accessor.count * componentCount;
-  return Array.from(
-    getComponentArray(accessor.componentType, buffers[bufferView.buffer], byteOffset, valueCount)
+  const componentByteSize = getComponentByteSize(accessor.componentType);
+  const packedElementByteLength = componentCount * componentByteSize;
+  const byteStride = Math.max(bufferView.byteStride ?? packedElementByteLength, packedElementByteLength);
+  if (byteStride === packedElementByteLength) {
+    const valueCount = accessor.count * componentCount;
+    return Array.from(
+      getComponentArray(accessor.componentType, buffers[bufferView.buffer], byteOffset, valueCount)
+    );
+  }
+  const view = new DataView(
+    buffers[bufferView.buffer],
+    byteOffset
   );
+  const valueCount = accessor.count * componentCount;
+  const values = new Array(valueCount);
+  for (let index = 0; index < accessor.count; index += 1) {
+    const elementOffset = index * byteStride;
+    for (let componentIndex = 0; componentIndex < componentCount; componentIndex += 1) {
+      values[index * componentCount + componentIndex] = readComponentValue(
+        view,
+        accessor.componentType,
+        elementOffset + componentIndex * componentByteSize
+      );
+    }
+  }
+  return values;
 }
 
 async function decodeTexturePixels(url) {

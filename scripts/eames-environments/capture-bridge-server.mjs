@@ -80,60 +80,69 @@ async function writeCaptureArtifact(request, response) {
   );
 }
 
-async function serveStaticAsset(requestPath, response) {
-  let filePath = resolveWorkspacePath(requestPath);
-  let stats;
-  try {
-    stats = await fs.stat(filePath);
-  } catch {
-    response.writeHead(404, { "content-type": "text/plain; charset=utf-8" });
-    response.end("File not found");
-    return;
-  }
-
-  if (stats.isDirectory()) {
-    filePath = path.join(filePath, "index.html");
-  }
-
+export async function readStaticAssetResponse(requestPath) {
+  const requestedPath = resolveWorkspacePath(requestPath);
+  let filePath = requestedPath;
   let fileBuffer;
   try {
     fileBuffer = await fs.readFile(filePath);
+  } catch (error) {
+    if (error?.code === "EISDIR") {
+      filePath = path.join(requestedPath, "index.html");
+      fileBuffer = await fs.readFile(filePath);
+    } else {
+      throw error;
+    }
+  }
+  const contentType = contentTypes.get(path.extname(filePath).toLowerCase()) ?? "application/octet-stream";
+  return { contentType, fileBuffer };
+}
+
+async function serveStaticAsset(requestPath, response) {
+  let asset;
+  try {
+    asset = await readStaticAssetResponse(requestPath);
   } catch {
     response.writeHead(404, { "content-type": "text/plain; charset=utf-8" });
     response.end("File not found");
     return;
   }
 
-  const contentType = contentTypes.get(path.extname(filePath).toLowerCase()) ?? "application/octet-stream";
+  const { contentType, fileBuffer } = asset;
   response.writeHead(200, { "content-type": contentType });
   response.end(fileBuffer);
 }
 
-const server = http.createServer(async (request, response) => {
-  try {
-    applyCorsHeaders(request, response);
-    const url = new URL(request.url ?? "/", `http://${request.headers.host ?? `127.0.0.1:${port}`}`);
-    if (request.method === "OPTIONS" && url.pathname === "/__plasius-capture") {
-      response.writeHead(204);
-      response.end();
-      return;
+export function createCaptureBridgeServer(host = "127.0.0.1") {
+  return http.createServer(async (request, response) => {
+    try {
+      applyCorsHeaders(request, response);
+      const url = new URL(request.url ?? "/", `http://${request.headers.host ?? `${host}:${port}`}`);
+      if (request.method === "OPTIONS" && url.pathname === "/__plasius-capture") {
+        response.writeHead(204);
+        response.end();
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/__plasius-capture") {
+        await writeCaptureArtifact(request, response);
+        return;
+      }
+      if (request.method !== "GET" && request.method !== "HEAD") {
+        response.writeHead(405, { "content-type": "text/plain; charset=utf-8" });
+        response.end("Method not allowed");
+        return;
+      }
+      await serveStaticAsset(url.pathname, response);
+    } catch (error) {
+      response.writeHead(500, { "content-type": "text/plain; charset=utf-8" });
+      response.end(error instanceof Error ? error.message : "Unknown server error");
     }
-    if (request.method === "POST" && url.pathname === "/__plasius-capture") {
-      await writeCaptureArtifact(request, response);
-      return;
-    }
-    if (request.method !== "GET" && request.method !== "HEAD") {
-      response.writeHead(405, { "content-type": "text/plain; charset=utf-8" });
-      response.end("Method not allowed");
-      return;
-    }
-    await serveStaticAsset(url.pathname, response);
-  } catch (error) {
-    response.writeHead(500, { "content-type": "text/plain; charset=utf-8" });
-    response.end(error instanceof Error ? error.message : "Unknown server error");
-  }
-});
+  });
+}
 
-server.listen(port, "127.0.0.1", () => {
-  process.stdout.write(`capture bridge listening on http://127.0.0.1:${port}\n`);
-});
+if (!globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__) {
+  const server = createCaptureBridgeServer();
+  server.listen(port, "127.0.0.1", () => {
+    process.stdout.write(`capture bridge listening on http://127.0.0.1:${port}\n`);
+  });
+}

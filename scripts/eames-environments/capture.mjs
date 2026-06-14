@@ -51,6 +51,18 @@ const allPresets = [
 ];
 const presets = readCapturePresets(process.env.PLASIUS_CAPTURE_PRESETS, allPresets);
 
+export function computeCaptureReadyTimeoutMs(options = {}) {
+  const width = Math.max(1, Number(options.width ?? 1280));
+  const height = Math.max(1, Number(options.height ?? 720));
+  const frames = Math.max(1, Number(options.frames ?? 1));
+  const maxDepth = Math.max(1, Number(options.maxDepth ?? 3));
+  const samplesPerPixel = Math.max(1, Number(options.samplesPerPixel ?? 8));
+  const tileEstimate = Math.max(1, Math.ceil(width / 128) * Math.ceil(height / 128));
+  const perSamplePassEstimate = maxDepth + 2;
+  const workEstimate = frames * samplesPerPixel * perSamplePassEstimate * tileEstimate;
+  return Math.min(900_000, 60_000 + workEstimate * 30);
+}
+
 function readCaptureInteger(name, fallback, minimum, maximum) {
   const value = Number(process.env[name]);
   if (!Number.isFinite(value)) {
@@ -97,8 +109,16 @@ async function capturePreset(page, baseUrl, preset, geometry) {
   url.searchParams.set("frameIndex", String(defaultCaptureFrameIndex));
   url.searchParams.set("showSources", defaultCaptureShowSources ? "1" : "0");
 
+  const readyTimeoutMs = computeCaptureReadyTimeoutMs({
+    width: defaultCaptureWidth,
+    height: defaultCaptureHeight,
+    frames: defaultCaptureFrames,
+    maxDepth: defaultCaptureMaxDepth,
+    samplesPerPixel: defaultCaptureSamplesPerPixel,
+  });
+
   await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 60_000 });
-  await waitForCaptureReady(page, preset, geometry === "mesh" ? 180_000 : 90_000);
+  await waitForCaptureReady(page, preset, readyTimeoutMs);
   const result = await page.evaluate(() => window.__plasiusCaptureResult ?? window.__plasiusCaptureError);
   if (!result || result.status !== "ok") {
     throw new Error(formatCaptureDiagnostic(preset, await readPageDiagnostic(page)));
@@ -255,7 +275,9 @@ async function main() {
   console.log(`wrote ${summaryPath}`);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+if (!globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__) {
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

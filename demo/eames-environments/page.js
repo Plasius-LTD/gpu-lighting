@@ -41,9 +41,14 @@ const SCENE_SURFACES = Object.freeze({
     wall: [0.14, 0.13, 0.13, 1],
   }),
 });
+const LOOPBACK_CAPTURE_HOSTNAMES = new Set(["127.0.0.1", "localhost", "::1", "[::1]"]);
 
-function readNumberParam(params, name, fallback, minimum, maximum) {
-  const value = Number(params.get(name));
+export function readNumberParam(params, name, fallback, minimum, maximum) {
+  const rawValue = params.get(name);
+  if (typeof rawValue !== "string" || rawValue.trim().length <= 0) {
+    return fallback;
+  }
+  const value = Number(rawValue);
   if (!Number.isFinite(value)) {
     return fallback;
   }
@@ -143,8 +148,25 @@ export function resolveCaptureUploadUrl(uploadUrl, runtime = globalThis) {
   return new URL(target, baseHref).href;
 }
 
+function isLoopbackCaptureHostname(hostname) {
+  return LOOPBACK_CAPTURE_HOSTNAMES.has(String(hostname ?? "").toLowerCase());
+}
+
+export function assertLocalCaptureUploadUrl(uploadUrl, runtime = globalThis) {
+  const resolvedUrl = new URL(resolveCaptureUploadUrl(uploadUrl, runtime));
+  if (!["http:", "https:"].includes(resolvedUrl.protocol)) {
+    throw new Error(`Capture upload URL must use http or https: ${resolvedUrl.href}`);
+  }
+  if (!isLoopbackCaptureHostname(resolvedUrl.hostname)) {
+    throw new Error(
+      `Capture upload URL must target a local loopback bridge: ${resolvedUrl.href}`
+    );
+  }
+  return resolvedUrl.href;
+}
+
 export function listCaptureUploadUrlCandidates(uploadUrl, runtime = globalThis) {
-  const primaryUrl = resolveCaptureUploadUrl(uploadUrl, runtime);
+  const primaryUrl = assertLocalCaptureUploadUrl(uploadUrl, runtime);
   const candidates = [primaryUrl];
   if (typeof uploadUrl === "string" && uploadUrl.trim().length > 0) {
     return candidates;
@@ -853,7 +875,7 @@ export async function renderEamesEnvironment(options = {}) {
       const animatedSceneObjects = buildEnvironmentSceneObjects(model, lightingOptions, {
         showSources,
         motionPhase,
-      });
+      }, runtimeModules);
       renderer.updateSceneObjects(animatedSceneObjects);
     }
     const frameOptions = adaptiveSampling.getFrameOptions();

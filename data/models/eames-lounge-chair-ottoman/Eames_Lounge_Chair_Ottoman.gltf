@@ -1,0 +1,741 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20230919.1"
+  },
+  "extensionsUsed": [
+    "KHR_texture_transform",
+    "KHR_materials_specular"
+  ],
+  "extensionsRequired": [
+    "KHR_texture_transform"
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1,
+        2
+      ],
+      "name": "Eames_Lounge_Chair_Ottoman"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        -0.301774561,
+        0.831917346,
+        0.0
+      ],
+      "rotation": [
+        -1.80001023E-14,
+        -1.0,
+        -2.38418579E-07,
+        7.54979E-08
+      ],
+      "name": "01"
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        0.429250032,
+        0.225293338,
+        0.0
+      ],
+      "rotation": [
+        -2.6621698E-13,
+        -1.0,
+        -2.38418579E-07,
+        1.116595E-06
+      ],
+      "name": "02"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 5,
+            "NORMAL": 6,
+            "TEXCOORD_0": 7
+          },
+          "indices": 4,
+          "material": 1
+        },
+        {
+          "attributes": {
+            "POSITION": 9,
+            "NORMAL": 10,
+            "TEXCOORD_0": 11
+          },
+          "indices": 8,
+          "material": 2
+        },
+        {
+          "attributes": {
+            "POSITION": 13,
+            "NORMAL": 14,
+            "TEXCOORD_0": 15
+          },
+          "indices": 12,
+          "material": 3
+        }
+      ],
+      "name": "01"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 17,
+            "NORMAL": 18,
+            "TEXCOORD_0": 19
+          },
+          "indices": 16,
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 21,
+            "NORMAL": 22,
+            "TEXCOORD_0": 23
+          },
+          "indices": 20,
+          "material": 1
+        },
+        {
+          "attributes": {
+            "POSITION": 25,
+            "NORMAL": 26,
+            "TEXCOORD_0": 27
+          },
+          "indices": 24,
+          "material": 2
+        },
+        {
+          "attributes": {
+            "POSITION": 29,
+            "NORMAL": 30,
+            "TEXCOORD_0": 31
+          },
+          "indices": 28,
+          "material": 3
+        },
+        {
+          "attributes": {
+            "POSITION": 33,
+            "NORMAL": 34,
+            "TEXCOORD_0": 35
+          },
+          "indices": 32,
+          "material": 4
+        }
+      ],
+      "name": "02"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 252996,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 42172,
+      "max": [
+        0.247339338,
+        -0.5870645,
+        0.33077997
+      ],
+      "min": [
+        -0.38349846,
+        -0.8319172,
+        -0.3307804
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 506064,
+      "componentType": 5126,
+      "count": 42172,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 42172,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 1011984,
+      "componentType": 5125,
+      "count": 58992,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1012128,
+      "componentType": 5126,
+      "count": 10599,
+      "max": [
+        0.405101538,
+        -0.00480133062,
+        0.305246055
+      ],
+      "min": [
+        -0.40045172,
+        -0.670599639,
+        -0.305246472
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1139316,
+      "componentType": 5126,
+      "count": 10599,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 337376,
+      "componentType": 5126,
+      "count": 10599,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 1247952,
+      "componentType": 5125,
+      "count": 136740,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1266504,
+      "componentType": 5126,
+      "count": 24538,
+      "max": [
+        0.394199729,
+        -1.8310547E-07,
+        0.407229722
+      ],
+      "min": [
+        -0.405101538,
+        -0.660065353,
+        -0.407230139
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1560960,
+      "componentType": 5126,
+      "count": 24538,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 422168,
+      "componentType": 5126,
+      "count": 24538,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 1794912,
+      "componentType": 5125,
+      "count": 63528,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1855416,
+      "componentType": 5126,
+      "count": 10776,
+      "max": [
+        0.3845211,
+        -0.177855849,
+        0.159101859
+      ],
+      "min": [
+        -0.206289068,
+        -0.6770856,
+        -0.159102172
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1984728,
+      "componentType": 5126,
+      "count": 10776,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 618472,
+      "componentType": 5126,
+      "count": 10776,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 2049024,
+      "componentType": 5123,
+      "count": 209808,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2114040,
+      "componentType": 5126,
+      "count": 35143,
+      "max": [
+        0.21393086,
+        0.0474914275,
+        0.213634267
+      ],
+      "min": [
+        -0.2133374,
+        -0.225293219,
+        -0.213633969
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2535756,
+      "componentType": 5126,
+      "count": 35143,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 704680,
+      "componentType": 5126,
+      "count": 35143,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 2468640,
+      "componentType": 5123,
+      "count": 28992,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2957472,
+      "componentType": 5126,
+      "count": 5101,
+      "max": [
+        0.2668222,
+        0.1834864,
+        0.329040825
+      ],
+      "min": [
+        -0.266228229,
+        0.047315523,
+        -0.329040825
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 3018684,
+      "componentType": 5126,
+      "count": 5101,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 985824,
+      "componentType": 5126,
+      "count": 5101,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 2526624,
+      "componentType": 5123,
+      "count": 34212,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 3079896,
+      "componentType": 5126,
+      "count": 6008,
+      "max": [
+        0.2776259,
+        0.225293219,
+        0.317384154
+      ],
+      "min": [
+        -0.2776259,
+        0.0594578274,
+        -0.317384154
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 3151992,
+      "componentType": 5126,
+      "count": 6008,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1026632,
+      "componentType": 5126,
+      "count": 6008,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 2595048,
+      "componentType": 5123,
+      "count": 10368,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 3224088,
+      "componentType": 5126,
+      "count": 1796,
+      "max": [
+        0.122927234,
+        0.0474907234,
+        0.1226302
+      ],
+      "min": [
+        -0.122333623,
+        0.0360628366,
+        -0.122630708
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 3245640,
+      "componentType": 5126,
+      "count": 1796,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1074696,
+      "componentType": 5126,
+      "count": 1796,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 2615784,
+      "componentType": 5123,
+      "count": 768,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 3267192,
+      "componentType": 5126,
+      "count": 192,
+      "max": [
+        0.016139552,
+        -0.000119476324,
+        0.015842678
+      ],
+      "min": [
+        -0.0155457733,
+        -0.105810642,
+        -0.0158425737
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 3269496,
+      "componentType": 5126,
+      "count": 192,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1089064,
+      "componentType": 5126,
+      "count": 192,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 2617320,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 2617320,
+      "byteLength": 3271800,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 5889120,
+      "byteLength": 1090600,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "Eames_Lounge_Chair_Ottoman.bin",
+      "byteLength": 6979720
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.0399471745,
+          0.0399471745,
+          0.0399471745,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.3
+      },
+      "name": "Eames_Lounge_Chair_Ottoman_Wood_Black_G2_"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1,
+          "extensions": {
+            "KHR_texture_transform": {
+              "scale": [
+                3.0,
+                3.0
+              ],
+              "texCoord": 0
+            }
+          }
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.25
+      },
+      "normalTexture": {
+        "index": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "scale": [
+              3.0,
+              3.0
+            ],
+            "texCoord": 0
+          }
+        }
+      },
+      "name": "Eames_Lounge_Chair_Ottoman_Wood_"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 3,
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0.15,
+                0.149999976
+              ],
+              "scale": [
+                0.7,
+                0.7
+              ],
+              "texCoord": 0
+            }
+          }
+        },
+        "metallicFactor": 0.0,
+        "metallicRoughnessTexture": {
+          "index": 4,
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0.15,
+                0.149999976
+              ],
+              "scale": [
+                0.7,
+                0.7
+              ],
+              "texCoord": 0
+            }
+          }
+        }
+      },
+      "normalTexture": {
+        "index": 2,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0.15,
+              0.149999976
+            ],
+            "scale": [
+              0.7,
+              0.7
+            ],
+            "texCoord": 0
+          }
+        }
+      },
+      "name": "Eames_Lounge_Chair_Ottoman_Leather_"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.5556,
+          0.5545,
+          0.5548,
+          1.0
+        ],
+        "roughnessFactor": 0.03
+      },
+      "name": "Eames_Lounge_Chair_Ottoman_Chrome_",
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularColorFactor": [
+            0.57,
+            0.557,
+            0.689
+          ]
+        }
+      }
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.0399471745,
+          0.0399471745,
+          0.0399471745,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.05
+      },
+      "name": "Eames_Lounge_Chair_Ottoman_Wood_Black_G_"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "Eames_Lounge_Chair_Ottoman_Wood_normal.png"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "Eames_Lounge_Chair_Ottoman_Wood_albedo.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 2,
+      "name": "Eames_Lounge_Chair_Ottoman_Leather_normal.png"
+    },
+    {
+      "sampler": 0,
+      "source": 3,
+      "name": "Eames_Lounge_Chair_Ottoman_Leather_basecolortexture.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 4,
+      "name": "Eames_Lounge_Chair_Ottoman_Leather_roughness0.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "Eames_Lounge_Chair_Ottoman_Wood_normal.png"
+    },
+    {
+      "uri": "Eames_Lounge_Chair_Ottoman_Wood_albedo.jpg"
+    },
+    {
+      "uri": "Eames_Lounge_Chair_Ottoman_Leather_normal.png"
+    },
+    {
+      "uri": "Eames_Lounge_Chair_Ottoman_Leather_basecolortexture.jpg"
+    },
+    {
+      "uri": "Eames_Lounge_Chair_Ottoman_Leather_roughness0.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

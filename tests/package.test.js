@@ -48,6 +48,7 @@ if (typeof originalImportMetaUrl === "undefined") {
 const previousEamesModuleOnly = globalThis.__PLASIUS_EAMES_ENVIRONMENT_MODULE_ONLY__;
 globalThis.__PLASIUS_EAMES_ENVIRONMENT_MODULE_ONLY__ = true;
 const {
+  assertLocalCaptureUploadUrl,
   buildEamesMeshes,
   buildEnvironmentSceneObjects,
   computeCaptureBootTimeoutMs,
@@ -57,9 +58,30 @@ const {
   listCaptureUploadUrlCandidates,
   normalizeCaptureError,
   readWebGpuBootstrapSnapshot,
+  readNumberParam,
   renderEamesEnvironment,
   resolveCaptureUploadUrl,
 } = await import("../demo/eames-environments/page.js");
+const previousEamesCaptureModuleOnly = globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__;
+globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__ = true;
+const {
+  computeCaptureReadyTimeoutMs,
+} = await import("../scripts/eames-environments/capture.mjs");
+if (typeof previousEamesCaptureModuleOnly === "undefined") {
+  delete globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__;
+} else {
+  globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__ = previousEamesCaptureModuleOnly;
+}
+const previousCaptureBridgeModuleOnly = globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__;
+globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__ = true;
+const {
+  readStaticAssetResponse,
+} = await import("../scripts/eames-environments/capture-bridge-server.mjs");
+if (typeof previousCaptureBridgeModuleOnly === "undefined") {
+  delete globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__;
+} else {
+  globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__ = previousCaptureBridgeModuleOnly;
+}
 const {
   decodePngDataUrl,
   ensureCaptureArtifactDirectory,
@@ -576,6 +598,29 @@ test("validation page proposes local bridge upload candidates for localhost capt
   );
 });
 
+test("validation page numeric query parsing preserves fallbacks for missing values", () => {
+  const params = new URLSearchParams("");
+  assert.equal(readNumberParam(params, "pathDebugLayer", -1, -1, 32), -1);
+  assert.equal(readNumberParam(params, "samplesPerPixel", 8, 1, 256), 8);
+  params.set("width", "");
+  assert.equal(readNumberParam(params, "width", 1280, 320, 4096), 1280);
+});
+
+test("validation page restricts capture upload URLs to loopback bridges", () => {
+  const runtime = {
+    location: { href: "http://127.0.0.1:8011/gpu-lighting/demo/eames-environments/index.html" },
+  };
+
+  assert.equal(
+    assertLocalCaptureUploadUrl("http://localhost:8001/__plasius-capture", runtime),
+    "http://localhost:8001/__plasius-capture"
+  );
+  assert.throws(
+    () => assertLocalCaptureUploadUrl("https://example.com/__plasius-capture", runtime),
+    /loopback bridge/
+  );
+});
+
 test("validation page reference camera is tighter than the wide orbit camera", () => {
   const referenceCamera = createEnvironmentCamera("reference", 0);
   const wideCamera = createEnvironmentCamera("wide", 0);
@@ -609,6 +654,10 @@ test("validation page scales capture boot timeout with render workload", () => {
   );
   assert.equal(
     computeCaptureBootTimeoutMs({ width: 3840, height: 2160, frames: 8, maxDepth: 12, samplesPerPixel: 256 }),
+    900_000
+  );
+  assert.equal(
+    computeCaptureReadyTimeoutMs({ width: 3840, height: 2160, frames: 8, maxDepth: 12, samplesPerPixel: 256 }),
     900_000
   );
 });
@@ -873,6 +922,82 @@ test("Eames glTF loader preserves UVs and material maps when textures are presen
   }
 });
 
+test("Eames glTF loader honors interleaved bufferView strides", async () => {
+  const vertexStride = 8;
+  const vertexData = new Float32Array([
+    -1, 0, 0, 0, 0, 1, 0, 0,
+    1, 0, 0, 0, 0, 1, 1, 0,
+    0, 1, 0, 0, 0, 1, 0.5, 1,
+  ]);
+  const indices = new Uint32Array([0, 1, 2]);
+  const buffer = new ArrayBuffer(vertexData.byteLength + indices.byteLength);
+  const bufferBytes = new Uint8Array(buffer);
+  bufferBytes.set(new Uint8Array(vertexData.buffer), 0);
+  bufferBytes.set(new Uint8Array(indices.buffer), vertexData.byteLength);
+  const modelUrl = "https://example.test/eames/interleaved.gltf";
+  const modelDocument = {
+    asset: { version: "2.0" },
+    scene: 0,
+    scenes: [{ nodes: [0] }],
+    nodes: [{ mesh: 0 }],
+    meshes: [
+      {
+        primitives: [
+          {
+            attributes: { POSITION: 0, NORMAL: 1, TEXCOORD_0: 2 },
+            indices: 3,
+          },
+        ],
+      },
+    ],
+    buffers: [{ uri: "mesh.bin", byteLength: buffer.byteLength }],
+    bufferViews: [
+      { buffer: 0, byteOffset: 0, byteLength: vertexData.byteLength, byteStride: vertexStride * 4 },
+      { buffer: 0, byteOffset: vertexData.byteLength, byteLength: indices.byteLength },
+    ],
+    accessors: [
+      { bufferView: 0, byteOffset: 0, componentType: 5126, count: 3, type: "VEC3" },
+      { bufferView: 0, byteOffset: 12, componentType: 5126, count: 3, type: "VEC3" },
+      { bufferView: 0, byteOffset: 24, componentType: 5126, count: 3, type: "VEC2" },
+      { bufferView: 1, componentType: 5125, count: 3, type: "SCALAR" },
+    ],
+  };
+
+  const previousFetch = globalThis.fetch;
+  globalThis.fetch = async (resource) => {
+    const href = String(resource);
+    if (href === modelUrl) {
+      return {
+        ok: true,
+        url: modelUrl,
+        async json() {
+          return modelDocument;
+        },
+      };
+    }
+    if (href === "https://example.test/eames/mesh.bin") {
+      return {
+        ok: true,
+        url: href,
+        async arrayBuffer() {
+          return buffer;
+        },
+      };
+    }
+    throw new Error(`Unexpected fetch: ${href}`);
+  };
+
+  try {
+    const model = await loadEamesGltfModel(modelUrl);
+    const primitive = model.primitives[0];
+    assert.deepEqual(primitive.positions, [-1, 0, 0, 1, 0, 0, 0, 1, 0]);
+    assert.deepEqual(primitive.normals, [0, 0, 1, 0, 0, 1, 0, 0, 1]);
+    assert.deepEqual(primitive.uvs, [0, 0, 1, 0, 0.5, 1]);
+  } finally {
+    globalThis.fetch = previousFetch;
+  }
+});
+
 test("validation scene builder can be exercised with injected runtime helpers", () => {
   const lightingOptions = createWavefrontEnvironmentLightingOptions({
     preset: "warehouse-dusk",
@@ -912,6 +1037,21 @@ test("validation scene builder can be exercised with injected runtime helpers", 
   assert.equal(sceneObjects.length >= 2, true);
   assert.deepEqual(sceneObjects[0].color, [0.35, 0.37, 0.38, 1]);
   assert.deepEqual(sceneObjects[1].color, [0.31, 0.33, 0.35, 1]);
+});
+
+test("validation repo ships the Eames model referenced by the capture page", () => {
+  assert.ok(
+    fs.existsSync(
+      path.resolve(
+        __dirname,
+        "..",
+        "data",
+        "models",
+        "eames-lounge-chair-ottoman",
+        "Eames_Lounge_Chair_Ottoman.gltf"
+      )
+    )
+  );
 });
 
 test("validation mesh builder preserves generic material inputs and texture maps", () => {
@@ -1121,6 +1261,106 @@ test("validation render decouples frame rendering from optional probe readback",
   assert.equal(result.renderer.gpuWorkerJobs.completedPerSecond, 420);
   assert.equal(result.renderer.gpuWorkerJobs.completedPerSubmission, 14);
   assert.equal(result.probeSummary.sampledPixels, 5);
+});
+
+test("validation render can rebuild animated source markers with injected runtime helpers", async () => {
+  const lightingOptions = createWavefrontEnvironmentLightingOptions({
+    preset: "grass-field-midday",
+  });
+  const updateSceneObjectsCalls = [];
+  const renderer = {
+    async renderFrame(options = {}) {
+      return {
+        frame: 1,
+        samplesPerPixel: options.samplesPerPixel ?? 2,
+        renderedSamplesPerPixel: options.samplesPerPixel ?? 2,
+        triangleCount: 1,
+        emissiveTriangleCount: 0,
+        bvhNodeCount: 1,
+        accelerationBuildMode: "gpu",
+        accelerationBuildSubmitted: true,
+        deferredPathResolve: true,
+        gpuWorkerJobs: {
+          completedPerFrame: 12,
+          completedPerSecond: 120,
+          completedPerSubmission: 6,
+          frameTimeMs: 10,
+        },
+        gpuParallelism: { exposesMultiWorkgroupParallelism: true },
+      };
+    },
+    async readOutputProbe() {
+      return {
+        x: 0,
+        y: 0,
+        rgba: [0, 0, 0, 255],
+        luminance: 0,
+      };
+    },
+    updateCamera() {},
+    updateSceneObjects(sceneObjects) {
+      updateSceneObjectsCalls.push(sceneObjects);
+    },
+  };
+  const canvas = { width: 0, height: 0 };
+  const model = {
+    name: "animated-model",
+    bounds: {
+      min: [-1, -1, -1],
+      max: [1, 1, 1],
+    },
+    primitives: [
+      {
+        positions: [-1, 0, 0, 1, 0, 0, 0, 1, 0],
+        indices: [0, 1, 2],
+        normals: [0, 1, 0, 0, 1, 0, 0, 1, 0],
+        material: {
+          name: "chrome",
+          roughness: 0.05,
+          metallic: 0.9,
+        },
+      },
+    ],
+    indices: [0, 1, 2],
+  };
+
+  await renderEamesEnvironment({
+    canvas,
+    width: 640,
+    height: 480,
+    frames: 2,
+    maxDepth: 3,
+    samplesPerPixel: 2,
+    motion: true,
+    showSources: true,
+    readOutputProbe: false,
+    runtimeModules: {
+      createWavefrontEnvironmentLightingOptions() {
+        return lightingOptions;
+      },
+      async loadEamesGltfModel() {
+        return model;
+      },
+      buildProductStudioSceneObjects() {
+        return [
+          { id: 1, color: [1, 1, 1, 1], materialKind: "diffuse", roughness: 1 },
+          { id: 2, color: [1, 1, 1, 1], materialKind: "diffuse", roughness: 1 },
+        ];
+      },
+      async createWavefrontPathTracingComputeRenderer() {
+        return renderer;
+      },
+    },
+  });
+
+  assert.equal(updateSceneObjectsCalls.length, 2);
+  assert.ok(updateSceneObjectsCalls.every((sceneObjects) => sceneObjects.length >= 2));
+});
+
+test("capture bridge static asset helper resolves directory requests to index.html without pre-stat races", async () => {
+  const asset = await readStaticAssetResponse("/gpu-lighting/demo/eames-environments/");
+  assert.match(asset.contentType, /text\/html/);
+  assert.match(asset.fileBuffer.toString("utf8"), /<canvas id="stage"/);
 });
 
 test("module base does not use a browser-bundler asset URL pattern", () => {

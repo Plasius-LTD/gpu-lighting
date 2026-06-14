@@ -70,6 +70,21 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - Eames capture helpers now resolve browser profile and temporary output paths
     through the host OS temp directory instead of assuming macOS-only
     `/private/tmp`, which fixes Linux CI validation.
+  - Eames validation query parsing now preserves documented fallback defaults
+    when numeric URL params are omitted, which keeps standard captures out of
+    accidental reverse-pass debug mode.
+  - Animated source-marker captures now reuse the injected product-studio scene
+    helper during per-frame rebuilds instead of throwing when motion is enabled.
+  - Eames capture waits now scale with requested resolution, frame count, depth,
+    and SPP so higher-workload validation runs are not aborted at a stale fixed
+    timeout.
+  - The Eames glTF loader now honors interleaved `bufferView.byteStride` values,
+    which keeps positions, normals, and UVs correct for legal strided assets.
+  - The capture bridge now serves static assets without a pre-stat/read race,
+    and browser-driven capture uploads are restricted to loopback bridge URLs.
+  - The standalone repo now ships the Eames demo asset set referenced by the
+    validation page so fresh checkouts can render the chair without external
+    workspace-only files.
 
 - **Security**
   - (placeholder)
