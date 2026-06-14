@@ -1,8 +1,13 @@
-const REPO_ROOT_URL = new URL("../../../", import.meta.url);
+const WORKSPACE_ROOT_URL = new URL("../../../", import.meta.url);
+const PACKAGE_ROOT_URL = new URL("../../", import.meta.url);
 const MODULE_VERSION = new URLSearchParams(globalThis.location?.search ?? "").get("moduleVersion") ?? "1";
 
 function resolveRepoUrl(relativePath) {
-  return new URL(relativePath, REPO_ROOT_URL).href;
+  return new URL(relativePath, WORKSPACE_ROOT_URL).href;
+}
+
+function resolvePackageUrl(relativePath) {
+  return new URL(relativePath, PACKAGE_ROOT_URL).href;
 }
 
 function withModuleVersion(url) {
@@ -11,7 +16,7 @@ function withModuleVersion(url) {
   return resolved.href;
 }
 
-export const MODEL_URL = resolveRepoUrl(
+export const MODEL_URL = resolvePackageUrl(
   "data/models/eames-lounge-chair-ottoman/Eames_Lounge_Chair_Ottoman.gltf"
 );
 export const CAPTURE_BOOT_TIMEOUT_MS = 60_000;

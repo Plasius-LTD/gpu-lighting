@@ -56,6 +56,7 @@ const {
   createEnvironmentCamera,
   createCaptureState,
   listCaptureUploadUrlCandidates,
+  MODEL_URL,
   normalizeCaptureError,
   readWebGpuBootstrapSnapshot,
   readNumberParam,
@@ -664,6 +665,10 @@ test("validation page restricts capture upload URLs to loopback bridges", () => 
   );
 });
 
+test("validation page resolves the Eames model from the gpu-lighting repo path", () => {
+  assert.match(MODEL_URL, /\/gpu-lighting\/data\/models\/eames-lounge-chair-ottoman\//);
+});
+
 test("validation page reference camera is tighter than the wide orbit camera", () => {
   const referenceCamera = createEnvironmentCamera("reference", 0);
   const wideCamera = createEnvironmentCamera("wide", 0);
@@ -703,6 +708,17 @@ test("validation page scales capture boot timeout with render workload", () => {
     computeCaptureReadyTimeoutMs({ width: 3840, height: 2160, frames: 8, maxDepth: 12, samplesPerPixel: 256 }),
     900_000
   );
+});
+
+test("path-debug capture scales readiness waits with the requested workload", () => {
+  const source = fs.readFileSync(
+    path.resolve(__dirname, "..", "scripts", "eames-environments", "path-debug-capture.mjs"),
+    "utf8"
+  );
+
+  assert.match(source, /computePathDebugWaitTimeoutMs/);
+  assert.match(source, /waitForCaptureReady\(page,\s*`layer \$\{layer\}`,\s*readyTimeoutMs\)/);
+  assert.doesNotMatch(source, /waitForCaptureReady\(page,\s*`layer \$\{layer\}`,\s*180_000\)/);
 });
 
 test("validation page adaptive sampling controller uses gpu-performance-style ladders", () => {

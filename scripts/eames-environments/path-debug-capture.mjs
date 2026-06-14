@@ -26,6 +26,19 @@ const frameIndex = readInteger("PLASIUS_PATH_DEBUG_FRAME_INDEX", 777, 0, 1_000_0
 const showSources = process.env.PLASIUS_PATH_DEBUG_SHOW_SOURCES === "1";
 const label = sanitize(process.env.PLASIUS_PATH_DEBUG_LABEL ?? "reverse-pass");
 
+export function computePathDebugWaitTimeoutMs(options = {}) {
+  const captureWidth = Math.max(1, Number(options.width ?? width));
+  const captureHeight = Math.max(1, Number(options.height ?? height));
+  const captureLayers = Math.max(1, Number(options.layers ?? layers));
+  const captureMaxDepth = Math.max(1, Number(options.maxDepth ?? maxDepth));
+  const captureSamplesPerPixel = Math.max(1, Number(options.samplesPerPixel ?? samplesPerPixel));
+  const tileEstimate = Math.max(1, Math.ceil(captureWidth / 128) * Math.ceil(captureHeight / 128));
+  const perSamplePassEstimate = captureMaxDepth + 2;
+  const workEstimate =
+    captureLayers * captureSamplesPerPixel * perSamplePassEstimate * tileEstimate;
+  return Math.min(900_000, 60_000 + workEstimate * 30);
+}
+
 function readInteger(name, fallback, minimum, maximum) {
   const value = Number(process.env[name]);
   if (!Number.isFinite(value)) {
@@ -52,6 +65,13 @@ function centerProbe(result) {
 
 async function captureLayer(page, baseUrl, layer) {
   const artifactDirectory = await artifactDirectoryPromise;
+  const readyTimeoutMs = computePathDebugWaitTimeoutMs({
+    width,
+    height,
+    layers,
+    maxDepth,
+    samplesPerPixel,
+  });
   const url = new URL("/gpu-lighting/demo/eames-environments/index.html", baseUrl);
   url.searchParams.set("preset", preset);
   url.searchParams.set("geometry", "mesh");
@@ -69,7 +89,7 @@ async function captureLayer(page, baseUrl, layer) {
   url.searchParams.set("showSources", showSources ? "1" : "0");
 
   await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 60_000 });
-  await waitForCaptureReady(page, `layer ${layer}`, 180_000);
+  await waitForCaptureReady(page, `layer ${layer}`, readyTimeoutMs);
   const result = await page.evaluate(() => window.__plasiusCaptureResult ?? window.__plasiusCaptureError);
   if (!result || result.status !== "ok") {
     throw new Error(formatCaptureDiagnostic(`layer ${layer}`, await readPageDiagnostic(page)));
@@ -204,7 +224,9 @@ function renderSummary(manifest) {
   return `${lines.join("\n")}\n`;
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+if (!globalThis.__PLASIUS_PATH_DEBUG_CAPTURE_MODULE_ONLY__) {
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}
