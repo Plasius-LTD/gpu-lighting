@@ -1639,7 +1639,10 @@ test("capture bridge server serves demo assets and accepts loopback uploads", as
 
     const uploadResponse = await fetch(`http://127.0.0.1:${listeningPort}/__plasius-capture`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: {
+        "content-type": "application/json",
+        origin: "http://127.0.0.1:8011",
+      },
       body: JSON.stringify({
         path: path.relative(captureWorkspaceRoot, uploadPath),
         dataUrl,
@@ -1650,6 +1653,25 @@ test("capture bridge server serves demo assets and accepts loopback uploads", as
     const uploadResult = await uploadResponse.json();
     assert.equal(fs.existsSync(path.resolve(captureWorkspaceRoot, uploadResult.path)), true);
     assert.equal(fs.existsSync(metadataPath), true);
+
+    const rejectedOptionsResponse = await fetch(`http://127.0.0.1:${listeningPort}/__plasius-capture`, {
+      method: "OPTIONS",
+      headers: { origin: "https://example.com" },
+    });
+    assert.equal(rejectedOptionsResponse.status, 403);
+
+    const rejectedUploadResponse = await fetch(`http://127.0.0.1:${listeningPort}/__plasius-capture`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: "https://example.com",
+      },
+      body: JSON.stringify({
+        path: path.relative(captureWorkspaceRoot, uploadPath),
+        dataUrl,
+      }),
+    });
+    assert.equal(rejectedUploadResponse.status, 403);
   } finally {
     server.close();
     fs.rmSync(uploadPath, { force: true });

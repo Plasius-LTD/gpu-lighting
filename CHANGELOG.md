@@ -85,6 +85,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - Eames glTF validation materials now honor `KHR_texture_transform` offsets,
     scales, and rotation by baking transformed texture maps during decode so
     chair screenshots reflect the authored leather and wood layouts.
+  - The capture bridge now rejects non-loopback browser origins and confines
+    capture writes to `output/playwright/eames-environments/`, which closes the
+    browser-driven workspace overwrite path on the local upload endpoint.
   - The Eames glTF loader now honors interleaved `bufferView.byteStride` values,
     which keeps positions, normals, and UVs correct for legal strided assets.
   - The capture bridge now serves static assets without a pre-stat/read race,

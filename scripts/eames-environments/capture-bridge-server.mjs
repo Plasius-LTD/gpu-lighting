@@ -6,7 +6,9 @@ import { decodePngDataUrl } from "./capture-runtime.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const workspaceRoot = path.resolve(__dirname, "../../..");
+const captureOutputRoot = path.resolve(workspaceRoot, "output/playwright/eames-environments");
 const port = Number(process.argv[2] ?? 8001);
+const trustedLoopbackHostnames = new Set(["127.0.0.1", "localhost", "::1", "[::1]"]);
 
 const contentTypes = new Map([
   [".html", "text/html; charset=utf-8"],
@@ -22,18 +24,12 @@ const contentTypes = new Map([
   [".bin", "application/octet-stream"],
 ]);
 
-function applyCorsHeaders(request, response) {
-  const origin =
-    typeof request.headers.origin === "string" && request.headers.origin.length > 0
-      ? request.headers.origin
-      : "*";
+function applyCaptureCorsHeaders(response, origin) {
   response.setHeader("access-control-allow-origin", origin);
   response.setHeader("access-control-allow-methods", "GET, HEAD, POST, OPTIONS");
   response.setHeader("access-control-allow-headers", "content-type");
   response.setHeader("access-control-max-age", "86400");
-  if (origin !== "*") {
-    response.setHeader("vary", "Origin");
-  }
+  response.setHeader("vary", "Origin");
 }
 
 function resolveWorkspacePath(requestPath) {
@@ -44,6 +40,38 @@ function resolveWorkspacePath(requestPath) {
     throw new Error("Path escapes workspace root.");
   }
   return resolvedPath;
+}
+
+function resolveCaptureOutputPath(requestPath) {
+  const resolvedPath = resolveWorkspacePath(requestPath);
+  const relativeToOutputRoot = path.relative(captureOutputRoot, resolvedPath);
+  if (relativeToOutputRoot.startsWith("..") || path.isAbsolute(relativeToOutputRoot)) {
+    throw new Error("Capture upload path must stay within output/playwright/eames-environments.");
+  }
+  return resolvedPath;
+}
+
+function resolveTrustedCaptureOrigin(request) {
+  const originHeader =
+    typeof request.headers.origin === "string" && request.headers.origin.length > 0
+      ? request.headers.origin
+      : null;
+  if (!originHeader) {
+    return null;
+  }
+  let origin;
+  try {
+    origin = new URL(originHeader);
+  } catch {
+    return null;
+  }
+  if (!["http:", "https:"].includes(origin.protocol)) {
+    return null;
+  }
+  if (!trustedLoopbackHostnames.has(origin.hostname.toLowerCase())) {
+    return null;
+  }
+  return origin.origin;
 }
 
 async function readRequestBody(request) {
@@ -62,7 +90,7 @@ async function readRequestBody(request) {
 async function writeCaptureArtifact(request, response) {
   const body = await readRequestBody(request);
   const payload = JSON.parse(body);
-  const outputPath = resolveWorkspacePath(payload.path);
+  const outputPath = resolveCaptureOutputPath(payload.path);
   const buffer = decodePngDataUrl(payload.dataUrl);
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   await fs.writeFile(outputPath, buffer);
@@ -116,14 +144,27 @@ async function serveStaticAsset(requestPath, response) {
 export function createCaptureBridgeServer(host = "127.0.0.1") {
   return http.createServer(async (request, response) => {
     try {
-      applyCorsHeaders(request, response);
       const url = new URL(request.url ?? "/", `http://${request.headers.host ?? `${host}:${port}`}`);
       if (request.method === "OPTIONS" && url.pathname === "/__plasius-capture") {
+        const trustedOrigin = resolveTrustedCaptureOrigin(request);
+        if (!trustedOrigin) {
+          response.writeHead(403, { "content-type": "text/plain; charset=utf-8" });
+          response.end("Capture bridge only accepts loopback browser origins.");
+          return;
+        }
+        applyCaptureCorsHeaders(response, trustedOrigin);
         response.writeHead(204);
         response.end();
         return;
       }
       if (request.method === "POST" && url.pathname === "/__plasius-capture") {
+        const trustedOrigin = resolveTrustedCaptureOrigin(request);
+        if (!trustedOrigin) {
+          response.writeHead(403, { "content-type": "text/plain; charset=utf-8" });
+          response.end("Capture bridge only accepts loopback browser origins.");
+          return;
+        }
+        applyCaptureCorsHeaders(response, trustedOrigin);
         await writeCaptureArtifact(request, response);
         return;
       }
