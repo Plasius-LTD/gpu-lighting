@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -42,6 +43,69 @@ if (typeof originalImportMetaUrl === "undefined") {
   delete globalThis.__IMPORT_META_URL__;
 } else {
   globalThis.__IMPORT_META_URL__ = originalImportMetaUrl;
+}
+
+const previousEamesModuleOnly = globalThis.__PLASIUS_EAMES_ENVIRONMENT_MODULE_ONLY__;
+globalThis.__PLASIUS_EAMES_ENVIRONMENT_MODULE_ONLY__ = true;
+const {
+  assertLocalCaptureUploadUrl,
+  buildEamesMeshes,
+  buildEnvironmentSceneObjects,
+  computeCaptureBootTimeoutMs,
+  createAdaptiveSamplingController,
+  createEnvironmentCamera,
+  createCaptureState,
+  listCaptureUploadUrlCandidates,
+  MODEL_URL,
+  normalizeCaptureError,
+  readWebGpuBootstrapSnapshot,
+  readNumberParam,
+  readOptionalNumberParam,
+  renderEamesEnvironment,
+  resolveCaptureUploadUrl,
+} = await import("../demo/eames-environments/page.js");
+const previousEamesCaptureModuleOnly = globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__;
+globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__ = true;
+const {
+  computeCaptureReadyTimeoutMs,
+} = await import("../scripts/eames-environments/capture.mjs");
+if (typeof previousEamesCaptureModuleOnly === "undefined") {
+  delete globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__;
+} else {
+  globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__ = previousEamesCaptureModuleOnly;
+}
+const previousCaptureBridgeModuleOnly = globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__;
+globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__ = true;
+const {
+  createCaptureBridgeServer,
+  readStaticAssetResponse,
+} = await import("../scripts/eames-environments/capture-bridge-server.mjs");
+if (typeof previousCaptureBridgeModuleOnly === "undefined") {
+  delete globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__;
+} else {
+  globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__ = previousCaptureBridgeModuleOnly;
+}
+const {
+  decodePngDataUrl,
+  ensureCaptureArtifactDirectory,
+  formatCaptureDiagnostic,
+  looksLikeBrowserBootstrapFailure,
+  readOptionalString,
+  resolveCaptureBrowserProfileDirectory,
+  resolveCaptureArtifactDirectory,
+  resolveCaptureWorkspaceRoot,
+  summarizeRgbaPixels,
+} = await import("../scripts/eames-environments/capture-runtime.mjs");
+const {
+  buildCaptureAssetUrl,
+  findCaptureServerPort,
+  waitForCaptureServer,
+} = await import("../scripts/eames-environments/capture-server.mjs");
+const { loadEamesGltfModel } = await import("../demo/eames-environments/eames-loader.js");
+if (typeof previousEamesModuleOnly === "undefined") {
+  delete globalThis.__PLASIUS_EAMES_ENVIRONMENT_MODULE_ONLY__;
+} else {
+  globalThis.__PLASIUS_EAMES_ENVIRONMENT_MODULE_ONLY__ = previousEamesModuleOnly;
 }
 
 const __filename = fileURLToPath(import.meta.url);
@@ -356,6 +420,1263 @@ test("environment lighting config rejects invalid portal settings", () => {
       }),
     /environmentPortals\[0\]\.shape must be one of/
   );
+});
+
+test("playwright capture helpers surface browser bootstrap failures and trim optional strings", () => {
+  assert.equal(readOptionalString("  http://127.0.0.1:9222 "), "http://127.0.0.1:9222");
+  assert.equal(readOptionalString("   "), null);
+  assert.equal(
+    looksLikeBrowserBootstrapFailure(
+      new Error("MachPortRendezvousServer bootstrap_check_in Permission denied")
+    ),
+    true
+  );
+  assert.equal(looksLikeBrowserBootstrapFailure(new Error("ordinary timeout")), false);
+});
+
+test("playwright capture helpers normalize output directories and summarize canvas pixels", async () => {
+  const tempDirectory = path.join(os.tmpdir(), "plasius-capture-helper-test");
+  const defaultOutputDirectory = resolveCaptureArtifactDirectory();
+  assert.ok(defaultOutputDirectory.endsWith("/output/playwright/eames-environments"));
+  assert.equal(
+    resolveCaptureArtifactDirectory("output/playwright/eames-environments/custom"),
+    path.resolve(process.cwd(), "..", "output/playwright/eames-environments/custom")
+  );
+  assert.equal(resolveCaptureWorkspaceRoot(), path.resolve(process.cwd(), ".."));
+  assert.equal(
+    resolveCaptureArtifactDirectory(tempDirectory),
+    tempDirectory
+  );
+  assert.equal(
+    resolveCaptureBrowserProfileDirectory("/tmp/playwright", 42),
+    path.join("/tmp/playwright", "plasius-playwright-eames-42")
+  );
+
+  const summary = summarizeRgbaPixels(
+    new Uint8Array([
+      0, 0, 0, 255,
+      4, 8, 6, 255,
+      12, 16, 14, 255,
+      32, 48, 64, 255,
+    ])
+  );
+  assert.equal(summary.exactBlackPixels, 1);
+  assert.equal(summary.nearBlackPixels8, 2);
+  assert.equal(summary.nearBlackPixels16, 3);
+  assert.equal(summary.opaquePixels, 4);
+  assert.ok(summary.averageLuminance > 0);
+
+  const outputDirectory = await ensureCaptureArtifactDirectory(tempDirectory);
+  assert.equal(outputDirectory, tempDirectory);
+  assert.ok(fs.existsSync(outputDirectory));
+
+  const pngBuffer = decodePngDataUrl(
+    "data:image/png;base64," +
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wn7Y6sAAAAASUVORK5CYII="
+  );
+  assert.ok(Buffer.isBuffer(pngBuffer));
+  assert.ok(pngBuffer.length > 16);
+  assert.throws(
+    () => decodePngDataUrl("data:text/plain;base64,SGVsbG8="),
+    /Expected a PNG data URL/
+  );
+});
+
+test("playwright capture server helpers prefer reusable servers before free-port fallback", async () => {
+  const checks = [];
+  const selection = await findCaptureServerPort({
+    startPort: 9100,
+    attempts: 3,
+    canReuse: async (port) => {
+      checks.push(`reuse:${port}`);
+      return port === 9101;
+    },
+    isPortFree: async (port) => {
+      checks.push(`free:${port}`);
+      return false;
+    },
+  });
+
+  assert.deepEqual(selection, { port: 9101, reuse: true });
+  assert.deepEqual(checks, ["reuse:9100", "free:9100", "reuse:9101"]);
+  assert.equal(
+    buildCaptureAssetUrl("http://127.0.0.1:9101"),
+    "http://127.0.0.1:9101/gpu-lighting/demo/eames-environments/index.html"
+  );
+});
+
+test("playwright capture server helpers fall back to a free port when no server can be reused", async () => {
+  const checks = [];
+  const selection = await findCaptureServerPort({
+    startPort: 9200,
+    attempts: 4,
+    canReuse: async (port) => {
+      checks.push(`reuse:${port}`);
+      return false;
+    },
+    isPortFree: async (port) => {
+      checks.push(`free:${port}`);
+      return port === 9202;
+    },
+  });
+
+  assert.deepEqual(selection, { port: 9202, reuse: false });
+  assert.deepEqual(checks, [
+    "reuse:9200",
+    "free:9200",
+    "reuse:9201",
+    "free:9201",
+    "reuse:9202",
+    "free:9202",
+  ]);
+});
+
+test("playwright capture server wait helper polls until the server responds", async () => {
+  const fetchCalls = [];
+  const sleepCalls = [];
+  let attempts = 0;
+  await waitForCaptureServer(
+    "http://127.0.0.1:8765/gpu-lighting/demo/eames-environments/index.html",
+    { exitCode: null },
+    {
+      timeoutMs: 1_000,
+      async fetchImpl(url) {
+        fetchCalls.push(url);
+        attempts += 1;
+        if (attempts < 3) {
+          throw new Error("not ready");
+        }
+        return { ok: true };
+      },
+      async sleep(durationMs) {
+        sleepCalls.push(durationMs);
+      },
+    }
+  );
+
+  assert.equal(fetchCalls.length, 3);
+  assert.deepEqual(sleepCalls, [200, 200]);
+});
+
+test("playwright capture server wait helper fails fast when the server exits", async () => {
+  await assert.rejects(
+    () =>
+      waitForCaptureServer("http://127.0.0.1:8765/demo", { exitCode: 1 }, {
+        timeoutMs: 1_000,
+        async fetchImpl() {
+          return { ok: false };
+        },
+        async sleep() {},
+      }),
+    /exited early/
+  );
+});
+
+test("validation page bootstrap helpers expose explicit WebGPU diagnostics", () => {
+  const runtime = {
+    navigator: {
+      gpu: {},
+      userAgent: "Unit Test Browser",
+    },
+    isSecureContext: true,
+    location: { href: "http://127.0.0.1:8765/demo" },
+  };
+
+  const snapshot = readWebGpuBootstrapSnapshot(runtime);
+  const state = createCaptureState(runtime);
+  state.step = "Creating renderer";
+  state.detail = "Requesting WebGPU renderer and scene buffers.";
+  const error = normalizeCaptureError(new Error("navigator.gpu missing"), state, runtime);
+  const diagnostic = formatCaptureDiagnostic("grass-field-midday", {
+    state,
+    error,
+    hudText: "Creating renderer Requesting WebGPU renderer and scene buffers.",
+  });
+
+  assert.deepEqual(snapshot, {
+    hasNavigator: true,
+    hasGpu: true,
+    secureContext: true,
+    userAgent: "Unit Test Browser",
+    location: "http://127.0.0.1:8765/demo",
+  });
+  assert.equal(state.webgpu.hasGpu, true);
+  assert.equal(error.status, "error");
+  assert.match(diagnostic, /grass-field-midday failed/);
+  assert.match(diagnostic, /step: Creating renderer/);
+  assert.match(diagnostic, /webgpu\.hasGpu: true/);
+  assert.match(diagnostic, /hud: Creating renderer Requesting WebGPU renderer and scene buffers\./);
+});
+
+test("validation page resolves capture upload URLs against the active page origin", () => {
+  const runtime = {
+    location: { href: "http://127.0.0.1:8011/gpu-lighting/demo/eames-environments/index.html?preset=grass-field-midday" },
+  };
+
+  assert.equal(
+    resolveCaptureUploadUrl(null, runtime),
+    "http://127.0.0.1:8011/__plasius-capture"
+  );
+  assert.equal(
+    resolveCaptureUploadUrl("http://127.0.0.1:8001/__plasius-capture", runtime),
+    "http://127.0.0.1:8001/__plasius-capture"
+  );
+  assert.equal(
+    resolveCaptureUploadUrl("../capture-endpoint", runtime),
+    "http://127.0.0.1:8011/gpu-lighting/demo/capture-endpoint"
+  );
+});
+
+test("validation page proposes local bridge upload candidates for localhost captures", () => {
+  const runtime = {
+    location: { href: "http://127.0.0.1:8011/gpu-lighting/demo/eames-environments/index.html" },
+  };
+
+  assert.deepEqual(listCaptureUploadUrlCandidates(null, runtime), [
+    "http://127.0.0.1:8011/__plasius-capture",
+    "http://127.0.0.1:8001/__plasius-capture",
+    "http://127.0.0.1:8123/__plasius-capture",
+  ]);
+  assert.deepEqual(
+    listCaptureUploadUrlCandidates("http://127.0.0.1:9000/__plasius-capture", runtime),
+    ["http://127.0.0.1:9000/__plasius-capture"]
+  );
+});
+
+test("validation page numeric query parsing preserves fallbacks for missing values", () => {
+  const params = new URLSearchParams("");
+  assert.equal(readNumberParam(params, "pathDebugLayer", -1, -1, 32), -1);
+  assert.equal(readNumberParam(params, "samplesPerPixel", 8, 1, 256), 8);
+  assert.equal(readOptionalNumberParam(params, "frameTimeBudgetMs", 0, 1000), null);
+  params.set("width", "");
+  assert.equal(readNumberParam(params, "width", 1280, 320, 4096), 1280);
+  params.set("frameTimeBudgetMs", "16");
+  assert.equal(readOptionalNumberParam(params, "frameTimeBudgetMs", 0, 1000), 16);
+});
+
+test("validation page restricts capture upload URLs to loopback bridges", () => {
+  const runtime = {
+    location: { href: "http://127.0.0.1:8011/gpu-lighting/demo/eames-environments/index.html" },
+  };
+
+  assert.equal(
+    assertLocalCaptureUploadUrl("http://localhost:8001/__plasius-capture", runtime),
+    "http://localhost:8001/__plasius-capture"
+  );
+  assert.throws(
+    () => assertLocalCaptureUploadUrl("https://example.com/__plasius-capture", runtime),
+    /loopback bridge/
+  );
+});
+
+test("validation page resolves the Eames model from the gpu-lighting repo path", () => {
+  assert.match(MODEL_URL, /\/gpu-lighting\/data\/models\/eames-lounge-chair-ottoman\//);
+});
+
+test("validation page reference camera is tighter than the wide orbit camera", () => {
+  const referenceCamera = createEnvironmentCamera("reference", 0);
+  const wideCamera = createEnvironmentCamera("wide", 0);
+  const referenceDistance = Math.hypot(
+    referenceCamera.position[0] - referenceCamera.target[0],
+    referenceCamera.position[1] - referenceCamera.target[1],
+    referenceCamera.position[2] - referenceCamera.target[2]
+  );
+  const wideDistance = Math.hypot(
+    wideCamera.position[0] - wideCamera.target[0],
+    wideCamera.position[1] - wideCamera.target[1],
+    wideCamera.position[2] - wideCamera.target[2]
+  );
+
+  assert.ok(referenceDistance < wideDistance);
+  assert.ok(referenceCamera.fovYDegrees < wideCamera.fovYDegrees);
+});
+
+test("validation page scales capture boot timeout with render workload", () => {
+  const lowWorkloadTimeout = computeCaptureBootTimeoutMs({
+    width: 640,
+    height: 360,
+    frames: 1,
+    maxDepth: 8,
+    samplesPerPixel: 1,
+  });
+  assert.ok(lowWorkloadTimeout > 60_000);
+  assert.ok(
+    computeCaptureBootTimeoutMs({ width: 640, height: 360, frames: 1, maxDepth: 8, samplesPerPixel: 32 }) >
+      computeCaptureBootTimeoutMs({ width: 640, height: 360, frames: 1, maxDepth: 8, samplesPerPixel: 8 })
+  );
+  assert.equal(
+    computeCaptureBootTimeoutMs({ width: 3840, height: 2160, frames: 8, maxDepth: 12, samplesPerPixel: 256 }),
+    900_000
+  );
+  assert.equal(
+    computeCaptureReadyTimeoutMs({ width: 3840, height: 2160, frames: 8, maxDepth: 12, samplesPerPixel: 256 }),
+    900_000
+  );
+});
+
+test("path-debug capture scales readiness waits with the requested workload", () => {
+  const source = fs.readFileSync(
+    path.resolve(__dirname, "..", "scripts", "eames-environments", "path-debug-capture.mjs"),
+    "utf8"
+  );
+
+  assert.match(source, /computePathDebugWaitTimeoutMs/);
+  assert.match(source, /waitForCaptureReady\(page,\s*`layer \$\{layer\}`,\s*readyTimeoutMs\)/);
+  assert.doesNotMatch(source, /waitForCaptureReady\(page,\s*`layer \$\{layer\}`,\s*180_000\)/);
+});
+
+test("validation page adaptive sampling controller uses gpu-performance-style ladders", () => {
+  let currentLevelIndex = 5;
+  const levels = [];
+  const performanceModule = {
+    createDeviceProfile(device) {
+      return device;
+    },
+    createQualityLadderAdapter(options) {
+      levels.push(...options.levels);
+      currentLevelIndex = options.levels.length - 1;
+      return {
+        getCurrentLevel() {
+          return options.levels[currentLevelIndex];
+        },
+        stepDown() {
+          if (currentLevelIndex <= 0) {
+            return null;
+          }
+          currentLevelIndex -= 1;
+          return { moduleId: options.id, toLevelId: options.levels[currentLevelIndex].id };
+        },
+        stepUp() {
+          if (currentLevelIndex >= options.levels.length - 1) {
+            return null;
+          }
+          currentLevelIndex += 1;
+          return { moduleId: options.id, toLevelId: options.levels[currentLevelIndex].id };
+        },
+      };
+    },
+    createGpuPerformanceGovernor() {
+      return {
+        recordFrame({ frameTimeMs }) {
+          if (frameTimeMs > 20) {
+            return { pressureLevel: "critical", adjustments: [{ moduleId: "eames-wavefront-samples" }] };
+          }
+          return { pressureLevel: "stable", adjustments: [] };
+        },
+      };
+    },
+  };
+
+  const controller = createAdaptiveSamplingController({
+    samplesPerPixel: 32,
+    frameTimeBudgetMs: 16,
+    minimumSamplesPerPixel: 1,
+    motion: true,
+    createWavefrontAdaptiveSamplingLevels() {
+      return {
+        requestedSamplesPerPixel: 32,
+        minimumSamplesPerPixel: 1,
+        frameTimeBudgetMs: 16,
+        levels: [1, 2, 4, 8, 16, 32].map((samplesPerPixel) => ({
+          id: `${samplesPerPixel}spp`,
+          label: `${samplesPerPixel} spp`,
+          estimatedCostMs: samplesPerPixel,
+          config: {
+            samplesPerPixel,
+            frameTimeBudgetMs: 16,
+            minimumSamplesPerPixel: 1,
+          },
+        })),
+      };
+    },
+    performanceModule,
+  });
+
+  assert.equal(controller.enabled, true);
+  assert.deepEqual(
+    levels.map((level) => level.config.samplesPerPixel),
+    [1, 2, 4, 8, 16, 32]
+  );
+  assert.equal(controller.getFrameOptions().samplesPerPixel, 32);
+  controller.recordFrame({ gpuWorkerJobs: { frameTimeMs: 24 } });
+  assert.equal(controller.getSnapshot().pressureLevel, "critical");
+});
+
+test("Eames glTF loader preserves UVs and material maps when textures are present", async () => {
+  const positions = new Float32Array([
+    -1, 0, 0,
+    1, 0, 0,
+    0, 1, 0,
+  ]);
+  const normals = new Float32Array([
+    0, 0, 1,
+    0, 0, 1,
+    0, 0, 1,
+  ]);
+  const uvs = new Float32Array([
+    0, 0,
+    1, 0,
+    0.5, 1,
+  ]);
+  const indices = new Uint32Array([0, 1, 2]);
+  const buffer = new ArrayBuffer(
+    positions.byteLength + normals.byteLength + uvs.byteLength + indices.byteLength
+  );
+  const bufferBytes = new Uint8Array(buffer);
+  bufferBytes.set(new Uint8Array(positions.buffer), 0);
+  bufferBytes.set(new Uint8Array(normals.buffer), positions.byteLength);
+  bufferBytes.set(
+    new Uint8Array(uvs.buffer),
+    positions.byteLength + normals.byteLength
+  );
+  bufferBytes.set(
+    new Uint8Array(indices.buffer),
+    positions.byteLength + normals.byteLength + uvs.byteLength
+  );
+
+  const modelUrl = "https://example.test/eames/model.gltf";
+  const modelDocument = {
+    asset: { version: "2.0" },
+    scene: 0,
+    scenes: [{ nodes: [0] }],
+    nodes: [{ mesh: 0 }],
+    meshes: [
+      {
+        primitives: [
+          {
+            attributes: {
+              POSITION: 0,
+              NORMAL: 1,
+              TEXCOORD_0: 2,
+            },
+            indices: 3,
+            material: 0,
+          },
+        ],
+      },
+    ],
+    materials: [
+      {
+        name: "Leather",
+        pbrMetallicRoughness: {
+          baseColorFactor: [0.25, 0.2, 0.18, 1],
+          metallicFactor: 0,
+          roughnessFactor: 0.61,
+          baseColorTexture: { index: 0, texCoord: 0 },
+          metallicRoughnessTexture: { index: 1, texCoord: 0 },
+        },
+        normalTexture: { index: 2, texCoord: 0, scale: 0.75 },
+      },
+    ],
+    textures: [{ source: 0 }, { source: 1 }, { source: 2 }],
+    images: [
+      { uri: "leather-base.png" },
+      { uri: "leather-orm.png" },
+      { uri: "leather-normal.png" },
+    ],
+    buffers: [{ uri: "mesh.bin", byteLength: buffer.byteLength }],
+    bufferViews: [
+      { buffer: 0, byteOffset: 0, byteLength: positions.byteLength },
+      {
+        buffer: 0,
+        byteOffset: positions.byteLength,
+        byteLength: normals.byteLength,
+      },
+      {
+        buffer: 0,
+        byteOffset: positions.byteLength + normals.byteLength,
+        byteLength: uvs.byteLength,
+      },
+      {
+        buffer: 0,
+        byteOffset: positions.byteLength + normals.byteLength + uvs.byteLength,
+        byteLength: indices.byteLength,
+      },
+    ],
+    accessors: [
+      { bufferView: 0, componentType: 5126, count: 3, type: "VEC3" },
+      { bufferView: 1, componentType: 5126, count: 3, type: "VEC3" },
+      { bufferView: 2, componentType: 5126, count: 3, type: "VEC2" },
+      { bufferView: 3, componentType: 5125, count: 3, type: "SCALAR" },
+    ],
+  };
+
+  const previousFetch = globalThis.fetch;
+  const previousCreateImageBitmap = globalThis.createImageBitmap;
+  const previousOffscreenCanvas = globalThis.OffscreenCanvas;
+  globalThis.fetch = async (resource) => {
+    const href = String(resource);
+    if (href === modelUrl) {
+      return {
+        ok: true,
+        url: modelUrl,
+        async json() {
+          return modelDocument;
+        },
+      };
+    }
+    if (href === "https://example.test/eames/mesh.bin") {
+      return {
+        ok: true,
+        url: href,
+        async arrayBuffer() {
+          return buffer;
+        },
+      };
+    }
+    if (
+      href === "https://example.test/eames/leather-base.png" ||
+      href === "https://example.test/eames/leather-orm.png" ||
+      href === "https://example.test/eames/leather-normal.png"
+    ) {
+      return {
+        ok: true,
+        url: href,
+        async blob() {
+          return new Blob([new Uint8Array([1, 2, 3, 4])], { type: "image/png" });
+        },
+      };
+    }
+    throw new Error(`Unexpected fetch: ${href}`);
+  };
+  globalThis.createImageBitmap = async () => ({
+    width: 2,
+    height: 2,
+    close() {},
+  });
+  globalThis.OffscreenCanvas = class OffscreenCanvasMock {
+    constructor(width, height) {
+      this.width = width;
+      this.height = height;
+    }
+
+    getContext() {
+      return {
+        drawImage() {},
+        getImageData: () => ({
+          data: new Uint8ClampedArray([
+            255, 128, 64, 255,
+            192, 160, 96, 255,
+            128, 96, 64, 255,
+            32, 16, 8, 255,
+          ]),
+        }),
+      };
+    }
+  };
+
+  try {
+    const model = await loadEamesGltfModel(modelUrl);
+    const primitive = model.primitives[0];
+
+    assert.deepEqual(primitive.uvs, [0, 0, 1, 0, 0.5, 1]);
+    assert.equal(primitive.material.name, "Leather");
+    assert.equal(primitive.material.roughness, 0.61);
+    assert.equal(primitive.material.baseColorTexture.width, 2);
+    assert.equal(primitive.material.baseColorTexture.height, 2);
+    assert.equal(primitive.material.metallicRoughnessTexture.width, 2);
+    assert.equal(primitive.material.normalTexture.scale, 0.75);
+    assert.equal(primitive.material.normalTexture.height, 2);
+    assert.equal(primitive.material.baseColorTexture.data.length, 16);
+  } finally {
+    globalThis.fetch = previousFetch;
+    globalThis.createImageBitmap = previousCreateImageBitmap;
+    globalThis.OffscreenCanvas = previousOffscreenCanvas;
+  }
+});
+
+test("Eames glTF loader honors interleaved bufferView strides", async () => {
+  const vertexStride = 8;
+  const vertexData = new Float32Array([
+    -1, 0, 0, 0, 0, 1, 0, 0,
+    1, 0, 0, 0, 0, 1, 1, 0,
+    0, 1, 0, 0, 0, 1, 0.5, 1,
+  ]);
+  const indices = new Uint32Array([0, 1, 2]);
+  const buffer = new ArrayBuffer(vertexData.byteLength + indices.byteLength);
+  const bufferBytes = new Uint8Array(buffer);
+  bufferBytes.set(new Uint8Array(vertexData.buffer), 0);
+  bufferBytes.set(new Uint8Array(indices.buffer), vertexData.byteLength);
+  const modelUrl = "https://example.test/eames/interleaved.gltf";
+  const modelDocument = {
+    asset: { version: "2.0" },
+    scene: 0,
+    scenes: [{ nodes: [0] }],
+    nodes: [{ mesh: 0 }],
+    meshes: [
+      {
+        primitives: [
+          {
+            attributes: { POSITION: 0, NORMAL: 1, TEXCOORD_0: 2 },
+            indices: 3,
+          },
+        ],
+      },
+    ],
+    buffers: [{ uri: "mesh.bin", byteLength: buffer.byteLength }],
+    bufferViews: [
+      { buffer: 0, byteOffset: 0, byteLength: vertexData.byteLength, byteStride: vertexStride * 4 },
+      { buffer: 0, byteOffset: vertexData.byteLength, byteLength: indices.byteLength },
+    ],
+    accessors: [
+      { bufferView: 0, byteOffset: 0, componentType: 5126, count: 3, type: "VEC3" },
+      { bufferView: 0, byteOffset: 12, componentType: 5126, count: 3, type: "VEC3" },
+      { bufferView: 0, byteOffset: 24, componentType: 5126, count: 3, type: "VEC2" },
+      { bufferView: 1, componentType: 5125, count: 3, type: "SCALAR" },
+    ],
+  };
+
+  const previousFetch = globalThis.fetch;
+  globalThis.fetch = async (resource) => {
+    const href = String(resource);
+    if (href === modelUrl) {
+      return {
+        ok: true,
+        url: modelUrl,
+        async json() {
+          return modelDocument;
+        },
+      };
+    }
+    if (href === "https://example.test/eames/mesh.bin") {
+      return {
+        ok: true,
+        url: href,
+        async arrayBuffer() {
+          return buffer;
+        },
+      };
+    }
+    throw new Error(`Unexpected fetch: ${href}`);
+  };
+
+  try {
+    const model = await loadEamesGltfModel(modelUrl);
+    const primitive = model.primitives[0];
+    assert.deepEqual(primitive.positions, [-1, 0, 0, 1, 0, 0, 0, 1, 0]);
+    assert.deepEqual(primitive.normals, [0, 0, 1, 0, 0, 1, 0, 0, 1]);
+    assert.deepEqual(primitive.uvs, [0, 0, 1, 0, 0.5, 1]);
+  } finally {
+    globalThis.fetch = previousFetch;
+  }
+});
+
+test("Eames glTF loader bakes KHR_texture_transform offsets into material maps", async () => {
+  const positions = new Float32Array([
+    -1, 0, 0,
+    1, 0, 0,
+    0, 1, 0,
+  ]);
+  const normals = new Float32Array([
+    0, 0, 1,
+    0, 0, 1,
+    0, 0, 1,
+  ]);
+  const uvs = new Float32Array([
+    0, 0,
+    1, 0,
+    0.5, 1,
+  ]);
+  const indices = new Uint32Array([0, 1, 2]);
+  const buffer = new ArrayBuffer(
+    positions.byteLength + normals.byteLength + uvs.byteLength + indices.byteLength
+  );
+  const bufferBytes = new Uint8Array(buffer);
+  bufferBytes.set(new Uint8Array(positions.buffer), 0);
+  bufferBytes.set(new Uint8Array(normals.buffer), positions.byteLength);
+  bufferBytes.set(new Uint8Array(uvs.buffer), positions.byteLength + normals.byteLength);
+  bufferBytes.set(
+    new Uint8Array(indices.buffer),
+    positions.byteLength + normals.byteLength + uvs.byteLength
+  );
+
+  const modelUrl = "https://example.test/eames/transformed.gltf";
+  const modelDocument = {
+    asset: { version: "2.0" },
+    scene: 0,
+    scenes: [{ nodes: [0] }],
+    nodes: [{ mesh: 0 }],
+    meshes: [
+      {
+        primitives: [
+          {
+            attributes: {
+              POSITION: 0,
+              NORMAL: 1,
+              TEXCOORD_0: 2,
+            },
+            indices: 3,
+            material: 0,
+          },
+        ],
+      },
+    ],
+    materials: [
+      {
+        pbrMetallicRoughness: {
+          baseColorTexture: {
+            index: 0,
+            texCoord: 0,
+            extensions: {
+              KHR_texture_transform: {
+                offset: [0.5, 0],
+              },
+            },
+          },
+        },
+      },
+    ],
+    textures: [{ source: 0 }],
+    images: [{ uri: "leather-base.png" }],
+    buffers: [{ uri: "mesh.bin", byteLength: buffer.byteLength }],
+    bufferViews: [
+      { buffer: 0, byteOffset: 0, byteLength: positions.byteLength },
+      { buffer: 0, byteOffset: positions.byteLength, byteLength: normals.byteLength },
+      { buffer: 0, byteOffset: positions.byteLength + normals.byteLength, byteLength: uvs.byteLength },
+      {
+        buffer: 0,
+        byteOffset: positions.byteLength + normals.byteLength + uvs.byteLength,
+        byteLength: indices.byteLength,
+      },
+    ],
+    accessors: [
+      { bufferView: 0, componentType: 5126, count: 3, type: "VEC3" },
+      { bufferView: 1, componentType: 5126, count: 3, type: "VEC3" },
+      { bufferView: 2, componentType: 5126, count: 3, type: "VEC2" },
+      { bufferView: 3, componentType: 5125, count: 3, type: "SCALAR" },
+    ],
+  };
+
+  const previousFetch = globalThis.fetch;
+  const previousCreateImageBitmap = globalThis.createImageBitmap;
+  const previousOffscreenCanvas = globalThis.OffscreenCanvas;
+  globalThis.fetch = async (resource) => {
+    const href = String(resource);
+    if (href === modelUrl) {
+      return {
+        ok: true,
+        url: modelUrl,
+        async json() {
+          return modelDocument;
+        },
+      };
+    }
+    if (href === "https://example.test/eames/mesh.bin") {
+      return {
+        ok: true,
+        url: href,
+        async arrayBuffer() {
+          return buffer;
+        },
+      };
+    }
+    if (href === "https://example.test/eames/leather-base.png") {
+      return {
+        ok: true,
+        url: href,
+        async blob() {
+          return new Blob([new Uint8Array([1, 2, 3, 4])], { type: "image/png" });
+        },
+      };
+    }
+    throw new Error(`Unexpected fetch: ${href}`);
+  };
+  globalThis.createImageBitmap = async () => ({
+    width: 4,
+    height: 2,
+    close() {},
+  });
+  globalThis.OffscreenCanvas = class OffscreenCanvasMock {
+    constructor(width, height) {
+      this.width = width;
+      this.height = height;
+    }
+
+    getContext() {
+      return {
+        drawImage() {},
+        getImageData: () => ({
+          data: new Uint8ClampedArray([
+            10, 0, 0, 255,
+            20, 0, 0, 255,
+            30, 0, 0, 255,
+            40, 0, 0, 255,
+            50, 0, 0, 255,
+            60, 0, 0, 255,
+            70, 0, 0, 255,
+            80, 0, 0, 255,
+          ]),
+        }),
+      };
+    }
+  };
+
+  try {
+    const model = await loadEamesGltfModel(modelUrl);
+    const transformedTexture = model.primitives[0].material.baseColorTexture;
+
+    assert.equal(transformedTexture.width, 4);
+    assert.equal(transformedTexture.height, 2);
+    assert.deepEqual(
+      Array.from(transformedTexture.data),
+      [
+        70, 0, 0, 255,
+        80, 0, 0, 255,
+        50, 0, 0, 255,
+        70, 0, 0, 255,
+        70, 0, 0, 255,
+        80, 0, 0, 255,
+        50, 0, 0, 255,
+        70, 0, 0, 255,
+      ]
+    );
+  } finally {
+    globalThis.fetch = previousFetch;
+    globalThis.createImageBitmap = previousCreateImageBitmap;
+    globalThis.OffscreenCanvas = previousOffscreenCanvas;
+  }
+});
+
+test("validation scene builder can be exercised with injected runtime helpers", () => {
+  const lightingOptions = createWavefrontEnvironmentLightingOptions({
+    preset: "warehouse-dusk",
+  });
+  const model = {
+    bounds: {
+      min: [-1, -1, -1],
+      max: [1, 1, 1],
+    },
+    primitives: [
+      {
+        positions: [-1, 0, 0, 1, 0, 0, 0, 1, 0],
+        indices: [0, 1, 2],
+        normals: [0, 1, 0, 0, 1, 0, 0, 1, 0],
+        material: {
+          name: "chrome",
+          roughness: 0.05,
+          metallic: 0.9,
+        },
+      },
+    ],
+  };
+  const sceneObjects = buildEnvironmentSceneObjects(
+    model,
+    lightingOptions,
+    { showSources: true, motionPhase: 0.25 },
+    {
+      buildProductStudioSceneObjects() {
+        return [
+          { id: 1, color: [1, 1, 1, 1], materialKind: "diffuse", roughness: 1 },
+          { id: 2, color: [1, 1, 1, 1], materialKind: "diffuse", roughness: 1 },
+        ];
+      },
+    }
+  );
+
+  assert.equal(sceneObjects.length >= 2, true);
+  assert.deepEqual(sceneObjects[0].color, [0.35, 0.37, 0.38, 1]);
+  assert.deepEqual(sceneObjects[1].color, [0.31, 0.33, 0.35, 1]);
+});
+
+test("validation repo ships the Eames model referenced by the capture page", () => {
+  assert.ok(
+    fs.existsSync(
+      path.resolve(
+        __dirname,
+        "..",
+        "data",
+        "models",
+        "eames-lounge-chair-ottoman",
+        "Eames_Lounge_Chair_Ottoman.gltf"
+      )
+    )
+  );
+});
+
+test("validation mesh builder preserves generic material inputs and texture maps", () => {
+  const normalTexture = {
+    texCoord: 0,
+    scale: 1,
+    width: 2,
+    height: 2,
+    data: new Uint8ClampedArray(16),
+  };
+  const baseColorTexture = {
+    texCoord: 0,
+    width: 2,
+    height: 2,
+    data: new Uint8ClampedArray(16),
+  };
+  const metallicRoughnessTexture = {
+    texCoord: 0,
+    width: 2,
+    height: 2,
+    data: new Uint8ClampedArray(16),
+  };
+  const emissiveTexture = {
+    texCoord: 0,
+    width: 2,
+    height: 2,
+    data: new Uint8ClampedArray(16),
+  };
+  const model = {
+    bounds: {
+      min: [-1, -1, -1],
+      max: [1, 1, 1],
+    },
+    primitives: [
+      {
+        positions: [-1, 0, 0, 1, 0, 0, 0, 1, 0],
+        indices: [0, 1, 2],
+        normals: [0, 1, 0, 0, 1, 0, 0, 1, 0],
+        uvs: [0, 0, 1, 0, 0, 1],
+        material: {
+          name: "chrome",
+          roughness: 0.03,
+          metallic: 1,
+          specular: 0.92,
+          specularColor: [0.84, 0.85, 0.88],
+          clearcoat: 0.02,
+          clearcoatRoughness: 0.04,
+          baseColorTexture,
+          metallicRoughnessTexture,
+          normalTexture,
+          emissiveTexture,
+        },
+      },
+      {
+        positions: [-1, 0, 0, 1, 0, 0, 0, -1, 0],
+        indices: [0, 1, 2],
+        normals: [0, 1, 0, 0, 1, 0, 0, 1, 0],
+        uvs: [0, 0, 1, 0, 0, 1],
+        material: {
+          name: "leather",
+          roughness: 0.58,
+          metallic: 0,
+          sheenColor: [0.44, 0.37, 0.31],
+          clearcoat: 0.16,
+          clearcoatRoughness: 0.24,
+          baseColorTexture,
+          metallicRoughnessTexture,
+          normalTexture,
+        },
+      },
+    ],
+  };
+
+  const meshes = buildEamesMeshes(model);
+  const chrome = meshes[0];
+  const leather = meshes[1];
+
+  assert.equal(chrome.materialKind, "metal");
+  assert.equal(chrome.metallic, 1);
+  assert.equal(chrome.specular, 0.92);
+  assert.deepEqual(chrome.specularColor, [0.84, 0.85, 0.88, 1]);
+  assert.equal(chrome.clearcoat, 0.02);
+  assert.equal(chrome.clearcoatRoughness, 0.04);
+  assert.deepEqual(chrome.uvs, [0, 0, 1, 0, 0, 1]);
+  assert.equal(chrome.material.baseColorTexture, baseColorTexture);
+  assert.equal(chrome.material.metallicRoughnessTexture, metallicRoughnessTexture);
+  assert.equal(chrome.material.normalTexture, normalTexture);
+  assert.equal(chrome.material.emissiveTexture, emissiveTexture);
+
+  assert.equal(leather.materialKind, "diffuse");
+  assert.deepEqual(leather.sheenColor, [0.44, 0.37, 0.31, 1]);
+  assert.equal(leather.clearcoat, 0.16);
+  assert.equal(leather.clearcoatRoughness, 0.24);
+});
+
+test("validation render decouples frame rendering from optional probe readback", async () => {
+  const lightingOptions = createWavefrontEnvironmentLightingOptions({
+    preset: "grass-field-midday",
+  });
+  let rendererOptions = null;
+  const renderFrameCalls = [];
+  const readProbeCalls = [];
+  const renderer = {
+    async renderFrame(options = {}) {
+      renderFrameCalls.push(options);
+      assert.equal(options.readOutputProbe, false);
+      return {
+        frame: 1,
+        samplesPerPixel: options.samplesPerPixel ?? 4,
+        triangleCount: 1,
+        emissiveTriangleCount: 0,
+        bvhNodeCount: 1,
+        accelerationBuildMode: "gpu",
+        accelerationBuildSubmitted: true,
+        deferredPathResolve: true,
+        gpuWorkerJobs: {
+          completedPerFrame: 42,
+          completedPerSecond: 420,
+          completedPerSubmission: 14,
+          directDispatchesCompleted: 18,
+          indirectDispatchesCompleted: 24,
+          frameTimeMs: 100,
+          awaitedGpuCompletion: true,
+        },
+        gpuParallelism: { exposesMultiWorkgroupParallelism: true },
+        outputProbe: null,
+      };
+    },
+    async readOutputProbe({ x, y }) {
+      readProbeCalls.push({ x, y });
+      return {
+        x,
+        y,
+        rgba: [32, 64, 128, 255],
+        luminance: (0.2126 * 32 + 0.7152 * 64 + 0.0722 * 128) / 255,
+      };
+    },
+    updateCamera() {},
+    updateSceneObjects() {},
+  };
+  const canvas = { width: 0, height: 0 };
+  const model = {
+    name: "test-model",
+    bounds: {
+      min: [-1, -1, -1],
+      max: [1, 1, 1],
+    },
+    primitives: [
+      {
+        positions: [-1, 0, 0, 1, 0, 0, 0, 1, 0],
+        indices: [0, 1, 2],
+        normals: [0, 1, 0, 0, 1, 0, 0, 1, 0],
+        material: {
+          name: "chrome",
+          roughness: 0.05,
+          metallic: 0.9,
+        },
+      },
+    ],
+    indices: [0, 1, 2],
+  };
+
+  const { result } = await renderEamesEnvironment({
+    canvas,
+    width: 640,
+    height: 480,
+    frames: 1,
+    maxDepth: 8,
+    samplesPerPixel: 4,
+    denoise: true,
+    deferredPathResolve: true,
+    motion: false,
+    readOutputProbe: true,
+    runtimeModules: {
+      createWavefrontEnvironmentLightingOptions() {
+        return lightingOptions;
+      },
+      async loadEamesGltfModel() {
+        return model;
+      },
+      buildProductStudioSceneObjects() {
+        return [
+          { id: 1, color: [1, 1, 1, 1], materialKind: "diffuse", roughness: 1 },
+          { id: 2, color: [1, 1, 1, 1], materialKind: "diffuse", roughness: 1 },
+        ];
+      },
+      async createWavefrontPathTracingComputeRenderer(options = {}) {
+        rendererOptions = options;
+        return renderer;
+      },
+    },
+  });
+
+  assert.equal(renderFrameCalls.length, 1);
+  assert.equal(readProbeCalls.length, 5);
+  assert.equal(rendererOptions.camera.fovYDegrees, createEnvironmentCamera("reference", 0).fovYDegrees);
+  assert.equal(result.cameraPreset, "reference");
+  assert.equal(renderFrameCalls[0].samplesPerPixel, 4);
+  assert.equal(result.renderer.outputProbe.sampledPixels, 1);
+  assert.equal(result.renderer.outputProbe.nonZeroSamples, 1);
+  assert.equal(result.renderer.outputProbe.maxChannel, 128);
+  assert.deepEqual(result.renderer.outputProbe.rgba, [32, 64, 128, 255]);
+  assert.equal(result.renderer.cameraPreset, "reference");
+  assert.equal(result.renderer.targetSamplesPerPixel, 4);
+  assert.equal(result.renderer.adaptiveSampling.enabled, false);
+  assert.equal(result.renderer.gpuWorkerJobs.completedPerFrame, 42);
+  assert.equal(result.renderer.gpuWorkerJobs.completedPerSecond, 420);
+  assert.equal(result.renderer.gpuWorkerJobs.completedPerSubmission, 14);
+  assert.equal(result.probeSummary.sampledPixels, 5);
+});
+
+test("validation render can rebuild animated source markers with injected runtime helpers", async () => {
+  const lightingOptions = createWavefrontEnvironmentLightingOptions({
+    preset: "grass-field-midday",
+  });
+  const updateSceneObjectsCalls = [];
+  const renderer = {
+    async renderFrame(options = {}) {
+      return {
+        frame: 1,
+        samplesPerPixel: options.samplesPerPixel ?? 2,
+        renderedSamplesPerPixel: options.samplesPerPixel ?? 2,
+        triangleCount: 1,
+        emissiveTriangleCount: 0,
+        bvhNodeCount: 1,
+        accelerationBuildMode: "gpu",
+        accelerationBuildSubmitted: true,
+        deferredPathResolve: true,
+        gpuWorkerJobs: {
+          completedPerFrame: 12,
+          completedPerSecond: 120,
+          completedPerSubmission: 6,
+          frameTimeMs: 10,
+        },
+        gpuParallelism: { exposesMultiWorkgroupParallelism: true },
+      };
+    },
+    async readOutputProbe() {
+      return {
+        x: 0,
+        y: 0,
+        rgba: [0, 0, 0, 255],
+        luminance: 0,
+      };
+    },
+    updateCamera() {},
+    updateSceneObjects(sceneObjects) {
+      updateSceneObjectsCalls.push(sceneObjects);
+    },
+  };
+  const canvas = { width: 0, height: 0 };
+  const model = {
+    name: "animated-model",
+    bounds: {
+      min: [-1, -1, -1],
+      max: [1, 1, 1],
+    },
+    primitives: [
+      {
+        positions: [-1, 0, 0, 1, 0, 0, 0, 1, 0],
+        indices: [0, 1, 2],
+        normals: [0, 1, 0, 0, 1, 0, 0, 1, 0],
+        material: {
+          name: "chrome",
+          roughness: 0.05,
+          metallic: 0.9,
+        },
+      },
+    ],
+    indices: [0, 1, 2],
+  };
+
+  await renderEamesEnvironment({
+    canvas,
+    width: 640,
+    height: 480,
+    frames: 2,
+    maxDepth: 3,
+    samplesPerPixel: 2,
+    motion: true,
+    showSources: true,
+    readOutputProbe: false,
+    runtimeModules: {
+      createWavefrontEnvironmentLightingOptions() {
+        return lightingOptions;
+      },
+      async loadEamesGltfModel() {
+        return model;
+      },
+      buildProductStudioSceneObjects() {
+        return [
+          { id: 1, color: [1, 1, 1, 1], materialKind: "diffuse", roughness: 1 },
+          { id: 2, color: [1, 1, 1, 1], materialKind: "diffuse", roughness: 1 },
+        ];
+      },
+      async createWavefrontPathTracingComputeRenderer() {
+        return renderer;
+      },
+    },
+  });
+
+  assert.equal(updateSceneObjectsCalls.length, 2);
+  assert.ok(updateSceneObjectsCalls.every((sceneObjects) => sceneObjects.length >= 2));
+});
+
+test("capture bridge static asset helper resolves directory requests to index.html without pre-stat races", async () => {
+  const asset = await readStaticAssetResponse("/gpu-lighting/demo/eames-environments/");
+  assert.match(asset.contentType, /text\/html/);
+  assert.match(asset.fileBuffer.toString("utf8"), /<canvas id="stage"/);
+});
+
+test("capture bridge server serves demo assets and accepts loopback uploads", async () => {
+  const server = createCaptureBridgeServer("127.0.0.1");
+  const listeningPort = await new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", () => {
+      resolve(server.address().port);
+    });
+  });
+  const captureWorkspaceRoot = resolveCaptureWorkspaceRoot();
+  const uploadPath = path.resolve(
+    captureWorkspaceRoot,
+    "output",
+    "playwright",
+    "eames-environments",
+    "bridge-server-test.png"
+  );
+  const metadataPath = uploadPath.replace(/\.png$/i, ".json");
+  const dataUrl =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+iP4cAAAAASUVORK5CYII=";
+
+  try {
+    const assetResponse = await fetch(`http://127.0.0.1:${listeningPort}/gpu-lighting/demo/eames-environments/`);
+    assert.equal(assetResponse.ok, true);
+    assert.match(assetResponse.headers.get("content-type") ?? "", /text\/html/);
+
+    const optionsResponse = await fetch(`http://127.0.0.1:${listeningPort}/__plasius-capture`, {
+      method: "OPTIONS",
+      headers: { origin: "http://127.0.0.1:8011" },
+    });
+    assert.equal(optionsResponse.status, 204);
+    assert.equal(
+      optionsResponse.headers.get("access-control-allow-origin"),
+      "http://127.0.0.1:8011"
+    );
+
+    const uploadResponse = await fetch(`http://127.0.0.1:${listeningPort}/__plasius-capture`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: "http://127.0.0.1:8011",
+      },
+      body: JSON.stringify({
+        path: path.relative(captureWorkspaceRoot, uploadPath),
+        dataUrl,
+        result: { status: "ok", preset: "grass-field-midday" },
+      }),
+    });
+    assert.equal(uploadResponse.ok, true);
+    const uploadResult = await uploadResponse.json();
+    assert.equal(fs.existsSync(path.resolve(captureWorkspaceRoot, uploadResult.path)), true);
+    assert.equal(fs.existsSync(metadataPath), true);
+
+    const rejectedOptionsResponse = await fetch(`http://127.0.0.1:${listeningPort}/__plasius-capture`, {
+      method: "OPTIONS",
+      headers: { origin: "https://example.com" },
+    });
+    assert.equal(rejectedOptionsResponse.status, 403);
+
+    const rejectedUploadResponse = await fetch(`http://127.0.0.1:${listeningPort}/__plasius-capture`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: "https://example.com",
+      },
+      body: JSON.stringify({
+        path: path.relative(captureWorkspaceRoot, uploadPath),
+        dataUrl,
+      }),
+    });
+    assert.equal(rejectedUploadResponse.status, 403);
+  } finally {
+    server.close();
+    fs.rmSync(uploadPath, { force: true });
+    fs.rmSync(metadataPath, { force: true });
+  }
 });
 
 test("module base does not use a browser-bundler asset URL pattern", () => {

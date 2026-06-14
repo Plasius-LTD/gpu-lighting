@@ -29,14 +29,86 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - Added `sunlitBaseline` to environment lighting presets and wavefront
     lighting options so renderers can apply a time-of-day daylight floor at
     terminal path collisions without raising ambient residual colour.
-  - (placeholder)
+  - Added an Eames screenshot capture runbook and browser-runtime helpers so
+    validation scripts can attach to an existing WebGPU-capable Chrome over CDP
+    instead of only launching a fresh Playwright Chromium profile.
+  - Added generic glTF material forwarding in the Eames validation loader so
+    authored specular, sheen, clearcoat, transmission, emissive, and IOR values
+    can flow into the shared wavefront renderer without model-name overrides.
+  - Added Eames validation HUD/result diagnostics for GPU worker-job throughput
+    so validation runs can report compute-dispatch jobs per frame, per second,
+    and per command submission.
+  - Added adaptive Eames validation frame budgeting so motion-oriented runs can
+    request a `frameTimeBudgetMs` and inspect delivered `rendered/target spp`
+    in the HUD and result payload.
+  - Added `@plasius/gpu-performance`-governed adaptive SPP control to the Eames
+    validation harness so frame-budgeted runs degrade and recover through a
+    shared quality-ladder contract instead of a demo-local policy alone.
 
 - **Changed**
   - Reduced ambient residual strength for the grass-field, forest, warehouse,
     and cavern environment preset families to avoid low-sample whitewash.
+  - Eames validation capture scripts now pin deterministic render settings by
+    default and write canvas-only PNG artifacts plus comparable black-pixel and
+    luminance metrics under `output/playwright/eames-environments/`.
+  - Eames validation page and capture entry points now accept up to `256 spp`,
+    and the validation boot timeout now scales with requested render workload
+    instead of failing at a fixed 60-second watchdog.
+  - `gpu-lighting` local typecheck coverage now includes the Eames validation
+    page, loader, and capture helpers instead of checking only the legacy demo
+    entry points.
+  - Eames validation mesh loading now preserves authored UVs and decoded
+    base-colour, metallic-roughness, normal, and occlusion maps so the shared
+    wavefront renderer can evaluate materially richer leather, wood, and chrome
+    surfaces.
+  - Eames validation meshes now forward decoded emissive maps as well so the
+    shared wavefront renderer can keep all material texture evaluation in the
+    GPU render path.
+  - Eames validation mesh building now preserves authored material values
+    generically instead of deriving chrome, leather, and wood behaviour from
+    material names.
+  - Eames validation page can now freeze its own canvas and POST the PNG back
+    to a local bridge endpoint, which provides a browser-driven screenshot
+    fallback when Playwright cannot own the Chromium process directly.
+  - Eames validation capture and reverse-pass debug entry points now share one
+    server-selection helper so port reuse, static serving, and bridge-ready
+    startup rules stay aligned across local runs and CI.
 
 - **Fixed**
-  - (placeholder)
+  - Eames Playwright validation pages and capture scripts now surface import,
+    WebGPU bootstrap, and renderer startup diagnostics instead of hanging on the
+    initial HUD when a browser cannot complete setup.
+  - Eames validation renders now collect optional output-probe figures after the
+    frame render completes instead of coupling probe readback to the heavy
+    high-SPP render submission itself.
+  - Eames capture helpers now resolve browser profile and temporary output paths
+    through the host OS temp directory instead of assuming macOS-only
+    `/private/tmp`, which fixes Linux CI validation.
+  - Eames validation query parsing now preserves documented fallback defaults
+    when numeric URL params are omitted, which keeps standard captures out of
+    accidental reverse-pass debug mode.
+  - Eames validation motion renders now preserve the built-in adaptive
+    `frameTimeBudgetMs` default when the query parameter is omitted, so the
+    shared `@plasius/gpu-performance` quality ladder still engages on the
+    standard animated validation route.
+  - Animated source-marker captures now reuse the injected product-studio scene
+    helper during per-frame rebuilds instead of throwing when motion is enabled.
+  - Eames capture waits now scale with requested resolution, frame count, depth,
+    and SPP so higher-workload validation runs are not aborted at a stale fixed
+    timeout.
+  - Eames glTF validation materials now honor `KHR_texture_transform` offsets,
+    scales, and rotation by baking transformed texture maps during decode so
+    chair screenshots reflect the authored leather and wood layouts.
+  - The capture bridge now rejects non-loopback browser origins and confines
+    capture writes to `output/playwright/eames-environments/`, which closes the
+    browser-driven workspace overwrite path on the local upload endpoint.
+  - The Eames glTF loader now honors interleaved `bufferView.byteStride` values,
+    which keeps positions, normals, and UVs correct for legal strided assets.
+  - The capture bridge now serves static assets without a pre-stat/read race,
+    and browser-driven capture uploads are restricted to loopback bridge URLs.
+  - The standalone repo now ships the Eames demo asset set referenced by the
+    validation page so fresh checkouts can render the chair without external
+    workspace-only files.
 
 - **Security**
   - (placeholder)

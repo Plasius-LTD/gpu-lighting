@@ -42,6 +42,81 @@ For browser-only serving, the demo resolves `@plasius/gpu-shared` through an
 import map so the page stays on the published package surface rather than a
 package-private source path.
 
+## Screenshot Capture
+
+The repo also carries the Eames-chair environment validation harness under
+`demo/eames-environments/` plus tracked Playwright helpers under
+`scripts/eames-environments/`. The referenced chair asset is tracked under
+`data/models/eames-lounge-chair-ottoman/` so fresh repo checkouts can run the
+validation page without depending on a parent monorepo checkout. Build
+`gpu-performance`, `gpu-renderer`, and `gpu-lighting` first, then run:
+
+```bash
+node scripts/eames-environments/capture.mjs
+```
+
+For reverse-pass black-pixel diagnostics, run:
+
+```bash
+node scripts/eames-environments/path-debug-capture.mjs
+```
+
+If fresh Playwright Chromium bootstrap is unstable on macOS, start a
+WebGPU-capable Chrome separately with remote debugging enabled and set
+`PLASIUS_CAPTURE_CDP_URL=http://127.0.0.1:<port>` before running the capture
+script. The validation page now reports bootstrap step, detail, and WebGPU
+availability through `window.__plasiusCaptureState` and
+`window.__plasiusCaptureError` so capture failures stop at a named phase rather
+than hanging on the initial HUD.
+
+For browser-controlled fallbacks, start
+`node scripts/eames-environments/capture-bridge-server.mjs <port>` and open the
+validation page with `captureBitmap=1` plus
+`captureUploadPath=output/playwright/eames-environments/<name>.png`. If the page
+is being served by a plain static server such as `python -m http.server`, also
+pass
+`captureUploadUrl=http://127.0.0.1:<port>/__plasius-capture`. The page will
+freeze its own canvas and POST the PNG back to the bridge server once the
+render completes. The browser-side upload helper now rejects non-loopback
+capture endpoints so this fallback cannot be redirected at arbitrary remote
+origins.
+
+The main capture and reverse-pass debug capture entry points now share the same
+server-selection helper, so local reuse, fresh static-server startup, and
+bridge fallback all follow the same port and readiness rules across macOS and
+Linux.
+
+The capture scripts now pin deterministic validation settings unless explicitly
+overridden:
+
+- `PLASIUS_CAPTURE_MAX_DEPTH=8`
+- `PLASIUS_CAPTURE_SPP=1`
+- `PLASIUS_CAPTURE_FRAMES=1`
+- `PLASIUS_CAPTURE_DENOISE=1`
+- `PLASIUS_CAPTURE_MOTION=0`
+- `PLASIUS_CAPTURE_FRAME_INDEX=777`
+- `PLASIUS_CAPTURE_PROBE=1`
+
+They save canvas-only PNGs plus per-capture JSON under
+`output/playwright/eames-environments/`, including exact-black, near-black, and
+average-luminance metrics so screenshot comparisons stay apples-to-apples. The
+validation page now decouples optional probe readback from the heavy render
+submission itself, which keeps higher-SPP screenshot validation more stable.
+For motion or realtime validation, the page also accepts `frameTimeBudgetMs`
+and will render at least one full-screen sample before adaptively spending the
+rest of the per-frame budget on additional SPP passes. The HUD reports
+`rendered/target spp` whenever the budgeted frame lands below the configured
+ceiling. When `gpu-performance/dist/index.js` is available, the Eames harness
+also routes that target through a `@plasius/gpu-performance` quality ladder fed
+by `gpu-renderer`'s wavefront adaptive-sampling levels, so the requested SPP
+becomes a release-grade ceiling rather than an ungoverned demo-local heuristic.
+The Eames loader also preserves authored UVs, decoded base-colour,
+metallic-roughness, normal, occlusion, and emissive maps, plus authored glTF
+material factors such as clearcoat, sheen colour, specular colour,
+transmission, and IOR when present. That keeps the validation scene on the
+shared renderer path instead of relying on material-name-specific overrides for
+leather, wood, and chrome.
+
 ## Usage (load one technique)
 
 ```js
