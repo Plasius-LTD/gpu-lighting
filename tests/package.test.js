@@ -75,6 +75,7 @@ if (typeof previousEamesCaptureModuleOnly === "undefined") {
 const previousCaptureBridgeModuleOnly = globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__;
 globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__ = true;
 const {
+  createCaptureBridgeServer,
   readStaticAssetResponse,
 } = await import("../scripts/eames-environments/capture-bridge-server.mjs");
 if (typeof previousCaptureBridgeModuleOnly === "undefined") {
@@ -96,6 +97,7 @@ const {
 const {
   buildCaptureAssetUrl,
   findCaptureServerPort,
+  waitForCaptureServer,
 } = await import("../scripts/eames-environments/capture-server.mjs");
 const { loadEamesGltfModel } = await import("../demo/eames-environments/eames-loader.js");
 if (typeof previousEamesModuleOnly === "undefined") {
@@ -525,6 +527,47 @@ test("playwright capture server helpers fall back to a free port when no server 
     "reuse:9202",
     "free:9202",
   ]);
+});
+
+test("playwright capture server wait helper polls until the server responds", async () => {
+  const fetchCalls = [];
+  const sleepCalls = [];
+  let attempts = 0;
+  await waitForCaptureServer(
+    "http://127.0.0.1:8765/gpu-lighting/demo/eames-environments/index.html",
+    { exitCode: null },
+    {
+      timeoutMs: 1_000,
+      async fetchImpl(url) {
+        fetchCalls.push(url);
+        attempts += 1;
+        if (attempts < 3) {
+          throw new Error("not ready");
+        }
+        return { ok: true };
+      },
+      async sleep(durationMs) {
+        sleepCalls.push(durationMs);
+      },
+    }
+  );
+
+  assert.equal(fetchCalls.length, 3);
+  assert.deepEqual(sleepCalls, [200, 200]);
+});
+
+test("playwright capture server wait helper fails fast when the server exits", async () => {
+  await assert.rejects(
+    () =>
+      waitForCaptureServer("http://127.0.0.1:8765/demo", { exitCode: 1 }, {
+        timeoutMs: 1_000,
+        async fetchImpl() {
+          return { ok: false };
+        },
+        async sleep() {},
+      }),
+    /exited early/
+  );
 });
 
 test("validation page bootstrap helpers expose explicit WebGPU diagnostics", () => {
@@ -1361,6 +1404,61 @@ test("capture bridge static asset helper resolves directory requests to index.ht
   const asset = await readStaticAssetResponse("/gpu-lighting/demo/eames-environments/");
   assert.match(asset.contentType, /text\/html/);
   assert.match(asset.fileBuffer.toString("utf8"), /<canvas id="stage"/);
+});
+
+test("capture bridge server serves demo assets and accepts loopback uploads", async () => {
+  const server = createCaptureBridgeServer("127.0.0.1");
+  const listeningPort = await new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", () => {
+      resolve(server.address().port);
+    });
+  });
+  const captureWorkspaceRoot = resolveCaptureWorkspaceRoot();
+  const uploadPath = path.resolve(
+    captureWorkspaceRoot,
+    "output",
+    "playwright",
+    "eames-environments",
+    "bridge-server-test.png"
+  );
+  const metadataPath = uploadPath.replace(/\.png$/i, ".json");
+  const dataUrl =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+iP4cAAAAASUVORK5CYII=";
+
+  try {
+    const assetResponse = await fetch(`http://127.0.0.1:${listeningPort}/gpu-lighting/demo/eames-environments/`);
+    assert.equal(assetResponse.ok, true);
+    assert.match(assetResponse.headers.get("content-type") ?? "", /text\/html/);
+
+    const optionsResponse = await fetch(`http://127.0.0.1:${listeningPort}/__plasius-capture`, {
+      method: "OPTIONS",
+      headers: { origin: "http://127.0.0.1:8011" },
+    });
+    assert.equal(optionsResponse.status, 204);
+    assert.equal(
+      optionsResponse.headers.get("access-control-allow-origin"),
+      "http://127.0.0.1:8011"
+    );
+
+    const uploadResponse = await fetch(`http://127.0.0.1:${listeningPort}/__plasius-capture`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        path: path.relative(captureWorkspaceRoot, uploadPath),
+        dataUrl,
+        result: { status: "ok", preset: "grass-field-midday" },
+      }),
+    });
+    assert.equal(uploadResponse.ok, true);
+    const uploadResult = await uploadResponse.json();
+    assert.equal(fs.existsSync(path.resolve(captureWorkspaceRoot, uploadResult.path)), true);
+    assert.equal(fs.existsSync(metadataPath), true);
+  } finally {
+    server.close();
+    fs.rmSync(uploadPath, { force: true });
+    fs.rmSync(metadataPath, { force: true });
+  }
 });
 
 test("module base does not use a browser-bundler asset URL pattern", () => {
