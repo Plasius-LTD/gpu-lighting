@@ -60,6 +60,7 @@ const {
   normalizeCaptureError,
   readWebGpuBootstrapSnapshot,
   readNumberParam,
+  readOptionalNumberParam,
   renderEamesEnvironment,
   resolveCaptureUploadUrl,
 } = await import("../demo/eames-environments/page.js");
@@ -646,8 +647,11 @@ test("validation page numeric query parsing preserves fallbacks for missing valu
   const params = new URLSearchParams("");
   assert.equal(readNumberParam(params, "pathDebugLayer", -1, -1, 32), -1);
   assert.equal(readNumberParam(params, "samplesPerPixel", 8, 1, 256), 8);
+  assert.equal(readOptionalNumberParam(params, "frameTimeBudgetMs", 0, 1000), null);
   params.set("width", "");
   assert.equal(readNumberParam(params, "width", 1280, 320, 4096), 1280);
+  params.set("frameTimeBudgetMs", "16");
+  assert.equal(readOptionalNumberParam(params, "frameTimeBudgetMs", 0, 1000), 16);
 });
 
 test("validation page restricts capture upload URLs to loopback bridges", () => {
@@ -1054,6 +1058,182 @@ test("Eames glTF loader honors interleaved bufferView strides", async () => {
     assert.deepEqual(primitive.uvs, [0, 0, 1, 0, 0.5, 1]);
   } finally {
     globalThis.fetch = previousFetch;
+  }
+});
+
+test("Eames glTF loader bakes KHR_texture_transform offsets into material maps", async () => {
+  const positions = new Float32Array([
+    -1, 0, 0,
+    1, 0, 0,
+    0, 1, 0,
+  ]);
+  const normals = new Float32Array([
+    0, 0, 1,
+    0, 0, 1,
+    0, 0, 1,
+  ]);
+  const uvs = new Float32Array([
+    0, 0,
+    1, 0,
+    0.5, 1,
+  ]);
+  const indices = new Uint32Array([0, 1, 2]);
+  const buffer = new ArrayBuffer(
+    positions.byteLength + normals.byteLength + uvs.byteLength + indices.byteLength
+  );
+  const bufferBytes = new Uint8Array(buffer);
+  bufferBytes.set(new Uint8Array(positions.buffer), 0);
+  bufferBytes.set(new Uint8Array(normals.buffer), positions.byteLength);
+  bufferBytes.set(new Uint8Array(uvs.buffer), positions.byteLength + normals.byteLength);
+  bufferBytes.set(
+    new Uint8Array(indices.buffer),
+    positions.byteLength + normals.byteLength + uvs.byteLength
+  );
+
+  const modelUrl = "https://example.test/eames/transformed.gltf";
+  const modelDocument = {
+    asset: { version: "2.0" },
+    scene: 0,
+    scenes: [{ nodes: [0] }],
+    nodes: [{ mesh: 0 }],
+    meshes: [
+      {
+        primitives: [
+          {
+            attributes: {
+              POSITION: 0,
+              NORMAL: 1,
+              TEXCOORD_0: 2,
+            },
+            indices: 3,
+            material: 0,
+          },
+        ],
+      },
+    ],
+    materials: [
+      {
+        pbrMetallicRoughness: {
+          baseColorTexture: {
+            index: 0,
+            texCoord: 0,
+            extensions: {
+              KHR_texture_transform: {
+                offset: [0.5, 0],
+              },
+            },
+          },
+        },
+      },
+    ],
+    textures: [{ source: 0 }],
+    images: [{ uri: "leather-base.png" }],
+    buffers: [{ uri: "mesh.bin", byteLength: buffer.byteLength }],
+    bufferViews: [
+      { buffer: 0, byteOffset: 0, byteLength: positions.byteLength },
+      { buffer: 0, byteOffset: positions.byteLength, byteLength: normals.byteLength },
+      { buffer: 0, byteOffset: positions.byteLength + normals.byteLength, byteLength: uvs.byteLength },
+      {
+        buffer: 0,
+        byteOffset: positions.byteLength + normals.byteLength + uvs.byteLength,
+        byteLength: indices.byteLength,
+      },
+    ],
+    accessors: [
+      { bufferView: 0, componentType: 5126, count: 3, type: "VEC3" },
+      { bufferView: 1, componentType: 5126, count: 3, type: "VEC3" },
+      { bufferView: 2, componentType: 5126, count: 3, type: "VEC2" },
+      { bufferView: 3, componentType: 5125, count: 3, type: "SCALAR" },
+    ],
+  };
+
+  const previousFetch = globalThis.fetch;
+  const previousCreateImageBitmap = globalThis.createImageBitmap;
+  const previousOffscreenCanvas = globalThis.OffscreenCanvas;
+  globalThis.fetch = async (resource) => {
+    const href = String(resource);
+    if (href === modelUrl) {
+      return {
+        ok: true,
+        url: modelUrl,
+        async json() {
+          return modelDocument;
+        },
+      };
+    }
+    if (href === "https://example.test/eames/mesh.bin") {
+      return {
+        ok: true,
+        url: href,
+        async arrayBuffer() {
+          return buffer;
+        },
+      };
+    }
+    if (href === "https://example.test/eames/leather-base.png") {
+      return {
+        ok: true,
+        url: href,
+        async blob() {
+          return new Blob([new Uint8Array([1, 2, 3, 4])], { type: "image/png" });
+        },
+      };
+    }
+    throw new Error(`Unexpected fetch: ${href}`);
+  };
+  globalThis.createImageBitmap = async () => ({
+    width: 4,
+    height: 2,
+    close() {},
+  });
+  globalThis.OffscreenCanvas = class OffscreenCanvasMock {
+    constructor(width, height) {
+      this.width = width;
+      this.height = height;
+    }
+
+    getContext() {
+      return {
+        drawImage() {},
+        getImageData: () => ({
+          data: new Uint8ClampedArray([
+            10, 0, 0, 255,
+            20, 0, 0, 255,
+            30, 0, 0, 255,
+            40, 0, 0, 255,
+            50, 0, 0, 255,
+            60, 0, 0, 255,
+            70, 0, 0, 255,
+            80, 0, 0, 255,
+          ]),
+        }),
+      };
+    }
+  };
+
+  try {
+    const model = await loadEamesGltfModel(modelUrl);
+    const transformedTexture = model.primitives[0].material.baseColorTexture;
+
+    assert.equal(transformedTexture.width, 4);
+    assert.equal(transformedTexture.height, 2);
+    assert.deepEqual(
+      Array.from(transformedTexture.data),
+      [
+        70, 0, 0, 255,
+        80, 0, 0, 255,
+        50, 0, 0, 255,
+        70, 0, 0, 255,
+        70, 0, 0, 255,
+        80, 0, 0, 255,
+        50, 0, 0, 255,
+        70, 0, 0, 255,
+      ]
+    );
+  } finally {
+    globalThis.fetch = previousFetch;
+    globalThis.createImageBitmap = previousCreateImageBitmap;
+    globalThis.OffscreenCanvas = previousOffscreenCanvas;
   }
 });
 

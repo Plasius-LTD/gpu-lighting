@@ -156,6 +156,93 @@ async function decodeTexturePixels(url) {
   }
 }
 
+function normalizeTextureTransformPair(value, fallback) {
+  if (!Array.isArray(value) || value.length < 2) {
+    return fallback;
+  }
+  return [
+    Number.isFinite(value[0]) ? Number(value[0]) : fallback[0],
+    Number.isFinite(value[1]) ? Number(value[1]) : fallback[1],
+  ];
+}
+
+function readTextureTransform(textureRef) {
+  const transformExtension = textureRef?.extensions?.KHR_texture_transform ?? null;
+  return {
+    texCoord:
+      typeof transformExtension?.texCoord === "number"
+        ? transformExtension.texCoord
+        : textureRef?.texCoord ?? 0,
+    offset: normalizeTextureTransformPair(transformExtension?.offset, [0, 0]),
+    scale: normalizeTextureTransformPair(transformExtension?.scale, [1, 1]),
+    rotation: Number.isFinite(transformExtension?.rotation) ? Number(transformExtension.rotation) : 0,
+  };
+}
+
+function wrapTextureCoordinate(value) {
+  return ((value % 1) + 1) % 1;
+}
+
+function transformTextureCoordinate(uv, transform) {
+  const scaledU = uv[0] * transform.scale[0];
+  const scaledV = uv[1] * transform.scale[1];
+  const cosine = Math.cos(transform.rotation);
+  const sine = Math.sin(transform.rotation);
+  return [
+    scaledU * cosine - scaledV * sine + transform.offset[0],
+    scaledU * sine + scaledV * cosine + transform.offset[1],
+  ];
+}
+
+function sampleTexturePixel(data, width, height, uv) {
+  const u = wrapTextureCoordinate(uv[0]);
+  const v = wrapTextureCoordinate(uv[1]);
+  const x = Math.min(width - 1, Math.max(0, Math.round(u * Math.max(width - 1, 0))));
+  const y = Math.min(height - 1, Math.max(0, Math.round((1 - v) * Math.max(height - 1, 0))));
+  const offset = (y * width + x) * 4;
+  return [
+    data[offset] ?? 0,
+    data[offset + 1] ?? 0,
+    data[offset + 2] ?? 0,
+    data[offset + 3] ?? 255,
+  ];
+}
+
+function applyTextureTransformToPixels(pixels, transform) {
+  const isIdentityTransform =
+    transform.offset[0] === 0 &&
+    transform.offset[1] === 0 &&
+    transform.scale[0] === 1 &&
+    transform.scale[1] === 1 &&
+    transform.rotation === 0;
+  if (isIdentityTransform) {
+    return pixels;
+  }
+  const transformedData = new Uint8ClampedArray(pixels.data.length);
+  for (let y = 0; y < pixels.height; y += 1) {
+    const outputV = pixels.height > 1 ? 1 - y / (pixels.height - 1) : 0;
+    for (let x = 0; x < pixels.width; x += 1) {
+      const outputU = pixels.width > 1 ? x / (pixels.width - 1) : 0;
+      const sourcePixel = sampleTexturePixel(
+        pixels.data,
+        pixels.width,
+        pixels.height,
+        transformTextureCoordinate([outputU, outputV], transform)
+      );
+      const offset = (y * pixels.width + x) * 4;
+      transformedData[offset] = sourcePixel[0];
+      transformedData[offset + 1] = sourcePixel[1];
+      transformedData[offset + 2] = sourcePixel[2];
+      transformedData[offset + 3] = sourcePixel[3];
+    }
+  }
+  return Object.freeze({
+    width: pixels.width,
+    height: pixels.height,
+    data: transformedData,
+  });
+}
+
 function resolveMaterialTexture(document, textureRef, imageResources) {
   if (!textureRef || typeof textureRef.index !== "number") {
     return null;
@@ -169,13 +256,15 @@ function resolveMaterialTexture(document, textureRef, imageResources) {
   if (!pixels) {
     return null;
   }
+  const transform = readTextureTransform(textureRef);
+  const transformedPixels = applyTextureTransformToPixels(pixels, transform);
   return Object.freeze({
-    texCoord: textureRef.texCoord ?? 0,
+    texCoord: transform.texCoord,
     scale: textureRef.scale,
     strength: textureRef.strength,
-    width: pixels.width,
-    height: pixels.height,
-    data: pixels.data,
+    width: transformedPixels.width,
+    height: transformedPixels.height,
+    data: transformedPixels.data,
   });
 }
 

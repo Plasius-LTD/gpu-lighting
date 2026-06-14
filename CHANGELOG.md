@@ -73,11 +73,18 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - Eames validation query parsing now preserves documented fallback defaults
     when numeric URL params are omitted, which keeps standard captures out of
     accidental reverse-pass debug mode.
+  - Eames validation motion renders now preserve the built-in adaptive
+    `frameTimeBudgetMs` default when the query parameter is omitted, so the
+    shared `@plasius/gpu-performance` quality ladder still engages on the
+    standard animated validation route.
   - Animated source-marker captures now reuse the injected product-studio scene
     helper during per-frame rebuilds instead of throwing when motion is enabled.
   - Eames capture waits now scale with requested resolution, frame count, depth,
     and SPP so higher-workload validation runs are not aborted at a stale fixed
     timeout.
+  - Eames glTF validation materials now honor `KHR_texture_transform` offsets,
+    scales, and rotation by baking transformed texture maps during decode so
+    chair screenshots reflect the authored leather and wood layouts.
   - The Eames glTF loader now honors interleaved `bufferView.byteStride` values,
     which keeps positions, normals, and UVs correct for legal strided assets.
   - The capture bridge now serves static assets without a pre-stat/read race,

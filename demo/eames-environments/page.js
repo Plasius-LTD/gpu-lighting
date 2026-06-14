@@ -60,6 +60,18 @@ export function readNumberParam(params, name, fallback, minimum, maximum) {
   return Math.max(minimum, Math.min(maximum, Math.round(value)));
 }
 
+export function readOptionalNumberParam(params, name, minimum, maximum) {
+  const rawValue = params.get(name);
+  if (typeof rawValue !== "string" || rawValue.trim().length <= 0) {
+    return null;
+  }
+  const value = Number(rawValue);
+  if (!Number.isFinite(value)) {
+    return null;
+  }
+  return Math.max(minimum, Math.min(maximum, Math.round(value)));
+}
+
 export function computeCaptureBootTimeoutMs(options = {}) {
   const width = Math.max(1, Number(options.width ?? 1280));
   const height = Math.max(1, Number(options.height ?? 720));
@@ -974,7 +986,7 @@ async function main() {
   const captureBitmap = params.get("captureBitmap") === "1" || Boolean(captureUploadPath);
   const captureBitmapDelayMs = readNumberParam(params, "captureBitmapDelayMs", 8000, 0, 60000);
   const awaitGPUCompletion = params.get("awaitGPUCompletion") !== "0";
-  const frameTimeBudgetMs = readNumberParam(params, "frameTimeBudgetMs", 0, 0, 1000);
+  const frameTimeBudgetMs = readOptionalNumberParam(params, "frameTimeBudgetMs", 0, 1000);
   const frameIndex = readNumberParam(params, "frameIndex", 0, 0, 1_000_000);
   const bootTimeoutMs = computeCaptureBootTimeoutMs({
     width,
