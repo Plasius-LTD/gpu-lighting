@@ -1861,6 +1861,107 @@ test("hybrid realtime WGSL stages are real kernels rather than placeholders", ()
   assert.doesNotMatch(finalGather, /Placeholder/);
 });
 
+test("every exported lighting job contains non-placeholder implementation markers", () => {
+  const expectedMarkersByJob = {
+    "hybrid.directLighting": [
+      /HybridLightingPixel/,
+      /evaluate_direct_sun/,
+      /@compute\s+@workgroup_size/,
+    ],
+    "hybrid.screenTrace": [
+      /trace_screen_scene/,
+      /HybridScreenTracePixel/,
+      /HybridReflectionTrace/,
+    ],
+    "hybrid.radianceCache": [
+      /HybridRadianceCacheEntry/,
+      /resolved_irradiance/,
+      /history_weight/,
+    ],
+    "hybrid.finalGather": [
+      /HybridLightingPixel/,
+      /indirect_gi/,
+      /reflection_term/,
+    ],
+    "hybrid.reflectionResolve": [
+      /trace_reflection_scene/,
+      /HybridReflectionPixel/,
+      /reflect\(/,
+    ],
+    "pathtracer.pathTrace": [
+      /fn trace_scene\b/,
+      /samples_per_pixel/,
+      /max_bounces/,
+    ],
+    "pathtracer.accumulate": [
+      /PathAccumulationPixel/,
+      /history_blend/,
+    ],
+    "pathtracer.denoise": [
+      /fn bilateral_weight\b/,
+      /filtered_radiance/,
+    ],
+    "volumetrics.froxelIntegrate": [
+      /FroxelGridParams/,
+      /MediumSample/,
+      /integrated_scattering/,
+    ],
+    "volumetrics.volumetricShadow": [
+      /FroxelGridParams/,
+      /shadow_transmittance/,
+      /history_visibility/,
+    ],
+    "hdri.irradianceConvolution": [
+      /IblPrecomputeParams/,
+      /accumulated_irradiance/,
+      /sample_environment/,
+    ],
+    "hdri.specularPrefilter": [
+      /IblPrecomputeParams/,
+      /prefiltered_radiance/,
+      /importance_weight/,
+    ],
+    "hdri.brdfLut": [
+      /IblPrecomputeParams/,
+      /integrated_brdf/,
+      /geometry_smith/,
+    ],
+  };
+
+  for (const techniqueName of lightingTechniqueNames) {
+    const technique = lightingTechniques[techniqueName];
+    const techniqueDir = path.resolve(
+      __dirname,
+      "..",
+      "src",
+      "techniques",
+      techniqueName
+    );
+
+    for (const job of technique.jobs) {
+      const jobId = `${techniqueName}.${job.key}`;
+      const expectedMarkers = expectedMarkersByJob[jobId];
+      assert.ok(expectedMarkers, `Missing expected markers for ${jobId}`);
+
+      const source = fs.readFileSync(
+        path.join(techniqueDir, path.basename(job.url.pathname)),
+        "utf8"
+      );
+      assert.match(source, /@compute\s+@workgroup_size/, `${jobId} should declare a compute entry point`);
+      assert.doesNotMatch(source, /Placeholder/i, `${jobId} should not ship placeholder text`);
+      assert.doesNotMatch(
+        source,
+        /fn\s+process_job\s*\(\s*\)\s*\{\s*\}/,
+        `${jobId} should not use an empty process_job body`
+      );
+
+      for (const marker of expectedMarkers) {
+        assert.match(source, marker, `${jobId} should include ${marker}`);
+      }
+    }
+  }
+});
+
 test("lighting profiles reference known techniques", () => {
   assert.ok(lightingProfileNames.length > 0);
   for (const profileName of lightingProfileNames) {

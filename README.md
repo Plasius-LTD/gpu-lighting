@@ -325,6 +325,11 @@ The package now ships concrete WGSL contracts for:
 - `hybrid.screenTrace`: first-hit reflection tracing over the shared hybrid scene contracts
 - `hybrid.radianceCache`: irradiance history updates for cache-backed indirect reuse
 - `hybrid.finalGather`: cache + trace composition with temporal reuse for the hybrid GI path
+- `volumetrics.volumetricShadow`: slice-aware Beer-Lambert shadow history for fog and shafts
+- `volumetrics.froxelIntegrate`: froxel scattering/extinction integration with temporal stability
+- `hdri.irradianceConvolution`: cosine-weighted diffuse environment convolution
+- `hdri.specularPrefilter`: roughness-aware environment prefiltering for glossy IBL
+- `hdri.brdfLut`: split-sum BRDF LUT integration for image-based lighting
 - `pathtracer.pathTrace`: analytic scene tracing, bounce integration, and sky fallback
 - `pathtracer.accumulate`: progressive history resolve with reset handling
 - `pathtracer.denoise`: spatial-temporal bilateral filtering for reference previews
@@ -354,12 +359,12 @@ graph.
   - `accumulate`
   - `denoise`
 - `volumetrics`
-  - `froxelIntegrate`
-  - `volumetricShadow`
+  - `froxelIntegrate`: accumulates participating-media scattering/extinction per froxel
+  - `volumetricShadow`: resolves directional shadow transmittance history per froxel
 - `hdri`
-  - `irradianceConvolution`
-  - `specularPrefilter`
-  - `brdfLut`
+  - `irradianceConvolution`: builds diffuse irradiance from the environment source
+  - `specularPrefilter`: builds roughness-aware glossy environment mip data
+  - `brdfLut`: integrates the split-sum BRDF lookup surface for IBL
 
 ## Demo
 

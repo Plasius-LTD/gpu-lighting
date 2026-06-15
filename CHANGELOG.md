@@ -9,16 +9,19 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
-  - (placeholder)
+  - Added concrete volumetric WGSL kernels for `volumetricShadow` and
+    `froxelIntegrate`, covering froxel shadow history plus scattering/extinction
+    integration for the published realtime and reference profiles.
+  - Added concrete HDRI/IBL WGSL kernels for `irradianceConvolution`,
+    `specularPrefilter`, and `brdfLut`.
 
 - **Changed**
-  - (placeholder)
+  - README now documents the delivered volumetrics and HDRI kernel scope with
+    technique-level descriptions instead of leaving those exported jobs implied.
 
 - **Fixed**
-  - (placeholder)
-
-- **Security**
-  - (placeholder)
+  - Package tests now fail if any exported `hybrid`, `volumetrics`, or `hdri`
+    job regresses to placeholder text or an empty/no-op `process_job` body.
 
 ## [0.2.2] - 2026-06-11
 
