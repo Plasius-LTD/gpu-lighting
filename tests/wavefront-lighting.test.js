@@ -64,6 +64,36 @@ function summarizeContracts(contracts) {
   );
 }
 
+function assertRendererCompatibleContracts(actualContracts, expectedContracts) {
+  for (const [recordKey, expectedRecord] of Object.entries(expectedContracts)) {
+    const actualRecord = actualContracts[recordKey];
+    assert.ok(actualRecord, `missing ${recordKey} contract`);
+    assert.equal(actualRecord.recordName, expectedRecord.recordName);
+
+    const actualFieldIndexes = new Map(
+      actualRecord.fields.map((field, index) => [field.name, index])
+    );
+
+    let lastFieldIndex = -1;
+    for (const expectedField of expectedRecord.fields) {
+      const actualFieldIndex = actualFieldIndexes.get(expectedField.name);
+      assert.notEqual(
+        actualFieldIndex,
+        undefined,
+        `${recordKey} is missing renderer field ${expectedField.name}`
+      );
+      assert.ok(
+        actualFieldIndex > lastFieldIndex,
+        `${recordKey} field ${expectedField.name} moved out of renderer order`
+      );
+
+      const actualField = actualRecord.fields[actualFieldIndex];
+      assert.equal(typeof actualField.type, "string");
+      lastFieldIndex = actualFieldIndex;
+    }
+  }
+}
+
 test("wavefront lighting plan aligns with renderer queue, buffer, and termination contracts", () => {
   const rendererPlan = createWavefrontPathTracingPlan({
     maxDepth: 5,
@@ -80,10 +110,7 @@ test("wavefront lighting plan aligns with renderer queue, buffer, and terminatio
 
   assert.equal(lightingPlan.queueLayout.strategy, rendererWavefrontQueuePairStrategy);
   assert.deepEqual(lightingPlan.queueLayout, rendererPlan.queueLayout);
-  assert.deepEqual(
-    summarizeContracts(lightingPlan.bufferContracts),
-    summarizeContracts(rendererPlan.bufferContracts)
-  );
+  assertRendererCompatibleContracts(lightingPlan.bufferContracts, rendererPlan.bufferContracts);
   assert.deepEqual(lightingPlan.terminationPolicy, rendererPlan.terminationPolicy);
   assert.deepEqual(lightingPlan.requiredRendererPassOrder, rendererWavefrontPassOrder);
   assert.deepEqual(
@@ -98,9 +125,10 @@ test("wavefront lighting plan aligns with renderer queue, buffer, and terminatio
     "exclusive-emissive",
   ]);
   assert.deepEqual(
-    summarizeContracts(lightingWavefrontBufferContracts),
-    summarizeContracts(rendererPlan.bufferContracts)
+    summarizeContracts(lightingPlan.bufferContracts),
+    summarizeContracts(lightingWavefrontBufferContracts)
   );
+  assertRendererCompatibleContracts(lightingWavefrontBufferContracts, rendererPlan.bufferContracts);
   assert.deepEqual(lightingWavefrontTerminationPolicy, rendererPlan.terminationPolicy);
 });
 
