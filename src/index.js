@@ -40,6 +40,15 @@ const techniqueSpecs = {
       denoise: "denoise.job.wgsl",
     },
   },
+  wavefront: {
+    description:
+      "Renderer-aligned wavefront lighting jobs for terminal radiance and continuation scattering.",
+    prelude: "prelude.wgsl",
+    jobs: {
+      accumulateTerminalRadiance: "accumulate-terminal-radiance.job.wgsl",
+      scatterContinuations: "scatter-continuations.job.wgsl",
+    },
+  },
   volumetrics: {
     description:
       "Froxel volumetric lighting for fog, shafts, and participating media shadows.",
@@ -1128,6 +1137,421 @@ export function createWavefrontEnvironmentLightingOptions(options = {}) {
   });
 }
 
+export const lightingWavefrontSchemaVersion = 1;
+export const lightingWavefrontQueuePairStrategy = "ping-pong-active-next";
+export const lightingWavefrontHitTypes = Object.freeze([
+  "surface",
+  "emissive",
+  "environment",
+  "transparent",
+  "miss",
+]);
+export const lightingWavefrontTerminalHitTypes = Object.freeze([
+  "emissive",
+  "environment",
+  "miss",
+]);
+export const lightingWavefrontContinuationHitTypes = Object.freeze([
+  "surface",
+  "transparent",
+]);
+export const lightingWavefrontPassOrder = Object.freeze([
+  "accumulateTerminalRadiance",
+  "scatterContinuations",
+]);
+export const lightingRequiredRendererWavefrontPassOrder = Object.freeze([
+  "generatePrimaryRays",
+  "intersectActiveQueue",
+  "resolveSurfaceRecords",
+  "accumulateTerminalRadiance",
+  "scatterContinuations",
+  "compactAndSwapQueues",
+]);
+
+function createLightingWavefrontField(name, type, description) {
+  return Object.freeze({
+    name,
+    type,
+    description,
+  });
+}
+
+function createLightingWavefrontRecordContract(recordName, fields) {
+  return Object.freeze({
+    schemaVersion: lightingWavefrontSchemaVersion,
+    recordName,
+    fields: Object.freeze(fields),
+  });
+}
+
+export const lightingWavefrontBufferContracts = Object.freeze({
+  ray: createLightingWavefrontRecordContract(
+    "RayRecord",
+    [
+      createLightingWavefrontField("rayId", "u32", "Stable ray identifier."),
+      createLightingWavefrontField("parentRayId", "u32", "Parent ray identifier."),
+      createLightingWavefrontField("sourcePixelId", "u32", "Source pixel/sample owner."),
+      createLightingWavefrontField("sampleId", "u32", "Per-pixel sample slot."),
+      createLightingWavefrontField("bounce", "u32", "Current bounce depth."),
+      createLightingWavefrontField("origin", "vec3<f32>", "Ray origin."),
+      createLightingWavefrontField("direction", "vec3<f32>", "Normalized ray direction."),
+      createLightingWavefrontField("throughput", "vec3<f32>", "Accumulated path throughput."),
+      createLightingWavefrontField("mediumRefId", "u32", "Current medium reference."),
+      createLightingWavefrontField("flags", "u32", "Renderer-owned ray flags."),
+    ]
+  ),
+  hit: createLightingWavefrontRecordContract(
+    "HitRecord",
+    [
+      createLightingWavefrontField("rayId", "u32", "Stable ray identifier."),
+      createLightingWavefrontField("sourcePixelId", "u32", "Source pixel/sample owner."),
+      createLightingWavefrontField("hitType", "u32", "Surface, emissive, environment, transparent, or miss."),
+      createLightingWavefrontField("distance", "f32", "Nearest-hit distance."),
+      createLightingWavefrontField("entityId", "u32", "Owning entity identifier."),
+      createLightingWavefrontField("instanceId", "u32", "Owning instance identifier."),
+      createLightingWavefrontField("primitiveId", "u32", "Primitive identifier."),
+      createLightingWavefrontField("materialId", "u32", "Resolved material identifier."),
+      createLightingWavefrontField("barycentrics", "vec3<f32>", "Triangle barycentrics."),
+      createLightingWavefrontField("uv", "vec2<f32>", "Resolved UV coordinates."),
+      createLightingWavefrontField("geometricNormal", "vec3<f32>", "Geometric surface normal."),
+      createLightingWavefrontField("shadingNormal", "vec3<f32>", "Interpolated shading normal."),
+      createLightingWavefrontField("frontFace", "u32", "Front-face classification."),
+    ]
+  ),
+  surface: createLightingWavefrontRecordContract(
+    "SurfaceRecord",
+    [
+      createLightingWavefrontField("rayId", "u32", "Stable ray identifier."),
+      createLightingWavefrontField("entityId", "u32", "Owning entity identifier."),
+      createLightingWavefrontField("materialRefId", "u32", "Renderer material reference id."),
+      createLightingWavefrontField("mediumRefId", "u32", "Renderer medium reference id."),
+      createLightingWavefrontField("geometricNormal", "vec3<f32>", "Geometric surface normal."),
+      createLightingWavefrontField("shadingNormal", "vec3<f32>", "Interpolated shading normal."),
+      createLightingWavefrontField("uv", "vec2<f32>", "Resolved UV coordinates."),
+      createLightingWavefrontField("tangentFrame", "mat3x3<f32>", "Resolved tangent frame."),
+    ]
+  ),
+  materialReference: createLightingWavefrontRecordContract(
+    "MaterialReferenceRecord",
+    [
+      createLightingWavefrontField("materialRefId", "u32", "Lighting-visible material reference id."),
+      createLightingWavefrontField("materialId", "u32", "Source material identifier."),
+      createLightingWavefrontField("shadingModel", "u32", "Renderer shading-model discriminator."),
+      createLightingWavefrontField("textureSetId", "u32", "Resolved texture-set identifier."),
+      createLightingWavefrontField("flags", "u32", "Renderer material flags."),
+    ]
+  ),
+  mediumReference: createLightingWavefrontRecordContract(
+    "MediumReferenceRecord",
+    [
+      createLightingWavefrontField("mediumRefId", "u32", "Lighting-visible medium reference id."),
+      createLightingWavefrontField("mediumId", "u32", "Source medium identifier."),
+      createLightingWavefrontField("phaseModel", "u32", "Phase-function discriminator."),
+      createLightingWavefrontField("absorption", "vec3<f32>", "Medium absorption coefficients."),
+      createLightingWavefrontField("scattering", "vec3<f32>", "Medium scattering coefficients."),
+    ]
+  ),
+  accumulation: createLightingWavefrontRecordContract(
+    "AccumulationRecord",
+    [
+      createLightingWavefrontField("sourcePixelId", "u32", "Source pixel/sample owner."),
+      createLightingWavefrontField("sampleCount", "u32", "Accumulated sample count."),
+      createLightingWavefrontField("radiance", "vec3<f32>", "Accumulated radiance."),
+      createLightingWavefrontField("throughput", "vec3<f32>", "Last surviving throughput."),
+      createLightingWavefrontField("resetEpoch", "u32", "Renderer accumulation reset epoch."),
+    ]
+  ),
+});
+
+export const lightingWavefrontTerminationPolicy = Object.freeze({
+  terminalHitTypes: lightingWavefrontTerminalHitTypes,
+  continuationHitTypes: lightingWavefrontContinuationHitTypes,
+  emissive: Object.freeze({
+    action: "accumulate-and-stop",
+    contributesRadiance: true,
+  }),
+  environment: Object.freeze({
+    action: "accumulate-and-stop",
+    contributesRadiance: true,
+  }),
+  miss: Object.freeze({
+    action: "accumulate-environment-or-dark-stop",
+    contributesRadiance: true,
+  }),
+});
+
+const defaultWavefrontDarkRadiance = Object.freeze([0.0001, 0.0001, 0.0001]);
+const wavefrontEventKinds = Object.freeze([
+  "diffuse",
+  "reflection",
+  "refraction",
+  "transparency",
+  "terminate",
+]);
+
+function normalizeWavefrontHitType(value) {
+  return lightingWavefrontHitTypes.includes(value) ? value : "surface";
+}
+
+function normalizeWavefrontEventKind(value) {
+  return wavefrontEventKinds.includes(value) ? value : null;
+}
+
+function normalizeVec3(value, fallback = [0, 0, 0]) {
+  if (!Array.isArray(value) || value.length < 3) {
+    return [...fallback];
+  }
+  return [
+    Number.isFinite(value[0]) ? value[0] : fallback[0],
+    Number.isFinite(value[1]) ? value[1] : fallback[1],
+    Number.isFinite(value[2]) ? value[2] : fallback[2],
+  ];
+}
+
+function clampUnit(value, fallback = 0) {
+  return Math.max(0, Math.min(1, readFinite(value, fallback)));
+}
+
+function saturateVec3(value) {
+  return value.map((component) => Math.max(0, component));
+}
+
+function scaleVec3(value, scalar) {
+  return value.map((component) => component * scalar);
+}
+
+function addVec3(left, right) {
+  return left.map((component, index) => component + right[index]);
+}
+
+function multiplyVec3(left, right) {
+  return left.map((component, index) => component * right[index]);
+}
+
+function dotVec3(left, right) {
+  return left[0] * right[0] + left[1] * right[1] + left[2] * right[2];
+}
+
+function lengthVec3(value) {
+  return Math.hypot(value[0], value[1], value[2]);
+}
+
+function normalizeDirection(value, fallback = [0, 1, 0]) {
+  const vector = normalizeVec3(value, fallback);
+  const length = lengthVec3(vector);
+  if (!Number.isFinite(length) || length <= 0.000001) {
+    return [...fallback];
+  }
+  return vector.map((component) => component / length);
+}
+
+function mixVec3(left, right, factor) {
+  return left.map((component, index) =>
+    component * (1 - factor) + right[index] * factor
+  );
+}
+
+function reflectDirection(direction, normal) {
+  const scale = 2 * dotVec3(direction, normal);
+  return normalizeDirection(
+    [
+      direction[0] - scale * normal[0],
+      direction[1] - scale * normal[1],
+      direction[2] - scale * normal[2],
+    ],
+    normal
+  );
+}
+
+function refractDirection(direction, normal, etaRatio) {
+  const cosTheta = Math.min(-dotVec3(direction, normal), 1);
+  const rOutPerp = scaleVec3(addVec3(direction, scaleVec3(normal, cosTheta)), etaRatio);
+  const rOutPerpLengthSquared = dotVec3(rOutPerp, rOutPerp);
+  const parallelFactor = 1 - rOutPerpLengthSquared;
+  if (parallelFactor <= 0) {
+    return null;
+  }
+  const rOutParallel = scaleVec3(normal, -Math.sqrt(parallelFactor));
+  return normalizeDirection(addVec3(rOutPerp, rOutParallel), direction);
+}
+
+export function createWavefrontLightingPlan(options = {}) {
+  const maxDepth = Math.max(1, Math.trunc(readFinite(options.maxDepth, 4)));
+  const queueCapacity = Math.max(
+    1,
+    Math.trunc(readFinite(options.queueCapacity, 4096))
+  );
+  const explicitLightSampling = Boolean(options.explicitLightSampling);
+  const accumulationResetEpoch = Math.max(
+    0,
+    Math.trunc(readFinite(options.accumulationResetEpoch, 0))
+  );
+
+  return Object.freeze({
+    schemaVersion: lightingWavefrontSchemaVersion,
+    maxDepth,
+    queueCapacity,
+    explicitLightSampling,
+    accumulationResetEpoch,
+    queueLayout: Object.freeze({
+      strategy: lightingWavefrontQueuePairStrategy,
+      compactAfterScatter: true,
+      queues: Object.freeze([
+        Object.freeze({ name: "active", role: "current-bounce" }),
+        Object.freeze({ name: "next", role: "next-bounce" }),
+      ]),
+    }),
+    bufferContracts: lightingWavefrontBufferContracts,
+    terminationPolicy: lightingWavefrontTerminationPolicy,
+    requiredRendererPassOrder: lightingRequiredRendererWavefrontPassOrder,
+    lightingPasses: Object.freeze([
+      Object.freeze({
+        key: "accumulateTerminalRadiance",
+        stage: "accumulateTerminalRadiance",
+        reads: Object.freeze([
+          "ray",
+          "hit",
+          "surface",
+          "materialReference",
+          "mediumReference",
+        ]),
+        writes: Object.freeze(["accumulation"]),
+        terminalHitTypes: lightingWavefrontTerminalHitTypes,
+      }),
+      Object.freeze({
+        key: "scatterContinuations",
+        stage: "scatterContinuations",
+        reads: Object.freeze([
+          "ray",
+          "hit",
+          "surface",
+          "materialReference",
+          "mediumReference",
+        ]),
+        writes: Object.freeze(["ray"]),
+        continuationHitTypes: lightingWavefrontContinuationHitTypes,
+        explicitLightSampling,
+      }),
+    ]),
+  });
+}
+
+export function evaluateWavefrontTerminalRadiance(options = {}) {
+  const hitType = normalizeWavefrontHitType(options.hitType);
+  const throughput = saturateVec3(normalizeVec3(options.throughput, [1, 1, 1]));
+  const emission = saturateVec3(normalizeVec3(options.emission, [0, 0, 0]));
+  const environmentRadiance = saturateVec3(
+    normalizeVec3(options.environmentRadiance, [0, 0, 0])
+  );
+  const missRadiance = saturateVec3(
+    normalizeVec3(options.missRadiance, defaultWavefrontDarkRadiance)
+  );
+  const environmentLuminance = colorLuminance(environmentRadiance);
+  let source = "none";
+  let rawRadiance = [0, 0, 0];
+
+  if (hitType === "emissive") {
+    source = "emissive";
+    rawRadiance = emission;
+  } else if (hitType === "environment") {
+    source = "environment";
+    rawRadiance = environmentRadiance;
+  } else if (hitType === "miss") {
+    source = environmentLuminance > 0.000001 ? "environment" : "dark";
+    rawRadiance = environmentLuminance > 0.000001 ? environmentRadiance : missRadiance;
+  }
+
+  const radiance = multiplyVec3(throughput, rawRadiance);
+  const terminated = lightingWavefrontTerminalHitTypes.includes(hitType);
+
+  return Object.freeze({
+    hitType,
+    source,
+    terminated,
+    radiance: Object.freeze(radiance),
+    nearDarkSample:
+      source === "dark" && colorLuminance(radiance) <= colorLuminance(defaultWavefrontDarkRadiance),
+  });
+}
+
+export function evaluateWavefrontContinuationEvent(options = {}) {
+  const hitType = normalizeWavefrontHitType(options.hitType);
+  const bounceIndex = Math.max(0, Math.trunc(readFinite(options.bounceIndex, 0)));
+  const maxDepth = Math.max(1, Math.trunc(readFinite(options.maxDepth, 4)));
+  const throughput = saturateVec3(normalizeVec3(options.throughput, [1, 1, 1]));
+  const albedo = saturateVec3(normalizeVec3(options.albedo, [0.8, 0.8, 0.8]));
+  const transmission = saturateVec3(
+    normalizeVec3(options.transmission, [0, 0, 0])
+  );
+  const shadingNormal = normalizeDirection(options.shadingNormal, [0, 1, 0]);
+  const viewDirection = normalizeDirection(options.viewDirection, [0, 0, 1]);
+  const incomingDirection = normalizeDirection(
+    scaleVec3(viewDirection, -1),
+    [0, 0, -1]
+  );
+  const frontFace = options.frontFace !== false;
+  const orientedNormal = frontFace
+    ? shadingNormal
+    : scaleVec3(shadingNormal, -1);
+  const metalness = clampUnit(options.metalness, 0);
+  const roughness = clampUnit(options.roughness, 0.5);
+  const opacity = clampUnit(options.opacity, 1);
+  const refractiveIndex = Math.max(1, readFinite(options.refractiveIndex ?? options.ior, 1.45));
+  const transmissionStrength = Math.max(...transmission);
+  let eventKind =
+    normalizeWavefrontEventKind(options.eventKind) ??
+    (hitType === "transparent" || opacity < 0.999
+      ? "transparency"
+      : transmissionStrength > 0.001
+        ? "refraction"
+        : metalness >= 0.5 || roughness <= 0.2
+          ? "reflection"
+          : "diffuse");
+
+  let nextDirection = incomingDirection;
+  let attenuation;
+
+  if (!lightingWavefrontContinuationHitTypes.includes(hitType) || bounceIndex >= maxDepth - 1) {
+    eventKind = "terminate";
+    attenuation = [0, 0, 0];
+  } else if (eventKind === "reflection") {
+    nextDirection = reflectDirection(incomingDirection, orientedNormal);
+    attenuation = mixVec3([0.04, 0.04, 0.04], albedo, metalness);
+  } else if (eventKind === "refraction") {
+    const etaRatio = frontFace ? 1 / refractiveIndex : refractiveIndex;
+    nextDirection =
+      refractDirection(incomingDirection, orientedNormal, etaRatio) ??
+      reflectDirection(incomingDirection, orientedNormal);
+    attenuation = transmissionStrength > 0.001 ? transmission : [1, 1, 1];
+  } else if (eventKind === "transparency") {
+    nextDirection = incomingDirection;
+    const transparencyWeight = Math.max(1 - opacity, transmissionStrength, 0.05);
+    attenuation = transmissionStrength > 0.001
+      ? transmission
+      : [transparencyWeight, transparencyWeight, transparencyWeight];
+  } else {
+    nextDirection = normalizeDirection(
+      addVec3(orientedNormal, albedo.map((component) => component - 0.5)),
+      orientedNormal
+    );
+    attenuation = scaleVec3(albedo, Math.max(0.05, 1 - metalness));
+  }
+
+  const nextThroughput = multiplyVec3(throughput, saturateVec3(attenuation));
+  const continueTracing =
+    eventKind !== "terminate" && colorLuminance(nextThroughput) > 0.0001;
+
+  return Object.freeze({
+    hitType,
+    eventKind,
+    continueTracing,
+    nextDirection: Object.freeze(nextDirection),
+    attenuation: Object.freeze(saturateVec3(attenuation)),
+    nextThroughput: Object.freeze(nextThroughput),
+    explicitLightSamplingEnabled: Boolean(options.explicitLightSampling),
+  });
+}
+
 const lightingImportanceLevels = Object.freeze([
   "low",
   "medium",
@@ -1725,6 +2149,91 @@ const lightingWorkerSpecPresets = {
       },
     },
   },
+  wavefront: {
+    suggestedAllocationIds: [
+      "lighting.wavefront.active-queue",
+      "lighting.wavefront.next-queue",
+      "lighting.wavefront.accumulation",
+    ],
+    jobs: {
+      accumulateTerminalRadiance: {
+        domain: "lighting",
+        importance: "critical",
+        levels: buildWorkerBudgetLevels(
+          "lighting.wavefront.accumulateTerminalRadiance",
+          lightingWorkerQueueClass,
+          {
+            low: {
+              estimatedCostMs: 0.7,
+              maxDispatchesPerFrame: 1,
+              maxJobsPerDispatch: 32,
+              cadenceDivisor: 2,
+              workgroupScale: 0.5,
+              maxQueueDepth: 96,
+            },
+            medium: {
+              estimatedCostMs: 1.2,
+              maxDispatchesPerFrame: 1,
+              maxJobsPerDispatch: 64,
+              cadenceDivisor: 1,
+              workgroupScale: 0.75,
+              maxQueueDepth: 192,
+            },
+            high: {
+              estimatedCostMs: 1.8,
+              maxDispatchesPerFrame: 2,
+              maxJobsPerDispatch: 128,
+              cadenceDivisor: 1,
+              workgroupScale: 1,
+              maxQueueDepth: 256,
+            },
+          }
+        ),
+        suggestedAllocationIds: [
+          "lighting.wavefront.accumulation",
+          "lighting.wavefront.active-queue",
+        ],
+      },
+      scatterContinuations: {
+        domain: "lighting",
+        importance: "critical",
+        levels: buildWorkerBudgetLevels(
+          "lighting.wavefront.scatterContinuations",
+          lightingWorkerQueueClass,
+          {
+            low: {
+              estimatedCostMs: 0.8,
+              maxDispatchesPerFrame: 1,
+              maxJobsPerDispatch: 32,
+              cadenceDivisor: 2,
+              workgroupScale: 0.5,
+              maxQueueDepth: 96,
+            },
+            medium: {
+              estimatedCostMs: 1.4,
+              maxDispatchesPerFrame: 1,
+              maxJobsPerDispatch: 64,
+              cadenceDivisor: 1,
+              workgroupScale: 0.75,
+              maxQueueDepth: 192,
+            },
+            high: {
+              estimatedCostMs: 2.1,
+              maxDispatchesPerFrame: 2,
+              maxJobsPerDispatch: 128,
+              cadenceDivisor: 1,
+              workgroupScale: 1,
+              maxQueueDepth: 256,
+            },
+          }
+        ),
+        suggestedAllocationIds: [
+          "lighting.wavefront.active-queue",
+          "lighting.wavefront.next-queue",
+        ],
+      },
+    },
+  },
   volumetrics: {
     suggestedAllocationIds: [
       "lighting.volumetrics.froxel-grid",
@@ -1935,6 +2444,13 @@ const lightingWorkerDagSpecs = {
     accumulate: { priority: 3, dependencies: ["pathTrace"] },
     denoise: { priority: 2, dependencies: ["accumulate"] },
   },
+  wavefront: {
+    accumulateTerminalRadiance: { priority: 3, dependencies: [] },
+    scatterContinuations: {
+      priority: 2,
+      dependencies: ["accumulateTerminalRadiance"],
+    },
+  },
   volumetrics: {
     volumetricShadow: { priority: 3, dependencies: [] },
     froxelIntegrate: { priority: 2, dependencies: ["volumetricShadow"] },
@@ -1969,6 +2485,16 @@ function resolveLightingQualityDimensions(techniqueName, jobKey) {
       "pathtracer.pathTrace": { rayTracing: 1, lightingSamples: 1 },
       "pathtracer.accumulate": { temporalReuse: 1, updateCadence: 0.4 },
       "pathtracer.denoise": { temporalReuse: 1, shading: 0.4 },
+      "wavefront.accumulateTerminalRadiance": {
+        rayTracing: 1,
+        lightingSamples: 1,
+        temporalReuse: 0.4,
+      },
+      "wavefront.scatterContinuations": {
+        rayTracing: 1,
+        shading: 0.7,
+        updateCadence: 0.5,
+      },
       "volumetrics.froxelIntegrate": {
         lightingSamples: 0.6,
         shading: 0.4,
@@ -2014,6 +2540,15 @@ function resolveLightingImportanceSignals(techniqueName, jobKey) {
       },
       "pathtracer.accumulate": { visible: true },
       "pathtracer.denoise": { visible: true },
+      "wavefront.accumulateTerminalRadiance": {
+        visible: true,
+        shadowSignificance: "high",
+        reflectionSignificance: "high",
+      },
+      "wavefront.scatterContinuations": {
+        visible: true,
+        reflectionSignificance: "high",
+      },
       "volumetrics.froxelIntegrate": { visible: true },
       "volumetrics.volumetricShadow": { visible: true, shadowSignificance: "high" },
       "hdri.irradianceConvolution": { visible: false },

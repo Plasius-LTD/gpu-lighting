@@ -6,8 +6,15 @@ import { chromium } from "playwright";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "../..");
-const workspaceRoot = path.resolve(packageRoot, "..");
-const repoRoot = path.resolve(__dirname, "../../..");
+function resolveWorkspaceRootFromPackageRoot(currentPackageRoot) {
+  const directParent = path.resolve(currentPackageRoot, "..");
+  if (path.basename(directParent) === ".worktrees") {
+    return path.resolve(directParent, "..");
+  }
+  return directParent;
+}
+const workspaceRoot = resolveWorkspaceRootFromPackageRoot(packageRoot);
+const repoRoot = workspaceRoot;
 const defaultCaptureArtifactDirectory = path.join(
   repoRoot,
   "output/playwright/eames-environments"

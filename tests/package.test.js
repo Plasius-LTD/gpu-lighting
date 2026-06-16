@@ -437,12 +437,13 @@ test("playwright capture helpers surface browser bootstrap failures and trim opt
 test("playwright capture helpers normalize output directories and summarize canvas pixels", async () => {
   const tempDirectory = path.join(os.tmpdir(), "plasius-capture-helper-test");
   const defaultOutputDirectory = resolveCaptureArtifactDirectory();
+  const workspaceRoot = resolveCaptureWorkspaceRoot();
   assert.ok(defaultOutputDirectory.endsWith("/output/playwright/eames-environments"));
   assert.equal(
     resolveCaptureArtifactDirectory("output/playwright/eames-environments/custom"),
-    path.resolve(process.cwd(), "..", "output/playwright/eames-environments/custom")
+    path.resolve(workspaceRoot, "output/playwright/eames-environments/custom")
   );
-  assert.equal(resolveCaptureWorkspaceRoot(), path.resolve(process.cwd(), ".."));
+  assert.equal(workspaceRoot, path.resolve(process.cwd(), "../.."));
   assert.equal(
     resolveCaptureArtifactDirectory(tempDirectory),
     tempDirectory
@@ -670,7 +671,10 @@ test("validation page restricts capture upload URLs to loopback bridges", () => 
 });
 
 test("validation page resolves the Eames model from the gpu-lighting repo path", () => {
-  assert.match(MODEL_URL, /\/gpu-lighting\/data\/models\/eames-lounge-chair-ottoman\//);
+  assert.match(
+    MODEL_URL,
+    /\/data\/models\/eames-lounge-chair-ottoman\/Eames_Lounge_Chair_Ottoman\.gltf$/
+  );
 });
 
 test("validation page reference camera is tighter than the wide orbit camera", () => {
@@ -1900,6 +1904,16 @@ test("every exported lighting job contains non-placeholder implementation marker
     "pathtracer.denoise": [
       /fn bilateral_weight\b/,
       /filtered_radiance/,
+    ],
+    "wavefront.accumulateTerminalRadiance": [
+      /fn accumulate_terminal_sample/,
+      /terminal_radiance_for_hit/,
+      /AccumulationRecord/,
+    ],
+    "wavefront.scatterContinuations": [
+      /fn queue_reflection_continuation/,
+      /fn queue_refraction_continuation/,
+      /fn queue_transparency_continuation/,
     ],
     "volumetrics.froxelIntegrate": [
       /FroxelGridParams/,
