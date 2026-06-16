@@ -9,13 +9,19 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
-  - (placeholder)
+  - Extended the wavefront lighting contract with compact medium-state carry,
+    visibility-probe ray helpers, MIS/exclusive-emissive probe controls, and
+    deterministic CPU reference fixtures for continuation validation.
 
 - **Changed**
-  - (placeholder)
+  - Wavefront ray-record documentation now mirrors the current renderer payload
+    shape, including medium-stack and spectral-state fields used for transport
+    validation.
 
 - **Fixed**
-  - (placeholder)
+  - Wavefront continuation helpers now report total internal reflection
+    explicitly and keep refraction/transparency medium transitions stable in the
+    published reference contract.
 
 - **Security**
   - (placeholder)

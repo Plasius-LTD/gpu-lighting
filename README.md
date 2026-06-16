@@ -173,7 +173,11 @@ radiance accumulation and continuation scattering.
 ```js
 import {
   createWavefrontLightingPlan,
+  createWavefrontReferenceFixture,
+  createWavefrontVisibilityProbeRay,
+  evaluateWavefrontMaterialReference,
   evaluateWavefrontTerminalRadiance,
+  evaluateWavefrontVisibilityProbe,
   loadLightingTechniqueWorkerBundle,
 } from "@plasius/gpu-lighting";
 
@@ -181,6 +185,7 @@ const plan = createWavefrontLightingPlan({
   maxDepth: 6,
   queueCapacity: 4096,
   explicitLightSampling: true,
+  visibilityProbeMode: "mis-balanced",
 });
 
 const bundle = await loadLightingTechniqueWorkerBundle("wavefront");
@@ -189,15 +194,71 @@ const emissive = evaluateWavefrontTerminalRadiance({
   throughput: [0.5, 0.5, 0.5],
   emission: [8, 6, 4],
 });
+const material = evaluateWavefrontMaterialReference({
+  hitType: "surface",
+  eventKind: "refraction",
+  throughput: [1, 1, 1],
+  transmission: [0.92, 0.95, 0.98],
+  ior: 1.45,
+  shadingNormal: [0, 1, 0],
+  viewDirection: [0, 1, 0],
+  currentMediumRefId: 0,
+  surfaceMediumRefId: 7,
+});
+const probeRay = createWavefrontVisibilityProbeRay({
+  rayId: 12,
+  parentRayId: 4,
+  sourcePixelId: 9,
+  sampleId: 2,
+  bounce: 1,
+  origin: [0, 1, 0],
+  direction: [0.25, -1, 0.15],
+  throughput: [0.8, 0.7, 0.6],
+  mediumRefId: 7,
+  mediumStack: [7],
+});
+const probe = evaluateWavefrontVisibilityProbe({
+  probeRay,
+  probeMode: "exclusive-emissive",
+  activeEmissiveRadiance: [4, 3, 2],
+  emissiveRadiance: [4, 3, 2],
+  transparentSegments: [[0.8, 0.8, 0.8]],
+});
+const fixture = createWavefrontReferenceFixture({
+  hitType: "emissive",
+  throughput: [0.8, 0.7, 0.6],
+  emission: [4, 3, 2],
+  visibilityProbe: {
+    probeMode: "mis-balanced",
+    emissiveRadiance: [0.6, 0.3, 0.1],
+    transparentSegments: [[0.7, 0.8, 0.9]],
+  },
+});
 
 console.log(plan.requiredRendererPassOrder);
+console.log(plan.visibilityProbeMode);
 console.log(bundle.jobs.map((job) => job.label));
 console.log(emissive.radiance);
+console.log(material.continuation.mediumState);
+console.log(probe.doubleCountPrevented);
+console.log(fixture.tolerance);
 ```
 
 This slice keeps emissive hits, environment hits, and environment-miss dark
 fallbacks on the lighting package surface without reintroducing a depth-first
 shader dependency into the renderer-owned wavefront queue model.
+
+The continuation/reference surface now also exposes:
+
+- compact medium-state carry for refraction/transparency events, including
+  total-internal-reflection fallback reporting
+- shared-ray payload helpers where visibility probes reuse the base ray layout
+  and encode their kind through the low bits of `flags`
+- optional probe contribution helpers with `mis-balanced` and
+  `exclusive-emissive` modes so active emissive hits remain correct even when
+  explicit light sampling is enabled
+- deterministic reference fixtures that publish buffer-like accumulation outputs
+  with a documented default tolerance of `0.0005` for CPU-vs-GPU comparisons
 
 ## Distance-Banded Lighting
 

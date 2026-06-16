@@ -12,9 +12,14 @@ package still only exposed the older depth-first `pathtracer` WGSL entry points,
 which meant downstream consumers had no lighting-owned shader tranche for the
 renderer's breadth-first wavefront path.
 
-Story `plasius-ltd-site#1039` requires the first lighting slice where emissive
+Story `plasius-ltd-site#1039` required the first lighting slice where emissive
 hits and environment misses terminate correctly through wavefront GPU jobs
 without reintroducing a depth-first correctness dependency.
+
+Story `plasius-ltd-site#1040` extends that contract with continuation-heavy
+transport concerns: richer refraction/transparency handling, compact
+medium-state carry, optional explicit-light probe semantics, and deterministic
+CPU fixtures that stay comparable to renderer-owned buffers.
 
 ## Decision
 
@@ -33,6 +38,17 @@ This slice publishes:
 - JS reference helpers for deterministic emissive/environment termination and
   continuation-event validation
 
+The continuation extension also publishes:
+
+- medium-state helpers that preserve compact nested-medium payload state through
+  refraction and transparency events
+- visibility-probe ray helpers that reuse the base ray payload contract and
+  distinguish probes through flag-encoded ray kinds
+- probe contribution helpers with explicit `mis-balanced` and
+  `exclusive-emissive` modes so active emissive hits cannot be double-counted
+- deterministic reference fixtures with documented tolerances for CPU-vs-GPU
+  comparisons
+
 The existing depth-first `pathtracer` technique remains available as a
 reference-mode baseline. The new wavefront technique is an additive public
 surface for renderer integration and validation.
@@ -46,17 +62,13 @@ surface for renderer integration and validation.
   testable via shared queue/buffer/termination expectations.
 - Positive: deterministic CPU-side helpers make emissive-hit, environment-hit,
   miss-darkening, and continuation behavior testable without a WebGPU runtime.
-- Neutral: this slice only covers terminal radiance and continuation scattering;
-  it does not yet own explicit light sampling, MIS weighting, or medium-heavy
-  transport orchestration beyond the published hooks.
+- Neutral: the package still does not own renderer-side queue orchestration for
+  dedicated probe passes; it publishes the contract and deterministic reference
+  behavior while renderer execution remains in `@plasius/gpu-renderer`.
 - Negative: the package now carries both depth-first and wavefront path-tracing
   surfaces, so documentation and tests must keep the intended roles clear.
 
 ## Follow-On Work
 
-- Extend the wavefront slice with explicit light sampling and MIS once the
-  renderer-owned queue orchestration is ready for that path.
-- Add richer medium-aware continuation and attenuation once the lighting slice
-  consumes fuller medium contracts.
 - Promote the wavefront technique into a broader lighting profile once the
   remaining wavefront child stories are complete.

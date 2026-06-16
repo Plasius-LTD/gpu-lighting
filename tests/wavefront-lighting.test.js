@@ -13,13 +13,20 @@ const originalImportMetaUrl = globalThis.__IMPORT_META_URL__;
 globalThis.__IMPORT_META_URL__ = new URL("../src/index.js", import.meta.url);
 const {
   createWavefrontLightingPlan,
+  createWavefrontReferenceFixture,
+  createWavefrontVisibilityProbeRay,
   evaluateWavefrontContinuationEvent,
+  evaluateWavefrontMaterialReference,
+  evaluateWavefrontMediumState,
   evaluateWavefrontTerminalRadiance,
+  evaluateWavefrontVisibilityProbe,
   getLightingTechnique,
   getLightingTechniqueWorkerManifest,
   lightingWavefrontBufferContracts,
   lightingWavefrontPassOrder,
+  lightingWavefrontRayKinds,
   lightingWavefrontTerminationPolicy,
+  lightingWavefrontVisibilityProbeModes,
   loadLightingTechniqueJobs,
   loadLightingTechniqueWorkerBundle,
 } = await import("../src/index.js");
@@ -34,6 +41,15 @@ const __dirname = path.dirname(__filename);
 
 function roundVec3(value) {
   return value.map((component) => Number(component.toFixed(4)));
+}
+
+function assertVec3Within(actual, expected, tolerance) {
+  actual.forEach((component, index) => {
+    assert.ok(
+      Math.abs(component - expected[index]) <= tolerance,
+      `component ${index} expected ${expected[index]} but got ${component}`
+    );
+  });
 }
 
 function summarizeContracts(contracts) {
@@ -74,6 +90,13 @@ test("wavefront lighting plan aligns with renderer queue, buffer, and terminatio
     lightingPlan.lightingPasses.map((pass) => pass.key),
     lightingWavefrontPassOrder
   );
+  assert.deepEqual(lightingPlan.rayKinds, lightingWavefrontRayKinds);
+  assert.equal(lightingPlan.visibilityProbeMode, "mis-balanced");
+  assert.deepEqual(lightingWavefrontVisibilityProbeModes, [
+    "disabled",
+    "mis-balanced",
+    "exclusive-emissive",
+  ]);
   assert.deepEqual(
     summarizeContracts(lightingWavefrontBufferContracts),
     summarizeContracts(rendererPlan.bufferContracts)
@@ -178,6 +201,161 @@ test("wavefront continuation reference helpers cover reflection, refraction, and
   assert.deepEqual(roundVec3(transparency.nextDirection), [0, -1, 0]);
 });
 
+test("wavefront continuation reference helpers detect total internal reflection and compact medium carry", () => {
+  const tir = evaluateWavefrontContinuationEvent({
+    hitType: "surface",
+    eventKind: "refraction",
+    throughput: [1, 1, 1],
+    albedo: [0.75, 0.85, 0.95],
+    transmission: [0.94, 0.97, 1],
+    shadingNormal: [0, 1, 0],
+    viewDirection: [-0.9, -0.2, 0],
+    frontFace: false,
+    ior: 1.5,
+    currentMediumRefId: 7,
+    mediumStack: [7],
+    surfaceMediumRefId: 7,
+  });
+
+  assert.equal(tir.requestedEventKind, "refraction");
+  assert.equal(tir.eventKind, "reflection");
+  assert.equal(tir.totalInternalReflection, true);
+  assert.equal(tir.mediumState.currentMediumRefId, 7);
+  assert.deepEqual(tir.mediumState.stack, [7]);
+
+  const enteredWater = evaluateWavefrontMediumState({
+    currentMediumRefId: 0,
+    mediumStack: [],
+    surfaceMediumRefId: 7,
+    frontFace: true,
+    eventKind: "transparency",
+  });
+  assert.equal(enteredWater.currentMediumRefId, 7);
+  assert.equal(enteredWater.enteredMediumRefId, 7);
+  assert.deepEqual(enteredWater.stack, [7]);
+
+  const exitedWater = evaluateWavefrontMediumState({
+    currentMediumRefId: 7,
+    mediumStack: [7],
+    surfaceMediumRefId: 7,
+    frontFace: false,
+    eventKind: "transparency",
+  });
+  assert.equal(exitedWater.currentMediumRefId, 0);
+  assert.equal(exitedWater.exitedMediumRefId, 7);
+  assert.deepEqual(exitedWater.stack, []);
+});
+
+test("wavefront visibility probes use shared ray payload fields and avoid double counting emissive hits", () => {
+  const probeRay = createWavefrontVisibilityProbeRay({
+    rayId: 12,
+    parentRayId: 4,
+    sourcePixelId: 9,
+    sampleId: 2,
+    bounce: 1,
+    origin: [0, 1, 0],
+    direction: [0.25, -1, 0.15],
+    throughput: [0.8, 0.7, 0.6],
+    mediumRefId: 3,
+    mediumStack: [3],
+  });
+
+  assert.equal(probeRay.rayKind, "visibility-probe");
+  assert.equal(probeRay.flags & 0x3, 1);
+  assert.equal(probeRay.mediumRefId, 3);
+  assert.deepEqual(probeRay.mediumStack, [3]);
+
+  const exclusive = evaluateWavefrontVisibilityProbe({
+    probeRay,
+    probeMode: "exclusive-emissive",
+    activeEmissiveRadiance: [4, 3, 2],
+    emissiveRadiance: [4, 3, 2],
+    transparentSegments: [[0.8, 0.8, 0.8]],
+  });
+  assert.equal(exclusive.doubleCountPrevented, true);
+  assert.deepEqual(roundVec3(exclusive.contribution), [0, 0, 0]);
+
+  const misBalanced = evaluateWavefrontVisibilityProbe({
+    probeRay,
+    probeMode: "mis-balanced",
+    activeEmissiveRadiance: [4, 3, 2],
+    emissiveRadiance: [4, 3, 2],
+    transparentSegments: [
+      [0.8, 0.8, 0.8],
+      [0.6, 0.7, 0.9],
+    ],
+  });
+  assert.equal(misBalanced.misWeight, 0.5);
+  assert.deepEqual(roundVec3(misBalanced.transmittance), [0.48, 0.56, 0.72]);
+  assertVec3Within(
+    misBalanced.contribution,
+    [0.768, 0.588, 0.432],
+    0.0001
+  );
+
+  const terminal = evaluateWavefrontTerminalRadiance({
+    hitType: "emissive",
+    throughput: [0.8, 0.7, 0.6],
+    emission: [4, 3, 2],
+  });
+  assertVec3Within(terminal.radiance, [3.2, 2.1, 1.2], 0.0001);
+});
+
+test("wavefront material reference fixtures expose buffer-like deterministic outputs within tolerance", () => {
+  const reference = evaluateWavefrontMaterialReference({
+    hitType: "surface",
+    eventKind: "transparency",
+    throughput: [0.9, 0.8, 0.7],
+    albedo: [0.7, 0.5, 0.3],
+    emission: [1.5, 0.5, 0.2],
+    roughness: 0.2,
+    metalness: 0.1,
+    opacity: 0.35,
+    transmission: [0.9, 0.85, 0.8],
+    ior: 1.33,
+    shadingNormal: [0, 1, 0],
+    viewDirection: [0, 1, 0],
+    currentMediumRefId: 0,
+    mediumStack: [],
+    surfaceMediumRefId: 11,
+  });
+  assert.equal(reference.material.refractiveIndex, 1.33);
+  assert.deepEqual(reference.material.transmission, [0.9, 0.85, 0.8]);
+  assert.deepEqual(reference.continuation.mediumState.stack, [11]);
+  assertVec3Within(reference.throughputUpdate, [0.81, 0.68, 0.56], 0.0001);
+
+  const fixture = createWavefrontReferenceFixture({
+    rayId: 21,
+    parentRayId: 0,
+    sourcePixelId: 5,
+    sampleId: 1,
+    bounceIndex: 0,
+    origin: [0, 0, 0],
+    viewDirection: [0, 1, 0],
+    throughput: [0.9, 0.8, 0.7],
+    hitType: "emissive",
+    emission: [1.5, 0.5, 0.2],
+    opacity: 0.35,
+    transmission: [0.9, 0.85, 0.8],
+    ior: 1.33,
+    currentMediumRefId: 0,
+    mediumStack: [],
+    surfaceMediumRefId: 11,
+    visibilityProbe: {
+      probeMode: "mis-balanced",
+      emissiveRadiance: [0.6, 0.3, 0.1],
+      transparentSegments: [[0.7, 0.8, 0.9]],
+    },
+  });
+
+  assert.equal(fixture.ray.sourcePixelId, 5);
+  assert.equal(fixture.ray.mediumStackDepth, 0);
+  assert.equal(fixture.tolerance, 0.0005);
+  assert.equal(fixture.accumulation.sampleCount, 1);
+  assertVec3Within(fixture.accumulation.radiance, [1.728, 0.592, 0.203], 0.0001);
+  assert.ok(fixture.visibilityProbe);
+});
+
 test("wavefront WGSL sources publish terminal-radiance and continuation jobs rather than placeholder kernels", () => {
   const base = path.resolve(__dirname, "..", "src", "techniques", "wavefront");
   const prelude = fs.readFileSync(path.join(base, "prelude.wgsl"), "utf8");
@@ -195,6 +373,8 @@ test("wavefront WGSL sources publish terminal-radiance and continuation jobs rat
   assert.match(prelude, /struct SurfaceRecord/);
   assert.match(prelude, /struct AccumulationRecord/);
   assert.match(prelude, /fn terminal_radiance_for_hit/);
+  assert.match(prelude, /const RAY_KIND_VISIBILITY_PROBE/);
+  assert.match(prelude, /fn ray_kind\(flags: u32\) -> u32/);
 
   assert.match(accumulate, /fn accumulate_terminal_sample/);
   assert.match(accumulate, /terminal_radiance_for_hit/);

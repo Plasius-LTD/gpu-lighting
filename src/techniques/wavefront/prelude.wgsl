@@ -13,6 +13,10 @@ const EVENT_KIND_REFRACTION: u32 = 2u;
 const EVENT_KIND_TRANSPARENCY: u32 = 3u;
 const EVENT_KIND_TERMINATE: u32 = 4u;
 
+const RAY_KIND_PATH: u32 = 0u;
+const RAY_KIND_VISIBILITY_PROBE: u32 = 1u;
+const RAY_KIND_MASK: u32 = 0x3u;
+
 const LIGHTING_EPSILON: f32 = 0.0001;
 const LIGHTING_INV_PI: f32 = 0.3183098861837907;
 
@@ -145,6 +149,10 @@ fn is_terminal_hit_type(hit_type: u32) -> bool {
   return hit_type == HIT_TYPE_EMISSIVE ||
     hit_type == HIT_TYPE_ENVIRONMENT ||
     hit_type == HIT_TYPE_MISS;
+}
+
+fn ray_kind(flags: u32) -> u32 {
+  return flags & RAY_KIND_MASK;
 }
 
 fn environment_radiance(direction: vec3<f32>) -> vec3<f32> {

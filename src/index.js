@@ -1146,6 +1146,15 @@ export const lightingWavefrontHitTypes = Object.freeze([
   "transparent",
   "miss",
 ]);
+export const lightingWavefrontRayKinds = Object.freeze([
+  "path",
+  "visibility-probe",
+]);
+export const lightingWavefrontVisibilityProbeModes = Object.freeze([
+  "disabled",
+  "mis-balanced",
+  "exclusive-emissive",
+]);
 export const lightingWavefrontTerminalHitTypes = Object.freeze([
   "emissive",
   "environment",
@@ -1193,11 +1202,35 @@ export const lightingWavefrontBufferContracts = Object.freeze({
       createLightingWavefrontField("sourcePixelId", "u32", "Source pixel/sample owner."),
       createLightingWavefrontField("sampleId", "u32", "Per-pixel sample slot."),
       createLightingWavefrontField("bounce", "u32", "Current bounce depth."),
+      createLightingWavefrontField("mediumRefId", "u32", "Current medium reference."),
+      createLightingWavefrontField(
+        "mediumStackDepth",
+        "u32",
+        "Depth of the bounded nested medium stack."
+      ),
+      createLightingWavefrontField(
+        "flags",
+        "u32",
+        "Renderer-owned ray flags. Low bits may encode ray kind metadata."
+      ),
+      createLightingWavefrontField(
+        "mediumStack0",
+        "vec4<u32>",
+        "Lower half of the bounded nested medium stack."
+      ),
+      createLightingWavefrontField(
+        "mediumStack1",
+        "vec4<u32>",
+        "Upper half of the bounded nested medium stack."
+      ),
+      createLightingWavefrontField(
+        "spectralState",
+        "vec4<f32>",
+        "Spectral transport payload for wavelength-driven reference validation."
+      ),
       createLightingWavefrontField("origin", "vec3<f32>", "Ray origin."),
       createLightingWavefrontField("direction", "vec3<f32>", "Normalized ray direction."),
       createLightingWavefrontField("throughput", "vec3<f32>", "Accumulated path throughput."),
-      createLightingWavefrontField("mediumRefId", "u32", "Current medium reference."),
-      createLightingWavefrontField("flags", "u32", "Renderer-owned ray flags."),
     ]
   ),
   hit: createLightingWavefrontRecordContract(
@@ -1288,6 +1321,21 @@ const wavefrontEventKinds = Object.freeze([
   "transparency",
   "terminate",
 ]);
+const wavefrontRayKindFlagMask = 0x3;
+const wavefrontRayKindFlagValues = Object.freeze({
+  path: 0,
+  "visibility-probe": 1,
+});
+
+function normalizeWavefrontRayKind(value) {
+  return lightingWavefrontRayKinds.includes(value) ? value : "path";
+}
+
+function normalizeWavefrontVisibilityProbeMode(value) {
+  return lightingWavefrontVisibilityProbeModes.includes(value)
+    ? value
+    : "disabled";
+}
 
 function normalizeWavefrontHitType(value) {
   return lightingWavefrontHitTypes.includes(value) ? value : "surface";
@@ -1375,6 +1423,137 @@ function refractDirection(direction, normal, etaRatio) {
   return normalizeDirection(addVec3(rOutPerp, rOutParallel), direction);
 }
 
+function normalizeMediumRefId(value) {
+  const mediumRefId = Math.max(0, Math.trunc(readFinite(value, 0)));
+  return Number.isFinite(mediumRefId) ? mediumRefId : 0;
+}
+
+function normalizeMediumStack(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map((entry) => normalizeMediumRefId(entry))
+    .filter((entry, index, stack) => entry > 0 && stack.indexOf(entry) === index)
+    .slice(0, 4);
+}
+
+function createWavefrontMediumStatePayload(currentMediumRefId, stack) {
+  const normalizedStack = normalizeMediumStack(stack);
+  const stackSlots = [0, 0, 0, 0];
+  normalizedStack.forEach((entry, index) => {
+    stackSlots[index] = entry;
+  });
+  return Object.freeze({
+    currentMediumRefId,
+    stackDepth: normalizedStack.length,
+    stack: Object.freeze(normalizedStack),
+    stackSlots: Object.freeze(stackSlots),
+  });
+}
+
+export function evaluateWavefrontMediumState(options = {}) {
+  const currentMediumRefId = normalizeMediumRefId(
+    options.currentMediumRefId ?? options.mediumRefId
+  );
+  const surfaceMediumRefId = normalizeMediumRefId(options.surfaceMediumRefId);
+  const stack = normalizeMediumStack(options.mediumStack);
+  const frontFace = options.frontFace !== false;
+  const eventKind =
+    normalizeWavefrontEventKind(options.eventKind) ?? "transparency";
+
+  if (
+    surfaceMediumRefId === 0 ||
+    (eventKind !== "refraction" && eventKind !== "transparency")
+  ) {
+    return Object.freeze({
+      ...createWavefrontMediumStatePayload(currentMediumRefId, stack),
+      enteredMediumRefId: 0,
+      exitedMediumRefId: 0,
+    });
+  }
+
+  let nextStack = [...stack];
+  let nextMediumRefId = currentMediumRefId;
+  let enteredMediumRefId = 0;
+  let exitedMediumRefId = 0;
+  const stackTop = nextStack.at(-1) ?? 0;
+
+  if (frontFace) {
+    if (stackTop !== surfaceMediumRefId) {
+      nextStack.push(surfaceMediumRefId);
+      nextStack = nextStack.slice(-4);
+    }
+    nextMediumRefId = surfaceMediumRefId;
+    enteredMediumRefId = surfaceMediumRefId;
+  } else if (stackTop === surfaceMediumRefId) {
+    nextStack.pop();
+    nextMediumRefId = nextStack.at(-1) ?? 0;
+    exitedMediumRefId = surfaceMediumRefId;
+  }
+
+  return Object.freeze({
+    ...createWavefrontMediumStatePayload(nextMediumRefId, nextStack),
+    enteredMediumRefId,
+    exitedMediumRefId,
+  });
+}
+
+function encodeWavefrontRayFlags(flags, rayKind) {
+  const normalizedFlags = Math.max(0, Math.trunc(readFinite(flags, 0)));
+  const rayKindValue = wavefrontRayKindFlagValues[rayKind];
+  return (normalizedFlags & ~wavefrontRayKindFlagMask) | rayKindValue;
+}
+
+export function createWavefrontRayPayload(options = {}) {
+  const rayKind = normalizeWavefrontRayKind(options.rayKind);
+  const mediumState = evaluateWavefrontMediumState({
+    currentMediumRefId: options.mediumRefId,
+    mediumStack: options.mediumStack,
+  });
+  const spectralState = Object.freeze(
+    normalizeVec3(options.spectralState, [550, 1, 0]).concat(
+      readFinite(options.spectralWeight, 0)
+    )
+  );
+  const mediumStack0 = Object.freeze([
+    mediumState.stackSlots[0],
+    mediumState.stackSlots[1],
+    mediumState.stackSlots[2],
+    mediumState.stackSlots[3],
+  ]);
+  const mediumStack1 = Object.freeze([0, 0, 0, 0]);
+  return Object.freeze({
+    rayId: Math.max(0, Math.trunc(readFinite(options.rayId, 0))),
+    parentRayId: Math.max(0, Math.trunc(readFinite(options.parentRayId, 0))),
+    sourcePixelId: Math.max(0, Math.trunc(readFinite(options.sourcePixelId, 0))),
+    sampleId: Math.max(0, Math.trunc(readFinite(options.sampleId, 0))),
+    bounce: Math.max(0, Math.trunc(readFinite(options.bounce, 0))),
+    origin: Object.freeze(normalizeVec3(options.origin, [0, 0, 0])),
+    direction: Object.freeze(normalizeDirection(options.direction, [0, 0, -1])),
+    throughput: Object.freeze(
+      saturateVec3(normalizeVec3(options.throughput, [1, 1, 1]))
+    ),
+    mediumRefId: mediumState.currentMediumRefId,
+    mediumStackDepth: mediumState.stackDepth,
+    mediumStack: mediumState.stack,
+    mediumStackSlots: mediumState.stackSlots,
+    mediumStack0,
+    mediumStack1,
+    spectralState,
+    rayKind,
+    flags: encodeWavefrontRayFlags(options.flags, rayKind),
+  });
+}
+
+export function createWavefrontVisibilityProbeRay(options = {}) {
+  return createWavefrontRayPayload({
+    ...options,
+    rayKind: "visibility-probe",
+  });
+}
+
 export function createWavefrontLightingPlan(options = {}) {
   const maxDepth = Math.max(1, Math.trunc(readFinite(options.maxDepth, 4)));
   const queueCapacity = Math.max(
@@ -1382,6 +1561,10 @@ export function createWavefrontLightingPlan(options = {}) {
     Math.trunc(readFinite(options.queueCapacity, 4096))
   );
   const explicitLightSampling = Boolean(options.explicitLightSampling);
+  const visibilityProbeMode = normalizeWavefrontVisibilityProbeMode(
+    options.visibilityProbeMode ??
+      (explicitLightSampling ? "mis-balanced" : "disabled")
+  );
   const accumulationResetEpoch = Math.max(
     0,
     Math.trunc(readFinite(options.accumulationResetEpoch, 0))
@@ -1392,6 +1575,8 @@ export function createWavefrontLightingPlan(options = {}) {
     maxDepth,
     queueCapacity,
     explicitLightSampling,
+    visibilityProbeMode,
+    rayKinds: lightingWavefrontRayKinds,
     accumulationResetEpoch,
     queueLayout: Object.freeze({
       strategy: lightingWavefrontQueuePairStrategy,
@@ -1431,6 +1616,7 @@ export function createWavefrontLightingPlan(options = {}) {
         writes: Object.freeze(["ray"]),
         continuationHitTypes: lightingWavefrontContinuationHitTypes,
         explicitLightSampling,
+        visibilityProbeMode,
       }),
     ]),
   });
@@ -1498,7 +1684,7 @@ export function evaluateWavefrontContinuationEvent(options = {}) {
   const opacity = clampUnit(options.opacity, 1);
   const refractiveIndex = Math.max(1, readFinite(options.refractiveIndex ?? options.ior, 1.45));
   const transmissionStrength = Math.max(...transmission);
-  let eventKind =
+  const requestedEventKind =
     normalizeWavefrontEventKind(options.eventKind) ??
     (hitType === "transparent" || opacity < 0.999
       ? "transparency"
@@ -1507,6 +1693,8 @@ export function evaluateWavefrontContinuationEvent(options = {}) {
         : metalness >= 0.5 || roughness <= 0.2
           ? "reflection"
           : "diffuse");
+  let eventKind = requestedEventKind;
+  let totalInternalReflection = false;
 
   let nextDirection = incomingDirection;
   let attenuation;
@@ -1519,10 +1707,20 @@ export function evaluateWavefrontContinuationEvent(options = {}) {
     attenuation = mixVec3([0.04, 0.04, 0.04], albedo, metalness);
   } else if (eventKind === "refraction") {
     const etaRatio = frontFace ? 1 / refractiveIndex : refractiveIndex;
-    nextDirection =
-      refractDirection(incomingDirection, orientedNormal, etaRatio) ??
-      reflectDirection(incomingDirection, orientedNormal);
-    attenuation = transmissionStrength > 0.001 ? transmission : [1, 1, 1];
+    const refractedDirection = refractDirection(
+      incomingDirection,
+      orientedNormal,
+      etaRatio
+    );
+    if (refractedDirection) {
+      nextDirection = refractedDirection;
+      attenuation = transmissionStrength > 0.001 ? transmission : [1, 1, 1];
+    } else {
+      totalInternalReflection = true;
+      eventKind = "reflection";
+      nextDirection = reflectDirection(incomingDirection, orientedNormal);
+      attenuation = mixVec3([0.04, 0.04, 0.04], albedo, metalness);
+    }
   } else if (eventKind === "transparency") {
     nextDirection = incomingDirection;
     const transparencyWeight = Math.max(1 - opacity, transmissionStrength, 0.05);
@@ -1540,15 +1738,171 @@ export function evaluateWavefrontContinuationEvent(options = {}) {
   const nextThroughput = multiplyVec3(throughput, saturateVec3(attenuation));
   const continueTracing =
     eventKind !== "terminate" && colorLuminance(nextThroughput) > 0.0001;
+  const mediumState = evaluateWavefrontMediumState({
+    currentMediumRefId: options.currentMediumRefId ?? options.mediumRefId,
+    surfaceMediumRefId: options.surfaceMediumRefId,
+    mediumStack: options.mediumStack,
+    frontFace,
+    eventKind,
+  });
 
   return Object.freeze({
     hitType,
+    requestedEventKind,
     eventKind,
     continueTracing,
+    totalInternalReflection,
     nextDirection: Object.freeze(nextDirection),
     attenuation: Object.freeze(saturateVec3(attenuation)),
     nextThroughput: Object.freeze(nextThroughput),
+    mediumState,
     explicitLightSamplingEnabled: Boolean(options.explicitLightSampling),
+  });
+}
+
+export function evaluateWavefrontVisibilityProbe(options = {}) {
+  const probeMode = normalizeWavefrontVisibilityProbeMode(
+    options.probeMode ??
+      (options.explicitLightSampling ? "mis-balanced" : "disabled")
+  );
+  const probeRay = createWavefrontVisibilityProbeRay({
+    ...options.probeRay,
+    throughput: options.throughput ?? options.probeRay?.throughput,
+    direction: options.direction ?? options.probeRay?.direction,
+    mediumRefId: options.currentMediumRefId ?? options.probeRay?.mediumRefId,
+    mediumStack: options.mediumStack ?? options.probeRay?.mediumStack,
+  });
+  const transparentSegments = Array.isArray(options.transparentSegments)
+    ? options.transparentSegments
+    : [];
+  const transmittance = transparentSegments.reduce(
+    (current, segment) =>
+      multiplyVec3(current, saturateVec3(normalizeVec3(segment, [1, 1, 1]))),
+    [1, 1, 1]
+  );
+  const emissiveRadiance = saturateVec3(
+    normalizeVec3(options.emissiveRadiance, [0, 0, 0])
+  );
+  const environmentRadiance = saturateVec3(
+    normalizeVec3(options.environmentRadiance, [0, 0, 0])
+  );
+  const activeEmissiveRadiance = saturateVec3(
+    normalizeVec3(options.activeEmissiveRadiance, [0, 0, 0])
+  );
+  const prefersEnvironment = Boolean(options.prefersEnvironment);
+  const sourceRadiance =
+    prefersEnvironment || colorLuminance(emissiveRadiance) <= 0.000001
+      ? environmentRadiance
+      : emissiveRadiance;
+  const rawContribution = multiplyVec3(
+    probeRay.throughput,
+    multiplyVec3(sourceRadiance, transmittance)
+  );
+  const activeEmissiveVisible =
+    colorLuminance(activeEmissiveRadiance) > 0.000001;
+  const misWeight =
+    probeMode === "mis-balanced" && activeEmissiveVisible ? 0.5 : 1;
+  const contribution =
+    probeMode === "exclusive-emissive" && activeEmissiveVisible
+      ? [0, 0, 0]
+      : scaleVec3(rawContribution, misWeight);
+
+  return Object.freeze({
+    probeMode,
+    probeRay,
+    transmittance: Object.freeze(transmittance),
+    misWeight,
+    doubleCountPrevented:
+      activeEmissiveVisible && probeMode !== "disabled",
+    contribution: Object.freeze(contribution),
+  });
+}
+
+export function evaluateWavefrontMaterialReference(options = {}) {
+  const material = Object.freeze({
+    albedo: Object.freeze(
+      saturateVec3(normalizeVec3(options.albedo, [0.8, 0.8, 0.8]))
+    ),
+    emission: Object.freeze(
+      saturateVec3(normalizeVec3(options.emission, [0, 0, 0]))
+    ),
+    roughness: clampUnit(options.roughness, 0.5),
+    metalness: clampUnit(options.metalness, 0),
+    opacity: clampUnit(options.opacity, 1),
+    transmission: Object.freeze(
+      saturateVec3(normalizeVec3(options.transmission, [0, 0, 0]))
+    ),
+    refractiveIndex: Math.max(
+      1,
+      readFinite(options.refractiveIndex ?? options.ior, 1.45)
+    ),
+  });
+  const continuation = evaluateWavefrontContinuationEvent({
+    ...options,
+    albedo: material.albedo,
+    roughness: material.roughness,
+    metalness: material.metalness,
+    opacity: material.opacity,
+    transmission: material.transmission,
+    refractiveIndex: material.refractiveIndex,
+  });
+  const terminal = evaluateWavefrontTerminalRadiance({
+    ...options,
+    emission: material.emission,
+  });
+
+  return Object.freeze({
+    material,
+    terminal,
+    continuation,
+    throughputUpdate: continuation.nextThroughput,
+  });
+}
+
+export function createWavefrontReferenceFixture(options = {}) {
+  const tolerance = Math.max(0.0001, readFinite(options.tolerance, 0.0005));
+  const ray = createWavefrontRayPayload({
+    rayId: options.rayId,
+    parentRayId: options.parentRayId,
+    sourcePixelId: options.sourcePixelId,
+    sampleId: options.sampleId,
+    bounce: options.bounceIndex ?? options.bounce,
+    origin: options.origin,
+    direction: options.direction ?? scaleVec3(options.viewDirection ?? [0, 0, 1], -1),
+    throughput: options.throughput,
+    mediumRefId: options.currentMediumRefId ?? options.mediumRefId,
+    mediumStack: options.mediumStack,
+  });
+  const reference = evaluateWavefrontMaterialReference(options);
+  const visibilityProbe =
+    options.visibilityProbe === undefined
+      ? null
+      : evaluateWavefrontVisibilityProbe({
+          ...options.visibilityProbe,
+          throughput: options.visibilityProbe.throughput ?? ray.throughput,
+        });
+  const accumulationRadiance = addVec3(
+    reference.terminal.radiance,
+    visibilityProbe?.contribution ?? [0, 0, 0]
+  );
+
+  return Object.freeze({
+    tolerance,
+    ray,
+    material: reference.material,
+    continuation: reference.continuation,
+    terminal: reference.terminal,
+    visibilityProbe,
+    accumulation: Object.freeze({
+      sourcePixelId: ray.sourcePixelId,
+      sampleCount: reference.terminal.terminated ? 1 : 0,
+      radiance: Object.freeze(accumulationRadiance),
+      throughput: reference.continuation.nextThroughput,
+      resetEpoch: Math.max(
+        0,
+        Math.trunc(readFinite(options.accumulationResetEpoch, 0))
+      ),
+    }),
   });
 }
 
