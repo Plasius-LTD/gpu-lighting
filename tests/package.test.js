@@ -115,6 +115,17 @@ function urlToPath(url) {
   return fileURLToPath(url);
 }
 
+function deriveExpectedCaptureWorkspaceRoot() {
+  const captureRuntimeDirectory = path.dirname(
+    fileURLToPath(new URL("../scripts/eames-environments/capture-runtime.mjs", import.meta.url))
+  );
+  const packageRoot = path.resolve(captureRuntimeDirectory, "../..");
+  const directParent = path.resolve(packageRoot, "..");
+  return path.basename(directParent) === ".worktrees"
+    ? path.resolve(directParent, "..")
+    : directParent;
+}
+
 function roundColor(value) {
   return value.map((component) => Number(component.toFixed(4)));
 }
@@ -438,12 +449,13 @@ test("playwright capture helpers normalize output directories and summarize canv
   const tempDirectory = path.join(os.tmpdir(), "plasius-capture-helper-test");
   const defaultOutputDirectory = resolveCaptureArtifactDirectory();
   const workspaceRoot = resolveCaptureWorkspaceRoot();
+  const expectedWorkspaceRoot = deriveExpectedCaptureWorkspaceRoot();
   assert.ok(defaultOutputDirectory.endsWith("/output/playwright/eames-environments"));
   assert.equal(
     resolveCaptureArtifactDirectory("output/playwright/eames-environments/custom"),
     path.resolve(workspaceRoot, "output/playwright/eames-environments/custom")
   );
-  assert.equal(workspaceRoot, path.resolve(process.cwd(), "../.."));
+  assert.equal(workspaceRoot, expectedWorkspaceRoot);
   assert.equal(
     resolveCaptureArtifactDirectory(tempDirectory),
     tempDirectory
