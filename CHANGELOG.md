@@ -9,6 +9,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.2.6] - 2026-06-16
+
+- **Added**
   - Added concrete volumetric WGSL kernels for `volumetricShadow` and
     `froxelIntegrate`, covering froxel shadow history plus scattering/extinction
     integration for the published realtime and reference profiles.
@@ -461,6 +475,7 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
 [0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
 [0.1.19]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.19
-[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.6...HEAD
 [0.2.0]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.0
 [0.2.2]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.2
+[0.2.6]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.6
