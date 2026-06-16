@@ -14,14 +14,25 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
     integration for the published realtime and reference profiles.
   - Added concrete HDRI/IBL WGSL kernels for `irradianceConvolution`,
     `specularPrefilter`, and `brdfLut`.
+  - Added a renderer-aligned `wavefront` lighting technique with concrete
+    WGSL jobs for terminal radiance accumulation and continuation scattering.
+  - Added `createWavefrontLightingPlan()`,
+    `evaluateWavefrontTerminalRadiance()`, and
+    `evaluateWavefrontContinuationEvent()` so downstream packages and tests can
+    validate emissive-hit, environment-hit, miss-darkening, reflection,
+    refraction, and transparency behavior without reimplementing the contract.
 
 - **Changed**
   - README now documents the delivered volumetrics and HDRI kernel scope with
     technique-level descriptions instead of leaving those exported jobs implied.
+  - Eames capture helpers now resolve workspace roots correctly from both
+    ordinary repo checkouts and `git worktree` paths.
 
 - **Fixed**
   - Package tests now fail if any exported `hybrid`, `volumetrics`, or `hdri`
     job regresses to placeholder text or an empty/no-op `process_job` body.
+  - Eames asset-path and capture-bridge tests are now worktree-safe instead of
+    assuming the package always lives under a literal `/gpu-lighting/` path.
 
 ## [0.2.2] - 2026-06-11
 

@@ -162,6 +162,43 @@ const profileManifest = getLightingProfileWorkerManifest("realtime");
 console.log(profileManifest.jobs.map((job) => job.worker.jobType));
 ```
 
+## Wavefront Lighting Contracts
+
+`@plasius/gpu-lighting` now also publishes a renderer-aligned `wavefront`
+technique for the first active-ray lighting slice. It keeps the queue layout,
+buffer contract names, and terminal-hit policy aligned with
+`@plasius/gpu-renderer` while owning the lighting-specific WGSL for terminal
+radiance accumulation and continuation scattering.
+
+```js
+import {
+  createWavefrontLightingPlan,
+  evaluateWavefrontTerminalRadiance,
+  loadLightingTechniqueWorkerBundle,
+} from "@plasius/gpu-lighting";
+
+const plan = createWavefrontLightingPlan({
+  maxDepth: 6,
+  queueCapacity: 4096,
+  explicitLightSampling: true,
+});
+
+const bundle = await loadLightingTechniqueWorkerBundle("wavefront");
+const emissive = evaluateWavefrontTerminalRadiance({
+  hitType: "emissive",
+  throughput: [0.5, 0.5, 0.5],
+  emission: [8, 6, 4],
+});
+
+console.log(plan.requiredRendererPassOrder);
+console.log(bundle.jobs.map((job) => job.label));
+console.log(emissive.radiance);
+```
+
+This slice keeps emissive hits, environment hits, and environment-miss dark
+fallbacks on the lighting package surface without reintroducing a depth-first
+shader dependency into the renderer-owned wavefront queue model.
+
 ## Distance-Banded Lighting
 
 ```js

@@ -1,11 +1,9 @@
 import fs from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { decodePngDataUrl } from "./capture-runtime.mjs";
+import { decodePngDataUrl, resolveCaptureWorkspaceRoot } from "./capture-runtime.mjs";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const workspaceRoot = path.resolve(__dirname, "../../..");
+const workspaceRoot = resolveCaptureWorkspaceRoot();
 const captureOutputRoot = path.resolve(workspaceRoot, "output/playwright/eames-environments");
 const port = Number(process.argv[2] ?? 8001);
 const trustedLoopbackHostnames = new Set(["127.0.0.1", "localhost", "::1", "[::1]"]);
