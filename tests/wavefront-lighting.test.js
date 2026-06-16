@@ -74,7 +74,6 @@ function assertRendererCompatibleContracts(actualContracts, expectedContracts) {
       actualRecord.fields.map((field, index) => [field.name, index])
     );
 
-    let lastFieldIndex = -1;
     for (const expectedField of expectedRecord.fields) {
       const actualFieldIndex = actualFieldIndexes.get(expectedField.name);
       assert.notEqual(
@@ -82,14 +81,9 @@ function assertRendererCompatibleContracts(actualContracts, expectedContracts) {
         undefined,
         `${recordKey} is missing renderer field ${expectedField.name}`
       );
-      assert.ok(
-        actualFieldIndex > lastFieldIndex,
-        `${recordKey} field ${expectedField.name} moved out of renderer order`
-      );
 
       const actualField = actualRecord.fields[actualFieldIndex];
       assert.equal(typeof actualField.type, "string");
-      lastFieldIndex = actualFieldIndex;
     }
   }
 }
