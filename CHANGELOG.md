@@ -17,11 +17,21 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - Wavefront ray-record documentation now mirrors the current renderer payload
     shape, including medium-stack and spectral-state fields used for transport
     validation.
+  - The Eames validation page now defaults display-quality captures to
+    `accelerationBuildMode=cpu-upload` while still allowing explicit GPU BVH
+    validation through the query parameter.
 
 - **Fixed**
   - Wavefront continuation helpers now report total internal reflection
     explicitly and keep refraction/transparency medium transitions stable in the
     published reference contract.
+  - The Eames validation mesh transform now floor-aligns scaled product meshes
+    by their actual lower bound instead of centering them through the analytic
+    floor plane, preventing chair geometry from rendering mostly below ground.
+  - Eames validation captures at 4 SPP and 8 SPP no longer depend on the
+    corrupted display-quality CPU-upload material path or the broken high-SPP
+    tile scheduling order, so browser-driven runtime screenshots now render the
+    chair coherently instead of producing striped/blocked artifact regions.
 
 - **Security**
   - (placeholder)

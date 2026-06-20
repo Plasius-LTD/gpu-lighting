@@ -72,6 +72,22 @@ export function readOptionalNumberParam(params, name, minimum, maximum) {
   return Math.max(minimum, Math.min(maximum, Math.round(value)));
 }
 
+export function readAccelerationBuildModeParam(params, fallback = "cpu-upload") {
+  const rawValue = params.get("accelerationBuildMode");
+  if (typeof rawValue !== "string" || rawValue.trim().length <= 0) {
+    return fallback;
+  }
+  const normalizedValue = rawValue.trim();
+  if (
+    normalizedValue === "gpu" ||
+    normalizedValue === "cpu-upload" ||
+    normalizedValue === "cpu-debug"
+  ) {
+    return normalizedValue;
+  }
+  return fallback;
+}
+
 export function computeCaptureBootTimeoutMs(options = {}) {
   const width = Math.max(1, Number(options.width ?? 1280));
   const height = Math.max(1, Number(options.height ?? 720));
@@ -281,7 +297,8 @@ export async function loadCaptureRuntimeModules() {
   return Object.freeze({
     createWavefrontAdaptiveSamplingLevels: rendererModule.createWavefrontAdaptiveSamplingLevels,
     createWavefrontPathTracingComputeRenderer: rendererModule.createWavefrontPathTracingComputeRenderer,
-    buildProductStudioSceneObjects: sceneModule.buildProductStudioSceneObjects,
+    buildProductStudioSceneObjects:
+      sceneModule.buildProductStudioSceneObjects ?? sceneModule.createProductStudioMeshes,
     createWavefrontEnvironmentLightingOptions: lightingModule.createWavefrontEnvironmentLightingOptions,
     createDeviceProfile: performanceModule.createDeviceProfile,
     createGpuPerformanceGovernor: performanceModule.createGpuPerformanceGovernor,
@@ -441,16 +458,32 @@ function readBoundsExtent(bounds) {
   ];
 }
 
+const DEFAULT_PRODUCT_TARGET_X = 0;
+const DEFAULT_PRODUCT_TARGET_Z = -1.32;
+const DEFAULT_PRODUCT_FLOOR_Y = -0.06;
+const DEFAULT_PRODUCT_GROUND_CLEARANCE = 0.01;
+
 function createModelTransform(model, options = {}) {
   const center = readBoundsCenter(model.bounds);
   const extent = readBoundsExtent(model.bounds);
   const maxExtent = Math.max(extent[0], extent[1], extent[2], 0.001);
   const scale = Number(options.productScale ?? 1.75) / maxExtent;
-  const target = options.productTarget ?? [0, -0.18, -1.32];
+  const target = Array.isArray(options.productTarget) ? options.productTarget : null;
+  const targetX = Number.isFinite(target?.[0]) ? Number(target[0]) : DEFAULT_PRODUCT_TARGET_X;
+  const targetZ = Number.isFinite(target?.[2]) ? Number(target[2]) : DEFAULT_PRODUCT_TARGET_Z;
+  const floorY = Number.isFinite(options.productFloorY)
+    ? Number(options.productFloorY)
+    : DEFAULT_PRODUCT_FLOOR_Y;
+  const groundClearance = Number.isFinite(options.productGroundClearance)
+    ? Math.max(0, Number(options.productGroundClearance))
+    : DEFAULT_PRODUCT_GROUND_CLEARANCE;
+  const targetY = Number.isFinite(target?.[1])
+    ? Number(target[1])
+    : floorY + groundClearance - (model.bounds.min[1] - center[1]) * scale;
   return (point) => [
-    (point[0] - center[0]) * scale + target[0],
-    (point[1] - center[1]) * scale + target[1],
-    (point[2] - center[2]) * scale + target[2],
+    (point[0] - center[0]) * scale + targetX,
+    (point[1] - center[1]) * scale + targetY,
+    (point[2] - center[2]) * scale + targetZ,
   ];
 }
 
@@ -665,12 +698,31 @@ function sourceMarker(source, index, motionPhase = 0) {
   };
 }
 
+function createEnvironmentSurfaceObjects() {
+  return [
+    {
+      id: 1,
+      kind: "box",
+      center: [0, -0.1, -0.35],
+      halfExtent: [3.2, 0.04, 2.75],
+      color: [0.48, 0.55, 0.55, 1],
+      materialKind: "diffuse",
+      roughness: 0.82,
+    },
+    {
+      id: 2,
+      kind: "box",
+      center: [0, 1.285, -2.45],
+      halfExtent: [3.2, 1.365, 0.04],
+      color: [0.43, 0.42, 0.38, 1],
+      materialKind: "diffuse",
+      roughness: 0.86,
+    },
+  ];
+}
+
 export function buildEnvironmentSceneObjects(model, lightingOptions, options = {}, runtimeModules = {}) {
-  const buildSceneObjects = runtimeModules.buildProductStudioSceneObjects;
-  if (typeof buildSceneObjects !== "function") {
-    throw new Error("buildEnvironmentSceneObjects requires buildProductStudioSceneObjects.");
-  }
-  const baseSceneObjects = buildSceneObjects(model).slice(0, 2);
+  const baseSceneObjects = createEnvironmentSurfaceObjects();
   const scene = lightingOptions.lightingEnvironment.scene;
   const surfaces = SCENE_SURFACES[scene] ?? SCENE_SURFACES.warehouse;
   const floor = { ...baseSceneObjects[0], color: surfaces.floor, materialKind: "diffuse", roughness: 0.86 };
@@ -816,6 +868,13 @@ export async function renderEamesEnvironment(options = {}) {
     : motion && frames > 1
       ? 16
       : 0;
+  const submittedWorkTimeoutMs = Number.isFinite(options.submittedWorkTimeoutMs)
+    ? Math.max(1, Number(options.submittedWorkTimeoutMs))
+    : null;
+  const accelerationBuildMode =
+    typeof options.accelerationBuildMode === "string" && options.accelerationBuildMode.trim().length > 0
+      ? options.accelerationBuildMode.trim()
+      : "cpu-upload";
   const pathDebugLayer = Number.isInteger(options.pathDebugLayer) && options.pathDebugLayer >= 0
     ? options.pathDebugLayer
     : -1;
@@ -868,6 +927,7 @@ export async function renderEamesEnvironment(options = {}) {
     sceneObjects,
     meshes,
     displayQuality: true,
+    accelerationBuildMode,
     denoise,
     environmentColor: lightingOptions.environmentColor,
     ambientColor: lightingOptions.ambientColor,
@@ -903,6 +963,7 @@ export async function renderEamesEnvironment(options = {}) {
       awaitGPUCompletion,
       frameTimeBudgetMs: frameOptions.frameTimeBudgetMs,
       minimumSamplesPerPixel: frameOptions.minimumSamplesPerPixel,
+      submittedWorkTimeoutMs,
     });
     adaptiveSampling.recordFrame(stats);
   }
@@ -987,6 +1048,13 @@ async function main() {
   const captureBitmapDelayMs = readNumberParam(params, "captureBitmapDelayMs", 8000, 0, 60000);
   const awaitGPUCompletion = params.get("awaitGPUCompletion") !== "0";
   const frameTimeBudgetMs = readOptionalNumberParam(params, "frameTimeBudgetMs", 0, 1000);
+  const accelerationBuildMode = readAccelerationBuildModeParam(params);
+  const submittedWorkTimeoutMs = readOptionalNumberParam(
+    params,
+    "submittedWorkTimeoutMs",
+    1,
+    120000
+  );
   const frameIndex = readNumberParam(params, "frameIndex", 0, 0, 1_000_000);
   const bootTimeoutMs = computeCaptureBootTimeoutMs({
     width,
@@ -1027,6 +1095,8 @@ async function main() {
     pathDebugLayer,
     awaitGPUCompletion,
     frameTimeBudgetMs,
+    accelerationBuildMode,
+    submittedWorkTimeoutMs,
     frameIndex,
     captureState,
   });

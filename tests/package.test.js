@@ -58,6 +58,7 @@ const {
   listCaptureUploadUrlCandidates,
   MODEL_URL,
   normalizeCaptureError,
+  readAccelerationBuildModeParam,
   readWebGpuBootstrapSnapshot,
   readNumberParam,
   readOptionalNumberParam,
@@ -243,6 +244,26 @@ test("environment presets cover outdoor, interior, and underground time-of-day v
       );
     }
   }
+});
+
+test("acceleration build mode param defaults to CPU-upload and whitelists supported values", () => {
+  assert.equal(readAccelerationBuildModeParam(new URLSearchParams()), "cpu-upload");
+  assert.equal(
+    readAccelerationBuildModeParam(new URLSearchParams("accelerationBuildMode=gpu")),
+    "gpu"
+  );
+  assert.equal(
+    readAccelerationBuildModeParam(new URLSearchParams("accelerationBuildMode=cpu-upload")),
+    "cpu-upload"
+  );
+  assert.equal(
+    readAccelerationBuildModeParam(new URLSearchParams("accelerationBuildMode=cpu-debug")),
+    "cpu-debug"
+  );
+  assert.equal(
+    readAccelerationBuildModeParam(new URLSearchParams("accelerationBuildMode=invalid")),
+    "cpu-upload"
+  );
 });
 
 test("environment scene presets use restrained ambient residuals", () => {
@@ -1402,6 +1423,35 @@ test("validation mesh builder preserves generic material inputs and texture maps
   assert.equal(leather.clearcoatRoughness, 0.24);
 });
 
+test("validation mesh builder floor-aligns the scaled model by default", () => {
+  const model = {
+    bounds: {
+      min: [-1, -2, -1],
+      max: [1, 2, 1],
+    },
+    primitives: [
+      {
+        positions: [
+          -1, -2, -1,
+          1, -2, -1,
+          0, 2, 1,
+        ],
+        indices: [0, 1, 2],
+        normals: [0, 1, 0, 0, 1, 0, 0, 1, 0],
+        material: {},
+      },
+    ],
+  };
+
+  const [mesh] = buildEamesMeshes(model);
+  let minY = Number.POSITIVE_INFINITY;
+  for (let index = 1; index < mesh.positions.length; index += 3) {
+    minY = Math.min(minY, mesh.positions[index]);
+  }
+
+  assert.ok(Math.abs(minY - (-0.05)) < 0.000001);
+});
+
 test("validation render decouples frame rendering from optional probe readback", async () => {
   const lightingOptions = createWavefrontEnvironmentLightingOptions({
     preset: "grass-field-midday",
@@ -1480,6 +1530,7 @@ test("validation render decouples frame rendering from optional probe readback",
     deferredPathResolve: true,
     motion: false,
     readOutputProbe: true,
+    submittedWorkTimeoutMs: 12000,
     runtimeModules: {
       createWavefrontEnvironmentLightingOptions() {
         return lightingOptions;
@@ -1502,9 +1553,11 @@ test("validation render decouples frame rendering from optional probe readback",
 
   assert.equal(renderFrameCalls.length, 1);
   assert.equal(readProbeCalls.length, 5);
+  assert.equal(rendererOptions.accelerationBuildMode, "cpu-upload");
   assert.equal(rendererOptions.camera.fovYDegrees, createEnvironmentCamera("reference", 0).fovYDegrees);
   assert.equal(result.cameraPreset, "reference");
   assert.equal(renderFrameCalls[0].samplesPerPixel, 4);
+  assert.equal(renderFrameCalls[0].submittedWorkTimeoutMs, 12000);
   assert.equal(result.renderer.outputProbe.sampledPixels, 1);
   assert.equal(result.renderer.outputProbe.nonZeroSamples, 1);
   assert.equal(result.renderer.outputProbe.maxChannel, 128);
