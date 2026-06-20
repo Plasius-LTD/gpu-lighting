@@ -74,6 +74,10 @@ export function summarizeRgbaPixels(rgbaBytes) {
   let nearBlackPixels16 = 0;
   let opaquePixels = 0;
   let luminanceTotal = 0;
+  let luminanceSquaredTotal = 0;
+  let minLuminance = Number.POSITIVE_INFINITY;
+  let maxLuminance = 0;
+  const quantizedColorBuckets = new Map();
   for (let index = 0; index < rgbaBytes.length; index += 4) {
     const red = rgbaBytes[index];
     const green = rgbaBytes[index + 1];
@@ -93,14 +97,36 @@ export function summarizeRgbaPixels(rgbaBytes) {
     if (maxChannel <= 16) {
       nearBlackPixels16 += 1;
     }
-    luminanceTotal += (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255;
+    const luminance = (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255;
+    luminanceTotal += luminance;
+    luminanceSquaredTotal += luminance * luminance;
+    minLuminance = Math.min(minLuminance, luminance);
+    maxLuminance = Math.max(maxLuminance, luminance);
+    const bucketKey = [
+      Math.floor(red / 32),
+      Math.floor(green / 32),
+      Math.floor(blue / 32),
+    ].join(":");
+    quantizedColorBuckets.set(bucketKey, (quantizedColorBuckets.get(bucketKey) ?? 0) + 1);
   }
+  const averageLuminance = opaquePixels > 0 ? luminanceTotal / opaquePixels : 0;
+  const luminanceVariance =
+    opaquePixels > 0
+      ? Math.max(0, luminanceSquaredTotal / opaquePixels - averageLuminance * averageLuminance)
+      : 0;
+  const dominantQuantizedBucketPixels = Math.max(0, ...quantizedColorBuckets.values());
   return {
     exactBlackPixels,
     nearBlackPixels8,
     nearBlackPixels16,
     opaquePixels,
-    averageLuminance: opaquePixels > 0 ? luminanceTotal / opaquePixels : 0,
+    averageLuminance,
+    minLuminance: opaquePixels > 0 ? minLuminance : 0,
+    maxLuminance,
+    luminanceStdDev: Math.sqrt(luminanceVariance),
+    quantizedColorBucketCount: quantizedColorBuckets.size,
+    dominantQuantizedBucketShare:
+      opaquePixels > 0 ? dominantQuantizedBucketPixels / opaquePixels : 0,
   };
 }
 
