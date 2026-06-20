@@ -23,6 +23,7 @@ export const MODEL_URL = resolvePackageUrl(
 );
 export const CAPTURE_BOOT_TIMEOUT_MS = 60_000;
 export const MAX_CAPTURE_BOOT_TIMEOUT_MS = 900_000;
+export const MAX_VALIDATION_MAX_DEPTH = 32;
 const runtimeModuleUrls = Object.freeze({
   renderer: withModuleVersion(`${resolveRepoUrl("gpu-renderer/dist/index.js")}?terminal-environment-fallback=1`),
   scene: withModuleVersion(resolveRepoUrl("gpu-shared/src/product-studio-runtime.js")),
@@ -136,6 +137,19 @@ function setCaptureStep(state, step, detail, hud) {
       <span>${detail}</span>
     `;
   }
+}
+
+export function clearCaptureBootTimeout(runtime = globalThis) {
+  const timeoutHandle = runtime?.__plasiusCaptureBootTimeoutId;
+  if (timeoutHandle == null) {
+    return false;
+  }
+  const clearTimer =
+    typeof runtime.clearTimeout === "function" ? runtime.clearTimeout.bind(runtime) : clearTimeout;
+  clearTimer(timeoutHandle);
+  delete runtime.__plasiusCaptureBootTimeoutId;
+  runtime.__plasiusCaptureBootComplete = true;
+  return true;
 }
 
 function freezeCanvasForCapture(canvas) {
@@ -1441,6 +1455,7 @@ export async function renderEamesEnvironment(options = {}) {
 
   let stats = null;
   for (let frame = 0; frame < frames; frame += 1) {
+    clearCaptureBootTimeout(globalThis);
     setCaptureStep(captureState, "Rendering frames", `Rendering frame ${frame + 1} of ${frames}.`, hud);
     const motionPhase = frames <= 1 ? 0 : frame / (frames - 1);
     if (typeof renderer.updateCamera === "function") {
@@ -1535,7 +1550,7 @@ async function main() {
   const width = readNumberParam(params, "width", 1280, 320, 4096);
   const height = readNumberParam(params, "height", 720, 180, 2304);
   const frames = readNumberParam(params, "frames", 4, 1, 8);
-  const maxDepth = readNumberParam(params, "maxDepth", 3, 1, 12);
+  const maxDepth = readNumberParam(params, "maxDepth", 3, 1, MAX_VALIDATION_MAX_DEPTH);
   const samplesPerPixel = readNumberParam(params, "samplesPerPixel", 8, 1, 256);
   const denoise = params.get("denoise") !== "0";
   const deferredPathResolve = params.get("deferredPathResolve") !== "0";
@@ -1603,8 +1618,7 @@ async function main() {
     frameIndex,
     captureState,
   });
-  clearTimeout(bootTimeout);
-  delete globalThis.__plasiusCaptureBootTimeoutId;
+  clearCaptureBootTimeout(globalThis);
   if (captureBitmap) {
     await delayMilliseconds(captureBitmapDelayMs);
     window.__plasiusCaptureImage = freezeCanvasForCapture(canvas);

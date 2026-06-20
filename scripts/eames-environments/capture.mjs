@@ -65,6 +65,7 @@ const allPresets = [
   "cavern-night",
 ];
 const eamesPresets = readCapturePresets(process.env.PLASIUS_CAPTURE_PRESETS, allPresets);
+export const MAX_CAPTURE_READY_TIMEOUT_MS = 3_600_000;
 
 export function computeCaptureReadyTimeoutMs(options = {}) {
   const width = Math.max(1, Number(options.width ?? 1280));
@@ -75,7 +76,7 @@ export function computeCaptureReadyTimeoutMs(options = {}) {
   const tileEstimate = Math.max(1, Math.ceil(width / 128) * Math.ceil(height / 128));
   const perSamplePassEstimate = maxDepth + 2;
   const workEstimate = frames * samplesPerPixel * perSamplePassEstimate * tileEstimate;
-  return Math.min(900_000, 60_000 + workEstimate * 30);
+  return Math.min(MAX_CAPTURE_READY_TIMEOUT_MS, 60_000 + workEstimate * 30);
 }
 
 function readCaptureMatrixMode(value) {

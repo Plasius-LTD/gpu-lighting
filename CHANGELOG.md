@@ -24,6 +24,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - Wavefront ray-record documentation now mirrors the current renderer payload
     shape, including medium-stack and spectral-state fields used for transport
     validation.
+  - High-SPP Eames validation captures now separate browser boot readiness from
+    long-running frame completion and allow reference-depth requests up to 32
+    bounces instead of silently capping the page at 12.
   - The Eames validation page now defaults display-quality captures to
     `accelerationBuildMode=cpu-upload` while still allowing explicit GPU BVH
     validation through the query parameter.

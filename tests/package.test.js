@@ -51,11 +51,13 @@ const {
   assertLocalCaptureUploadUrl,
   buildEamesMeshes,
   buildEnvironmentSceneObjects,
+  clearCaptureBootTimeout,
   computeCaptureBootTimeoutMs,
   createAdaptiveSamplingController,
   createEnvironmentCamera,
   createCaptureState,
   listCaptureUploadUrlCandidates,
+  MAX_VALIDATION_MAX_DEPTH,
   MODEL_URL,
   normalizeCaptureError,
   readAccelerationBuildModeParam,
@@ -73,6 +75,7 @@ globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__ = true;
 const {
   computeCaptureReadyTimeoutMs,
   createCaptureScenarios,
+  MAX_CAPTURE_READY_TIMEOUT_MS,
 } = await import("../scripts/eames-environments/capture.mjs");
 if (typeof previousEamesCaptureModuleOnly === "undefined") {
   delete globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__;
@@ -795,7 +798,7 @@ test("validation page reference camera is tighter than the wide orbit camera", (
   assert.ok(referenceCamera.fovYDegrees < wideCamera.fovYDegrees);
 });
 
-test("validation page scales capture boot timeout with render workload", () => {
+test("validation page scales capture waits with render workload", () => {
   const lowWorkloadTimeout = computeCaptureBootTimeoutMs({
     width: 640,
     height: 360,
@@ -813,9 +816,32 @@ test("validation page scales capture boot timeout with render workload", () => {
     900_000
   );
   assert.equal(
-    computeCaptureReadyTimeoutMs({ width: 3840, height: 2160, frames: 8, maxDepth: 12, samplesPerPixel: 256 }),
-    900_000
+    computeCaptureReadyTimeoutMs({ width: 3840, height: 2160, frames: 1, maxDepth: 20, samplesPerPixel: 256 }),
+    MAX_CAPTURE_READY_TIMEOUT_MS
   );
+  assert.ok(
+    computeCaptureReadyTimeoutMs({ width: 3840, height: 2160, frames: 1, maxDepth: 20, samplesPerPixel: 256 }) >
+      computeCaptureBootTimeoutMs({ width: 3840, height: 2160, frames: 1, maxDepth: 20, samplesPerPixel: 256 })
+  );
+});
+
+test("validation page accepts high-SPP reference depth and clears boot timeout at render start", () => {
+  const params = new URLSearchParams("maxDepth=20");
+  assert.equal(readNumberParam(params, "maxDepth", 3, 1, MAX_VALIDATION_MAX_DEPTH), 20);
+  assert.equal(readNumberParam(new URLSearchParams("maxDepth=64"), "maxDepth", 3, 1, MAX_VALIDATION_MAX_DEPTH), 32);
+
+  let clearedHandle = null;
+  const runtime = {
+    __plasiusCaptureBootTimeoutId: 1234,
+    clearTimeout(handle) {
+      clearedHandle = handle;
+    },
+  };
+  assert.equal(clearCaptureBootTimeout(runtime), true);
+  assert.equal(clearedHandle, 1234);
+  assert.equal(runtime.__plasiusCaptureBootTimeoutId, undefined);
+  assert.equal(runtime.__plasiusCaptureBootComplete, true);
+  assert.equal(clearCaptureBootTimeout(runtime), false);
 });
 
 test("path-debug capture scales readiness waits with the requested workload", () => {
@@ -825,6 +851,8 @@ test("path-debug capture scales readiness waits with the requested workload", ()
   );
 
   assert.match(source, /computePathDebugWaitTimeoutMs/);
+  assert.match(source, /PLASIUS_PATH_DEBUG_MAX_DEPTH",\s*8,\s*1,\s*32/);
+  assert.match(source, /Math\.min\(3_600_000,/);
   assert.match(source, /waitForCaptureReady\(page,\s*`layer \$\{layer\}`,\s*readyTimeoutMs\)/);
   assert.doesNotMatch(source, /waitForCaptureReady\(page,\s*`layer \$\{layer\}`,\s*180_000\)/);
 });
