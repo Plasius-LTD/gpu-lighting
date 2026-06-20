@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { getValidationSceneDefinition, listValidationSceneDefinitions } from "../../demo/eames-environments/validation-scenes.js";
 import {
   ensureCaptureArtifactDirectory,
   formatCaptureDiagnostic,
@@ -43,6 +44,8 @@ const defaultDenoiseMatrix = readCaptureBooleanList(
 const captureLabel = sanitizeCaptureLabel(
   process.env.PLASIUS_CAPTURE_LABEL ?? (defaultDeferredPathResolve ? "deferred" : "legacy")
 );
+const eamesValidationScene = getValidationSceneDefinition("eames");
+const syntheticValidationScenes = listValidationSceneDefinitions().filter((scene) => scene.family === "synthetic");
 const allPresets = [
   "grass-field-dawn",
   "grass-field-midday",
@@ -61,7 +64,7 @@ const allPresets = [
   "cavern-dusk",
   "cavern-night",
 ];
-const presets = readCapturePresets(process.env.PLASIUS_CAPTURE_PRESETS, allPresets);
+const eamesPresets = readCapturePresets(process.env.PLASIUS_CAPTURE_PRESETS, allPresets);
 
 export function computeCaptureReadyTimeoutMs(options = {}) {
   const width = Math.max(1, Number(options.width ?? 1280));
@@ -167,6 +170,7 @@ function readCapturePresets(value, fallback) {
 }
 
 function buildScenarioId({
+  validationSceneId,
   preset,
   geometry,
   cameraPreset,
@@ -174,8 +178,8 @@ function buildScenarioId({
   denoise,
 }) {
   return [
-    "eames",
-    preset,
+    validationSceneId,
+    ...(preset ? [preset] : []),
     geometry,
     cameraPreset,
     `${samplesPerPixel}spp`,
@@ -186,13 +190,17 @@ function buildScenarioId({
 
 function buildScenarioReproCommand(scenario) {
   const environment = [
-    `PLASIUS_CAPTURE_PRESETS=${scenario.preset}`,
     `PLASIUS_CAPTURE_CAMERA_PRESETS=${scenario.cameraPreset}`,
     `PLASIUS_CAPTURE_SPP_MATRIX=${scenario.samplesPerPixel}`,
     `PLASIUS_CAPTURE_DENOISE_MATRIX=${scenario.denoise ? 1 : 0}`,
     `PLASIUS_CAPTURE_MATRIX_MODE=quick`,
     `PLASIUS_CAPTURE_LABEL=${captureLabel}`,
   ];
+  if (scenario.validationSceneId === "eames" && scenario.preset) {
+    environment.unshift(`PLASIUS_CAPTURE_PRESETS=${scenario.preset}`);
+  } else {
+    environment.unshift(`PLASIUS_CAPTURE_VALIDATION_SCENE=${scenario.validationSceneId}`);
+  }
   if (defaultCaptureFrames !== 1) {
     environment.push(`PLASIUS_CAPTURE_FRAMES=${defaultCaptureFrames}`);
   }
@@ -208,17 +216,22 @@ export function createCaptureScenarios(options = {}) {
   const samplesPerPixelMatrix = options.samplesPerPixelMatrix ?? defaultSamplesPerPixelMatrix;
   const denoiseMatrix = options.denoiseMatrix ?? defaultDenoiseMatrix;
   const geometry = options.geometry ?? "mesh";
-  return presets.flatMap((preset) =>
+  const eamesScenarios = eamesPresets.flatMap((preset) =>
     cameraPresets.flatMap((cameraPreset) =>
       samplesPerPixelMatrix.flatMap((samplesPerPixel) =>
         denoiseMatrix.map((denoise) => ({
           id: buildScenarioId({
+            validationSceneId: "eames",
             preset,
             geometry,
             cameraPreset,
             samplesPerPixel,
             denoise,
           }),
+          validationSceneId: eamesValidationScene.id,
+          validationSceneLabel: eamesValidationScene.label,
+          validationSceneFamily: eamesValidationScene.family,
+          artifactTargets: [...eamesValidationScene.artifactTargets],
           preset,
           geometry,
           cameraPreset,
@@ -226,6 +239,7 @@ export function createCaptureScenarios(options = {}) {
           samplesPerPixel,
           matrixMode,
           reproCommand: buildScenarioReproCommand({
+            validationSceneId: "eames",
             preset,
             geometry,
             cameraPreset,
@@ -236,6 +250,38 @@ export function createCaptureScenarios(options = {}) {
       )
     )
   );
+  const syntheticCameraPreset = cameraPresets.includes("reference") ? "reference" : cameraPresets[0];
+  const syntheticSamplesPerPixel = Math.max(...samplesPerPixelMatrix);
+  const syntheticDenoise = denoiseMatrix.includes(false) ? false : denoiseMatrix[0];
+  const syntheticScenarios = syntheticValidationScenes.map((scene) => ({
+    id: buildScenarioId({
+      validationSceneId: scene.id,
+      preset: null,
+      geometry,
+      cameraPreset: syntheticCameraPreset,
+      samplesPerPixel: syntheticSamplesPerPixel,
+      denoise: syntheticDenoise,
+    }),
+    validationSceneId: scene.id,
+    validationSceneLabel: scene.label,
+    validationSceneFamily: scene.family,
+    artifactTargets: [...scene.artifactTargets],
+    preset: null,
+    geometry,
+    cameraPreset: syntheticCameraPreset,
+    denoise: syntheticDenoise,
+    samplesPerPixel: syntheticSamplesPerPixel,
+    matrixMode,
+    reproCommand: buildScenarioReproCommand({
+      validationSceneId: scene.id,
+      preset: null,
+      geometry,
+      cameraPreset: syntheticCameraPreset,
+      denoise: syntheticDenoise,
+      samplesPerPixel: syntheticSamplesPerPixel,
+    }),
+  }));
+  return [...eamesScenarios, ...syntheticScenarios];
 }
 
 function buildFailureDiagnostic(error, scenario, captureUrl) {
@@ -271,7 +317,10 @@ function buildBootstrapFailureDiagnostic(error, baseUrl, scenarios) {
 
 function buildCaptureUrl(baseUrl, scenario) {
   const url = new URL("/gpu-lighting/demo/eames-environments/index.html", baseUrl);
-  url.searchParams.set("preset", scenario.preset);
+  url.searchParams.set("validationScene", scenario.validationSceneId ?? "eames");
+  if (scenario.preset) {
+    url.searchParams.set("preset", scenario.preset);
+  }
   url.searchParams.set("geometry", scenario.geometry);
   url.searchParams.set("width", String(defaultCaptureWidth));
   url.searchParams.set("height", String(defaultCaptureHeight));
@@ -308,7 +357,7 @@ async function captureScenario(page, baseUrl, scenario) {
   }
   if (result.geometry !== "mesh") {
     throw new Error(
-      `${scenario.id} captured ${result.geometry} geometry; Eames validation must use mesh triangles.`
+      `${scenario.id} captured ${result.geometry} geometry; validation captures must use mesh triangles.`
     );
   }
   if (result.maxDepth !== defaultCaptureMaxDepth) {
@@ -390,7 +439,7 @@ async function captureScenario(page, baseUrl, scenario) {
 
 function renderCaptureSummary(manifest) {
   return [
-    `# Eames Environment Lighting Screenshots`,
+    `# Validation Scene Screenshots`,
     ``,
     `Matrix mode: ${manifest.matrixMode}`,
     `Scenario count: ${manifest.scenarios.length}`,
@@ -402,11 +451,11 @@ function renderCaptureSummary(manifest) {
     `Probe readback: ${captureProbeReadback ? "on" : "off"}`,
     `Frame seed index: ${defaultCaptureFrameIndex}`,
     ``,
-    `| Scenario | Camera | SPP | Denoise | Black | Near <=16 | Avg lum | Lum stddev | Color buckets | Dominant bucket share | Screenshot |`,
-    `| --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |`,
+    `| Scenario | Validation scene | Artifact targets | Camera | SPP | Denoise | Black | Near <=16 | Avg lum | Lum stddev | Color buckets | Dominant bucket share | Screenshot |`,
+    `| --- | --- | --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |`,
     ...manifest.results.map((result) => {
       const metrics = result.canvasStats;
-      return `| ${result.scenario.id} | ${result.scenario.cameraPreset} | ${result.scenario.samplesPerPixel} | ` +
+      return `| ${result.scenario.id} | ${result.scenario.validationSceneLabel} | ${result.scenario.artifactTargets.join(", ")} | ${result.scenario.cameraPreset} | ${result.scenario.samplesPerPixel} | ` +
         `${result.scenario.denoise ? "on" : "off"} | ${metrics.exactBlackPixels} | ${metrics.nearBlackPixels16} | ` +
         `${metrics.averageLuminance.toFixed(4)} | ${metrics.luminanceStdDev.toFixed(4)} | ` +
         `${metrics.quantizedColorBucketCount} | ${metrics.dominantQuantizedBucketShare.toFixed(4)} | ` +

@@ -65,6 +65,9 @@ const {
   renderEamesEnvironment,
   resolveCaptureUploadUrl,
 } = await import("../demo/eames-environments/page.js");
+const {
+  listValidationSceneDefinitions,
+} = await import("../demo/eames-environments/validation-scenes.js");
 const previousEamesCaptureModuleOnly = globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__;
 globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__ = true;
 const {
@@ -529,11 +532,28 @@ test("playwright capture matrix helpers build quick and full validation scenario
     samplesPerPixelMatrix: [8],
     denoiseMatrix: [true],
   });
-  assert.equal(quick.length, 16);
+  assert.equal(quick.length, 20);
   assert.deepEqual(quick[0].cameraPreset, "reference");
   assert.deepEqual(quick[0].samplesPerPixel, 8);
   assert.deepEqual(quick[0].denoise, true);
   assert.match(quick[0].reproCommand, /PLASIUS_CAPTURE_MATRIX_MODE=quick/);
+  assert.deepEqual(
+    quick
+      .filter((scenario) => scenario.validationSceneId !== "eames")
+      .map((scenario) => scenario.validationSceneId)
+      .sort(),
+    [
+      "all-material-direct-light",
+      "dark-terminal-residual",
+      "furnace",
+      "hdri-skybox",
+    ]
+  );
+  assert.ok(
+    quick
+      .filter((scenario) => scenario.validationSceneId !== "eames")
+      .every((scenario) => Array.isArray(scenario.artifactTargets) && scenario.artifactTargets.length >= 3)
+  );
 
   const full = createCaptureScenarios({
     geometry: "mesh",
@@ -542,9 +562,25 @@ test("playwright capture matrix helpers build quick and full validation scenario
     samplesPerPixelMatrix: [1, 32],
     denoiseMatrix: [true, false],
   });
-  assert.equal(full.length, 16 * 2 * 2 * 2);
+  assert.equal(full.length, 16 * 2 * 2 * 2 + 4);
   assert.ok(full.some((scenario) => scenario.cameraPreset === "wide"));
   assert.ok(full.some((scenario) => scenario.samplesPerPixel === 32 && scenario.denoise === false));
+});
+
+test("validation scene catalog includes the required synthetic reference cases", () => {
+  const syntheticScenes = listValidationSceneDefinitions().filter((scene) => scene.family === "synthetic");
+  assert.deepEqual(
+    syntheticScenes.map((scene) => scene.id),
+    [
+      "furnace",
+      "all-material-direct-light",
+      "hdri-skybox",
+      "dark-terminal-residual",
+    ]
+  );
+  assert.ok(
+    syntheticScenes.every((scene) => Array.isArray(scene.artifactTargets) && scene.artifactTargets.length >= 3)
+  );
 });
 
 test("playwright capture server helpers prefer reusable servers before free-port fallback", async () => {
@@ -1600,6 +1636,82 @@ test("validation render decouples frame rendering from optional probe readback",
   assert.equal(result.renderer.gpuWorkerJobs.completedPerSecond, 420);
   assert.equal(result.renderer.gpuWorkerJobs.completedPerSubmission, 14);
   assert.equal(result.probeSummary.sampledPixels, 5);
+});
+
+test("validation render supports synthetic reference scenes without loading the Eames model", async () => {
+  const lightingOptions = createWavefrontEnvironmentLightingOptions({
+    preset: "warehouse-midday",
+  });
+  let loadModelCalled = false;
+  let rendererOptions = null;
+  const renderer = {
+    async renderFrame(options = {}) {
+      return {
+        frame: 1,
+        samplesPerPixel: options.samplesPerPixel ?? 4,
+        renderedSamplesPerPixel: options.samplesPerPixel ?? 4,
+        triangleCount: 2,
+        emissiveTriangleCount: 0,
+        bvhNodeCount: 1,
+        accelerationBuildMode: "gpu",
+        accelerationBuildSubmitted: true,
+        deferredPathResolve: true,
+        gpuWorkerJobs: {
+          completedPerFrame: 14,
+          completedPerSecond: 140,
+          completedPerSubmission: 7,
+          frameTimeMs: 10,
+        },
+        gpuParallelism: { exposesMultiWorkgroupParallelism: true },
+        outputProbe: null,
+      };
+    },
+    async readOutputProbe() {
+      return {
+        x: 0,
+        y: 0,
+        rgba: [0, 0, 0, 255],
+        luminance: 0,
+      };
+    },
+    updateCamera() {},
+    updateSceneObjects() {},
+  };
+  const canvas = { width: 0, height: 0 };
+
+  const { result } = await renderEamesEnvironment({
+    canvas,
+    width: 640,
+    height: 480,
+    frames: 1,
+    maxDepth: 8,
+    samplesPerPixel: 4,
+    denoise: false,
+    deferredPathResolve: true,
+    motion: false,
+    readOutputProbe: false,
+    validationSceneId: "furnace",
+    runtimeModules: {
+      createWavefrontEnvironmentLightingOptions() {
+        return lightingOptions;
+      },
+      async loadEamesGltfModel() {
+        loadModelCalled = true;
+        throw new Error("Synthetic validation scenes should not load the Eames model.");
+      },
+      async createWavefrontPathTracingComputeRenderer(options = {}) {
+        rendererOptions = options;
+        return renderer;
+      },
+    },
+  });
+
+  assert.equal(loadModelCalled, false);
+  assert.equal(result.validationSceneId, "furnace");
+  assert.equal(result.validationSceneFamily, "synthetic");
+  assert.equal(result.modelName, "synthetic-validation/furnace");
+  assert.ok(rendererOptions.meshes.length > 0);
+  assert.ok(Array.isArray(result.artifactTargets) && result.artifactTargets.length >= 3);
 });
 
 test("validation render can rebuild animated source markers with injected runtime helpers", async () => {

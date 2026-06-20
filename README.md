@@ -55,6 +55,13 @@ validation page without depending on a parent monorepo checkout. Build
 node scripts/eames-environments/capture.mjs
 ```
 
+Quick-mode captures now include the Eames matrix plus four synthetic reference
+scenes: `furnace`, `all-material-direct-light`, `hdri-skybox`, and
+`dark-terminal-residual`. The generated `summary.md` records which artifact
+classes each synthetic scene is intended to catch. To open a specific scene in
+the browser harness, pass `validationScene=<scene-id>` in the page query
+string.
+
 For reverse-pass black-pixel diagnostics, run:
 
 ```bash
