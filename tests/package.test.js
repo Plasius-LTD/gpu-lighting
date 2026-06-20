@@ -69,6 +69,7 @@ const previousEamesCaptureModuleOnly = globalThis.__PLASIUS_EAMES_CAPTURE_MODULE
 globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__ = true;
 const {
   computeCaptureReadyTimeoutMs,
+  createCaptureScenarios,
 } = await import("../scripts/eames-environments/capture.mjs");
 if (typeof previousEamesCaptureModuleOnly === "undefined") {
   delete globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__;
@@ -499,6 +500,10 @@ test("playwright capture helpers normalize output directories and summarize canv
   assert.equal(summary.nearBlackPixels16, 3);
   assert.equal(summary.opaquePixels, 4);
   assert.ok(summary.averageLuminance > 0);
+  assert.ok(summary.maxLuminance >= summary.averageLuminance);
+  assert.ok(summary.luminanceStdDev > 0);
+  assert.equal(summary.quantizedColorBucketCount, 2);
+  assert.equal(summary.dominantQuantizedBucketShare, 0.75);
 
   const outputDirectory = await ensureCaptureArtifactDirectory(tempDirectory);
   assert.equal(outputDirectory, tempDirectory);
@@ -514,6 +519,32 @@ test("playwright capture helpers normalize output directories and summarize canv
     () => decodePngDataUrl("data:text/plain;base64,SGVsbG8="),
     /Expected a PNG data URL/
   );
+});
+
+test("playwright capture matrix helpers build quick and full validation scenarios", () => {
+  const quick = createCaptureScenarios({
+    geometry: "mesh",
+    matrixMode: "quick",
+    cameraPresets: ["reference"],
+    samplesPerPixelMatrix: [8],
+    denoiseMatrix: [true],
+  });
+  assert.equal(quick.length, 16);
+  assert.deepEqual(quick[0].cameraPreset, "reference");
+  assert.deepEqual(quick[0].samplesPerPixel, 8);
+  assert.deepEqual(quick[0].denoise, true);
+  assert.match(quick[0].reproCommand, /PLASIUS_CAPTURE_MATRIX_MODE=quick/);
+
+  const full = createCaptureScenarios({
+    geometry: "mesh",
+    matrixMode: "full",
+    cameraPresets: ["reference", "wide"],
+    samplesPerPixelMatrix: [1, 32],
+    denoiseMatrix: [true, false],
+  });
+  assert.equal(full.length, 16 * 2 * 2 * 2);
+  assert.ok(full.some((scenario) => scenario.cameraPreset === "wide"));
+  assert.ok(full.some((scenario) => scenario.samplesPerPixel === 32 && scenario.denoise === false));
 });
 
 test("playwright capture server helpers prefer reusable servers before free-port fallback", async () => {

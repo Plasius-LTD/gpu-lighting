@@ -12,6 +12,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - Extended the wavefront lighting contract with compact medium-state carry,
     visibility-probe ray helpers, MIS/exclusive-emissive probe controls, and
     deterministic CPU reference fixtures for continuation validation.
+  - The Eames validation harness now supports scripted quick/full screenshot
+    matrices with configurable camera, SPP, and denoise combinations plus
+    manifest-level failure diagnostics for reference runs.
 
 - **Changed**
   - Wavefront ray-record documentation now mirrors the current renderer payload
@@ -20,6 +23,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - The Eames validation page now defaults display-quality captures to
     `accelerationBuildMode=cpu-upload` while still allowing explicit GPU BVH
     validation through the query parameter.
+  - Eames per-capture JSON artifacts now include capture URLs, repro commands,
+    luminance spread, and quantized color-bucket metrics so regression reports
+    retain lightweight texture-presence evidence alongside black-pixel counts.
 
 - **Fixed**
   - Wavefront continuation helpers now report total internal reflection

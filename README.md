@@ -97,11 +97,24 @@ overridden:
 - `PLASIUS_CAPTURE_FRAME_INDEX=777`
 - `PLASIUS_CAPTURE_PROBE=1`
 
-They save canvas-only PNGs plus per-capture JSON under
-`output/playwright/eames-environments/`, including exact-black, near-black, and
-average-luminance metrics so screenshot comparisons stay apples-to-apples. The
-validation page now decouples optional probe readback from the heavy render
-submission itself, which keeps higher-SPP screenshot validation more stable.
+The main screenshot harness now supports a scripted matrix:
+
+- `PLASIUS_CAPTURE_MATRIX_MODE=quick` keeps the default one-scenario-per-preset
+  lane for faster local checks.
+- `PLASIUS_CAPTURE_MATRIX_MODE=full` expands into a cross-product over camera
+  presets, SPP values, and denoise states for offline/reference validation.
+- `PLASIUS_CAPTURE_CAMERA_PRESETS=reference,wide`,
+  `PLASIUS_CAPTURE_SPP_MATRIX=1,4,8,32,128`, and
+  `PLASIUS_CAPTURE_DENOISE_MATRIX=1,0` refine the matrix explicitly.
+
+They save canvas-only PNGs plus per-scenario JSON under
+`output/playwright/eames-environments/`, including the capture URL, a repro
+command, renderer stats, exact-black/near-black counts, luminance spread, and
+quantized color-bucket metrics that act as lightweight texture-presence
+signals. The manifest and summary now also retain failure diagnostics instead of
+stopping with only terminal output. The validation page now decouples optional
+probe readback from the heavy render submission itself, which keeps higher-SPP
+screenshot validation more stable.
 For motion or realtime validation, the page also accepts `frameTimeBudgetMs`
 and will render at least one full-screen sample before adaptively spending the
 rest of the per-frame budget on additional SPP passes. The HUD reports

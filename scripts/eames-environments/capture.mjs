@@ -28,6 +28,18 @@ const defaultDeferredPathResolve = process.env.PLASIUS_CAPTURE_DEFERRED !== "0";
 const defaultCaptureDenoise = process.env.PLASIUS_CAPTURE_DENOISE !== "0";
 const defaultCaptureMotion = process.env.PLASIUS_CAPTURE_MOTION === "1";
 const defaultCaptureShowSources = process.env.PLASIUS_CAPTURE_SHOW_SOURCES === "1";
+const defaultMatrixMode = readCaptureMatrixMode(process.env.PLASIUS_CAPTURE_MATRIX_MODE);
+const defaultCameraPresets = readCaptureCameraPresets(process.env.PLASIUS_CAPTURE_CAMERA_PRESETS);
+const defaultSamplesPerPixelMatrix = readCaptureIntegerList(
+  process.env.PLASIUS_CAPTURE_SPP_MATRIX,
+  defaultMatrixMode === "full" ? [1, 4, 8, 32, 128] : [defaultCaptureSamplesPerPixel],
+  1,
+  256
+);
+const defaultDenoiseMatrix = readCaptureBooleanList(
+  process.env.PLASIUS_CAPTURE_DENOISE_MATRIX,
+  defaultMatrixMode === "full" ? [true, false] : [defaultCaptureDenoise]
+);
 const captureLabel = sanitizeCaptureLabel(
   process.env.PLASIUS_CAPTURE_LABEL ?? (defaultDeferredPathResolve ? "deferred" : "legacy")
 );
@@ -63,6 +75,17 @@ export function computeCaptureReadyTimeoutMs(options = {}) {
   return Math.min(900_000, 60_000 + workEstimate * 30);
 }
 
+function readCaptureMatrixMode(value) {
+  const selected = String(value ?? "quick").trim().toLowerCase();
+  if (!selected) {
+    return "quick";
+  }
+  if (selected !== "quick" && selected !== "full") {
+    throw new Error("PLASIUS_CAPTURE_MATRIX_MODE must be 'quick' or 'full'.");
+  }
+  return selected;
+}
+
 function readCaptureInteger(name, fallback, minimum, maximum) {
   const value = Number(process.env[name]);
   if (!Number.isFinite(value)) {
@@ -74,6 +97,57 @@ function readCaptureInteger(name, fallback, minimum, maximum) {
 function sanitizeCaptureLabel(value) {
   const label = String(value ?? "").trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-");
   return label || "capture";
+}
+
+function readCaptureIntegerList(value, fallback, minimum, maximum) {
+  const raw = String(value ?? "").trim();
+  const values = raw
+    ? raw
+        .split(",")
+        .map((entry) => Number(entry.trim()))
+        .filter(Number.isFinite)
+        .map((entry) => Math.max(minimum, Math.min(maximum, Math.round(entry))))
+    : fallback;
+  if (!Array.isArray(values) || values.length === 0) {
+    throw new Error("Capture integer matrix must contain at least one numeric value.");
+  }
+  return [...new Set(values)];
+}
+
+function readCaptureBooleanList(value, fallback) {
+  const raw = String(value ?? "").trim();
+  if (!raw) {
+    return fallback;
+  }
+  const values = raw
+    .split(",")
+    .map((entry) => entry.trim().toLowerCase())
+    .filter(Boolean)
+    .map((entry) => {
+      if (["1", "true", "on", "yes"].includes(entry)) {
+        return true;
+      }
+      if (["0", "false", "off", "no"].includes(entry)) {
+        return false;
+      }
+      throw new Error(`Unsupported boolean matrix value '${entry}'.`);
+    });
+  return [...new Set(values)];
+}
+
+function readCaptureCameraPresets(value) {
+  const fallback = defaultMatrixMode === "full" ? ["reference", "wide"] : ["reference"];
+  const selected = String(value ?? "")
+    .split(",")
+    .map((entry) => entry.trim().toLowerCase())
+    .filter(Boolean);
+  const values = selected.length > 0 ? selected : fallback;
+  for (const cameraPreset of values) {
+    if (!["reference", "wide"].includes(cameraPreset)) {
+      throw new Error(`Unsupported capture camera preset '${cameraPreset}'.`);
+    }
+  }
+  return [...new Set(values)];
 }
 
 function readCapturePresets(value, fallback) {
@@ -92,86 +166,218 @@ function readCapturePresets(value, fallback) {
   return selected;
 }
 
-async function capturePreset(page, baseUrl, preset, geometry) {
-  const artifactDirectory = await artifactDirectoryPromise;
+function buildScenarioId({
+  preset,
+  geometry,
+  cameraPreset,
+  samplesPerPixel,
+  denoise,
+}) {
+  return [
+    "eames",
+    preset,
+    geometry,
+    cameraPreset,
+    `${samplesPerPixel}spp`,
+    denoise ? "denoise-on" : "denoise-off",
+    captureLabel,
+  ].join("-");
+}
+
+function buildScenarioReproCommand(scenario) {
+  const environment = [
+    `PLASIUS_CAPTURE_PRESETS=${scenario.preset}`,
+    `PLASIUS_CAPTURE_CAMERA_PRESETS=${scenario.cameraPreset}`,
+    `PLASIUS_CAPTURE_SPP_MATRIX=${scenario.samplesPerPixel}`,
+    `PLASIUS_CAPTURE_DENOISE_MATRIX=${scenario.denoise ? 1 : 0}`,
+    `PLASIUS_CAPTURE_MATRIX_MODE=quick`,
+    `PLASIUS_CAPTURE_LABEL=${captureLabel}`,
+  ];
+  if (defaultCaptureFrames !== 1) {
+    environment.push(`PLASIUS_CAPTURE_FRAMES=${defaultCaptureFrames}`);
+  }
+  if (defaultCaptureMaxDepth !== 8) {
+    environment.push(`PLASIUS_CAPTURE_MAX_DEPTH=${defaultCaptureMaxDepth}`);
+  }
+  return `${environment.join(" ")} node scripts/eames-environments/capture.mjs`;
+}
+
+export function createCaptureScenarios(options = {}) {
+  const matrixMode = options.matrixMode ?? defaultMatrixMode;
+  const cameraPresets = options.cameraPresets ?? defaultCameraPresets;
+  const samplesPerPixelMatrix = options.samplesPerPixelMatrix ?? defaultSamplesPerPixelMatrix;
+  const denoiseMatrix = options.denoiseMatrix ?? defaultDenoiseMatrix;
+  const geometry = options.geometry ?? "mesh";
+  return presets.flatMap((preset) =>
+    cameraPresets.flatMap((cameraPreset) =>
+      samplesPerPixelMatrix.flatMap((samplesPerPixel) =>
+        denoiseMatrix.map((denoise) => ({
+          id: buildScenarioId({
+            preset,
+            geometry,
+            cameraPreset,
+            samplesPerPixel,
+            denoise,
+          }),
+          preset,
+          geometry,
+          cameraPreset,
+          denoise,
+          samplesPerPixel,
+          matrixMode,
+          reproCommand: buildScenarioReproCommand({
+            preset,
+            geometry,
+            cameraPreset,
+            denoise,
+            samplesPerPixel,
+          }),
+        }))
+      )
+    )
+  );
+}
+
+function buildFailureDiagnostic(error, scenario, captureUrl) {
+  return {
+    scenarioId: scenario.id,
+    preset: scenario.preset,
+    geometry: scenario.geometry,
+    cameraPreset: scenario.cameraPreset,
+    samplesPerPixel: scenario.samplesPerPixel,
+    denoise: scenario.denoise,
+    captureUrl,
+    reproCommand: scenario.reproCommand,
+    message: String(error?.message ?? error ?? "Unknown capture failure."),
+    cause: error?.cause ? String(error.cause.message ?? error.cause) : null,
+  };
+}
+
+function buildBootstrapFailureDiagnostic(error, baseUrl, scenarios) {
+  return {
+    scenarioId: "browser-bootstrap",
+    preset: scenarios[0]?.preset ?? null,
+    geometry: scenarios[0]?.geometry ?? "mesh",
+    cameraPreset: null,
+    samplesPerPixel: null,
+    denoise: null,
+    captureUrl: new URL("/gpu-lighting/demo/eames-environments/index.html", baseUrl).href,
+    reproCommand:
+      "Start a WebGPU-capable Chrome with remote debugging and set PLASIUS_CAPTURE_CDP_URL=http://127.0.0.1:<port>.",
+    message: String(error?.message ?? error ?? "Browser bootstrap failed."),
+    cause: error?.cause ? String(error.cause.message ?? error.cause) : null,
+  };
+}
+
+function buildCaptureUrl(baseUrl, scenario) {
   const url = new URL("/gpu-lighting/demo/eames-environments/index.html", baseUrl);
-  url.searchParams.set("preset", preset);
-  url.searchParams.set("geometry", geometry);
+  url.searchParams.set("preset", scenario.preset);
+  url.searchParams.set("geometry", scenario.geometry);
   url.searchParams.set("width", String(defaultCaptureWidth));
   url.searchParams.set("height", String(defaultCaptureHeight));
   url.searchParams.set("frames", String(defaultCaptureFrames));
   url.searchParams.set("maxDepth", String(defaultCaptureMaxDepth));
-  url.searchParams.set("samplesPerPixel", String(defaultCaptureSamplesPerPixel));
-  url.searchParams.set("denoise", defaultCaptureDenoise ? "1" : "0");
+  url.searchParams.set("samplesPerPixel", String(scenario.samplesPerPixel));
+  url.searchParams.set("denoise", scenario.denoise ? "1" : "0");
   url.searchParams.set("motion", defaultCaptureMotion ? "1" : "0");
   url.searchParams.set("probe", captureProbeReadback ? "1" : "0");
   url.searchParams.set("deferredPathResolve", defaultDeferredPathResolve ? "1" : "0");
   url.searchParams.set("frameIndex", String(defaultCaptureFrameIndex));
   url.searchParams.set("showSources", defaultCaptureShowSources ? "1" : "0");
+  url.searchParams.set("cameraPreset", scenario.cameraPreset);
+  return url;
+}
+
+async function captureScenario(page, baseUrl, scenario) {
+  const artifactDirectory = await artifactDirectoryPromise;
+  const url = buildCaptureUrl(baseUrl, scenario);
 
   const readyTimeoutMs = computeCaptureReadyTimeoutMs({
     width: defaultCaptureWidth,
     height: defaultCaptureHeight,
     frames: defaultCaptureFrames,
     maxDepth: defaultCaptureMaxDepth,
-    samplesPerPixel: defaultCaptureSamplesPerPixel,
+    samplesPerPixel: scenario.samplesPerPixel,
   });
 
   await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 60_000 });
-  await waitForCaptureReady(page, preset, readyTimeoutMs);
+  await waitForCaptureReady(page, scenario.id, readyTimeoutMs);
   const result = await page.evaluate(() => window.__plasiusCaptureResult ?? window.__plasiusCaptureError);
   if (!result || result.status !== "ok") {
-    throw new Error(formatCaptureDiagnostic(preset, await readPageDiagnostic(page)));
+    throw new Error(formatCaptureDiagnostic(scenario.id, await readPageDiagnostic(page)));
   }
   if (result.geometry !== "mesh") {
-    throw new Error(`${preset} captured ${result.geometry} geometry; Eames validation must use mesh triangles.`);
+    throw new Error(
+      `${scenario.id} captured ${result.geometry} geometry; Eames validation must use mesh triangles.`
+    );
   }
   if (result.maxDepth !== defaultCaptureMaxDepth) {
-    throw new Error(`${preset} rendered maxDepth=${result.maxDepth}; expected ${defaultCaptureMaxDepth}.`);
-  }
-  if (result.samplesPerPixel !== defaultCaptureSamplesPerPixel) {
     throw new Error(
-      `${preset} rendered samplesPerPixel=${result.samplesPerPixel}; expected ${defaultCaptureSamplesPerPixel}.`
+      `${scenario.id} rendered maxDepth=${result.maxDepth}; expected ${defaultCaptureMaxDepth}.`
+    );
+  }
+  if (result.samplesPerPixel !== scenario.samplesPerPixel) {
+    throw new Error(
+      `${scenario.id} rendered samplesPerPixel=${result.samplesPerPixel}; expected ${scenario.samplesPerPixel}.`
     );
   }
   if (result.frames !== defaultCaptureFrames) {
-    throw new Error(`${preset} rendered frames=${result.frames}; expected ${defaultCaptureFrames}.`);
+    throw new Error(`${scenario.id} rendered frames=${result.frames}; expected ${defaultCaptureFrames}.`);
   }
-  if (result.denoise !== defaultCaptureDenoise) {
-    throw new Error(`${preset} rendered denoise=${result.denoise}; expected ${defaultCaptureDenoise}.`);
+  if (result.denoise !== scenario.denoise) {
+    throw new Error(`${scenario.id} rendered denoise=${result.denoise}; expected ${scenario.denoise}.`);
   }
   if (result.motion !== defaultCaptureMotion) {
-    throw new Error(`${preset} rendered motion=${result.motion}; expected ${defaultCaptureMotion}.`);
+    throw new Error(`${scenario.id} rendered motion=${result.motion}; expected ${defaultCaptureMotion}.`);
+  }
+  if (result.cameraPreset !== scenario.cameraPreset) {
+    throw new Error(
+      `${scenario.id} rendered cameraPreset=${result.cameraPreset}; expected ${scenario.cameraPreset}.`
+    );
   }
   if (result.meshCount <= 0 || result.renderer.triangleCount <= 0) {
     throw new Error(
-      `${preset} did not render triangle mesh geometry: ${result.meshCount} meshes, ${result.renderer.triangleCount} renderer triangles.`
+      `${scenario.id} did not render triangle mesh geometry: ${result.meshCount} meshes, ${result.renderer.triangleCount} renderer triangles.`
     );
   }
   if (
     result.probeReadback &&
     (result.probeSummary.nonZeroSamples <= 0 || !Number.isFinite(result.probeSummary.averageLuminance))
   ) {
-    throw new Error(`${preset} rendered a blank or invalid output probe.`);
+    throw new Error(`${scenario.id} rendered a blank or invalid output probe.`);
   }
 
   const canvasCapture = await readCanvasCapture(page);
   if (!canvasCapture?.dataUrl) {
-    throw new Error(`${preset} did not expose a readable render canvas.`);
+    throw new Error(`${scenario.id} did not expose a readable render canvas.`);
   }
   const canvasStats = summarizeRgbaPixels(canvasCapture.rgbaBytes);
-  const screenshotPath = path.join(artifactDirectory, `eames-${preset}-${geometry}-${captureLabel}.png`);
+  const screenshotPath = path.join(artifactDirectory, `${scenario.id}.png`);
   const screenshotBytes = await writePngDataUrl(screenshotPath, canvasCapture.dataUrl);
   if (screenshotBytes < minimumScreenshotBytes) {
-    throw new Error(`${preset} screenshot is unexpectedly small: ${screenshotBytes} bytes.`);
+    throw new Error(`${scenario.id} screenshot is unexpectedly small: ${screenshotBytes} bytes.`);
   }
-  const resultPath = path.join(artifactDirectory, `eames-${preset}-${geometry}-${captureLabel}.json`);
+  const resultPath = path.join(artifactDirectory, `${scenario.id}.json`);
+  const captureUrl = url.href;
   await fs.writeFile(
     resultPath,
-    `${JSON.stringify({ ...result, canvasStats }, null, 2)}\n`,
+    `${JSON.stringify(
+      {
+        scenario,
+        captureUrl,
+        reproCommand: scenario.reproCommand,
+        canvasStats,
+        ...result,
+      },
+      null,
+      2
+    )}\n`,
     "utf8"
   );
   return {
+    scenario,
+    captureUrl,
+    reproCommand: scenario.reproCommand,
     ...result,
     canvasStats,
     screenshot: screenshotPath,
@@ -182,13 +388,60 @@ async function capturePreset(page, baseUrl, preset, geometry) {
   };
 }
 
+function renderCaptureSummary(manifest) {
+  return [
+    `# Eames Environment Lighting Screenshots`,
+    ``,
+    `Matrix mode: ${manifest.matrixMode}`,
+    `Scenario count: ${manifest.scenarios.length}`,
+    `Resolution: ${defaultCaptureWidth}x${defaultCaptureHeight}`,
+    `Frames: ${defaultCaptureFrames}`,
+    `Max depth: ${defaultCaptureMaxDepth}`,
+    `Deferred: ${defaultDeferredPathResolve ? "on" : "off"}`,
+    `Motion: ${defaultCaptureMotion ? "on" : "off"}`,
+    `Probe readback: ${captureProbeReadback ? "on" : "off"}`,
+    `Frame seed index: ${defaultCaptureFrameIndex}`,
+    ``,
+    `| Scenario | Camera | SPP | Denoise | Black | Near <=16 | Avg lum | Lum stddev | Color buckets | Dominant bucket share | Screenshot |`,
+    `| --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |`,
+    ...manifest.results.map((result) => {
+      const metrics = result.canvasStats;
+      return `| ${result.scenario.id} | ${result.scenario.cameraPreset} | ${result.scenario.samplesPerPixel} | ` +
+        `${result.scenario.denoise ? "on" : "off"} | ${metrics.exactBlackPixels} | ${metrics.nearBlackPixels16} | ` +
+        `${metrics.averageLuminance.toFixed(4)} | ${metrics.luminanceStdDev.toFixed(4)} | ` +
+        `${metrics.quantizedColorBucketCount} | ${metrics.dominantQuantizedBucketShare.toFixed(4)} | ` +
+        `${result.screenshotRelative} |`;
+    }),
+    ``,
+    manifest.failures.length > 0 ? `## Failures` : null,
+    ...manifest.failures.map((failure) =>
+      `- ${failure.scenarioId}: ${failure.message} | URL: ${failure.captureUrl} | Repro: \`${failure.reproCommand}\``
+    ),
+    ``,
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
 async function captureMatrix(geometry) {
   const serverSession = await openCaptureServerSession();
+  const scenarios = createCaptureScenarios({ geometry });
 
   let browserSession;
   try {
     const baseUrl = serverSession.baseUrl;
-    browserSession = await openCaptureBrowser();
+    try {
+      browserSession = await openCaptureBrowser();
+    } catch (error) {
+      return {
+        geometry,
+        matrixMode: defaultMatrixMode,
+        baseUrl,
+        scenarios,
+        results: [],
+        failures: [buildBootstrapFailureDiagnostic(error, baseUrl, scenarios)],
+      };
+    }
     const page = await browserSession.context.newPage({
       viewport: { width: defaultCaptureWidth, height: defaultCaptureHeight },
       deviceScaleFactor: 1,
@@ -215,14 +468,24 @@ async function captureMatrix(geometry) {
     });
 
     const results = [];
-    for (const preset of presets) {
-      console.log(`capturing ${preset} (${geometry})`);
-      results.push(await capturePreset(page, baseUrl, preset, geometry));
+    const failures = [];
+    for (const scenario of scenarios) {
+      console.log(`capturing ${scenario.id}`);
+      try {
+        results.push(await captureScenario(page, baseUrl, scenario));
+      } catch (error) {
+        const failure = buildFailureDiagnostic(error, scenario, buildCaptureUrl(baseUrl, scenario).href);
+        failures.push(failure);
+        console.error(`${failure.scenarioId} failed: ${failure.message}`);
+      }
     }
     return {
       geometry,
+      matrixMode: defaultMatrixMode,
       baseUrl: serverSession.baseUrl,
+      scenarios,
       results,
+      failures,
     };
   } finally {
     await browserSession?.close();
@@ -237,42 +500,14 @@ async function main() {
   const manifestPath = path.join(artifactDirectory, "manifest.json");
   await fs.writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   const summaryPath = path.join(artifactDirectory, "summary.md");
-  await fs.writeFile(
-    summaryPath,
-    [
-      `# Eames Environment Lighting Screenshots`,
-      ``,
-      `Geometry: ${manifest.geometry}`,
-      `Resolution: ${defaultCaptureWidth}x${defaultCaptureHeight}`,
-      `Frames: ${defaultCaptureFrames}`,
-      `Max depth: ${defaultCaptureMaxDepth}`,
-      `SPP: ${defaultCaptureSamplesPerPixel}`,
-      `Denoise: ${defaultCaptureDenoise ? "on" : "off"}`,
-      `Deferred: ${defaultDeferredPathResolve ? "on" : "off"}`,
-      `Motion: ${defaultCaptureMotion ? "on" : "off"}`,
-      `Frame seed index: ${defaultCaptureFrameIndex}`,
-      ``,
-      ...manifest.results.map((result) => {
-        const probe = result.probeSummary;
-        const parallelism = result.renderer.gpuParallelism;
-        const probeText = result.probeReadback
-          ? `${probe.nonZeroSamples}/${probe.sampledPixels} lit probe samples, avg luminance ${probe.averageLuminance.toFixed(4)}`
-          : "probe readback disabled";
-        const canvasText = `${result.canvasStats.exactBlackPixels} black, ` +
-          `${result.canvasStats.nearBlackPixels8} <=8, ` +
-          `${result.canvasStats.nearBlackPixels16} <=16, avg canvas luminance ` +
-          `${result.canvasStats.averageLuminance.toFixed(4)}`;
-        const parallelismText = parallelism
-          ? `${parallelism.directWorkgroups} direct workgroups, ${parallelism.indirectDispatches} indirect dispatches, multi-workgroup ${parallelism.exposesMultiWorkgroupParallelism ? "yes" : "no"}`
-          : "parallelism unavailable";
-        return `- ${result.preset}: ${result.screenshotRelative}, ${result.screenshotBytes} bytes, ${probeText}, ${canvasText}, ${parallelismText}`;
-      }),
-      ``,
-    ].join("\n"),
-    "utf8"
-  );
+  await fs.writeFile(summaryPath, `${renderCaptureSummary(manifest)}\n`, "utf8");
   console.log(`wrote ${manifestPath}`);
   console.log(`wrote ${summaryPath}`);
+  if (manifest.failures.length > 0) {
+    throw new Error(
+      `Capture matrix completed with ${manifest.failures.length} failure(s). See ${path.relative(repoRoot, manifestPath)}.`
+    );
+  }
 }
 
 if (!globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__) {
