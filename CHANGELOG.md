@@ -9,6 +9,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.2.9] - 2026-06-22
+
+- **Added**
   - Extended the wavefront lighting contract with compact medium-state carry,
     visibility-probe ray helpers, MIS/exclusive-emissive probe controls, and
     deterministic CPU reference fixtures for continuation validation.
@@ -500,7 +514,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
 [0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
 [0.1.19]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.19
-[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.6...HEAD
+[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.9...HEAD
 [0.2.0]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.0
 [0.2.2]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.2
 [0.2.6]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.6
+[0.2.9]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.9
