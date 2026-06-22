@@ -784,9 +784,135 @@ function summarizeCenterProbe(probeSummary) {
   };
 }
 
+function formatOptionalNumber(value, digits = 1) {
+  return Number.isFinite(value) ? Number(value).toFixed(digits) : null;
+}
+
+function formatOptionalInteger(value) {
+  return Number.isFinite(value) ? Number(value).toLocaleString() : null;
+}
+
+function formatMemoryBytes(totalBytes) {
+  if (!Number.isFinite(totalBytes)) {
+    return "memory unavailable";
+  }
+  if (totalBytes < 1024) {
+    return `${Math.round(totalBytes)} B`;
+  }
+  if (totalBytes < 1024 * 1024) {
+    return `${(totalBytes / 1024).toFixed(1)} KiB`;
+  }
+  return `${(totalBytes / (1024 * 1024)).toFixed(2)} MiB`;
+}
+
+function describeDeviceLossStatus(status) {
+  switch (status) {
+    case "lost":
+      return "device lost";
+    case "pending":
+      return "device status pending";
+    case "not-exposed":
+      return "device status unavailable";
+    case "not-detected":
+      return "device stable";
+    default:
+      return "device status unavailable";
+  }
+}
+
+function readRendererGuardrailCurrent(renderer = {}) {
+  const workerJobs = renderer.gpuWorkerJobs ?? {};
+  const guardrails = renderer.transportGuardrails?.current ?? {};
+  const memory = guardrails.memory ?? {};
+  return {
+    jobsPerFrame: Number.isFinite(guardrails.jobsPerFrame)
+      ? Number(guardrails.jobsPerFrame)
+      : Number.isFinite(workerJobs.completedPerFrame)
+        ? Number(workerJobs.completedPerFrame)
+        : null,
+    jobsPerSecond: Number.isFinite(guardrails.jobsPerSecond)
+      ? Number(guardrails.jobsPerSecond)
+      : Number.isFinite(workerJobs.completedPerSecond)
+        ? Number(workerJobs.completedPerSecond)
+        : null,
+    jobsPerSubmission: Number.isFinite(guardrails.jobsPerSubmission)
+      ? Number(guardrails.jobsPerSubmission)
+      : Number.isFinite(workerJobs.completedPerSubmission)
+        ? Number(workerJobs.completedPerSubmission)
+        : null,
+    commandSubmissions: Number.isFinite(guardrails.commandSubmissions)
+      ? Number(guardrails.commandSubmissions)
+      : Number.isFinite(renderer.commandSubmissions)
+        ? Number(renderer.commandSubmissions)
+        : null,
+    frameTimeMs: Number.isFinite(guardrails.frameTimeMs)
+      ? Number(guardrails.frameTimeMs)
+      : Number.isFinite(workerJobs.frameTimeMs)
+        ? Number(workerJobs.frameTimeMs)
+        : Number.isFinite(renderer.frameTimeMs)
+          ? Number(renderer.frameTimeMs)
+          : null,
+    queueOverflow: Number.isFinite(guardrails.queueOverflow)
+      ? Number(guardrails.queueOverflow)
+      : Number.isFinite(renderer.queueOverflow)
+        ? Number(renderer.queueOverflow)
+        : null,
+    deviceLossStatus: guardrails.deviceLossStatus ?? renderer.deviceLossStatus ?? null,
+    totalMemoryBytes: Number.isFinite(memory.totalBytes)
+      ? Number(memory.totalBytes)
+      : Number.isFinite(renderer.memory?.totalHotBufferBytes)
+        ? Number(renderer.memory.totalHotBufferBytes)
+        : null,
+  };
+}
+
+export function formatRendererTransportHudLines(renderer = {}) {
+  const workerJobs = renderer.gpuWorkerJobs ?? {};
+  const current = readRendererGuardrailCurrent(renderer);
+  const transportStatus = renderer.transportGuardrails?.status ?? "pending";
+  const directDispatches = formatOptionalInteger(workerJobs.directDispatchesCompleted);
+  const indirectDispatches = formatOptionalInteger(workerJobs.indirectDispatchesCompleted);
+  const jobsPerFrame = formatOptionalInteger(current.jobsPerFrame);
+  const jobsPerSecond = formatOptionalNumber(current.jobsPerSecond, 1);
+  const jobsPerSubmission = formatOptionalNumber(current.jobsPerSubmission, 2);
+  const commandSubmissions = formatOptionalInteger(current.commandSubmissions);
+  const frameTimeMs = formatOptionalNumber(current.frameTimeMs, 1);
+  const queueOverflow = formatOptionalInteger(current.queueOverflow);
+  const parallelism = renderer.gpuParallelism ?? {};
+  const directWorkgroups = formatOptionalInteger(
+    parallelism.largestDirectWorkgroupsPerDispatch
+  );
+  const indirectWorkgroups = formatOptionalInteger(
+    parallelism.largestEstimatedIndirectWorkgroupsPerDispatch
+  );
+
+  return [
+    [
+      jobsPerFrame ? `${jobsPerFrame} completed jobs` : "completed jobs pending",
+      directDispatches && indirectDispatches
+        ? `${directDispatches} direct + ${indirectDispatches} indirect dispatches`
+        : "dispatch counts unavailable",
+      commandSubmissions ? `${commandSubmissions} submissions` : "submissions pending",
+      jobsPerSubmission ? `${jobsPerSubmission} jobs/submission` : "jobs/submission pending",
+      jobsPerSecond ? `${jobsPerSecond} jobs/s` : "jobs/s pending GPU completion",
+    ].join(", "),
+    [
+      frameTimeMs ? `${frameTimeMs} ms frame time` : "frame time pending",
+      formatMemoryBytes(current.totalMemoryBytes),
+      queueOverflow ? `${queueOverflow} queue-overflow terminations` : "no queue-overflow terminations",
+      describeDeviceLossStatus(current.deviceLossStatus),
+      `guardrails ${transportStatus}`,
+    ].join(", "),
+    typeof parallelism.exposesMultiWorkgroupParallelism === "boolean"
+      ? parallelism.exposesMultiWorkgroupParallelism
+        ? `capability: multi-workgroup GPU dispatch${directWorkgroups ? `, direct <= ${directWorkgroups} wg` : ""}${indirectWorkgroups ? `, indirect <= ${indirectWorkgroups} wg` : ""}`
+        : "capability: single-workgroup GPU dispatch"
+      : "capability summary unavailable",
+  ];
+}
+
 function updateHud(hud, result) {
   const sourceLabels = result.lightSources.map((source) => `${source.kind}/${source.role}`).join(", ");
-  const workerJobs = result.renderer.gpuWorkerJobs;
   const renderedSamplesPerPixel = Number(
     result.renderer.renderedSamplesPerPixel ?? result.samplesPerPixel
   );
@@ -803,10 +929,6 @@ function updateHud(hud, result) {
         : targetSamplesPerPixel === requestedSamplesPerPixel
           ? `${renderedSamplesPerPixel}/${requestedSamplesPerPixel} spp`
           : `${renderedSamplesPerPixel}/${targetSamplesPerPixel}/${requestedSamplesPerPixel} spp`;
-  const jobsPerSecond =
-    typeof workerJobs.completedPerSecond === "number"
-      ? `${workerJobs.completedPerSecond.toFixed(1)} jobs/s`
-      : "jobs/s pending GPU completion";
   const budgetLabel =
     Number.isFinite(result.renderer.frameTimeBudgetMs) && result.renderer.frameTimeBudgetMs > 0
       ? `, ${result.renderer.frameTimeBudgetMs} ms budget${result.renderer.budgetConstrained ? ", adaptive" : ""}`
@@ -815,6 +937,7 @@ function updateHud(hud, result) {
   const governorLabel = governor?.enabled
     ? `${governor.currentLevelId}, ${governor.pressureLevel} pressure`
     : "governor off";
+  const [jobsLine, guardrailLine, capabilityLine] = formatRendererTransportHudLines(result.renderer);
   hud.innerHTML = `
     <strong>${result.preset}</strong>
     <span>${result.scene} - ${result.timeOfDay} - ${result.geometry}</span>
@@ -822,8 +945,9 @@ function updateHud(hud, result) {
     <span>${result.width}x${result.height}, ${sppLabel}${budgetLabel}, denoise ${result.denoise ? "on" : "off"}, deferred ${result.deferredPathResolve ? "on" : "off"}</span>
     <span>${result.triangleCount.toLocaleString()} triangles, ${result.sceneObjectCount} analytic surfaces</span>
     <span>${governorLabel}</span>
-    <span>${workerJobs.completedPerFrame.toLocaleString()} GPU jobs/frame, ${jobsPerSecond}, ${workerJobs.completedPerSubmission.toFixed(2)} jobs/submission</span>
-    <span>${result.renderer.gpuParallelism.exposesMultiWorkgroupParallelism ? "multi-workgroup GPU dispatch" : "single-workgroup GPU dispatch"}</span>
+    <span>${jobsLine}</span>
+    <span>${guardrailLine}</span>
+    <span>${capabilityLine}</span>
   `;
 }
 
@@ -1017,9 +1141,14 @@ export async function renderEamesEnvironment(options = {}) {
       budgetConstrained: stats.budgetConstrained,
       adaptiveSampling: adaptiveSamplingSnapshot,
       cameraPreset,
+      commandSubmissions: stats.commandSubmissions,
+      deviceLossStatus: stats.deviceLossStatus ?? null,
       gpuWorkerJobs: stats.gpuWorkerJobs,
       gpuParallelism: stats.gpuParallelism,
+      memory: stats.memory ?? null,
       outputProbe,
+      queueOverflow: stats.queueOverflow ?? 0,
+      transportGuardrails: stats.transportGuardrails ?? null,
     },
     probeSummary,
   };
