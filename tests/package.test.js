@@ -55,6 +55,7 @@ const {
   createAdaptiveSamplingController,
   createEnvironmentCamera,
   createCaptureState,
+  formatRendererTransportHudLines,
   listCaptureUploadUrlCandidates,
   MODEL_URL,
   normalizeCaptureError,
@@ -1512,8 +1513,29 @@ test("validation render decouples frame rendering from optional probe readback",
           frameTimeMs: 100,
           awaitedGpuCompletion: true,
         },
+        commandSubmissions: 3,
+        deviceLossStatus: "not-detected",
         gpuParallelism: { exposesMultiWorkgroupParallelism: true },
+        memory: {
+          totalHotBufferBytes: 32768,
+        },
         outputProbe: null,
+        queueOverflow: 0,
+        transportGuardrails: {
+          status: "pass",
+          current: {
+            jobsPerFrame: 42,
+            jobsPerSecond: 420,
+            jobsPerSubmission: 14,
+            commandSubmissions: 3,
+            frameTimeMs: 100,
+            queueOverflow: 0,
+            deviceLossStatus: "not-detected",
+            memory: {
+              totalBytes: 32768,
+            },
+          },
+        },
       };
     },
     async readOutputProbe({ x, y }) {
@@ -1599,7 +1621,67 @@ test("validation render decouples frame rendering from optional probe readback",
   assert.equal(result.renderer.gpuWorkerJobs.completedPerFrame, 42);
   assert.equal(result.renderer.gpuWorkerJobs.completedPerSecond, 420);
   assert.equal(result.renderer.gpuWorkerJobs.completedPerSubmission, 14);
+  assert.equal(result.renderer.commandSubmissions, 3);
+  assert.equal(result.renderer.deviceLossStatus, "not-detected");
+  assert.equal(result.renderer.transportGuardrails.status, "pass");
+  assert.equal(result.renderer.transportGuardrails.current.memory.totalBytes, 32768);
   assert.equal(result.probeSummary.sampledPixels, 5);
+});
+
+test("renderer transport hud lines surface guardrails and degrade gracefully when metrics are missing", () => {
+  const populated = formatRendererTransportHudLines({
+    commandSubmissions: 3,
+    deviceLossStatus: "not-detected",
+    gpuWorkerJobs: {
+      completedPerFrame: 42,
+      completedPerSecond: 420,
+      completedPerSubmission: 14,
+      directDispatchesCompleted: 18,
+      indirectDispatchesCompleted: 24,
+      frameTimeMs: 100,
+    },
+    gpuParallelism: {
+      exposesMultiWorkgroupParallelism: true,
+      largestDirectWorkgroupsPerDispatch: 4096,
+      largestEstimatedIndirectWorkgroupsPerDispatch: 256,
+    },
+    memory: {
+      totalHotBufferBytes: 32768,
+    },
+    queueOverflow: 0,
+    transportGuardrails: {
+      status: "pass",
+      current: {
+        jobsPerFrame: 42,
+        jobsPerSecond: 420,
+        jobsPerSubmission: 14,
+        commandSubmissions: 3,
+        frameTimeMs: 100,
+        queueOverflow: 0,
+        deviceLossStatus: "not-detected",
+        memory: {
+          totalBytes: 32768,
+        },
+      },
+    },
+  });
+  const missing = formatRendererTransportHudLines({
+    gpuWorkerJobs: {},
+    gpuParallelism: {},
+  });
+
+  assert.match(populated[0], /42 completed jobs/);
+  assert.match(populated[0], /18 direct \+ 24 indirect dispatches/);
+  assert.match(populated[1], /32\.0 KiB/);
+  assert.match(populated[1], /guardrails pass/);
+  assert.match(populated[2], /multi-workgroup GPU dispatch/);
+  assert.match(populated[2], /direct <= 4,096 wg/);
+
+  assert.match(missing[0], /completed jobs pending/);
+  assert.match(missing[0], /jobs\/s pending GPU completion/);
+  assert.match(missing[1], /memory unavailable/);
+  assert.match(missing[1], /guardrails pending/);
+  assert.match(missing[2], /capability summary unavailable/);
 });
 
 test("validation render can rebuild animated source markers with injected runtime helpers", async () => {

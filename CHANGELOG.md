@@ -15,6 +15,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - The Eames validation harness now supports scripted quick/full screenshot
     matrices with configurable camera, SPP, and denoise combinations plus
     manifest-level failure diagnostics for reference runs.
+  - The Eames validation HUD/result now preserves renderer transport
+    guardrails, including jobs, submissions, memory, queue-overflow, and
+    device-loss diagnostics for release validation.
 
 - **Changed**
   - Wavefront ray-record documentation now mirrors the current renderer payload
