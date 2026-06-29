@@ -620,6 +620,40 @@ test("capture scenario repro commands preserve maxDepth values up to 32", () => 
   assert.match(output, /PLASIUS_CAPTURE_MAX_DEPTH=20/);
 });
 
+test("capture scenarios respect PLASIUS_CAPTURE_VALIDATION_SCENE for synthetic repro isolation", () => {
+  const captureModuleUrl = new URL("../scripts/eames-environments/capture.mjs", import.meta.url).href;
+  const output = execFileSync(
+    process.execPath,
+    [
+      "--input-type=module",
+      "-e",
+      [
+        "globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__ = true;",
+        `const { createCaptureScenarios } = await import(${JSON.stringify(captureModuleUrl)});`,
+        "process.stdout.write(JSON.stringify(createCaptureScenarios({",
+        "  geometry: 'mesh',",
+        "  matrixMode: 'quick',",
+        "  cameraPresets: ['reference'],",
+        "  samplesPerPixelMatrix: [8],",
+        "  denoiseMatrix: [false],",
+        "})));",
+      ].join("\n"),
+    ],
+    {
+      cwd: path.resolve(__dirname, ".."),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        PLASIUS_CAPTURE_VALIDATION_SCENE: "furnace",
+      },
+    }
+  );
+  const scenarios = JSON.parse(output);
+  assert.equal(scenarios.length, 1);
+  assert.equal(scenarios[0].validationSceneId, "furnace");
+  assert.match(scenarios[0].reproCommand, /PLASIUS_CAPTURE_VALIDATION_SCENE=furnace/);
+});
+
 test("playwright capture server helpers prefer reusable servers before free-port fallback", async () => {
   const checks = [];
   const selection = await findCaptureServerPort({
@@ -1798,6 +1832,14 @@ test("validation render supports synthetic reference scenes without loading the 
   assert.equal(result.validationSceneFamily, "synthetic");
   assert.equal(result.modelName, "synthetic-validation/furnace");
   assert.ok(rendererOptions.meshes.length > 0);
+  assert.deepEqual(rendererOptions.environmentLighting.environmentLightSources, []);
+  assert.equal(rendererOptions.environmentLighting.environmentLightSourceCount, 0);
+  assert.equal(rendererOptions.environmentLighting.dominantLightSource, null);
+  assert.ok(
+    rendererOptions.meshes[1].normals.every((value, index) =>
+      index % 3 === 2 ? value > 0 : value === 0
+    )
+  );
   assert.ok(Array.isArray(result.artifactTargets) && result.artifactTargets.length >= 3);
 });
 
@@ -1863,10 +1905,75 @@ test("dark terminal residual strips inherited environment light sources", async 
   assert.deepEqual(rendererOptions.environmentLighting.environmentLightSources, []);
   assert.equal(rendererOptions.environmentLighting.environmentLightSourceCount, 0);
   assert.equal(rendererOptions.environmentLighting.dominantLightSource, null);
+  assert.equal(rendererOptions.environmentLighting.sunlitBaseline, 0);
   assert.equal(
     rendererOptions.environmentLighting.environmentMissLighting.sourceId,
     "validation-dark-terminal-residual"
   );
+});
+
+test("hdri skybox synthetic scene keeps an HDRI environment descriptor", async () => {
+  let rendererOptions = null;
+  const renderer = {
+    async renderFrame(options = {}) {
+      return {
+        frame: 1,
+        samplesPerPixel: options.samplesPerPixel ?? 2,
+        renderedSamplesPerPixel: options.samplesPerPixel ?? 2,
+        triangleCount: 1,
+        emissiveTriangleCount: 0,
+        bvhNodeCount: 1,
+        accelerationBuildMode: "cpu-upload",
+        accelerationBuildSubmitted: true,
+        deferredPathResolve: true,
+        gpuWorkerJobs: {
+          completedPerFrame: 10,
+          completedPerSecond: 100,
+          completedPerSubmission: 5,
+          frameTimeMs: 10,
+        },
+        gpuParallelism: { exposesMultiWorkgroupParallelism: true },
+        outputProbe: null,
+      };
+    },
+    async readOutputProbe() {
+      return null;
+    },
+    updateCamera() {},
+    updateSceneObjects() {},
+  };
+
+  await renderEamesEnvironment({
+    canvas: { width: 0, height: 0 },
+    width: 640,
+    height: 480,
+    frames: 1,
+    maxDepth: 8,
+    samplesPerPixel: 2,
+    denoise: false,
+    deferredPathResolve: true,
+    motion: false,
+    readOutputProbe: false,
+    validationSceneId: "hdri-skybox",
+    runtimeModules: {
+      createWavefrontEnvironmentLightingOptions() {
+        return createWavefrontEnvironmentLightingOptions({
+          preset: "grass-field-midday",
+        });
+      },
+      async loadEamesGltfModel() {
+        throw new Error("Synthetic validation scenes should not load the Eames model.");
+      },
+      async createWavefrontPathTracingComputeRenderer(options = {}) {
+        rendererOptions = options;
+        return renderer;
+      },
+    },
+  });
+
+  assert.equal(rendererOptions.environmentLighting.environmentMap?.id, "validation-hdri-skybox");
+  assert.equal(rendererOptions.environmentLighting.environmentMap?.projection, "equirectangular");
+  assert.equal(rendererOptions.environmentLighting.environmentMap?.intensity, 1.12);
 });
 
 test("renderer transport hud lines surface guardrails and degrade gracefully when metrics are missing", () => {

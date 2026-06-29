@@ -44,6 +44,9 @@ const defaultDenoiseMatrix = readCaptureBooleanList(
 const captureLabel = sanitizeCaptureLabel(
   process.env.PLASIUS_CAPTURE_LABEL ?? (defaultDeferredPathResolve ? "deferred" : "legacy")
 );
+const requestedValidationSceneId = readCaptureValidationSceneId(
+  process.env.PLASIUS_CAPTURE_VALIDATION_SCENE
+);
 const eamesValidationScene = getValidationSceneDefinition("eames");
 const syntheticValidationScenes = listValidationSceneDefinitions().filter((scene) => scene.family === "synthetic");
 const allPresets = [
@@ -170,6 +173,18 @@ function readCapturePresets(value, fallback) {
   return selected;
 }
 
+function readCaptureValidationSceneId(value) {
+  const selected = String(value ?? "").trim().toLowerCase();
+  if (!selected) {
+    return null;
+  }
+  const sceneIds = new Set(listValidationSceneDefinitions().map((scene) => scene.id));
+  if (!sceneIds.has(selected)) {
+    throw new Error(`Unknown validation scene '${selected}'.`);
+  }
+  return selected;
+}
+
 function buildScenarioId({
   validationSceneId,
   preset,
@@ -217,44 +232,52 @@ export function createCaptureScenarios(options = {}) {
   const samplesPerPixelMatrix = options.samplesPerPixelMatrix ?? defaultSamplesPerPixelMatrix;
   const denoiseMatrix = options.denoiseMatrix ?? defaultDenoiseMatrix;
   const geometry = options.geometry ?? "mesh";
-  const eamesScenarios = eamesPresets.flatMap((preset) =>
-    cameraPresets.flatMap((cameraPreset) =>
-      samplesPerPixelMatrix.flatMap((samplesPerPixel) =>
-        denoiseMatrix.map((denoise) => ({
-          id: buildScenarioId({
-            validationSceneId: "eames",
-            preset,
-            geometry,
-            cameraPreset,
-            samplesPerPixel,
-            denoise,
-          }),
-          validationSceneId: eamesValidationScene.id,
-          validationSceneLabel: eamesValidationScene.label,
-          validationSceneFamily: eamesValidationScene.family,
-          artifactTargets: [...eamesValidationScene.artifactTargets],
-          preset,
-          geometry,
-          cameraPreset,
-          denoise,
-          samplesPerPixel,
-          matrixMode,
-          reproCommand: buildScenarioReproCommand({
-            validationSceneId: "eames",
-            preset,
-            geometry,
-            cameraPreset,
-            denoise,
-            samplesPerPixel,
-          }),
-        }))
+  const includeEamesScenarios =
+    requestedValidationSceneId == null || requestedValidationSceneId === eamesValidationScene.id;
+  const selectedSyntheticValidationScenes =
+    requestedValidationSceneId == null
+      ? syntheticValidationScenes
+      : syntheticValidationScenes.filter((scene) => scene.id === requestedValidationSceneId);
+  const eamesScenarios = includeEamesScenarios
+    ? eamesPresets.flatMap((preset) =>
+        cameraPresets.flatMap((cameraPreset) =>
+          samplesPerPixelMatrix.flatMap((samplesPerPixel) =>
+            denoiseMatrix.map((denoise) => ({
+              id: buildScenarioId({
+                validationSceneId: "eames",
+                preset,
+                geometry,
+                cameraPreset,
+                samplesPerPixel,
+                denoise,
+              }),
+              validationSceneId: eamesValidationScene.id,
+              validationSceneLabel: eamesValidationScene.label,
+              validationSceneFamily: eamesValidationScene.family,
+              artifactTargets: [...eamesValidationScene.artifactTargets],
+              preset,
+              geometry,
+              cameraPreset,
+              denoise,
+              samplesPerPixel,
+              matrixMode,
+              reproCommand: buildScenarioReproCommand({
+                validationSceneId: "eames",
+                preset,
+                geometry,
+                cameraPreset,
+                denoise,
+                samplesPerPixel,
+              }),
+            }))
+          )
+        )
       )
-    )
-  );
+    : [];
   const syntheticCameraPreset = cameraPresets.includes("reference") ? "reference" : cameraPresets[0];
   const syntheticSamplesPerPixel = Math.max(...samplesPerPixelMatrix);
   const syntheticDenoise = denoiseMatrix.includes(false) ? false : denoiseMatrix[0];
-  const syntheticScenarios = syntheticValidationScenes.map((scene) => ({
+  const syntheticScenarios = selectedSyntheticValidationScenes.map((scene) => ({
     id: buildScenarioId({
       validationSceneId: scene.id,
       preset: null,

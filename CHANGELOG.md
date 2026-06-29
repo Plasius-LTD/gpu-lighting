@@ -15,7 +15,11 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Fixed**
-  - (placeholder)
+  - Synthetic reference-scene captures now honour `PLASIUS_CAPTURE_VALIDATION_SCENE`
+    repro commands, clear inherited direct-light and daylight-baseline state in
+    the furnace and dark-terminal validation scenes, preserve an HDRI
+    descriptor for skybox validation, and orient the furnace back wall toward
+    the reference camera.
 
 - **Security**
   - (placeholder)

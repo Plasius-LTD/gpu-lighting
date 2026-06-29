@@ -665,6 +665,14 @@ function withValidationLighting(baseLightingOptions, validationSceneId, override
   const dominantLightSource = Object.prototype.hasOwnProperty.call(overrides, "dominantLightSource")
     ? overrides.dominantLightSource
     : baseLightingOptions.dominantLightSource;
+  const sunlitBaseline = Object.prototype.hasOwnProperty.call(overrides, "sunlitBaseline")
+    ? overrides.sunlitBaseline
+    : baseLightingOptions.sunlitBaseline ?? baseLightingOptions.environmentLighting?.sunlitBaseline ?? 0;
+  const environmentMap = Object.prototype.hasOwnProperty.call(overrides, "environmentMap")
+    ? overrides.environmentMap
+    : Object.prototype.hasOwnProperty.call(overrides, "hdri")
+      ? overrides.hdri
+      : baseLightingOptions.environmentMap ?? baseLightingOptions.environmentLighting?.environmentMap ?? null;
   const environmentMissLighting = {
     ...baseLightingOptions.environmentMissLighting,
     ...(overrides.environmentMissLighting ?? {}),
@@ -672,6 +680,8 @@ function withValidationLighting(baseLightingOptions, validationSceneId, override
   const environmentLighting = {
     ...baseLightingOptions.environmentLighting,
     ...(overrides.environmentLighting ?? {}),
+    sunlitBaseline,
+    environmentMap,
     environmentLightSources,
     environmentLightSourceCount: environmentLightSources.length,
     dominantLightSource,
@@ -681,6 +691,8 @@ function withValidationLighting(baseLightingOptions, validationSceneId, override
     ...baseLightingOptions,
     environmentColor: overrides.environmentColor ?? baseLightingOptions.environmentColor,
     ambientColor: overrides.ambientColor ?? baseLightingOptions.ambientColor,
+    sunlitBaseline,
+    environmentMap,
     environmentLightSources,
     lightSources: environmentLightSources,
     dominantLightSource,
@@ -712,10 +724,10 @@ function createSyntheticSceneMeshes(validationSceneId) {
         createQuadMesh({
           id: 202,
           corners: [
-            [-1.1, 1.1, -2.0],
-            [1.1, 1.1, -2.0],
-            [1.1, -0.02, -2.0],
             [-1.1, -0.02, -2.0],
+            [1.1, -0.02, -2.0],
+            [1.1, 1.1, -2.0],
+            [-1.1, 1.1, -2.0],
           ],
           color: [0.92, 0.92, 0.92, 1],
           roughness: 0.82,
@@ -951,6 +963,8 @@ function createSyntheticLightingOptions(validationSceneId, runtimeModules) {
       return withValidationLighting(base, validationSceneId, {
         environmentColor: [0.95, 0.95, 0.95, 1],
         ambientColor: [0.01, 0.01, 0.01, 1],
+        environmentLightSources: [],
+        dominantLightSource: null,
         environmentMissLighting: {
           sourceId: "validation-furnace",
           color: [0.95, 0.95, 0.95, 1],
@@ -993,6 +1007,15 @@ function createSyntheticLightingOptions(validationSceneId, runtimeModules) {
       return withValidationLighting(base, validationSceneId, {
         environmentColor: [0.5, 0.66, 0.92, 1],
         ambientColor: [0.06, 0.08, 0.12, 1],
+        environmentMap: {
+          id: "validation-hdri-skybox",
+          projection: "equirectangular",
+          width: 1024,
+          height: 512,
+          intensity: 1.12,
+          ambientStrength: 0.42,
+          rotationRadians: 0,
+        },
         environmentMissLighting: {
           sourceId: "validation-hdri-skybox",
           color: [0.5, 0.66, 0.92, 1],
@@ -1013,6 +1036,7 @@ function createSyntheticLightingOptions(validationSceneId, runtimeModules) {
       return withValidationLighting(base, validationSceneId, {
         environmentColor: [0.002, 0.003, 0.004, 1],
         ambientColor: [0, 0, 0, 1],
+        sunlitBaseline: 0,
         environmentLightSources: [],
         dominantLightSource: null,
         environmentMissLighting: {
