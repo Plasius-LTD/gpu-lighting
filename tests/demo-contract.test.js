@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import * as lightingPackage from "../dist/index.js";
+import { createLightingDemoMountOptions } from "../demo/lighting-demo-config.js";
 
 const repoRoot = fileURLToPath(new URL("../", import.meta.url));
 
@@ -41,4 +43,18 @@ test("lighting demo browser entry uses the public gpu-shared package surface", (
   assert.doesNotMatch(source, /node_modules\/@plasius\/gpu-shared\/dist/);
   assert.doesNotMatch(readme, /does not mount a 3D canvas/i);
   assert.match(readme, /mounts the shared 3D harbor validation scene/i);
+});
+
+test("lighting demo runtime resolves the injected lighting package loader", async () => {
+  const mountOptions = createLightingDemoMountOptions({ id: "demo-root" });
+
+  assert.equal(typeof mountOptions.__showcaseFeatureLoaders?.lighting, "function");
+
+  const loadedLightingPackage = await mountOptions.__showcaseFeatureLoaders.lighting();
+
+  assert.equal(
+    loadedLightingPackage.createLightingBandPlan,
+    lightingPackage.createLightingBandPlan
+  );
+  assert.equal(loadedLightingPackage.defaultLightingProfile, lightingPackage.defaultLightingProfile);
 });

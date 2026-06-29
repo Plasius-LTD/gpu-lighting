@@ -9,6 +9,66 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.2.12] - 2026-06-29
+
+- **Added**
+  - (placeholder)
+
+- **Changed**
+  - Refreshed direct runtime and validation dependencies to the latest stable
+    published baselines, including the `@plasius/gpu-shared` 1.x line and the
+    current `@plasius/gpu-worker`, `@plasius/gpu-renderer`, Playwright, ESLint,
+    and `globals` releases.
+
+- **Fixed**
+  - Regenerated `package-lock.json` from a clean Node 24 install so the lockfile
+    matches the published dependency ranges declared in `package.json`.
+
+- **Security**
+  - (placeholder)
+
+## [0.2.11] - 2026-06-22
+
+- **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.2.10] - 2026-06-22
+
+- **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.2.9] - 2026-06-22
+
+- **Added**
   - Extended the wavefront lighting contract with compact medium-state carry,
     visibility-probe ray helpers, MIS/exclusive-emissive probe controls, and
     deterministic CPU reference fixtures for continuation validation.
@@ -19,6 +79,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
     direct-light, HDRI-skybox, and dark-terminal-residual scenes alongside the
     Eames matrix so reference summaries can name the artifact classes each
     scene is meant to catch.
+  - The Eames validation HUD/result now preserves renderer transport
+    guardrails, including jobs, submissions, memory, queue-overflow, and
+    device-loss diagnostics for release validation.
 
 - **Changed**
   - Wavefront ray-record documentation now mirrors the current renderer payload
@@ -504,7 +567,11 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
 [0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
 [0.1.19]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.19
-[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.6...HEAD
+[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.12...HEAD
 [0.2.0]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.0
 [0.2.2]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.2
 [0.2.6]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.6
+[0.2.9]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.9
+[0.2.10]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.10
+[0.2.11]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.11
+[0.2.12]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.12

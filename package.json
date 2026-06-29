@@ -1,6 +1,6 @@
 {
   "name": "@plasius/gpu-lighting",
-  "version": "0.2.6",
+  "version": "0.2.12",
   "description": "Advanced lighting WGSL modules and planning profiles for @plasius/gpu-worker.",
   "type": "module",
   "sideEffects": false,
@@ -55,11 +55,11 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@plasius/gpu-renderer": "^0.2.7",
-    "@playwright/test": "^1.60.0",
+    "@plasius/gpu-renderer": "^0.2.19",
+    "@playwright/test": "^1.61.1",
     "c8": "^11.0.0",
-    "eslint": "^10.3.0",
-    "globals": "^17.6.0",
+    "eslint": "^10.6.0",
+    "globals": "^17.7.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3"
   },
@@ -85,8 +85,8 @@
     }
   ],
   "dependencies": {
-    "@plasius/gpu-shared": "^0.1.9",
-    "@plasius/gpu-worker": "^0.1.15"
+    "@plasius/gpu-shared": "^1.0.1",
+    "@plasius/gpu-worker": "^0.3.3"
   },
   "overrides": {
     "minimatch": "^10.2.1"

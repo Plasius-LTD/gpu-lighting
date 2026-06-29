@@ -128,6 +128,10 @@ signals. The manifest and summary now also retain failure diagnostics instead of
 stopping with only terminal output. The validation page now decouples optional
 probe readback from the heavy render submission itself, which keeps higher-SPP
 screenshot validation more stable.
+The validation HUD/result also surfaces renderer transport guardrails, so
+completed jobs, dispatch/submission counts, frame time, tracked memory,
+queue-overflow, device-loss state, and adapter capability hints travel with the
+same JSON evidence used for release validation.
 For motion or realtime validation, the page also accepts `frameTimeBudgetMs`
 and will render at least one full-screen sample before adaptively spending the
 rest of the per-frame budget on additional SPP passes. The HUD reports
