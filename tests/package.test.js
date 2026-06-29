@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -584,6 +585,38 @@ test("validation scene catalog includes the required synthetic reference cases",
   assert.ok(
     syntheticScenes.every((scene) => Array.isArray(scene.artifactTargets) && scene.artifactTargets.length >= 3)
   );
+});
+
+test("capture scenario repro commands preserve maxDepth values up to 32", () => {
+  const captureModuleUrl = new URL("../scripts/eames-environments/capture.mjs", import.meta.url).href;
+  const output = execFileSync(
+    process.execPath,
+    [
+      "--input-type=module",
+      "-e",
+      [
+        "globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__ = true;",
+        `const { createCaptureScenarios } = await import(${JSON.stringify(captureModuleUrl)});`,
+        "const scenario = createCaptureScenarios({",
+        "  geometry: 'mesh',",
+        "  matrixMode: 'quick',",
+        "  cameraPresets: ['reference'],",
+        "  samplesPerPixelMatrix: [1],",
+        "  denoiseMatrix: [true],",
+        "})[0];",
+        "process.stdout.write(scenario.reproCommand);",
+      ].join("\n"),
+    ],
+    {
+      cwd: path.resolve(__dirname, ".."),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        PLASIUS_CAPTURE_MAX_DEPTH: "20",
+      },
+    }
+  );
+  assert.match(output, /PLASIUS_CAPTURE_MAX_DEPTH=20/);
 });
 
 test("playwright capture server helpers prefer reusable servers before free-port fallback", async () => {
@@ -1740,6 +1773,74 @@ test("validation render supports synthetic reference scenes without loading the 
   assert.equal(result.modelName, "synthetic-validation/furnace");
   assert.ok(rendererOptions.meshes.length > 0);
   assert.ok(Array.isArray(result.artifactTargets) && result.artifactTargets.length >= 3);
+});
+
+test("dark terminal residual strips inherited environment light sources", async () => {
+  let rendererOptions = null;
+  const renderer = {
+    async renderFrame(options = {}) {
+      return {
+        frame: 1,
+        samplesPerPixel: options.samplesPerPixel ?? 2,
+        renderedSamplesPerPixel: options.samplesPerPixel ?? 2,
+        triangleCount: 2,
+        emissiveTriangleCount: 0,
+        bvhNodeCount: 1,
+        accelerationBuildMode: "cpu-upload",
+        accelerationBuildSubmitted: true,
+        deferredPathResolve: true,
+        gpuWorkerJobs: {
+          completedPerFrame: 10,
+          completedPerSecond: 100,
+          completedPerSubmission: 5,
+          frameTimeMs: 10,
+        },
+        gpuParallelism: { exposesMultiWorkgroupParallelism: true },
+        outputProbe: null,
+      };
+    },
+    async readOutputProbe() {
+      return null;
+    },
+    updateCamera() {},
+    updateSceneObjects() {},
+  };
+
+  await renderEamesEnvironment({
+    canvas: { width: 0, height: 0 },
+    width: 640,
+    height: 480,
+    frames: 1,
+    maxDepth: 8,
+    samplesPerPixel: 2,
+    denoise: false,
+    deferredPathResolve: true,
+    motion: false,
+    readOutputProbe: false,
+    validationSceneId: "dark-terminal-residual",
+    runtimeModules: {
+      createWavefrontEnvironmentLightingOptions() {
+        return createWavefrontEnvironmentLightingOptions({
+          preset: "warehouse-night",
+        });
+      },
+      async loadEamesGltfModel() {
+        throw new Error("Synthetic validation scenes should not load the Eames model.");
+      },
+      async createWavefrontPathTracingComputeRenderer(options = {}) {
+        rendererOptions = options;
+        return renderer;
+      },
+    },
+  });
+
+  assert.deepEqual(rendererOptions.environmentLighting.environmentLightSources, []);
+  assert.equal(rendererOptions.environmentLighting.environmentLightSourceCount, 0);
+  assert.equal(rendererOptions.environmentLighting.dominantLightSource, null);
+  assert.equal(
+    rendererOptions.environmentLighting.environmentMissLighting.sourceId,
+    "validation-dark-terminal-residual"
+  );
 });
 
 test("validation render can rebuild animated source markers with injected runtime helpers", async () => {

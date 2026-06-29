@@ -656,6 +656,15 @@ function countMeshTriangles(meshes = []) {
 }
 
 function withValidationLighting(baseLightingOptions, validationSceneId, overrides = {}) {
+  const hasEnvironmentLightSourcesOverride =
+    Object.prototype.hasOwnProperty.call(overrides, "environmentLightSources") ||
+    Object.prototype.hasOwnProperty.call(overrides, "lightSources");
+  const environmentLightSources = hasEnvironmentLightSourcesOverride
+    ? (overrides.environmentLightSources ?? overrides.lightSources ?? [])
+    : (baseLightingOptions.environmentLightSources ?? baseLightingOptions.lightSources ?? []);
+  const dominantLightSource = Object.prototype.hasOwnProperty.call(overrides, "dominantLightSource")
+    ? overrides.dominantLightSource
+    : baseLightingOptions.dominantLightSource;
   const environmentMissLighting = {
     ...baseLightingOptions.environmentMissLighting,
     ...(overrides.environmentMissLighting ?? {}),
@@ -663,14 +672,18 @@ function withValidationLighting(baseLightingOptions, validationSceneId, override
   const environmentLighting = {
     ...baseLightingOptions.environmentLighting,
     ...(overrides.environmentLighting ?? {}),
+    environmentLightSources,
+    environmentLightSourceCount: environmentLightSources.length,
+    dominantLightSource,
     environmentMissLighting,
   };
   return {
     ...baseLightingOptions,
     environmentColor: overrides.environmentColor ?? baseLightingOptions.environmentColor,
     ambientColor: overrides.ambientColor ?? baseLightingOptions.ambientColor,
-    lightSources: overrides.lightSources ?? baseLightingOptions.lightSources,
-    dominantLightSource: overrides.dominantLightSource ?? baseLightingOptions.dominantLightSource,
+    environmentLightSources,
+    lightSources: environmentLightSources,
+    dominantLightSource,
     environmentMissLighting,
     environmentLighting,
     lightingEnvironment: {
@@ -1000,6 +1013,8 @@ function createSyntheticLightingOptions(validationSceneId, runtimeModules) {
       return withValidationLighting(base, validationSceneId, {
         environmentColor: [0.002, 0.003, 0.004, 1],
         ambientColor: [0, 0, 0, 1],
+        environmentLightSources: [],
+        dominantLightSource: null,
         environmentMissLighting: {
           sourceId: "validation-dark-terminal-residual",
           color: [0.002, 0.003, 0.004, 1],
