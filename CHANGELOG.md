@@ -15,6 +15,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.2.13] - 2026-06-29
+
+- **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
   - Synthetic reference-scene captures now honour `PLASIUS_CAPTURE_VALIDATION_SCENE`
     repro commands, clear inherited direct-light and daylight-baseline state in
     the furnace and dark-terminal validation scenes, preserve an HDRI
@@ -571,7 +585,7 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
 [0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
 [0.1.19]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.19
-[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.12...HEAD
+[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.13...HEAD
 [0.2.0]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.0
 [0.2.2]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.2
 [0.2.6]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.6
@@ -579,3 +593,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.2.10]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.10
 [0.2.11]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.11
 [0.2.12]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.12
+[0.2.13]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.13
