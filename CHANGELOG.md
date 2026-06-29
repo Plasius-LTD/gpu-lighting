@@ -12,10 +12,14 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Changed**
-  - (placeholder)
+  - Refreshed direct runtime and validation dependencies to the latest stable
+    published baselines, including the `@plasius/gpu-shared` 1.x line and the
+    current `@plasius/gpu-worker`, `@plasius/gpu-renderer`, Playwright, ESLint,
+    and `globals` releases.
 
 - **Fixed**
-  - (placeholder)
+  - Regenerated `package-lock.json` from a clean Node 24 install so the lockfile
+    matches the published dependency ranges declared in `package.json`.
 
 - **Security**
   - (placeholder)
