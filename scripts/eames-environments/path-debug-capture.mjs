@@ -20,7 +20,7 @@ const preset = process.env.PLASIUS_PATH_DEBUG_PRESET ?? "grass-field-midday";
 const width = readInteger("PLASIUS_PATH_DEBUG_WIDTH", 1280, 320, 4096);
 const height = readInteger("PLASIUS_PATH_DEBUG_HEIGHT", 720, 180, 2304);
 const layers = readInteger("PLASIUS_PATH_DEBUG_LAYERS", 8, 1, 16);
-const maxDepth = readInteger("PLASIUS_PATH_DEBUG_MAX_DEPTH", 8, 1, 12);
+const maxDepth = readInteger("PLASIUS_PATH_DEBUG_MAX_DEPTH", 8, 1, 32);
 const samplesPerPixel = readInteger("PLASIUS_PATH_DEBUG_SPP", 1, 1, 256);
 const frameIndex = readInteger("PLASIUS_PATH_DEBUG_FRAME_INDEX", 777, 0, 1_000_000);
 const showSources = process.env.PLASIUS_PATH_DEBUG_SHOW_SOURCES === "1";
@@ -36,7 +36,7 @@ export function computePathDebugWaitTimeoutMs(options = {}) {
   const perSamplePassEstimate = captureMaxDepth + 2;
   const workEstimate =
     captureLayers * captureSamplesPerPixel * perSamplePassEstimate * tileEstimate;
-  return Math.min(900_000, 60_000 + workEstimate * 30);
+  return Math.min(3_600_000, 60_000 + workEstimate * 30);
 }
 
 function readInteger(name, fallback, minimum, maximum) {

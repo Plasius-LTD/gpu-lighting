@@ -55,6 +55,13 @@ validation page without depending on a parent monorepo checkout. Build
 node scripts/eames-environments/capture.mjs
 ```
 
+Quick-mode captures now include the Eames matrix plus four synthetic reference
+scenes: `furnace`, `all-material-direct-light`, `hdri-skybox`, and
+`dark-terminal-residual`. The generated `summary.md` records which artifact
+classes each synthetic scene is intended to catch. To open a specific scene in
+the browser harness, pass `validationScene=<scene-id>` in the page query
+string.
+
 For reverse-pass black-pixel diagnostics, run:
 
 ```bash
@@ -68,6 +75,12 @@ script. The validation page now reports bootstrap step, detail, and WebGPU
 availability through `window.__plasiusCaptureState` and
 `window.__plasiusCaptureError` so capture failures stop at a named phase rather
 than hanging on the initial HUD.
+For long-running reference captures, browser boot readiness is considered
+complete once the page reaches frame rendering; the capture script then waits on
+the final render result with an offline timeout budget. This prevents a valid
+4K/high-SPP render from being reported as a boot failure while GPU work is still
+making progress. The Eames validation page accepts `maxDepth` values up to 32
+for reference-depth experiments.
 
 For browser-controlled fallbacks, start
 `node scripts/eames-environments/capture-bridge-server.mjs <port>` and open the

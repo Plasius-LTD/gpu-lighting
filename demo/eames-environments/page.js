@@ -1,3 +1,5 @@
+import { getValidationSceneDefinition } from "./validation-scenes.js";
+
 const WORKSPACE_ROOT_URL = new URL("../../../", import.meta.url);
 const PACKAGE_ROOT_URL = new URL("../../", import.meta.url);
 const MODULE_VERSION = new URLSearchParams(globalThis.location?.search ?? "").get("moduleVersion") ?? "1";
@@ -21,6 +23,7 @@ export const MODEL_URL = resolvePackageUrl(
 );
 export const CAPTURE_BOOT_TIMEOUT_MS = 60_000;
 export const MAX_CAPTURE_BOOT_TIMEOUT_MS = 900_000;
+export const MAX_VALIDATION_MAX_DEPTH = 32;
 const runtimeModuleUrls = Object.freeze({
   renderer: withModuleVersion(`${resolveRepoUrl("gpu-renderer/dist/index.js")}?terminal-environment-fallback=1`),
   scene: withModuleVersion(resolveRepoUrl("gpu-shared/src/product-studio-runtime.js")),
@@ -134,6 +137,19 @@ function setCaptureStep(state, step, detail, hud) {
       <span>${detail}</span>
     `;
   }
+}
+
+export function clearCaptureBootTimeout(runtime = globalThis) {
+  const timeoutHandle = runtime?.__plasiusCaptureBootTimeoutId;
+  if (timeoutHandle == null) {
+    return false;
+  }
+  const clearTimer =
+    typeof runtime.clearTimeout === "function" ? runtime.clearTimeout.bind(runtime) : clearTimeout;
+  clearTimer(timeoutHandle);
+  delete runtime.__plasiusCaptureBootTimeoutId;
+  runtime.__plasiusCaptureBootComplete = true;
+  return true;
 }
 
 function freezeCanvasForCapture(canvas) {
@@ -570,6 +586,528 @@ export function buildEamesMeshes(model, options = {}) {
   });
 }
 
+function subtractVec3(a, b) {
+  return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+}
+
+function crossVec3(a, b) {
+  return [
+    a[1] * b[2] - a[2] * b[1],
+    a[2] * b[0] - a[0] * b[2],
+    a[0] * b[1] - a[1] * b[0],
+  ];
+}
+
+function normalizeVec3(value) {
+  const length = Math.hypot(value[0], value[1], value[2]) || 1;
+  return [value[0] / length, value[1] / length, value[2] / length];
+}
+
+function createQuadMesh({
+  id,
+  corners,
+  color = [1, 1, 1, 1],
+  emission = [0, 0, 0, 1],
+  materialKind = "diffuse",
+  roughness = 0.72,
+  metallic = 0,
+  opacity = 1,
+  transmission = 0,
+  ior = 1.45,
+  specular = 1,
+  specularColor = [1, 1, 1, 1],
+  sheenColor = [0, 0, 0, 1],
+  clearcoat = 0,
+  clearcoatRoughness = 0.08,
+}) {
+  const [a, b, c, d] = corners;
+  const normal = normalizeVec3(crossVec3(subtractVec3(b, a), subtractVec3(c, a)));
+  return {
+    id,
+    positions: [...a, ...b, ...c, ...d],
+    indices: [0, 1, 2, 0, 2, 3],
+    normals: [...normal, ...normal, ...normal, ...normal],
+    uvs: [0, 0, 1, 0, 1, 1, 0, 1],
+    color,
+    emission,
+    materialKind,
+    roughness,
+    metallic,
+    opacity,
+    ior,
+    specular,
+    specularColor,
+    sheenColor,
+    clearcoat,
+    clearcoatRoughness,
+    transmission,
+    material: {
+      baseColorTexture: null,
+      metallicRoughnessTexture: null,
+      normalTexture: null,
+      occlusionTexture: null,
+      emissiveTexture: null,
+    },
+  };
+}
+
+function countMeshTriangles(meshes = []) {
+  return meshes.reduce((total, mesh) => total + Math.floor((mesh.indices?.length ?? 0) / 3), 0);
+}
+
+function withValidationLighting(baseLightingOptions, validationSceneId, overrides = {}) {
+  const hasEnvironmentLightSourcesOverride =
+    Object.prototype.hasOwnProperty.call(overrides, "environmentLightSources") ||
+    Object.prototype.hasOwnProperty.call(overrides, "lightSources");
+  const environmentLightSources = hasEnvironmentLightSourcesOverride
+    ? (overrides.environmentLightSources ?? overrides.lightSources ?? [])
+    : (baseLightingOptions.environmentLightSources ?? baseLightingOptions.lightSources ?? []);
+  const dominantLightSource = Object.prototype.hasOwnProperty.call(overrides, "dominantLightSource")
+    ? overrides.dominantLightSource
+    : baseLightingOptions.dominantLightSource;
+  const sunlitBaseline = Object.prototype.hasOwnProperty.call(overrides, "sunlitBaseline")
+    ? overrides.sunlitBaseline
+    : baseLightingOptions.sunlitBaseline ?? baseLightingOptions.environmentLighting?.sunlitBaseline ?? 0;
+  const environmentMap = Object.prototype.hasOwnProperty.call(overrides, "environmentMap")
+    ? overrides.environmentMap
+    : Object.prototype.hasOwnProperty.call(overrides, "hdri")
+      ? overrides.hdri
+      : baseLightingOptions.environmentMap ?? baseLightingOptions.environmentLighting?.environmentMap ?? null;
+  const environmentMissLighting = {
+    ...baseLightingOptions.environmentMissLighting,
+    ...(overrides.environmentMissLighting ?? {}),
+  };
+  const environmentLighting = {
+    ...baseLightingOptions.environmentLighting,
+    ...(overrides.environmentLighting ?? {}),
+    sunlitBaseline,
+    environmentMap,
+    environmentLightSources,
+    environmentLightSourceCount: environmentLightSources.length,
+    dominantLightSource,
+    environmentMissLighting,
+  };
+  return {
+    ...baseLightingOptions,
+    environmentColor: overrides.environmentColor ?? baseLightingOptions.environmentColor,
+    ambientColor: overrides.ambientColor ?? baseLightingOptions.ambientColor,
+    sunlitBaseline,
+    environmentMap,
+    environmentLightSources,
+    lightSources: environmentLightSources,
+    dominantLightSource,
+    environmentMissLighting,
+    environmentLighting,
+    lightingEnvironment: {
+      ...baseLightingOptions.lightingEnvironment,
+      scene: validationSceneId,
+      timeOfDay: "synthetic",
+    },
+  };
+}
+
+function createSyntheticSceneMeshes(validationSceneId) {
+  switch (validationSceneId) {
+    case "furnace":
+      return [
+        createQuadMesh({
+          id: 201,
+          corners: [
+            [-1.3, -0.05, -0.2],
+            [1.3, -0.05, -0.2],
+            [1.3, -0.05, -2.1],
+            [-1.3, -0.05, -2.1],
+          ],
+          color: [0.9, 0.9, 0.9, 1],
+          roughness: 0.9,
+        }),
+        createQuadMesh({
+          id: 202,
+          corners: [
+            [-1.1, -0.02, -2.0],
+            [1.1, -0.02, -2.0],
+            [1.1, 1.1, -2.0],
+            [-1.1, 1.1, -2.0],
+          ],
+          color: [0.92, 0.92, 0.92, 1],
+          roughness: 0.82,
+        }),
+      ];
+    case "all-material-direct-light":
+      return [
+        createQuadMesh({
+          id: 211,
+          corners: [
+            [-1.4, -0.05, -0.25],
+            [1.4, -0.05, -0.25],
+            [1.4, -0.05, -2.2],
+            [-1.4, -0.05, -2.2],
+          ],
+          color: [0.22, 0.24, 0.26, 1],
+          roughness: 0.72,
+        }),
+      ];
+    case "hdri-skybox":
+      return [
+        createQuadMesh({
+          id: 221,
+          corners: [
+            [-1.6, -0.05, 0.2],
+            [1.6, -0.05, 0.2],
+            [1.6, -0.05, -2.4],
+            [-1.6, -0.05, -2.4],
+          ],
+          color: [0.26, 0.29, 0.33, 1],
+          roughness: 0.64,
+        }),
+      ];
+    case "dark-terminal-residual":
+      return [
+        createQuadMesh({
+          id: 231,
+          corners: [
+            [-1.2, -0.05, 0.05],
+            [1.2, -0.05, 0.05],
+            [1.2, -0.05, -1.9],
+            [-1.2, -0.05, -1.9],
+          ],
+          color: [0.03, 0.035, 0.04, 1],
+          roughness: 0.94,
+        }),
+      ];
+    default:
+      return [];
+  }
+}
+
+function appendSyntheticSourceMarkers(sceneObjects, lightingOptions, options = {}) {
+  if (options.showSources !== true) {
+    return sceneObjects;
+  }
+  return [
+    ...sceneObjects,
+    ...lightingOptions.lightSources
+      .slice(0, 3)
+      .map((source, index) => sourceMarker(source, index, options.motionPhase)),
+  ];
+}
+
+function createSyntheticSceneObjects(validationSceneId, lightingOptions, options = {}) {
+  let sceneObjects;
+  switch (validationSceneId) {
+    case "furnace":
+      sceneObjects = [
+        {
+          id: 301,
+          kind: "box",
+          center: [0, 1.08, -1.15],
+          halfExtent: [0.44, 0.03, 0.44],
+          color: [1, 1, 1, 1],
+          emission: [9.5, 9.5, 9.5, 1],
+          materialKind: "emissive",
+        },
+        {
+          id: 302,
+          kind: "box",
+          center: [-1.24, 0.52, -1.15],
+          halfExtent: [0.03, 0.57, 0.95],
+          color: [0.9, 0.9, 0.9, 1],
+          materialKind: "diffuse",
+          roughness: 0.92,
+        },
+        {
+          id: 303,
+          kind: "box",
+          center: [1.24, 0.52, -1.15],
+          halfExtent: [0.03, 0.57, 0.95],
+          color: [0.9, 0.9, 0.9, 1],
+          materialKind: "diffuse",
+          roughness: 0.92,
+        },
+        {
+          id: 304,
+          kind: "sphere",
+          center: [-0.42, 0.14, -1.28],
+          radius: 0.18,
+          color: [0.82, 0.82, 0.82, 1],
+          materialKind: "diffuse",
+          roughness: 0.36,
+        },
+        {
+          id: 305,
+          kind: "sphere",
+          center: [0.38, 0.14, -0.98],
+          radius: 0.18,
+          color: [0.95, 0.93, 0.9, 1],
+          materialKind: "metal",
+          roughness: 0.08,
+          metallic: 1,
+        },
+      ];
+      break;
+    case "all-material-direct-light":
+      sceneObjects = [
+        {
+          id: 311,
+          kind: "box",
+          center: [0, 0.94, -1.16],
+          halfExtent: [0.56, 0.03, 0.18],
+          color: [1, 0.96, 0.9, 1],
+          emission: [7.2, 6.9, 6.5, 1],
+          materialKind: "emissive",
+        },
+        {
+          id: 312,
+          kind: "sphere",
+          center: [-0.58, 0.16, -1.18],
+          radius: 0.16,
+          color: [0.82, 0.36, 0.24, 1],
+          materialKind: "diffuse",
+          roughness: 0.7,
+        },
+        {
+          id: 313,
+          kind: "sphere",
+          center: [0.02, 0.16, -1.12],
+          radius: 0.16,
+          color: [0.94, 0.92, 0.88, 1],
+          materialKind: "metal",
+          roughness: 0.06,
+          metallic: 1,
+        },
+        {
+          id: 314,
+          kind: "sphere",
+          center: [0.64, 0.16, -1.06],
+          radius: 0.16,
+          color: [0.76, 0.88, 1, 0.18],
+          materialKind: "transparent",
+          roughness: 0.02,
+          transmission: 0.96,
+          opacity: 0.18,
+          ior: 1.47,
+        },
+      ];
+      break;
+    case "hdri-skybox":
+      sceneObjects = [
+        {
+          id: 321,
+          kind: "sphere",
+          center: [0.02, 0.18, -1.1],
+          radius: 0.18,
+          color: [0.93, 0.95, 0.98, 1],
+          materialKind: "metal",
+          roughness: 0.04,
+          metallic: 1,
+        },
+        {
+          id: 322,
+          kind: "box",
+          center: [-0.54, 0.16, -1.45],
+          halfExtent: [0.18, 0.18, 0.18],
+          color: [0.32, 0.37, 0.44, 1],
+          materialKind: "diffuse",
+          roughness: 0.58,
+        },
+        {
+          id: 323,
+          kind: "sphere",
+          center: [0.56, 0.14, -0.92],
+          radius: 0.14,
+          color: [0.84, 0.9, 0.98, 0.2],
+          materialKind: "transparent",
+          roughness: 0.04,
+          transmission: 0.92,
+          opacity: 0.2,
+          ior: 1.45,
+        },
+      ];
+      break;
+    case "dark-terminal-residual":
+      sceneObjects = [
+        {
+          id: 331,
+          kind: "box",
+          center: [0, 0.16, -1.18],
+          halfExtent: [0.24, 0.24, 0.24],
+          color: [0.08, 0.085, 0.09, 1],
+          materialKind: "diffuse",
+          roughness: 0.88,
+        },
+        {
+          id: 332,
+          kind: "sphere",
+          center: [-0.44, 0.12, -0.94],
+          radius: 0.12,
+          color: [0.18, 0.2, 0.24, 1],
+          materialKind: "metal",
+          roughness: 0.12,
+          metallic: 1,
+        },
+      ];
+      break;
+    default:
+      sceneObjects = [];
+      break;
+  }
+  return appendSyntheticSourceMarkers(sceneObjects, lightingOptions, options);
+}
+
+function createSyntheticLightingOptions(validationSceneId, runtimeModules) {
+  switch (validationSceneId) {
+    case "furnace": {
+      const base = runtimeModules.createWavefrontEnvironmentLightingOptions({
+        preset: "warehouse-midday",
+      });
+      return withValidationLighting(base, validationSceneId, {
+        environmentColor: [0.95, 0.95, 0.95, 1],
+        ambientColor: [0.01, 0.01, 0.01, 1],
+        environmentLightSources: [],
+        dominantLightSource: null,
+        environmentMissLighting: {
+          sourceId: "validation-furnace",
+          color: [0.95, 0.95, 0.95, 1],
+          radiance: [0.95, 0.95, 0.95, 1],
+          luminance: 0.95,
+        },
+        environmentLighting: {
+          intensity: 0.12,
+          sunColor: [0, 0, 0, 1],
+          horizonColor: [0.95, 0.95, 0.95, 1],
+          zenithColor: [0.95, 0.95, 0.95, 1],
+        },
+      });
+    }
+    case "all-material-direct-light": {
+      const base = runtimeModules.createWavefrontEnvironmentLightingOptions({
+        preset: "warehouse-midday",
+      });
+      return withValidationLighting(base, validationSceneId, {
+        environmentColor: [0.03, 0.03, 0.035, 1],
+        ambientColor: [0.004, 0.004, 0.004, 1],
+        environmentMissLighting: {
+          sourceId: "validation-direct-light",
+          color: [0.03, 0.03, 0.035, 1],
+          radiance: [0.03, 0.03, 0.035, 1],
+          luminance: 0.03,
+        },
+        environmentLighting: {
+          intensity: 0.08,
+          sunColor: [0, 0, 0, 1],
+          horizonColor: [0.03, 0.03, 0.035, 1],
+          zenithColor: [0.03, 0.03, 0.035, 1],
+        },
+      });
+    }
+    case "hdri-skybox": {
+      const base = runtimeModules.createWavefrontEnvironmentLightingOptions({
+        preset: "grass-field-midday",
+      });
+      return withValidationLighting(base, validationSceneId, {
+        environmentColor: [0.5, 0.66, 0.92, 1],
+        ambientColor: [0.06, 0.08, 0.12, 1],
+        environmentMap: {
+          id: "validation-hdri-skybox",
+          projection: "equirectangular",
+          width: 1024,
+          height: 512,
+          intensity: 1.12,
+          ambientStrength: 0.42,
+          rotationRadians: 0,
+        },
+        environmentMissLighting: {
+          sourceId: "validation-hdri-skybox",
+          color: [0.5, 0.66, 0.92, 1],
+          radiance: [0.5, 0.66, 0.92, 1],
+          luminance: 0.64,
+        },
+        environmentLighting: {
+          intensity: 1.12,
+          horizonColor: [0.56, 0.74, 0.98, 1],
+          zenithColor: [0.2, 0.35, 0.66, 1],
+        },
+      });
+    }
+    case "dark-terminal-residual": {
+      const base = runtimeModules.createWavefrontEnvironmentLightingOptions({
+        preset: "warehouse-night",
+      });
+      return withValidationLighting(base, validationSceneId, {
+        environmentColor: [0.002, 0.003, 0.004, 1],
+        ambientColor: [0, 0, 0, 1],
+        sunlitBaseline: 0,
+        environmentLightSources: [],
+        dominantLightSource: null,
+        environmentMissLighting: {
+          sourceId: "validation-dark-terminal-residual",
+          color: [0.002, 0.003, 0.004, 1],
+          radiance: [0.002, 0.003, 0.004, 1],
+          luminance: 0.003,
+        },
+        environmentLighting: {
+          intensity: 0.04,
+          sunColor: [0, 0, 0, 1],
+          horizonColor: [0.002, 0.003, 0.004, 1],
+          zenithColor: [0.001, 0.0015, 0.0025, 1],
+        },
+      });
+    }
+    default:
+      return runtimeModules.createWavefrontEnvironmentLightingOptions({
+        preset: "warehouse-midday",
+      });
+  }
+}
+
+async function prepareValidationScene(options = {}, runtimeModules) {
+  const validationSceneId = String(options.validationSceneId ?? "eames").trim().toLowerCase();
+  const sceneDefinition = getValidationSceneDefinition(validationSceneId);
+  if (sceneDefinition.family === "eames") {
+    const lightingOptions = runtimeModules.createWavefrontEnvironmentLightingOptions({
+      preset: options.preset ?? "grass-field-midday",
+    });
+    const model = options.model ?? await runtimeModules.loadEamesGltfModel(MODEL_URL);
+    const buildSceneObjects = (motionPhase = 0) =>
+      buildEnvironmentSceneObjects(
+        model,
+        lightingOptions,
+        { showSources: options.showSources === true, motionPhase },
+        runtimeModules
+      );
+    return {
+      sceneDefinition,
+      preset: options.preset ?? "grass-field-midday",
+      lightingOptions,
+      model,
+      modelName: model.name,
+      primitiveCount: model.primitives.length,
+      triangleCount: Math.floor(model.indices.length / 3),
+      meshes: buildEamesMeshes(model),
+      buildSceneObjects,
+    };
+  }
+
+  const lightingOptions = createSyntheticLightingOptions(validationSceneId, runtimeModules);
+  const meshes = createSyntheticSceneMeshes(validationSceneId);
+  const buildSceneObjects = (motionPhase = 0) =>
+    createSyntheticSceneObjects(validationSceneId, lightingOptions, {
+      showSources: options.showSources === true,
+      motionPhase,
+    });
+  return {
+    sceneDefinition,
+    preset: sceneDefinition.label,
+    lightingOptions,
+    model: null,
+    modelName: `synthetic-validation/${validationSceneId}`,
+    primitiveCount: meshes.length,
+    triangleCount: countMeshTriangles(meshes),
+    meshes,
+    buildSceneObjects,
+  };
+}
+
 function scaledEmission(source, scale = 1.9) {
   const color = source.color ?? [1, 1, 1, 1];
   const intensity = Math.max(source.intensity ?? 1, 0.05) * scale;
@@ -937,9 +1475,10 @@ function updateHud(hud, result) {
   const governorLabel = governor?.enabled
     ? `${governor.currentLevelId}, ${governor.pressureLevel} pressure`
     : "governor off";
+  const heading = result.validationSceneLabel ?? result.preset;
   const [jobsLine, guardrailLine, capabilityLine] = formatRendererTransportHudLines(result.renderer);
   hud.innerHTML = `
-    <strong>${result.preset}</strong>
+    <strong>${heading}</strong>
     <span>${result.scene} - ${result.timeOfDay} - ${result.geometry}</span>
     <span>${sourceLabels}</span>
     <span>${result.width}x${result.height}, ${sppLabel}${budgetLabel}, denoise ${result.denoise ? "on" : "off"}, deferred ${result.deferredPathResolve ? "on" : "off"}</span>
@@ -974,6 +1513,7 @@ function fail(error) {
 }
 
 export async function renderEamesEnvironment(options = {}) {
+  const requestedValidationSceneId = String(options.validationSceneId ?? "eames").trim().toLowerCase();
   const preset = options.preset ?? "grass-field-midday";
   const geometry = options.geometry ?? "mesh";
   const width = Number(options.width ?? 1280);
@@ -1019,17 +1559,30 @@ export async function renderEamesEnvironment(options = {}) {
 
   setCaptureStep(captureState, "Loading runtime modules", "Importing renderer, lighting, and model helpers.", hud);
   const runtimeModules = options.runtimeModules ?? await loadCaptureRuntimeModules();
-  const lightingOptions = runtimeModules.createWavefrontEnvironmentLightingOptions({ preset });
-  setCaptureStep(captureState, "Loading Eames model", MODEL_URL, hud);
-  const model = options.model ?? await runtimeModules.loadEamesGltfModel(MODEL_URL);
-  setCaptureStep(captureState, "Preparing scene", "Building analytic surfaces and mesh triangles.", hud);
-  const sceneObjects = buildEnvironmentSceneObjects(
-    model,
-    lightingOptions,
-    { showSources },
+  if (requestedValidationSceneId === "eames") {
+    setCaptureStep(captureState, "Loading Eames model", MODEL_URL, hud);
+  } else {
+    setCaptureStep(
+      captureState,
+      "Preparing synthetic validation scene",
+      `Building ${requestedValidationSceneId} validation geometry and lighting.`,
+      hud
+    );
+  }
+  const validationScene = await prepareValidationScene(
+    {
+      ...options,
+      preset,
+      validationSceneId: requestedValidationSceneId,
+      showSources,
+    },
     runtimeModules
   );
-  const meshes = buildEamesMeshes(model);
+  const lightingOptions = validationScene.lightingOptions;
+  const sceneObjects = validationScene.buildSceneObjects(0);
+  const meshes = validationScene.meshes;
+  const model = validationScene.model;
+  setCaptureStep(captureState, "Preparing scene", "Building analytic surfaces and mesh triangles.", hud);
   const adaptiveSampling = createAdaptiveSamplingController({
     samplesPerPixel,
     frameTimeBudgetMs,
@@ -1065,6 +1618,7 @@ export async function renderEamesEnvironment(options = {}) {
 
   let stats = null;
   for (let frame = 0; frame < frames; frame += 1) {
+    clearCaptureBootTimeout(globalThis);
     setCaptureStep(captureState, "Rendering frames", `Rendering frame ${frame + 1} of ${frames}.`, hud);
     const motionPhase = frames <= 1 ? 0 : frame / (frames - 1);
     if (typeof renderer.updateCamera === "function") {
@@ -1073,10 +1627,7 @@ export async function renderEamesEnvironment(options = {}) {
       );
     }
     if (motion && showSources) {
-      const animatedSceneObjects = buildEnvironmentSceneObjects(model, lightingOptions, {
-        showSources,
-        motionPhase,
-      }, runtimeModules);
+      const animatedSceneObjects = validationScene.buildSceneObjects(motionPhase);
       renderer.updateSceneObjects(animatedSceneObjects);
     }
     const frameOptions = adaptiveSampling.getFrameOptions();
@@ -1098,7 +1649,11 @@ export async function renderEamesEnvironment(options = {}) {
   const lightingEnvironment = lightingOptions.lightingEnvironment;
   const result = {
     status: "ok",
-    preset,
+    preset: validationScene.preset,
+    validationSceneId: validationScene.sceneDefinition.id,
+    validationSceneLabel: validationScene.sceneDefinition.label,
+    validationSceneFamily: validationScene.sceneDefinition.family,
+    artifactTargets: [...validationScene.sceneDefinition.artifactTargets],
     scene: lightingEnvironment.scene,
     timeOfDay: lightingEnvironment.timeOfDay,
     geometry,
@@ -1113,9 +1668,9 @@ export async function renderEamesEnvironment(options = {}) {
     motion,
     cameraPreset,
     probeReadback: readOutputProbe,
-    modelName: model.name,
-    primitiveCount: model.primitives.length,
-    triangleCount: Math.floor(model.indices.length / 3),
+    modelName: validationScene.modelName,
+    primitiveCount: validationScene.primitiveCount,
+    triangleCount: validationScene.triangleCount,
     sceneObjectCount: sceneObjects.length,
     meshCount: meshes.length,
     lightSources: lightingOptions.lightSources.map((source) => ({
@@ -1158,11 +1713,12 @@ export async function renderEamesEnvironment(options = {}) {
 async function main() {
   const params = new URLSearchParams(window.location.search);
   const preset = params.get("preset") ?? "grass-field-midday";
+  const validationSceneId = params.get("validationScene") ?? "eames";
   const geometry = params.get("geometry") ?? "mesh";
   const width = readNumberParam(params, "width", 1280, 320, 4096);
   const height = readNumberParam(params, "height", 720, 180, 2304);
   const frames = readNumberParam(params, "frames", 4, 1, 8);
-  const maxDepth = readNumberParam(params, "maxDepth", 3, 1, 12);
+  const maxDepth = readNumberParam(params, "maxDepth", 3, 1, MAX_VALIDATION_MAX_DEPTH);
   const samplesPerPixel = readNumberParam(params, "samplesPerPixel", 8, 1, 256);
   const denoise = params.get("denoise") !== "0";
   const deferredPathResolve = params.get("deferredPathResolve") !== "0";
@@ -1209,6 +1765,7 @@ async function main() {
     canvas,
     hud,
     preset,
+    validationSceneId,
     geometry,
     width,
     height,
@@ -1229,8 +1786,7 @@ async function main() {
     frameIndex,
     captureState,
   });
-  clearTimeout(bootTimeout);
-  delete globalThis.__plasiusCaptureBootTimeoutId;
+  clearCaptureBootTimeout(globalThis);
   if (captureBitmap) {
     await delayMilliseconds(captureBitmapDelayMs);
     window.__plasiusCaptureImage = freezeCanvasForCapture(canvas);

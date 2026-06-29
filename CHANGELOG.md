@@ -15,7 +15,11 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Fixed**
-  - (placeholder)
+  - Synthetic reference-scene captures now honour `PLASIUS_CAPTURE_VALIDATION_SCENE`
+    repro commands, clear inherited direct-light and daylight-baseline state in
+    the furnace and dark-terminal validation scenes, preserve an HDRI
+    descriptor for skybox validation, and orient the furnace back wall toward
+    the reference camera.
 
 - **Security**
   - (placeholder)
@@ -75,6 +79,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - The Eames validation harness now supports scripted quick/full screenshot
     matrices with configurable camera, SPP, and denoise combinations plus
     manifest-level failure diagnostics for reference runs.
+  - The validation harness now ships synthetic furnace, all-material
+    direct-light, HDRI-skybox, and dark-terminal-residual scenes alongside the
+    Eames matrix so reference summaries can name the artifact classes each
+    scene is meant to catch.
   - The Eames validation HUD/result now preserves renderer transport
     guardrails, including jobs, submissions, memory, queue-overflow, and
     device-loss diagnostics for release validation.
@@ -83,6 +91,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - Wavefront ray-record documentation now mirrors the current renderer payload
     shape, including medium-stack and spectral-state fields used for transport
     validation.
+  - High-SPP Eames validation captures now separate browser boot readiness from
+    long-running frame completion and allow reference-depth requests up to 32
+    bounces instead of silently capping the page at 12.
   - The Eames validation page now defaults display-quality captures to
     `accelerationBuildMode=cpu-upload` while still allowing explicit GPU BVH
     validation through the query parameter.

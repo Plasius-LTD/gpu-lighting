@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -51,12 +52,14 @@ const {
   assertLocalCaptureUploadUrl,
   buildEamesMeshes,
   buildEnvironmentSceneObjects,
+  clearCaptureBootTimeout,
   computeCaptureBootTimeoutMs,
   createAdaptiveSamplingController,
   createEnvironmentCamera,
   createCaptureState,
   formatRendererTransportHudLines,
   listCaptureUploadUrlCandidates,
+  MAX_VALIDATION_MAX_DEPTH,
   MODEL_URL,
   normalizeCaptureError,
   readAccelerationBuildModeParam,
@@ -66,11 +69,15 @@ const {
   renderEamesEnvironment,
   resolveCaptureUploadUrl,
 } = await import("../demo/eames-environments/page.js");
+const {
+  listValidationSceneDefinitions,
+} = await import("../demo/eames-environments/validation-scenes.js");
 const previousEamesCaptureModuleOnly = globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__;
 globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__ = true;
 const {
   computeCaptureReadyTimeoutMs,
   createCaptureScenarios,
+  MAX_CAPTURE_READY_TIMEOUT_MS,
 } = await import("../scripts/eames-environments/capture.mjs");
 if (typeof previousEamesCaptureModuleOnly === "undefined") {
   delete globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__;
@@ -530,11 +537,28 @@ test("playwright capture matrix helpers build quick and full validation scenario
     samplesPerPixelMatrix: [8],
     denoiseMatrix: [true],
   });
-  assert.equal(quick.length, 16);
+  assert.equal(quick.length, 20);
   assert.deepEqual(quick[0].cameraPreset, "reference");
   assert.deepEqual(quick[0].samplesPerPixel, 8);
   assert.deepEqual(quick[0].denoise, true);
   assert.match(quick[0].reproCommand, /PLASIUS_CAPTURE_MATRIX_MODE=quick/);
+  assert.deepEqual(
+    quick
+      .filter((scenario) => scenario.validationSceneId !== "eames")
+      .map((scenario) => scenario.validationSceneId)
+      .sort(),
+    [
+      "all-material-direct-light",
+      "dark-terminal-residual",
+      "furnace",
+      "hdri-skybox",
+    ]
+  );
+  assert.ok(
+    quick
+      .filter((scenario) => scenario.validationSceneId !== "eames")
+      .every((scenario) => Array.isArray(scenario.artifactTargets) && scenario.artifactTargets.length >= 3)
+  );
 
   const full = createCaptureScenarios({
     geometry: "mesh",
@@ -543,9 +567,91 @@ test("playwright capture matrix helpers build quick and full validation scenario
     samplesPerPixelMatrix: [1, 32],
     denoiseMatrix: [true, false],
   });
-  assert.equal(full.length, 16 * 2 * 2 * 2);
+  assert.equal(full.length, 16 * 2 * 2 * 2 + 4);
   assert.ok(full.some((scenario) => scenario.cameraPreset === "wide"));
   assert.ok(full.some((scenario) => scenario.samplesPerPixel === 32 && scenario.denoise === false));
+});
+
+test("validation scene catalog includes the required synthetic reference cases", () => {
+  const syntheticScenes = listValidationSceneDefinitions().filter((scene) => scene.family === "synthetic");
+  assert.deepEqual(
+    syntheticScenes.map((scene) => scene.id),
+    [
+      "furnace",
+      "all-material-direct-light",
+      "hdri-skybox",
+      "dark-terminal-residual",
+    ]
+  );
+  assert.ok(
+    syntheticScenes.every((scene) => Array.isArray(scene.artifactTargets) && scene.artifactTargets.length >= 3)
+  );
+});
+
+test("capture scenario repro commands preserve maxDepth values up to 32", () => {
+  const captureModuleUrl = new URL("../scripts/eames-environments/capture.mjs", import.meta.url).href;
+  const output = execFileSync(
+    process.execPath,
+    [
+      "--input-type=module",
+      "-e",
+      [
+        "globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__ = true;",
+        `const { createCaptureScenarios } = await import(${JSON.stringify(captureModuleUrl)});`,
+        "const scenario = createCaptureScenarios({",
+        "  geometry: 'mesh',",
+        "  matrixMode: 'quick',",
+        "  cameraPresets: ['reference'],",
+        "  samplesPerPixelMatrix: [1],",
+        "  denoiseMatrix: [true],",
+        "})[0];",
+        "process.stdout.write(scenario.reproCommand);",
+      ].join("\n"),
+    ],
+    {
+      cwd: path.resolve(__dirname, ".."),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        PLASIUS_CAPTURE_MAX_DEPTH: "20",
+      },
+    }
+  );
+  assert.match(output, /PLASIUS_CAPTURE_MAX_DEPTH=20/);
+});
+
+test("capture scenarios respect PLASIUS_CAPTURE_VALIDATION_SCENE for synthetic repro isolation", () => {
+  const captureModuleUrl = new URL("../scripts/eames-environments/capture.mjs", import.meta.url).href;
+  const output = execFileSync(
+    process.execPath,
+    [
+      "--input-type=module",
+      "-e",
+      [
+        "globalThis.__PLASIUS_EAMES_CAPTURE_MODULE_ONLY__ = true;",
+        `const { createCaptureScenarios } = await import(${JSON.stringify(captureModuleUrl)});`,
+        "process.stdout.write(JSON.stringify(createCaptureScenarios({",
+        "  geometry: 'mesh',",
+        "  matrixMode: 'quick',",
+        "  cameraPresets: ['reference'],",
+        "  samplesPerPixelMatrix: [8],",
+        "  denoiseMatrix: [false],",
+        "})));",
+      ].join("\n"),
+    ],
+    {
+      cwd: path.resolve(__dirname, ".."),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        PLASIUS_CAPTURE_VALIDATION_SCENE: "furnace",
+      },
+    }
+  );
+  const scenarios = JSON.parse(output);
+  assert.equal(scenarios.length, 1);
+  assert.equal(scenarios[0].validationSceneId, "furnace");
+  assert.match(scenarios[0].reproCommand, /PLASIUS_CAPTURE_VALIDATION_SCENE=furnace/);
 });
 
 test("playwright capture server helpers prefer reusable servers before free-port fallback", async () => {
@@ -760,7 +866,7 @@ test("validation page reference camera is tighter than the wide orbit camera", (
   assert.ok(referenceCamera.fovYDegrees < wideCamera.fovYDegrees);
 });
 
-test("validation page scales capture boot timeout with render workload", () => {
+test("validation page scales capture waits with render workload", () => {
   const lowWorkloadTimeout = computeCaptureBootTimeoutMs({
     width: 640,
     height: 360,
@@ -778,9 +884,32 @@ test("validation page scales capture boot timeout with render workload", () => {
     900_000
   );
   assert.equal(
-    computeCaptureReadyTimeoutMs({ width: 3840, height: 2160, frames: 8, maxDepth: 12, samplesPerPixel: 256 }),
-    900_000
+    computeCaptureReadyTimeoutMs({ width: 3840, height: 2160, frames: 1, maxDepth: 20, samplesPerPixel: 256 }),
+    MAX_CAPTURE_READY_TIMEOUT_MS
   );
+  assert.ok(
+    computeCaptureReadyTimeoutMs({ width: 3840, height: 2160, frames: 1, maxDepth: 20, samplesPerPixel: 256 }) >
+      computeCaptureBootTimeoutMs({ width: 3840, height: 2160, frames: 1, maxDepth: 20, samplesPerPixel: 256 })
+  );
+});
+
+test("validation page accepts high-SPP reference depth and clears boot timeout at render start", () => {
+  const params = new URLSearchParams("maxDepth=20");
+  assert.equal(readNumberParam(params, "maxDepth", 3, 1, MAX_VALIDATION_MAX_DEPTH), 20);
+  assert.equal(readNumberParam(new URLSearchParams("maxDepth=64"), "maxDepth", 3, 1, MAX_VALIDATION_MAX_DEPTH), 32);
+
+  let clearedHandle = null;
+  const runtime = {
+    __plasiusCaptureBootTimeoutId: 1234,
+    clearTimeout(handle) {
+      clearedHandle = handle;
+    },
+  };
+  assert.equal(clearCaptureBootTimeout(runtime), true);
+  assert.equal(clearedHandle, 1234);
+  assert.equal(runtime.__plasiusCaptureBootTimeoutId, undefined);
+  assert.equal(runtime.__plasiusCaptureBootComplete, true);
+  assert.equal(clearCaptureBootTimeout(runtime), false);
 });
 
 test("path-debug capture scales readiness waits with the requested workload", () => {
@@ -790,6 +919,8 @@ test("path-debug capture scales readiness waits with the requested workload", ()
   );
 
   assert.match(source, /computePathDebugWaitTimeoutMs/);
+  assert.match(source, /PLASIUS_PATH_DEBUG_MAX_DEPTH",\s*8,\s*1,\s*32/);
+  assert.match(source, /Math\.min\(3_600_000,/);
   assert.match(source, /waitForCaptureReady\(page,\s*`layer \$\{layer\}`,\s*readyTimeoutMs\)/);
   assert.doesNotMatch(source, /waitForCaptureReady\(page,\s*`layer \$\{layer\}`,\s*180_000\)/);
 });
@@ -1626,6 +1757,223 @@ test("validation render decouples frame rendering from optional probe readback",
   assert.equal(result.renderer.transportGuardrails.status, "pass");
   assert.equal(result.renderer.transportGuardrails.current.memory.totalBytes, 32768);
   assert.equal(result.probeSummary.sampledPixels, 5);
+});
+
+test("validation render supports synthetic reference scenes without loading the Eames model", async () => {
+  const lightingOptions = createWavefrontEnvironmentLightingOptions({
+    preset: "warehouse-midday",
+  });
+  let loadModelCalled = false;
+  let rendererOptions = null;
+  const renderer = {
+    async renderFrame(options = {}) {
+      return {
+        frame: 1,
+        samplesPerPixel: options.samplesPerPixel ?? 4,
+        renderedSamplesPerPixel: options.samplesPerPixel ?? 4,
+        triangleCount: 2,
+        emissiveTriangleCount: 0,
+        bvhNodeCount: 1,
+        accelerationBuildMode: "gpu",
+        accelerationBuildSubmitted: true,
+        deferredPathResolve: true,
+        gpuWorkerJobs: {
+          completedPerFrame: 14,
+          completedPerSecond: 140,
+          completedPerSubmission: 7,
+          frameTimeMs: 10,
+        },
+        gpuParallelism: { exposesMultiWorkgroupParallelism: true },
+        outputProbe: null,
+      };
+    },
+    async readOutputProbe() {
+      return {
+        x: 0,
+        y: 0,
+        rgba: [0, 0, 0, 255],
+        luminance: 0,
+      };
+    },
+    updateCamera() {},
+    updateSceneObjects() {},
+  };
+  const canvas = { width: 0, height: 0 };
+
+  const { result } = await renderEamesEnvironment({
+    canvas,
+    width: 640,
+    height: 480,
+    frames: 1,
+    maxDepth: 8,
+    samplesPerPixel: 4,
+    denoise: false,
+    deferredPathResolve: true,
+    motion: false,
+    readOutputProbe: false,
+    validationSceneId: "furnace",
+    runtimeModules: {
+      createWavefrontEnvironmentLightingOptions() {
+        return lightingOptions;
+      },
+      async loadEamesGltfModel() {
+        loadModelCalled = true;
+        throw new Error("Synthetic validation scenes should not load the Eames model.");
+      },
+      async createWavefrontPathTracingComputeRenderer(options = {}) {
+        rendererOptions = options;
+        return renderer;
+      },
+    },
+  });
+
+  assert.equal(loadModelCalled, false);
+  assert.equal(result.validationSceneId, "furnace");
+  assert.equal(result.validationSceneFamily, "synthetic");
+  assert.equal(result.modelName, "synthetic-validation/furnace");
+  assert.ok(rendererOptions.meshes.length > 0);
+  assert.deepEqual(rendererOptions.environmentLighting.environmentLightSources, []);
+  assert.equal(rendererOptions.environmentLighting.environmentLightSourceCount, 0);
+  assert.equal(rendererOptions.environmentLighting.dominantLightSource, null);
+  assert.ok(
+    rendererOptions.meshes[1].normals.every((value, index) =>
+      index % 3 === 2 ? value > 0 : value === 0
+    )
+  );
+  assert.ok(Array.isArray(result.artifactTargets) && result.artifactTargets.length >= 3);
+});
+
+test("dark terminal residual strips inherited environment light sources", async () => {
+  let rendererOptions = null;
+  const renderer = {
+    async renderFrame(options = {}) {
+      return {
+        frame: 1,
+        samplesPerPixel: options.samplesPerPixel ?? 2,
+        renderedSamplesPerPixel: options.samplesPerPixel ?? 2,
+        triangleCount: 2,
+        emissiveTriangleCount: 0,
+        bvhNodeCount: 1,
+        accelerationBuildMode: "cpu-upload",
+        accelerationBuildSubmitted: true,
+        deferredPathResolve: true,
+        gpuWorkerJobs: {
+          completedPerFrame: 10,
+          completedPerSecond: 100,
+          completedPerSubmission: 5,
+          frameTimeMs: 10,
+        },
+        gpuParallelism: { exposesMultiWorkgroupParallelism: true },
+        outputProbe: null,
+      };
+    },
+    async readOutputProbe() {
+      return null;
+    },
+    updateCamera() {},
+    updateSceneObjects() {},
+  };
+
+  await renderEamesEnvironment({
+    canvas: { width: 0, height: 0 },
+    width: 640,
+    height: 480,
+    frames: 1,
+    maxDepth: 8,
+    samplesPerPixel: 2,
+    denoise: false,
+    deferredPathResolve: true,
+    motion: false,
+    readOutputProbe: false,
+    validationSceneId: "dark-terminal-residual",
+    runtimeModules: {
+      createWavefrontEnvironmentLightingOptions() {
+        return createWavefrontEnvironmentLightingOptions({
+          preset: "warehouse-night",
+        });
+      },
+      async loadEamesGltfModel() {
+        throw new Error("Synthetic validation scenes should not load the Eames model.");
+      },
+      async createWavefrontPathTracingComputeRenderer(options = {}) {
+        rendererOptions = options;
+        return renderer;
+      },
+    },
+  });
+
+  assert.deepEqual(rendererOptions.environmentLighting.environmentLightSources, []);
+  assert.equal(rendererOptions.environmentLighting.environmentLightSourceCount, 0);
+  assert.equal(rendererOptions.environmentLighting.dominantLightSource, null);
+  assert.equal(rendererOptions.environmentLighting.sunlitBaseline, 0);
+  assert.equal(
+    rendererOptions.environmentLighting.environmentMissLighting.sourceId,
+    "validation-dark-terminal-residual"
+  );
+});
+
+test("hdri skybox synthetic scene keeps an HDRI environment descriptor", async () => {
+  let rendererOptions = null;
+  const renderer = {
+    async renderFrame(options = {}) {
+      return {
+        frame: 1,
+        samplesPerPixel: options.samplesPerPixel ?? 2,
+        renderedSamplesPerPixel: options.samplesPerPixel ?? 2,
+        triangleCount: 1,
+        emissiveTriangleCount: 0,
+        bvhNodeCount: 1,
+        accelerationBuildMode: "cpu-upload",
+        accelerationBuildSubmitted: true,
+        deferredPathResolve: true,
+        gpuWorkerJobs: {
+          completedPerFrame: 10,
+          completedPerSecond: 100,
+          completedPerSubmission: 5,
+          frameTimeMs: 10,
+        },
+        gpuParallelism: { exposesMultiWorkgroupParallelism: true },
+        outputProbe: null,
+      };
+    },
+    async readOutputProbe() {
+      return null;
+    },
+    updateCamera() {},
+    updateSceneObjects() {},
+  };
+
+  await renderEamesEnvironment({
+    canvas: { width: 0, height: 0 },
+    width: 640,
+    height: 480,
+    frames: 1,
+    maxDepth: 8,
+    samplesPerPixel: 2,
+    denoise: false,
+    deferredPathResolve: true,
+    motion: false,
+    readOutputProbe: false,
+    validationSceneId: "hdri-skybox",
+    runtimeModules: {
+      createWavefrontEnvironmentLightingOptions() {
+        return createWavefrontEnvironmentLightingOptions({
+          preset: "grass-field-midday",
+        });
+      },
+      async loadEamesGltfModel() {
+        throw new Error("Synthetic validation scenes should not load the Eames model.");
+      },
+      async createWavefrontPathTracingComputeRenderer(options = {}) {
+        rendererOptions = options;
+        return renderer;
+      },
+    },
+  });
+
+  assert.equal(rendererOptions.environmentLighting.environmentMap?.id, "validation-hdri-skybox");
+  assert.equal(rendererOptions.environmentLighting.environmentMap?.projection, "equirectangular");
+  assert.equal(rendererOptions.environmentLighting.environmentMap?.intensity, 1.12);
 });
 
 test("renderer transport hud lines surface guardrails and degrade gracefully when metrics are missing", () => {
