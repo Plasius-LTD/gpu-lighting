@@ -527,3 +527,13 @@ npm run pack:check
 - `docs/adrs/*`: architecture decisions for the lighting stack.
 - `docs/tdrs/*`: technical design records for worker manifests and debug hooks.
 - `docs/design/*`: integration guidance for worker budgets, DAG metadata, and debug instrumentation.
+
+<!-- BEGIN PLASIUS RELEASE INTEGRITY -->
+## Release integrity
+
+CI keeps the administrative contributor registry outside Git and npm package
+artifacts using exact, case-normalised path checks. CI runs on approved
+self-hosted runners. Release preparation and npm publication use GitHub-hosted
+runners with Node.js 24.18.0 LTS. CD remains disabled until the npm trusted
+publisher binding is verified and the legacy token fallback is removed.
+<!-- END PLASIUS RELEASE INTEGRITY -->

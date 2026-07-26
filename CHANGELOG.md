@@ -12,12 +12,15 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Changed**
+  - Updated `@plasius/gpu-shared`, `@plasius/gpu-worker`, and `@plasius/gpu-renderer` to the surviving clean registry versions used by the release pipeline.
   - (placeholder)
 
 - **Fixed**
   - (placeholder)
 
 - **Security**
+  - Added fail-closed source and npm-package admission for the administrative contributor registry and pinned the CI/CD runtime to Node.js 24.18.0 LTS.
+  - Pinned audited transitive build dependencies to fixed `brace-expansion` and `esbuild` releases.
   - (placeholder)
 
 ## [0.2.13] - 2026-06-29
