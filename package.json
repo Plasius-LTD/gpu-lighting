@@ -38,8 +38,10 @@
     "test": "npm run test:unit",
     "test:unit": "node --test",
     "test:e2e": "npx playwright install chromium && playwright test",
+    "test:privacy": "node --test tests/public-package-policy.test.cjs",
     "test:coverage": "c8 --reporter=lcov --reporter=text node --test",
-    "pack:check": "node scripts/verify-public-package.cjs",
+    "pack:check": "npm run privacy:check && node scripts/verify-public-package.cjs",
+    "privacy:check": "node scripts/verify-public-artifacts.cjs --source-only",
     "prepublishOnly": "npm run build && npm run pack:check && npm run zero-three"
   },
   "keywords": [
