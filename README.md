@@ -515,7 +515,23 @@ npm run typecheck
 npm run test:coverage
 npm run build
 npm run pack:check
+npm run zero-three
+npm run zero-three:test
 ```
+
+## Zero-Three architecture invariant
+
+This GPU-native package permanently prohibits Three.js and every package whose
+dependency, peer, or optional graph reaches it. The prohibition covers source,
+public declarations, tests, tooling, manifests, lockfiles, installed graphs,
+bundles, npm tarballs, SBOMs, and active documentation. There is no compatibility
+mode, waiver, or renderer fallback.
+
+Run `npm run zero-three:source` before installation and `npm run zero-three`
+after building to generate the immutable package evidence consumed by site
+release-integrity validation. `npm run zero-three:test` exercises the fail-closed
+negative fixtures. The system-wide decision is recorded in
+[ADR 0168](https://github.com/Plasius-LTD/plasius-ltd-site/blob/main/docs/adrs/adr-0168-three-js-is-prohibited-from-gpu-native-rendering.md).
 
 ## Files
 
@@ -533,7 +549,9 @@ npm run pack:check
 
 CI keeps the administrative contributor registry outside Git and npm package
 artifacts using exact, case-normalised path checks. CI runs on approved
-self-hosted runners. Release preparation and npm publication use GitHub-hosted
-runners with Node.js 24.18.0 LTS. CD remains disabled until the npm trusted
-publisher binding is verified and the legacy token fallback is removed.
+GitHub-hosted runners. Release preparation and publication use a two-run
+exact-main protocol on GitHub-hosted Node.js 24.18.0 LTS. A read-only job seals
+the package tarball, SBOM, and Zero-Three evidence before a dependency-free
+production job publishes that exact artifact through npm OIDC with provenance;
+there is no npm write-token fallback.
 <!-- END PLASIUS RELEASE INTEGRITY -->
