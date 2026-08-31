@@ -550,7 +550,8 @@ negative fixtures. The system-wide decision is recorded in
 CI keeps the administrative contributor registry outside Git and npm package
 artifacts using exact, case-normalised path checks. CI runs on approved
 GitHub-hosted runners. Release preparation and publication use a two-run
-exact-main protocol on GitHub-hosted Node.js 24.18.0 LTS. A read-only job seals
+exact-main protocol on GitHub-hosted Node.js 24.18.0 LTS with a pinned npm
+11.6.2 release client. A read-only job seals
 the package tarball, SBOM, and Zero-Three evidence before a dependency-free
 production job publishes that exact artifact through npm OIDC with provenance;
 there is no npm write-token fallback.

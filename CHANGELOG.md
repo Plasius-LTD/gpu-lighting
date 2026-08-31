@@ -15,9 +15,13 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Fixed**
+  - Removed self-hosted npm cache finalization from exact-commit CI and added a
+    manual validation entry point for reviewed release commits.
   - (placeholder)
 
 - **Security**
+  - Pinned the npm OIDC release client to 11.6.2 and revalidate the exact
+    checked-out and remote `main` commit immediately before npm publication.
   - (placeholder)
 
 ## [0.2.14] - 2026-08-30
