@@ -62,7 +62,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@plasius/gpu-debug": "^0.2.7",
-    "@plasius/gpu-renderer": "^0.2.42",
+    "@plasius/gpu-renderer": "^0.2.43",
     "@playwright/test": "^1.61.1",
     "c8": "^11.0.0",
     "eslint": "^10.6.0",
