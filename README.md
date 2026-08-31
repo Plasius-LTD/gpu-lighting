@@ -8,8 +8,6 @@
 [![Security Policy](https://img.shields.io/badge/security%20policy-yes-orange.svg)](./SECURITY.md)
 [![Changelog](https://img.shields.io/badge/changelog-md-blue.svg)](./CHANGELOG.md)
 
-[![license](https://img.shields.io/github/license/Plasius-LTD/gpu-lighting)](./LICENSE)
-
 Advanced lighting WGSL modules and planning profiles for `@plasius/gpu-worker`.
 The package is structured around modern lighting tracks:
 
