@@ -60,11 +60,11 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@plasius/gpu-renderer": "^0.2.40",
-    "@playwright/test": "^1.61.1",
+    "@plasius/gpu-renderer": "^0.2.43",
+    "@playwright/test": "^1.62.1",
     "c8": "^11.0.0",
-    "eslint": "^10.6.0",
-    "globals": "^17.7.0",
+    "eslint": "^10.9.1",
+    "globals": "^17.11.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3"
   },
@@ -90,7 +90,7 @@
     }
   ],
   "dependencies": {
-    "@plasius/gpu-shared": "^1.1.0",
+    "@plasius/gpu-shared": "^1.1.1",
     "@plasius/gpu-worker": "^0.3.4"
   },
   "overrides": {
