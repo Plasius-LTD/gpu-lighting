@@ -99,6 +99,40 @@ server-selection helper, so local reuse, fresh static-server startup, and
 bridge fallback all follow the same port and readiness rules across macOS and
 Linux.
 
+### Fixed-SPP adaptive-sampling baseline
+
+Story 1 of the GPU-native adaptive-sampling programme uses this repository as
+the physical WebGPU baseline owner. Build the package and its sibling GPU
+packages, then run the complete fixed-path matrix with:
+
+```bash
+npm run baseline:fixed-spp
+```
+
+The matrix contains 216 lanes: four representative scenes, 1080p/1440p/4K,
+one/four/eight maximum bounces, 4/32/128 SPP, and denoise off/on. Each lane
+excludes two warm-up frames and retains ten measured frames by default. A local
+smoke run is available through
+`PLASIUS_FIXED_SPP_BASELINE_MATRIX=quick npm run baseline:fixed-spp`.
+
+Evidence is written beneath `output/benchmarks/fixed-spp/task-85/` as one JSON
+record per lane plus a fail-closed manifest and Markdown summary. The runner
+requires exact fixed-SPP ray counts, timestamp-query GPU time, total render-job
+time, memory, queue-overflow, device-loss, and transport-guardrail evidence.
+Missing evidence fails the lane. Existing lane files are resumable; set
+`PLASIUS_FIXED_SPP_BASELINE_RESUME=0` to recapture them.
+
+Per-lane variance is the sample coefficient of variation across measured
+frames. Timing confidence uses a two-sided 95% Student t interval. A later
+adaptive mode advances only when the lower 95% confidence bound for its
+matched-quality GPU-time improvement is at least the greater of 5% and twice
+the fixed baseline coefficient of variation. See the
+[baseline design](./docs/design/fixed-spp-baseline-methodology.md) for the full
+admission and comparison contract.
+
+Three.js is permanently prohibited and must never be installed or used as a
+capture, rendering, test, development, or rollback path.
+
 The capture scripts now pin deterministic validation settings unless explicitly
 overridden:
 

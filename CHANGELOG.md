@@ -9,12 +9,22 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 ## [Unreleased]
 
 - **Added**
+  - Added a resumable, physical-WebGPU fixed-SPP baseline runner covering 216
+    scene, resolution, bounce, SPP, and denoise lanes with retained ray,
+    timing, memory, stability, coefficient-of-variation, and 95% confidence
+    evidence.
   - (placeholder)
 
 - **Changed**
+  - Raised validation to `@plasius/gpu-renderer` 0.2.41 and
+    `@plasius/gpu-debug` 0.2.6 so exact renderer telemetry is admitted through
+    the bounded GPU-debug aggregation contract.
   - (placeholder)
 
 - **Fixed**
+  - Capture servers now resolve both supported worktree layouts and serve the
+    active `gpu-lighting` checkout instead of silently qualifying a sibling
+    canonical checkout.
   - (placeholder)
 
 - **Security**

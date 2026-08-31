@@ -25,8 +25,9 @@
   },
   "scripts": {
     "build": "tsup && cp -R src/techniques dist/techniques",
+    "baseline:fixed-spp": "node scripts/eames-environments/fixed-spp-baseline-capture.mjs",
     "demo": "python3 -m http.server --directory ..",
-    "typecheck": "node --check src/index.js && node --check demo/lighting-demo-config.js && node --check demo/main.js && node --check demo/eames-environments/page.js && node --check demo/eames-environments/eames-loader.js && node --check demo/eames-environments/validation-scenes.js && node --check scripts/eames-environments/capture-runtime.mjs && node --check scripts/eames-environments/capture-server.mjs && node --check scripts/eames-environments/capture.mjs && node --check scripts/eames-environments/path-debug-capture.mjs && node --check scripts/eames-environments/capture-bridge-server.mjs",
+    "typecheck": "node --check src/index.js && node --check demo/lighting-demo-config.js && node --check demo/main.js && node --check demo/eames-environments/page.js && node --check demo/eames-environments/eames-loader.js && node --check demo/eames-environments/validation-scenes.js && node --check scripts/eames-environments/capture-runtime.mjs && node --check scripts/eames-environments/capture-server.mjs && node --check scripts/eames-environments/capture.mjs && node --check scripts/eames-environments/path-debug-capture.mjs && node --check scripts/eames-environments/capture-bridge-server.mjs && node --check scripts/eames-environments/fixed-spp-baseline-capture.mjs",
     "zero-three": "node scripts/verify-zero-three.cjs --package --evidence-out release-artifacts/zero-three-evidence.json",
     "zero-three:source": "node scripts/verify-zero-three.cjs --source-only",
     "zero-three:test": "node --test tests/zero-three.test.cjs",
@@ -60,7 +61,8 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@plasius/gpu-renderer": "^0.2.40",
+    "@plasius/gpu-debug": "^0.2.7",
+    "@plasius/gpu-renderer": "^0.2.41",
     "@playwright/test": "^1.61.1",
     "c8": "^11.0.0",
     "eslint": "^10.6.0",

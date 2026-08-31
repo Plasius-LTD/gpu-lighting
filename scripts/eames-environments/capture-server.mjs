@@ -1,6 +1,7 @@
 import net from "node:net";
 import { spawn } from "node:child_process";
 import { resolveCaptureWorkspaceRoot } from "./capture-runtime.mjs";
+import { createCaptureBridgeServer } from "./capture-bridge-server.mjs";
 
 export const defaultCaptureServerHost = "127.0.0.1";
 export const defaultCaptureServerAssetPath = "/gpu-lighting/demo/eames-environments/index.html";
@@ -76,7 +77,7 @@ export async function waitForCaptureServer(
   }
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
-    if (server.exitCode !== null) {
+    if (Number.isInteger(server.exitCode)) {
       throw new Error(`Static server exited early with code ${server.exitCode}.`);
     }
     try {
@@ -131,7 +132,16 @@ export async function stopCaptureStaticServer(server, gracePeriodMs = 2500) {
 export async function openCaptureServerSession(options = {}) {
   const selection = await findCaptureServerPort(options);
   const baseUrl = `http://${defaultCaptureServerHost}:${selection.port}`;
-  const server = selection.reuse ? null : startCaptureStaticServer(selection.port, options);
+  const server = selection.reuse
+    ? null
+    : await new Promise((resolve, reject) => {
+        const candidate = createCaptureBridgeServer(defaultCaptureServerHost);
+        candidate.once("error", reject);
+        candidate.listen(selection.port, defaultCaptureServerHost, () => {
+          candidate.off("error", reject);
+          resolve(candidate);
+        });
+      });
   await waitForCaptureServer(
     buildCaptureAssetUrl(baseUrl, options.assetPath),
     server ?? { exitCode: null },
@@ -143,7 +153,12 @@ export async function openCaptureServerSession(options = {}) {
     reuse: selection.reuse,
     server,
     async close() {
-      await stopCaptureStaticServer(server);
+      if (server) {
+        await new Promise((resolve, reject) => {
+          server.close((error) => error ? reject(error) : resolve());
+          server.closeAllConnections?.();
+        });
+      }
     },
   };
 }

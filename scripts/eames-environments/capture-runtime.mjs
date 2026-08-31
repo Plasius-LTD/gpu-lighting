@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "../..");
 function resolveWorkspaceRootFromPackageRoot(currentPackageRoot) {
   const directParent = path.resolve(currentPackageRoot, "..");
-  if (path.basename(directParent) === ".worktrees") {
+  if ([".worktrees", "worktrees"].includes(path.basename(directParent))) {
     return path.resolve(directParent, "..");
   }
   return directParent;
@@ -42,6 +42,10 @@ export function resolveCaptureArtifactDirectory(value = process.env.PLASIUS_CAPT
 
 export function resolveCaptureWorkspaceRoot() {
   return workspaceRoot;
+}
+
+export function resolveCapturePackageRoot() {
+  return packageRoot;
 }
 
 export async function ensureCaptureArtifactDirectory(value) {

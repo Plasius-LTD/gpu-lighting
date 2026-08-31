@@ -8,3 +8,4 @@
 - [Architectural Decision Record (ADR)](./adr-0006:%20Distance-Banded%20Lighting%20and%20Shadow%20Sources.md)
 - [Architectural Decision Record (ADR)](./adr-0007:%20Reference-First%20Adaptive%20Lighting%20Profile%20Ladder.md)
 - [Architectural Decision Record (ADR)](./adr-0008:%20Renderer-Aligned%20Wavefront%20Lighting%20Jobs.md)
+- [Architectural Decision Record (ADR)](./adr-0009:%20Physical%20Fixed-SPP%20Baseline%20as%20the%20Adaptive%20Admission%20Reference.md)
