@@ -1,6 +1,6 @@
 {
   "name": "@plasius/gpu-lighting",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "Advanced lighting WGSL modules and planning profiles for @plasius/gpu-worker.",
   "type": "module",
   "sideEffects": false,
@@ -27,6 +27,9 @@
     "build": "tsup && cp -R src/techniques dist/techniques",
     "demo": "python3 -m http.server --directory ..",
     "typecheck": "node --check src/index.js && node --check demo/lighting-demo-config.js && node --check demo/main.js && node --check demo/eames-environments/page.js && node --check demo/eames-environments/eames-loader.js && node --check demo/eames-environments/validation-scenes.js && node --check scripts/eames-environments/capture-runtime.mjs && node --check scripts/eames-environments/capture-server.mjs && node --check scripts/eames-environments/capture.mjs && node --check scripts/eames-environments/path-debug-capture.mjs && node --check scripts/eames-environments/capture-bridge-server.mjs",
+    "zero-three": "node scripts/verify-zero-three.cjs --package --evidence-out release-artifacts/zero-three-evidence.json",
+    "zero-three:source": "node scripts/verify-zero-three.cjs --source-only",
+    "zero-three:test": "node --test tests/zero-three.test.cjs",
     "audit:eslint": "eslint . --max-warnings=0",
     "audit:deps": "npm ls --all --omit=optional --omit=peer > /dev/null 2>&1 || true",
     "audit:npm": "npm audit --audit-level=high --omit=dev",
@@ -35,9 +38,11 @@
     "test": "npm run test:unit",
     "test:unit": "node --test",
     "test:e2e": "npx playwright install chromium && playwright test",
+    "test:privacy": "node --test tests/public-package-policy.test.cjs",
     "test:coverage": "c8 --reporter=lcov --reporter=text node --test",
-    "pack:check": "node scripts/verify-public-package.cjs",
-    "prepublishOnly": "npm run build && npm run pack:check"
+    "pack:check": "npm run privacy:check && node scripts/verify-public-package.cjs",
+    "privacy:check": "node scripts/verify-public-artifacts.cjs --source-only",
+    "prepublishOnly": "npm run build && npm run pack:check && npm run zero-three"
   },
   "keywords": [
     "webgpu",
@@ -55,7 +60,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@plasius/gpu-renderer": "^0.2.39",
+    "@plasius/gpu-renderer": "^0.2.40",
     "@playwright/test": "^1.61.1",
     "c8": "^11.0.0",
     "eslint": "^10.6.0",
@@ -85,11 +90,11 @@
     }
   ],
   "dependencies": {
-    "@plasius/gpu-shared": "^1.0.14",
+    "@plasius/gpu-shared": "^1.1.0",
     "@plasius/gpu-worker": "^0.3.4"
   },
   "overrides": {
-    "brace-expansion": "5.0.8",
+    "brace-expansion": "5.0.9",
     "esbuild": "0.28.1",
     "minimatch": "^10.2.1"
   },

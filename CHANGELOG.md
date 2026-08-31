@@ -12,15 +12,40 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Changed**
-  - Bound npm publication to the exact prepared `main` commit after successful push-triggered CI.
-  - Updated `@plasius/gpu-shared`, `@plasius/gpu-worker`, and `@plasius/gpu-renderer` to the surviving clean registry versions used by the release pipeline.
+  - (placeholder)
+
+- **Fixed**
+  - Removed self-hosted npm cache finalization from exact-commit CI and added a
+    manual validation entry point for reviewed release commits.
+  - (placeholder)
+
+- **Security**
+  - Pinned the npm OIDC release client to 11.6.2 and revalidate the exact
+    checked-out and remote `main` commit immediately before npm publication.
+  - (placeholder)
+
+## [0.2.14] - 2026-08-30
+
+- **Added**
+  - (placeholder)
+
+- **Changed**
+  - Raised `@plasius/gpu-shared` and the development
+    `@plasius/gpu-renderer` baseline to their first released immutable
+    Zero-Three evidence versions.
   - (placeholder)
 
 - **Fixed**
   - (placeholder)
 
 - **Security**
-  - Removed the npm write-token path, added a fail-closed npm 11.5.1-or-newer OIDC guard, and denied fork PR code access to self-hosted CI.
+  - Added permanent fail-closed Zero-Three validation across manifests,
+    dependency graphs, imports, declarations, aliases, bundles, npm tarballs,
+    SBOMs, and active documentation, with immutable CI/CD evidence and no
+    compatibility fallback.
+  - Replaced the legacy write-token publication path with exact-main npm OIDC
+    publication of a sealed tarball, SBOM, and attested Zero-Three evidence.
+  - Pinned patched transitive npm dependencies to clear the current audit baseline.
   - Added fail-closed source and npm-package admission for the administrative contributor registry and pinned the CI/CD runtime to Node.js 24.18.0 LTS.
   - Pinned audited transitive build dependencies to fixed `brace-expansion` and `esbuild` releases.
   - (placeholder)
@@ -590,7 +615,7 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
 [0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
 [0.1.19]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.19
-[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.13...HEAD
+[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.14...HEAD
 [0.2.0]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.0
 [0.2.2]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.2
 [0.2.6]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.6
@@ -599,3 +624,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.2.11]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.11
 [0.2.12]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.12
 [0.2.13]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.13
+[0.2.14]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.14
