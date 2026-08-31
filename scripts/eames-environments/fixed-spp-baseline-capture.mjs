@@ -272,7 +272,13 @@ export function validateFixedSppFrame(lane, frame) {
     frame.rayCounts?.expectedPrimaryRays !== expectedPrimaryRays ||
     frame.rayCounts?.observedPrimaryRays !== expectedPrimaryRays
   ) {
-    throw new Error(`${lane.id} primary-ray count evidence is inconsistent.`);
+    throw new Error(
+      `${lane.id} primary-ray count evidence is inconsistent: ${JSON.stringify({
+        expectedPrimaryRays,
+        primaryRays: frame.primaryRays,
+        rayCounts: frame.rayCounts,
+      })}.`
+    );
   }
   if (frame.rayCounts?.status !== "available") {
     throw new Error(`${lane.id} exact ray-count evidence is unavailable.`);
