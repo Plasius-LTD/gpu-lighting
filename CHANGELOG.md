@@ -16,18 +16,39 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - (placeholder)
 
 - **Changed**
-  - Raised validation to `@plasius/gpu-renderer` 0.2.41 and
-    `@plasius/gpu-debug` 0.2.6 so exact renderer telemetry is admitted through
+  - Raised validation to `@plasius/gpu-renderer` 0.2.43 and
+    `@plasius/gpu-debug` 0.2.7 so exact renderer telemetry is admitted through
     the bounded GPU-debug aggregation contract.
   - (placeholder)
 
 - **Fixed**
+  - Bind every retained baseline lane to its capture source, package versions,
+    browser, and adapter; reject mixed or missing provenance and recompute raw
+    measurement statistics before reuse. Capture each lane on a fresh page.
   - Capture servers now resolve both supported worktree layouts and serve the
     active `gpu-lighting` checkout instead of silently qualifying a sibling
     canonical checkout.
   - (placeholder)
 
 - **Security**
+  - (placeholder)
+
+## [0.2.15] - 2026-08-31
+
+- **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - Removed self-hosted npm cache finalization from exact-commit CI and added a
+    manual validation entry point for reviewed release commits.
+  - (placeholder)
+
+- **Security**
+  - Pinned the npm OIDC release client to 11.6.2 and revalidate the exact
+    checked-out and remote `main` commit immediately before npm publication.
   - (placeholder)
 
 ## [0.2.14] - 2026-08-30
@@ -621,7 +642,7 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
 [0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
 [0.1.19]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.19
-[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.14...HEAD
+[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.15...HEAD
 [0.2.0]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.0
 [0.2.2]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.2
 [0.2.6]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.6
@@ -631,3 +652,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.2.12]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.12
 [0.2.13]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.13
 [0.2.14]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.14
+[0.2.15]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.15

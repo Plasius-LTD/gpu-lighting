@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
+import { isDeepStrictEqual } from "node:util";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { createGpuDebugSession } from "@plasius/gpu-debug";
@@ -426,11 +427,68 @@ function percentile(values, fraction) {
   return sorted[index];
 }
 
+function captureProvenance(value) {
+  if (!value || !/^[0-9a-f]{40}$/u.test(value.sourceRevision ?? "") ||
+      value.sourceTreeStatus !== "clean" || !Array.isArray(value.packages) ||
+      value.packages.length === 0 || value.packages.some((entry) =>
+        typeof entry.name !== "string" || !entry.name ||
+        typeof entry.version !== "string" || !entry.version) ||
+      new Set(value.packages.map((entry) => entry.name)).size !== value.packages.length) {
+    throw new Error("Fixed-SPP capture provenance is missing or uncommitted.");
+  }
+  return {
+    sourceRevision: value.sourceRevision,
+    sourceTreeStatus: value.sourceTreeStatus,
+    packages: [...value.packages].sort((a, b) => a.name.localeCompare(b.name)),
+  };
+}
+
+function captureRuntime(value) {
+  if (!value || value.webgpu !== true || value.secureContext !== true ||
+      typeof value.browserVersion !== "string" || !value.browserVersion ||
+      typeof value.adapter?.vendor !== "string" || !value.adapter.vendor) {
+    throw new Error("Fixed-SPP physical runtime identity is missing.");
+  }
+  return {
+    webgpu: value.webgpu,
+    secureContext: value.secureContext,
+    browserVersion: value.browserVersion,
+    adapter: value.adapter,
+  };
+}
+
+export function validateRetainedFixedSppLane(lane, result, provenance, runtime) {
+  if (!isDeepStrictEqual(result?.lane, lane)) {
+    throw new Error(`Retained fixed-SPP lane configuration differs for ${lane.id}.`);
+  }
+  if (!isDeepStrictEqual(captureProvenance(result.provenance), captureProvenance(provenance))) {
+    throw new Error(`Retained fixed-SPP provenance differs for ${lane.id}.`);
+  }
+  if (!isDeepStrictEqual(captureRuntime(result.runtime), captureRuntime(runtime))) {
+    throw new Error(`Retained fixed-SPP runtime differs for ${lane.id}.`);
+  }
+  if (typeof result.capturedAt !== "string" || !Number.isFinite(Date.parse(result.capturedAt))) {
+    throw new Error(`Retained fixed-SPP capture provenance has no date for ${lane.id}.`);
+  }
+  const recomputed = createFixedSppBaselineLaneResult(lane, [
+    ...(result.warmupFrames ?? []), ...(result.measurements ?? []),
+  ], { probeSummary: result.hdrProbe });
+  for (const field of ["status", "warmupFrames", "measurements", "timings", "rays", "memory", "stability"]) {
+    if (!isDeepStrictEqual(result[field], recomputed[field])) {
+      throw new Error(`Retained fixed-SPP derived ${field} differs for ${lane.id}.`);
+    }
+  }
+  return result;
+}
+
 export function createFixedSppBaselineManifest({ lanes, results, runtime = {} }) {
   if (!Array.isArray(lanes) || lanes.length === 0) {
     throw new Error("Fixed-SPP baseline manifest requires at least one lane.");
   }
   const resultById = new Map((results ?? []).map((result) => [result.lane.id, result]));
+  if (resultById.size !== results?.length || new Set(lanes.map((lane) => lane.id)).size !== lanes.length) {
+    throw new Error("Fixed-SPP baseline contains duplicate lane evidence.");
+  }
   const missingLaneIds = lanes
     .map((lane) => lane.id)
     .filter((laneId) => !resultById.has(laneId));
@@ -439,7 +497,9 @@ export function createFixedSppBaselineManifest({ lanes, results, runtime = {} })
       `Fixed-SPP baseline is missing baseline evidence for ${missingLaneIds.join(", ") || "an unexpected lane"}.`
     );
   }
-  const orderedResults = lanes.map((lane) => resultById.get(lane.id));
+  const orderedResults = lanes.map((lane) => validateRetainedFixedSppLane(
+    lane, resultById.get(lane.id), runtime, runtime
+  ));
   if (orderedResults.some((result) => result?.status !== "pass")) {
     throw new Error("Fixed-SPP baseline contains a failed lane.");
   }
@@ -451,7 +511,7 @@ export function createFixedSppBaselineManifest({ lanes, results, runtime = {} })
   );
   const maximumGpuCoefficientOfVariation = Math.max(...gpuCoefficients);
   return Object.freeze({
-    schemaVersion: 1,
+    schemaVersion: 2,
     kind: "gpu-native-fixed-spp-baseline",
     status: "pass",
     createdAt: new Date().toISOString(),
@@ -550,6 +610,7 @@ async function captureLane(page, baseUrl, lane) {
       runtime: {
         webgpu: Boolean(navigator.gpu),
         secureContext: globalThis.isSecureContext === true,
+        browserVersion: navigator.userAgent,
         adapter: {
           vendor: info.vendor ?? null,
           architecture: info.architecture ?? null,
@@ -603,7 +664,7 @@ function createCliMatrix(mode) {
       });
 }
 
-async function readRetainedLane(outputDirectory, lane) {
+async function readRetainedLane(outputDirectory, lane, provenance, runtime) {
   if (process.env.PLASIUS_FIXED_SPP_BASELINE_RESUME === "0") {
     return null;
   }
@@ -611,9 +672,7 @@ async function readRetainedLane(outputDirectory, lane) {
     const retained = JSON.parse(
       await fs.readFile(path.join(outputDirectory, "lanes", `${lane.id}.json`), "utf8")
     );
-    return JSON.stringify(retained.result?.lane) === JSON.stringify(lane)
-      ? retained.result
-      : null;
+    return validateRetainedFixedSppLane(lane, retained.result, provenance, runtime);
   } catch (error) {
     if (error?.code === "ENOENT") {
       return null;
@@ -636,6 +695,16 @@ export async function runFixedSppBaselineCapture(options = {}) {
       "Full fixed-SPP baseline capture requires a clean committed source tree."
     );
   }
+  captureProvenance(provenance);
+  const assertCurrentProvenance = async () => {
+    if (!isDeepStrictEqual(captureProvenance(await readFixedSppBaselineProvenance(workspaceRoot)),
+      captureProvenance(provenance))) {
+      throw new Error("Source or package provenance changed during fixed-SPP capture.");
+    }
+  };
+  if (mode === "full" && !isDeepStrictEqual(lanes, createFixedSppBaselineMatrix())) {
+    throw new Error("Full fixed-SPP capture requires the canonical 216 lanes with two warmups and ten measurements.");
+  }
   const outputDirectory = path.resolve(
     options.outputDirectory ??
       process.env.PLASIUS_FIXED_SPP_BASELINE_OUTPUT_DIR ??
@@ -649,30 +718,50 @@ export async function runFixedSppBaselineCapture(options = {}) {
   let page;
   try {
     browser = await openCaptureBrowser();
-    page = await browser.context.newPage({
-      viewport: { width: 1280, height: 720 },
-      deviceScaleFactor: 1,
+    page = await browser.context.newPage();
+    await page.goto(new URL("/gpu-lighting/package.json", server.baseUrl).href);
+    const runtime = await page.evaluate(async () => {
+      const adapter = await navigator.gpu?.requestAdapter();
+      const info = adapter?.info ?? {};
+      return {
+        webgpu: Boolean(navigator.gpu),
+        secureContext: globalThis.isSecureContext === true,
+        browserVersion: navigator.userAgent,
+        adapter: {
+          vendor: info.vendor ?? null, architecture: info.architecture ?? null,
+          device: info.device ?? null, description: info.description ?? null,
+        },
+      };
     });
-    page.on("console", (message) => {
-      if (["error", "warning"].includes(message.type())) {
-        console.error(`[browser:${message.type()}] ${message.text()}`);
-      }
-    });
-    page.on("pageerror", (error) => {
-      console.error(`[browser:pageerror] ${error.message}`);
-    });
+    captureRuntime(runtime);
+    await page.close();
+    page = null;
     const results = [];
-    let runtime = null;
     for (const [index, lane] of lanes.entries()) {
-      const retained = await readRetainedLane(outputDirectory, lane);
+      await assertCurrentProvenance();
+      const retained = await readRetainedLane(outputDirectory, lane, provenance, runtime);
       if (retained) {
         console.log(`[${index + 1}/${lanes.length}] retained ${lane.id}`);
         results.push(retained);
         continue;
       }
       console.log(`[${index + 1}/${lanes.length}] capturing ${lane.id}`);
+      page = await browser.context.newPage({
+        viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1,
+      });
+      page.on("console", (message) => {
+        if (["error", "warning"].includes(message.type())) {
+          console.error(`[browser:${message.type()}] ${message.text()}`);
+        }
+      });
+      page.on("pageerror", (error) => console.error(`[browser:pageerror] ${error.message}`));
       const captured = await captureLane(page, server.baseUrl, lane);
-      runtime ??= captured.runtime;
+      await assertCurrentProvenance();
+      captured.result = {
+        ...captured.result, provenance, runtime: captured.runtime,
+        capturedAt: new Date().toISOString(),
+      };
+      validateRetainedFixedSppLane(lane, captured.result, provenance, runtime);
       results.push(captured.result);
       await fs.writeFile(
         path.join(outputDirectory, "lanes", `${lane.id}.json`),
@@ -684,7 +773,10 @@ export async function runFixedSppBaselineCapture(options = {}) {
         "utf8"
       );
       await page.evaluate(() => globalThis.__plasiusRenderer?.destroy?.());
+      await page.close();
+      page = null;
     }
+    await assertCurrentProvenance();
     const manifest = createFixedSppBaselineManifest({
       lanes,
       results,
@@ -718,6 +810,23 @@ export async function runFixedSppBaselineCapture(options = {}) {
 }
 
 async function main() {
+  if (process.argv[2] === "--verify") {
+    const evidencePath = process.argv[3];
+    if (!evidencePath) throw new Error("--verify requires a manifest.json path.");
+    const retained = JSON.parse(await fs.readFile(evidencePath, "utf8"));
+    if (retained.schemaVersion !== 2 || retained.status !== "pass" ||
+        retained.requiredLaneCount !== 216 || retained.completedLaneCount !== 216 ||
+        retained.runtime?.source !== "physical-webgpu" || retained.runtime?.matrixMode !== "full" ||
+        !isDeepStrictEqual(retained.lanes, createFixedSppBaselineMatrix())) {
+      throw new Error("Qualifying baseline requires schema 2 and the canonical full matrix; legacy evidence needs recapture.");
+    }
+    const verified = createFixedSppBaselineManifest(retained);
+    if (!isDeepStrictEqual(retained.variance, verified.variance)) {
+      throw new Error("Retained baseline variance differs from measured evidence.");
+    }
+    console.log(`Verified ${verified.completedLaneCount} fixed-SPP lanes with capture provenance.`);
+    return;
+  }
   const { manifest, outputDirectory } = await runFixedSppBaselineCapture();
   console.log(
     `fixed-SPP baseline ${manifest.status}: ${manifest.completedLaneCount}/${manifest.requiredLaneCount} lanes`

@@ -13,9 +13,66 @@ import {
   renderFixedSppBaselineSummary,
   runFixedSppBaselineCapture,
   validateFixedSppFrame,
+  validateRetainedFixedSppLane,
 } from "../scripts/eames-environments/fixed-spp-baseline-capture.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const provenance = {
+  sourceRevision: "a".repeat(40),
+  sourceTreeStatus: "clean",
+  packages: [{ name: "@plasius/gpu-renderer", version: "0.2.43" }],
+};
+const runtime = {
+  webgpu: true,
+  secureContext: true,
+  browserVersion: "test-browser-1",
+  adapter: { vendor: "apple", architecture: "metal-3", device: "", description: "" },
+};
+
+function capturedResult(lane = createLane()) {
+  return {
+    ...createFixedSppBaselineLaneResult(lane, [20, 8, 9, 10, 11].map(
+      (ms) => createFrame(lane, ms, ms + 1)
+    )),
+    provenance,
+    runtime,
+    capturedAt: "2026-09-01T00:00:00.000Z",
+  };
+}
+
+test("resumed evidence rejects absent or changed source, package, browser, and adapter identities", () => {
+  const result = capturedResult();
+  assert.deepEqual(validateRetainedFixedSppLane(result.lane, result, provenance, runtime), result);
+  for (const invalid of [
+    { ...result, provenance: undefined },
+    { ...result, runtime: undefined },
+    { ...result, provenance: { ...provenance, sourceRevision: "b".repeat(40) } },
+    { ...result, provenance: { ...provenance, sourceTreeStatus: "dirty" } },
+    { ...result, provenance: { ...provenance, packages: [{ name: "@plasius/gpu-renderer", version: "0.2.41" }] } },
+    { ...result, runtime: { ...runtime, browserVersion: "test-browser-2" } },
+    { ...result, runtime: { ...runtime, adapter: { ...runtime.adapter, vendor: "different" } } },
+  ]) {
+    assert.throws(() => validateRetainedFixedSppLane(result.lane, invalid, provenance, runtime), /provenance|runtime/);
+  }
+});
+
+test("resumed pass labels cannot bypass raw-frame admission or recomputed statistics", () => {
+  const result = capturedResult();
+  const invalidFrames = { ...result, measurements: result.measurements.map((frame, i) => i ? frame : { ...frame, primaryRays: 1 }) };
+  assert.throws(() => validateRetainedFixedSppLane(result.lane, invalidFrames, provenance, runtime), /primary-ray/);
+  assert.throws(() => validateRetainedFixedSppLane(result.lane, { ...result, timings: { ...result.timings, gpu: { ...result.timings.gpu, mean: 0 } } }, provenance, runtime), /derived/);
+  assert.throws(() => validateRetainedFixedSppLane({ ...result.lane, denoise: true }, result, provenance, runtime), /lane/);
+});
+
+test("manifests reject duplicate lanes, mixed provenance, and missing capture identity", () => {
+  const result = capturedResult();
+  const options = { lanes: [result.lane], results: [result], runtime: { ...runtime, ...provenance } };
+  assert.equal(createFixedSppBaselineManifest(options).status, "pass");
+  assert.throws(() => createFixedSppBaselineManifest({ ...options, results: [result, result] }), /duplicate/);
+  assert.throws(() => createFixedSppBaselineManifest({ ...options, results: [{ ...result, provenance: undefined }] }), /provenance/);
+  assert.throws(() => createFixedSppBaselineManifest({ ...options, runtime: { ...options.runtime, sourceRevision: "b".repeat(40) } }), /provenance/);
+});
 
 function createLane(overrides = {}) {
   return {
@@ -180,11 +237,11 @@ test("fixed-SPP manifest rejects missing lanes and renders retained evidence", (
     createFrame(lane, 10, 11),
     createFrame(lane, 11, 12),
   ];
-  const result = createFixedSppBaselineLaneResult(lane, frames);
+  const result = { ...createFixedSppBaselineLaneResult(lane, frames), provenance, runtime, capturedAt: "2026-09-01T00:00:00.000Z" };
   const manifest = createFixedSppBaselineManifest({
     lanes: [lane],
     results: [result],
-    runtime: { browser: "Chromium", webgpu: true },
+    runtime: { ...runtime, ...provenance },
   });
   assert.equal(manifest.status, "pass");
   assert.equal(manifest.completedLaneCount, 1);

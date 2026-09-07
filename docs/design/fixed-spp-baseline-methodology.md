@@ -32,8 +32,13 @@ npm run baseline:fixed-spp
 ```
 
 The default output is `output/benchmarks/fixed-spp/task-85/`. Every lane is
-written to `lanes/<lane-id>.json` as soon as it passes. A rerun reuses matching
-lane records. Use `PLASIUS_FIXED_SPP_BASELINE_RESUME=0` to force recapture.
+written to `lanes/<lane-id>.json` as soon as it passes. Each capture uses a fresh
+page. A rerun reuses a lane only when its configuration, clean source revision,
+package versions, browser identity, and adapter match the current run. Its raw
+frames are revalidated and its derived statistics recomputed before reuse.
+Missing or changed provenance fails closed. Use a new output directory to
+preserve the prior evidence when recapturing; `PLASIUS_FIXED_SPP_BASELINE_RESUME=0`
+explicitly requests replacement of existing lane records.
 
 The quick matrix is a physical smoke test only:
 
@@ -41,10 +46,10 @@ The quick matrix is a physical smoke test only:
 PLASIUS_FIXED_SPP_BASELINE_MATRIX=quick npm run baseline:fixed-spp
 ```
 
-Frame counts can be overridden with
+Quick-run frame counts can be overridden with
 `PLASIUS_FIXED_SPP_BASELINE_WARMUPS` and
 `PLASIUS_FIXED_SPP_BASELINE_REPETITIONS`. Qualifying evidence uses the default
-two warm-ups and ten measurements.
+two warm-ups and ten measurements; full mode rejects changes to that matrix.
 
 ## Frame admission
 
@@ -90,6 +95,20 @@ lane; denoise-on is supplemental presentation evidence.
 
 The manifest is valid only at 216 of 216 passing lanes. Review evidence must
 identify the exact source revision and released sibling package versions.
-The full runner enforces this by rejecting a dirty source tree and recording the
-Git revision plus every participating `@plasius/gpu-*` package version in the
-manifest.
+The runner enforces this by rejecting a dirty source tree and recording the
+Git revision plus every participating `@plasius/gpu-*` package version on each
+lane at capture time. Browser and adapter identities are retained per lane and
+in the assembled manifest. Schema 2 is required for qualifying evidence.
+
+Verify the full artifact without recapturing:
+
+```bash
+node scripts/eames-environments/fixed-spp-baseline-capture.mjs --verify /absolute/path/manifest.json
+```
+
+The schema-1 capture completed on 2026-09-01 retained 216 lanes but omitted
+per-lane source/package identity. Its final manifest applied current package
+versions to resumed measurements. It is historical diagnostic evidence only:
+its reported pass and 52.22% advancement floor do not qualify an adaptive mode.
+The original files are preserved, and qualifying evidence requires a fresh
+schema-2 capture. See [the evidence audit](./fixed-spp-baseline-evidence-audit.md).

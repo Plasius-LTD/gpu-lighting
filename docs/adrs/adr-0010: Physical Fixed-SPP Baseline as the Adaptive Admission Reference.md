@@ -1,4 +1,4 @@
-# ADR-0009: Physical Fixed-SPP Baseline as the Adaptive Admission Reference
+# ADR-0010: Physical Fixed-SPP Baseline as the Adaptive Admission Reference
 
 ## Status
 
@@ -39,6 +39,13 @@ Every one of the 216 lanes excludes warm-up frames and retains repeated
 measurements. The runner fails closed unless exact ray counts, timestamp-query
 GPU time, total render-job time, memory, queue-overflow, device-loss, and
 transport-guardrail evidence are present and internally consistent.
+
+Capture provenance is stored on each lane before it can be resumed. Source
+revision, package versions, browser, adapter, and capture date are mandatory;
+raw measurements and derived statistics are revalidated on resume. Source and
+package identity are checked before and after each capture. A manifest cannot
+apply a later runtime identity to previously captured measurements. Schema-1
+evidence without those identities is historical only and must be recaptured.
 
 Each lane publishes the sample coefficient of variation and a two-sided 95%
 Student t interval. A later adaptive mode may advance only when the lower 95%

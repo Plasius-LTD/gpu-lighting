@@ -36,7 +36,10 @@ against its exact released dependencies rather than whichever revision happens
 to be checked out in a canonical sibling directory. Qualifying baseline runs
 start their own server and never reuse an unverified listener on the capture
 port. Full-matrix runs also reject a dirty source tree and retain the source
-revision and participating package versions.
+revision and participating package versions on each lane at capture time.
+Each captured lane uses a fresh page. Resume verifies the captured source,
+packages, browser, and adapter and recomputes statistics from raw frames.
+Missing or changed identity is rejected before evidence can be reused.
 
 Each measured frame is validated before bounded ingestion by
 `@plasius/gpu-debug`. Warm-up frames remain in lane evidence but are excluded
@@ -50,7 +53,7 @@ measurements are required.
 
 ## Data Contracts
 
-The retained schema version is `1`:
+The qualifying manifest schema version is `2` (frame payloads remain `1`):
 
 - lane: mode, scene, resolution, maximum depth, SPP, denoise state, warm-up
   count, and measurement count;
@@ -58,7 +61,8 @@ The retained schema version is `1`:
   timestamp-query and render-job timings, telemetry and renderer memory,
   queue overflow, device-loss state, and transport guardrails;
 - lane result: measurements, statistics, bounded debug snapshot, peak memory,
-  stability summary, and optional HDR probe;
+  stability summary, optional HDR probe, capture timestamp, source/package
+  provenance, browser version, and adapter identity;
 - manifest: complete ordered matrix, runtime/adapter identity, aggregate
   variance percentiles/maxima, and the required matched-quality improvement.
 

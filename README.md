@@ -8,8 +8,6 @@
 [![Security Policy](https://img.shields.io/badge/security%20policy-yes-orange.svg)](./SECURITY.md)
 [![Changelog](https://img.shields.io/badge/changelog-md-blue.svg)](./CHANGELOG.md)
 
-[![license](https://img.shields.io/github/license/Plasius-LTD/gpu-lighting)](./LICENSE)
-
 Advanced lighting WGSL modules and planning profiles for `@plasius/gpu-worker`.
 The package is structured around modern lighting tracks:
 
@@ -100,6 +98,16 @@ bridge fallback all follow the same port and readiness rules across macOS and
 Linux.
 
 ### Fixed-SPP adaptive-sampling baseline
+
+Every lane retains its source revision, package versions, browser identity,
+adapter, and capture date. Resume rejects missing or changed identities and
+revalidates the raw measurements. Each newly captured lane uses a fresh page.
+Legacy schema-1 results are historical diagnostics and require recapture in a
+new output directory. Verify a completed qualifying manifest without rendering:
+
+```bash
+node scripts/eames-environments/fixed-spp-baseline-capture.mjs --verify /absolute/path/manifest.json
+```
 
 Story 1 of the GPU-native adaptive-sampling programme uses this repository as
 the physical WebGPU baseline owner. Build the package and its sibling GPU
@@ -584,7 +592,8 @@ negative fixtures. The system-wide decision is recorded in
 CI keeps the administrative contributor registry outside Git and npm package
 artifacts using exact, case-normalised path checks. CI runs on approved
 GitHub-hosted runners. Release preparation and publication use a two-run
-exact-main protocol on GitHub-hosted Node.js 24.18.0 LTS. A read-only job seals
+exact-main protocol on GitHub-hosted Node.js 24.18.0 LTS with a pinned npm
+11.6.2 release client. A read-only job seals
 the package tarball, SBOM, and Zero-Three evidence before a dependency-free
 production job publishes that exact artifact through npm OIDC with provenance;
 there is no npm write-token fallback.
