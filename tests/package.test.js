@@ -2212,6 +2212,16 @@ test("capture bridge serves the lockfile-selected renderer instead of a sibling 
   assert.equal(servedRenderer.version, installedRenderer.version);
 });
 
+test("capture bridge serves the installed performance governor used by baseline provenance", async () => {
+  const asset = await readStaticAssetResponse("/gpu-performance/package.json");
+  const served = JSON.parse(asset.fileBuffer.toString("utf8"));
+  const installed = JSON.parse(fs.readFileSync(new URL(
+    "../node_modules/@plasius/gpu-performance/package.json", import.meta.url
+  ), "utf8"));
+  assert.equal(served.name, "@plasius/gpu-performance");
+  assert.equal(served.version, installed.version);
+});
+
 test("capture bridge server serves demo assets and accepts loopback uploads", async () => {
   const server = createCaptureBridgeServer("127.0.0.1");
   const listeningPort = await new Promise((resolve, reject) => {

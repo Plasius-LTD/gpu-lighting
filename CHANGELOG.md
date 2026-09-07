@@ -25,6 +25,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   - Bind every retained baseline lane to its capture source, package versions,
     browser, and adapter; reject mixed or missing provenance and recompute raw
     measurement statistics before reuse. Capture each lane on a fresh page.
+  - Install the released performance governor for capture tooling so served
+    modules and provenance work in isolated checkouts and CI.
   - Capture servers now resolve both supported worktree layouts and serve the
     active `gpu-lighting` checkout instead of silently qualifying a sibling
     canonical checkout.

@@ -25,7 +25,7 @@ async function readPackageVersion(packageJsonPath) {
   return Object.freeze({ name: manifest.name, version: manifest.version });
 }
 
-export async function readFixedSppBaselineProvenance(workspaceRoot) {
+export async function readFixedSppBaselineProvenance() {
   const sourceRevision = execFileSync("git", ["rev-parse", "HEAD"], {
     cwd: packageRoot,
     encoding: "utf8",
@@ -40,7 +40,7 @@ export async function readFixedSppBaselineProvenance(workspaceRoot) {
     path.join(packageRoot, "node_modules/@plasius/gpu-debug/package.json"),
     path.join(packageRoot, "node_modules/@plasius/gpu-shared/package.json"),
     path.join(packageRoot, "node_modules/@plasius/gpu-camera/package.json"),
-    path.join(workspaceRoot, "gpu-performance/package.json"),
+    path.join(packageRoot, "node_modules/@plasius/gpu-performance/package.json"),
   ];
   return Object.freeze({
     sourceRevision,
@@ -689,7 +689,7 @@ export async function runFixedSppBaselineCapture(options = {}) {
   }
   const workspaceRoot = resolveCaptureWorkspaceRoot();
   const provenance = options.provenance ??
-    await readFixedSppBaselineProvenance(workspaceRoot);
+    await readFixedSppBaselineProvenance();
   if (mode === "full" && provenance.sourceTreeStatus !== "clean") {
     throw new Error(
       "Full fixed-SPP baseline capture requires a clean committed source tree."
@@ -697,7 +697,7 @@ export async function runFixedSppBaselineCapture(options = {}) {
   }
   captureProvenance(provenance);
   const assertCurrentProvenance = async () => {
-    if (!isDeepStrictEqual(captureProvenance(await readFixedSppBaselineProvenance(workspaceRoot)),
+    if (!isDeepStrictEqual(captureProvenance(await readFixedSppBaselineProvenance()),
       captureProvenance(provenance))) {
       throw new Error("Source or package provenance changed during fixed-SPP capture.");
     }

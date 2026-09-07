@@ -99,6 +99,9 @@ The runner enforces this by rejecting a dirty source tree and recording the
 Git revision plus every participating `@plasius/gpu-*` package version on each
 lane at capture time. Browser and adapter identities are retained per lane and
 in the assembled manifest. Schema 2 is required for qualifying evidence.
+The performance governor is an installed development dependency, so provenance
+and capture serving resolve the same lockfile-selected package without a
+sibling checkout.
 
 Verify the full artifact without recapturing:
 

@@ -1,7 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import fs from "node:fs/promises";
 
 import {
   FIXED_SPP_BASELINE_SCENES,
@@ -15,8 +14,6 @@ import {
   validateFixedSppFrame,
   validateRetainedFixedSppLane,
 } from "../scripts/eames-environments/fixed-spp-baseline-capture.mjs";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const provenance = {
   sourceRevision: "a".repeat(40),
@@ -255,9 +252,8 @@ test("fixed-SPP manifest rejects missing lanes and renders retained evidence", (
   );
 });
 
-test("fixed-SPP provenance binds source revision and participating package versions", async () => {
-  const workspaceRoot = path.resolve(__dirname, "../../..");
-  const provenance = await readFixedSppBaselineProvenance(workspaceRoot);
+test("fixed-SPP provenance binds installed package versions without requiring sibling checkouts", async () => {
+  const provenance = await readFixedSppBaselineProvenance();
   assert.match(provenance.sourceRevision, /^[0-9a-f]{40}$/u);
   assert.ok(["clean", "dirty"].includes(provenance.sourceTreeStatus));
   assert.deepEqual(
@@ -275,6 +271,10 @@ test("fixed-SPP provenance binds source revision and participating package versi
     provenance.packages.find((entry) => entry.name === "@plasius/gpu-debug")?.version,
     "0.2.7"
   );
+  const installed = JSON.parse(await fs.readFile(new URL(
+    "../node_modules/@plasius/gpu-performance/package.json", import.meta.url
+  ), "utf8"));
+  assert.equal(provenance.packages.find((entry) => entry.name === installed.name)?.version, installed.version);
 });
 
 test("full fixed-SPP capture rejects incomplete matrices and dirty provenance before browser work", async () => {
