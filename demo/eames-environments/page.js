@@ -1527,6 +1527,7 @@ export async function renderEamesEnvironment(options = {}) {
   const motion = options.motion !== false;
   const readOutputProbe = options.readOutputProbe === true;
   const awaitGPUCompletion = options.awaitGPUCompletion !== false;
+  const readStats = options.readStats === true;
   const frameTimeBudgetMs = Number.isFinite(options.frameTimeBudgetMs)
     ? Math.max(0, Number(options.frameTimeBudgetMs))
     : motion && frames > 1
@@ -1617,6 +1618,7 @@ export async function renderEamesEnvironment(options = {}) {
   });
 
   let stats = null;
+  const fixedSppFrames = [];
   for (let frame = 0; frame < frames; frame += 1) {
     clearCaptureBootTimeout(globalThis);
     setCaptureStep(captureState, "Rendering frames", `Rendering frame ${frame + 1} of ${frames}.`, hud);
@@ -1639,7 +1641,11 @@ export async function renderEamesEnvironment(options = {}) {
       frameTimeBudgetMs: frameOptions.frameTimeBudgetMs,
       minimumSamplesPerPixel: frameOptions.minimumSamplesPerPixel,
       submittedWorkTimeoutMs,
+      readStats,
     });
+    if (readStats) {
+      fixedSppFrames.push(createFixedSppFrameEvidence(stats));
+    }
     adaptiveSampling.recordFrame(stats);
   }
   setCaptureStep(captureState, "Reading probes", "Collecting output probe diagnostics.", hud);
@@ -1704,10 +1710,33 @@ export async function renderEamesEnvironment(options = {}) {
       outputProbe,
       queueOverflow: stats.queueOverflow ?? 0,
       transportGuardrails: stats.transportGuardrails ?? null,
+      fixedSppFrames,
     },
     probeSummary,
   };
   return { model, renderer, result };
+}
+
+export function createFixedSppFrameEvidence(stats = {}) {
+  return Object.freeze({
+    frame: stats.frame,
+    width: stats.width,
+    height: stats.height,
+    maxDepth: stats.maxDepth,
+    samplesPerPixel: stats.samplesPerPixel,
+    renderedSamplesPerPixel: stats.renderedSamplesPerPixel,
+    budgetConstrained: stats.budgetConstrained,
+    primaryRays: stats.primaryRays,
+    secondaryRays: stats.secondaryRays,
+    totalPathSegments: stats.totalPathSegments,
+    rayCounts: stats.rayCounts ?? null,
+    timings: stats.timings ?? null,
+    telemetryMemoryBytes: stats.telemetryMemoryBytes ?? 0,
+    queueOverflow: stats.queueOverflow ?? 0,
+    deviceLossStatus: stats.deviceLossStatus ?? null,
+    transportGuardrails: stats.transportGuardrails ?? null,
+    memory: stats.memory ?? null,
+  });
 }
 
 async function main() {
@@ -1717,7 +1746,7 @@ async function main() {
   const geometry = params.get("geometry") ?? "mesh";
   const width = readNumberParam(params, "width", 1280, 320, 4096);
   const height = readNumberParam(params, "height", 720, 180, 2304);
-  const frames = readNumberParam(params, "frames", 4, 1, 8);
+  const frames = readNumberParam(params, "frames", 4, 1, 64);
   const maxDepth = readNumberParam(params, "maxDepth", 3, 1, MAX_VALIDATION_MAX_DEPTH);
   const samplesPerPixel = readNumberParam(params, "samplesPerPixel", 8, 1, 256);
   const denoise = params.get("denoise") !== "0";
@@ -1732,6 +1761,7 @@ async function main() {
   const captureBitmap = params.get("captureBitmap") === "1" || Boolean(captureUploadPath);
   const captureBitmapDelayMs = readNumberParam(params, "captureBitmapDelayMs", 8000, 0, 60000);
   const awaitGPUCompletion = params.get("awaitGPUCompletion") !== "0";
+  const readStats = params.get("readStats") === "1";
   const frameTimeBudgetMs = readOptionalNumberParam(params, "frameTimeBudgetMs", 0, 1000);
   const accelerationBuildMode = readAccelerationBuildModeParam(params);
   const submittedWorkTimeoutMs = readOptionalNumberParam(
@@ -1780,6 +1810,7 @@ async function main() {
     readOutputProbe,
     pathDebugLayer,
     awaitGPUCompletion,
+    readStats,
     frameTimeBudgetMs,
     accelerationBuildMode,
     submittedWorkTimeoutMs,

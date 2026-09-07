@@ -57,6 +57,7 @@ const {
   createAdaptiveSamplingController,
   createEnvironmentCamera,
   createCaptureState,
+  createFixedSppFrameEvidence,
   formatRendererTransportHudLines,
   listCaptureUploadUrlCandidates,
   MAX_VALIDATION_MAX_DEPTH,
@@ -103,12 +104,14 @@ const {
   readOptionalString,
   resolveCaptureBrowserProfileDirectory,
   resolveCaptureArtifactDirectory,
+  resolveCapturePackageRoot,
   resolveCaptureWorkspaceRoot,
   summarizeRgbaPixels,
 } = await import("../scripts/eames-environments/capture-runtime.mjs");
 const {
   buildCaptureAssetUrl,
   findCaptureServerPort,
+  openCaptureServerSession,
   waitForCaptureServer,
 } = await import("../scripts/eames-environments/capture-server.mjs");
 const { loadEamesGltfModel } = await import("../demo/eames-environments/eames-loader.js");
@@ -131,7 +134,7 @@ function deriveExpectedCaptureWorkspaceRoot() {
   );
   const packageRoot = path.resolve(captureRuntimeDirectory, "../..");
   const directParent = path.resolve(packageRoot, "..");
-  return path.basename(directParent) === ".worktrees"
+  return [".worktrees", "worktrees"].includes(path.basename(directParent))
     ? path.resolve(directParent, "..")
     : directParent;
 }
@@ -486,6 +489,7 @@ test("playwright capture helpers normalize output directories and summarize canv
     path.resolve(workspaceRoot, "output/playwright/eames-environments/custom")
   );
   assert.equal(workspaceRoot, expectedWorkspaceRoot);
+  assert.equal(resolveCapturePackageRoot(), path.resolve(__dirname, ".."));
   assert.equal(
     resolveCaptureArtifactDirectory(tempDirectory),
     tempDirectory
@@ -742,6 +746,26 @@ test("playwright capture server wait helper fails fast when the server exits", a
       }),
     /exited early/
   );
+});
+
+test("capture server session closes active keep-alive connections", async () => {
+  const session = await openCaptureServerSession({
+    startPort: 9470,
+    attempts: 20,
+    canReuse: async () => false,
+  });
+  const response = await fetch(
+    `${session.baseUrl}/gpu-renderer/package.json`,
+    { keepalive: true }
+  );
+  assert.equal(response.ok, true);
+  await response.text();
+  await Promise.race([
+    session.close(),
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("capture server close timed out")), 1_000);
+    }),
+  ]);
 });
 
 test("validation page bootstrap helpers expose explicit WebGPU diagnostics", () => {
@@ -1628,7 +1652,33 @@ test("validation render decouples frame rendering from optional probe readback",
       assert.equal(options.readOutputProbe, false);
       return {
         frame: 1,
+        width: 640,
+        height: 480,
+        maxDepth: 8,
         samplesPerPixel: options.samplesPerPixel ?? 4,
+        renderedSamplesPerPixel: options.samplesPerPixel ?? 4,
+        budgetConstrained: false,
+        primaryRays: 1_228_800,
+        secondaryRays: 307_200,
+        totalPathSegments: 1_536_000,
+        rayCounts: {
+          status: "available",
+          expectedPrimaryRays: 1_228_800,
+          observedPrimaryRays: 1_228_800,
+          secondaryRays: 307_200,
+          totalPathSegments: 1_536_000,
+          bounceHistogram: [1_228_800, 307_200],
+          capturedRayCounts: 2,
+          expectedRayCounts: 2,
+        },
+        timings: {
+          status: "available",
+          timestampQueryStatus: "available",
+          source: "timestamp-query",
+          totalGpuTimeMs: 12,
+          totalRenderJobTimeMs: 14,
+        },
+        telemetryMemoryBytes: 96,
         triangleCount: 1,
         emissiveTriangleCount: 0,
         bvhNodeCount: 1,
@@ -1714,6 +1764,7 @@ test("validation render decouples frame rendering from optional probe readback",
     deferredPathResolve: true,
     motion: false,
     readOutputProbe: true,
+    readStats: true,
     submittedWorkTimeoutMs: 12000,
     runtimeModules: {
       createWavefrontEnvironmentLightingOptions() {
@@ -1742,6 +1793,7 @@ test("validation render decouples frame rendering from optional probe readback",
   assert.equal(result.cameraPreset, "reference");
   assert.equal(renderFrameCalls[0].samplesPerPixel, 4);
   assert.equal(renderFrameCalls[0].submittedWorkTimeoutMs, 12000);
+  assert.equal(renderFrameCalls[0].readStats, true);
   assert.equal(result.renderer.outputProbe.sampledPixels, 1);
   assert.equal(result.renderer.outputProbe.nonZeroSamples, 1);
   assert.equal(result.renderer.outputProbe.maxChannel, 128);
@@ -1756,6 +1808,17 @@ test("validation render decouples frame rendering from optional probe readback",
   assert.equal(result.renderer.deviceLossStatus, "not-detected");
   assert.equal(result.renderer.transportGuardrails.status, "pass");
   assert.equal(result.renderer.transportGuardrails.current.memory.totalBytes, 32768);
+  assert.equal(result.renderer.fixedSppFrames.length, 1);
+  const [fixedSppFrame] = result.renderer.fixedSppFrames;
+  assert.deepEqual(
+    fixedSppFrame,
+    createFixedSppFrameEvidence(fixedSppFrame)
+  );
+  assert.equal(fixedSppFrame.width, 640);
+  assert.equal(fixedSppFrame.maxDepth, 8);
+  assert.equal(fixedSppFrame.primaryRays, 1_228_800);
+  assert.equal(fixedSppFrame.timings.source, "timestamp-query");
+  assert.equal(fixedSppFrame.transportGuardrails.status, "pass");
   assert.equal(result.probeSummary.sampledPixels, 5);
 });
 
@@ -2130,6 +2193,33 @@ test("capture bridge static asset helper resolves directory requests to index.ht
   const asset = await readStaticAssetResponse("/gpu-lighting/demo/eames-environments/");
   assert.match(asset.contentType, /text\/html/);
   assert.match(asset.fileBuffer.toString("utf8"), /<canvas id="stage"/);
+  assert.match(
+    asset.fileBuffer.toString("utf8"),
+    /"@plasius\/gpu-camera": "\/gpu-camera\/dist\/index\.js"/
+  );
+});
+
+test("capture bridge serves the lockfile-selected renderer instead of a sibling checkout", async () => {
+  const asset = await readStaticAssetResponse("/gpu-renderer/package.json");
+  const servedRenderer = JSON.parse(asset.fileBuffer.toString("utf8"));
+  const installedRenderer = JSON.parse(
+    fs.readFileSync(
+      path.resolve(__dirname, "..", "node_modules", "@plasius", "gpu-renderer", "package.json"),
+      "utf8"
+    )
+  );
+  assert.equal(servedRenderer.name, "@plasius/gpu-renderer");
+  assert.equal(servedRenderer.version, installedRenderer.version);
+});
+
+test("capture bridge serves the installed performance governor used by baseline provenance", async () => {
+  const asset = await readStaticAssetResponse("/gpu-performance/package.json");
+  const served = JSON.parse(asset.fileBuffer.toString("utf8"));
+  const installed = JSON.parse(fs.readFileSync(new URL(
+    "../node_modules/@plasius/gpu-performance/package.json", import.meta.url
+  ), "utf8"));
+  assert.equal(served.name, "@plasius/gpu-performance");
+  assert.equal(served.version, installed.version);
 });
 
 test("capture bridge server serves demo assets and accepts loopback uploads", async () => {

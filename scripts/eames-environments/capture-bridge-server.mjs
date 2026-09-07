@@ -1,9 +1,16 @@
 import fs from "node:fs/promises";
+import fsSync from "node:fs";
 import http from "node:http";
 import path from "node:path";
-import { decodePngDataUrl, resolveCaptureWorkspaceRoot } from "./capture-runtime.mjs";
+import { pathToFileURL } from "node:url";
+import {
+  decodePngDataUrl,
+  resolveCapturePackageRoot,
+  resolveCaptureWorkspaceRoot,
+} from "./capture-runtime.mjs";
 
 const workspaceRoot = resolveCaptureWorkspaceRoot();
+const packageRoot = resolveCapturePackageRoot();
 const captureOutputRoot = path.resolve(workspaceRoot, "output/playwright/eames-environments");
 const port = Number(process.argv[2] ?? 8001);
 const trustedLoopbackHostnames = new Set(["127.0.0.1", "localhost", "::1", "[::1]"]);
@@ -32,10 +39,27 @@ function applyCaptureCorsHeaders(response, origin) {
 
 function resolveWorkspacePath(requestPath) {
   const relativePath = String(requestPath ?? "").replace(/^\/+/, "");
-  const resolvedPath = path.resolve(workspaceRoot, relativePath);
-  const relativeToWorkspace = path.relative(workspaceRoot, resolvedPath);
-  if (relativeToWorkspace.startsWith("..") || path.isAbsolute(relativeToWorkspace)) {
-    throw new Error("Path escapes workspace root.");
+  const pathSegments = relativePath.split("/");
+  const servesActivePackage = pathSegments[0] === "gpu-lighting";
+  const installedPackageRoot = /^gpu-[a-z0-9-]+$/u.test(pathSegments[0])
+    ? path.resolve(packageRoot, "node_modules", "@plasius", pathSegments[0])
+    : null;
+  const servesInstalledPackage =
+    !servesActivePackage &&
+    installedPackageRoot !== null &&
+    fsSync.existsSync(installedPackageRoot);
+  const selectedRoot = servesActivePackage
+    ? packageRoot
+    : servesInstalledPackage
+      ? installedPackageRoot
+      : workspaceRoot;
+  const selectedRelativePath = servesActivePackage || servesInstalledPackage
+    ? pathSegments.slice(1).join("/")
+    : relativePath;
+  const resolvedPath = path.resolve(selectedRoot, selectedRelativePath);
+  const relativeToRoot = path.relative(selectedRoot, resolvedPath);
+  if (relativeToRoot.startsWith("..") || path.isAbsolute(relativeToRoot)) {
+    throw new Error("Path escapes its capture root.");
   }
   return resolvedPath;
 }
@@ -179,7 +203,13 @@ export function createCaptureBridgeServer(host = "127.0.0.1") {
   });
 }
 
-if (!globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__) {
+const invokedPath = process.argv[1]
+  ? pathToFileURL(path.resolve(process.argv[1])).href
+  : null;
+if (
+  !globalThis.__PLASIUS_CAPTURE_BRIDGE_MODULE_ONLY__ &&
+  invokedPath === import.meta.url
+) {
   const server = createCaptureBridgeServer();
   server.listen(port, "127.0.0.1", () => {
     process.stdout.write(`capture bridge listening on http://127.0.0.1:${port}\n`);
