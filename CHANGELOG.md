@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Added prequalification paired adaptive diagnostic scenes, frozen linear-HDR
+  quality/identity criteria and paired timing gates; reused baseline timing
+  statistics through a browser-safe module. No adaptive performance claim.
+
 - **Added**
   - Added a resumable, physical-WebGPU fixed-SPP baseline runner covering 216
     scene, resolution, bounce, SPP, and denoise lanes with retained ray,

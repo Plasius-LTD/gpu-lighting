@@ -99,6 +99,14 @@ Linux.
 
 ### Fixed-SPP adaptive-sampling baseline
 
+An additional [paired diagnostic protocol](docs/paired-adaptive-probe.md) supports
+before/after experimental renderer checks: equal-budget identity, preassigned
+reduced budgets, linear-HDR quality gates, rotated timing rounds and visible error
+previews. Pure timing statistics are shared with the baseline runner; image metrics
+and diagnostic scenes live in `demo/eames-environments/paired-adaptive-*.js`.
+These small probes do not replace the fixed baseline, Eames or full qualification
+matrix, and failed quality cannot be offset by a faster timing result.
+
 Every lane retains its source revision, package versions, browser identity,
 adapter, and capture date. Resume rejects missing or changed identities and
 revalidates the raw measurements. Each newly captured lane uses a fresh page.

@@ -1,5 +1,7 @@
 # ADR Index
 
+- [ADR 0011: Paired Adaptive Diagnostics](./adr-0011-paired-adaptive-diagnostics.md)
+
 - [Architectural Decision Record (ADR)](./adr-0001:%20Lumen-Inspired%20Hybrid%20Realtime%20Lighting.md)
 - [Architectural Decision Record (ADR)](./adr-0002:%20Path-Traced%20Reference%20Rendering%20Mode.md)
 - [Architectural Decision Record (ADR)](./adr-0003:%20Froxel%20Volumetric%20Lighting%20Pipeline.md)
