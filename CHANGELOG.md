@@ -8,6 +8,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Retained before/after adaptive diagnostics, including unchanged equal-budget
+  images, reduced-budget quality failures, measured overhead and raw evidence.
+
 - Added prequalification paired adaptive diagnostic scenes, frozen linear-HDR
   quality/identity criteria and paired timing gates; reused baseline timing
   statistics through a browser-safe module. No adaptive performance claim.

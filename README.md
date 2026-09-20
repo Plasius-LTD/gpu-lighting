@@ -1,5 +1,9 @@
 # @plasius/gpu-lighting
 
+See the [retained paired adaptive diagnostic](docs/evidence/paired-adaptive-2026-09-20.md)
+for fixed/adaptive images, ray counts, timings and failed quality gates. It does
+not establish a production speedup or replace the fixed-SPP baseline programme.
+
 [![npm version](https://img.shields.io/npm/v/@plasius/gpu-lighting.svg)](https://www.npmjs.com/package/@plasius/gpu-lighting)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/Plasius-LTD/gpu-lighting/ci.yml?branch=main&label=build&style=flat)](https://github.com/Plasius-LTD/gpu-lighting/actions/workflows/ci.yml)
 [![coverage](https://img.shields.io/codecov/c/github/Plasius-LTD/gpu-lighting)](https://codecov.io/gh/Plasius-LTD/gpu-lighting)
