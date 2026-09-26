@@ -54,6 +54,11 @@ pixel IDs and dense queue slots, including short right/bottom tiles.
   the fixed32 image. Fixed32 is not a converged high-SPP reference: these are
   differences, not a passed quality gate. Keep existing frozen tolerances and
   leave full reference convergence/matrix/publication gates open.
+- Retain float32 bits in bounded 4 MiB raw chunks, byte-plane shuffled then gzip
+  compressed with independent hashes/offsets and a full-image hash manifest.
+  Reconstruct before replay; no HDR quantization or capture-limit increase.
+  A bit-identical uniform image may reference the fixed manifest instead of
+  duplicating its bytes. Take the native display snapshot before slow retention.
 - Use fresh physical adapters/devices per resolution, bounded waits, cancellation,
   fail-closed invalid counts/overflow/device loss and deterministic cleanup.
 

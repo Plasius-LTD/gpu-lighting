@@ -8,6 +8,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Retain native float32 HDR as bounded, lossless, hashed byte-plane/gzip chunks
+  without increasing capture upload limits or duplicating identical controls.
+
 - Add tested exact-area circular budget maps and a native adaptive trace protocol
   for 5.95 mean SPP at 1080p/4K. Separate the fixed reference from adaptive
   real-time acceptance and diagnostic traces from timing-only measurements.
