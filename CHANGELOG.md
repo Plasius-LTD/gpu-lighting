@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Retain native M2 Max fixed32 full-frame receipts and images, including the
+  rejected adapter-reuse run. Both corrected native lanes complete but fail the
+  60 Hz budget; no adaptive, sustained-performance or quality success is claimed.
+
 - Add native 1080p minimum / 4K target real-time acceptance and a tested full-frame
   timing screen. Report deadline misses and tails; reject tiny/upscaled evidence
   and prevent short diagnostic runs from qualifying sustained 60 Hz.

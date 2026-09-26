@@ -6,6 +6,10 @@ fixtures are correctness diagnostics, not performance qualification. See the
 [native-resolution acceptance contract](docs/native-resolution-acceptance.md).
 The lighting-owned `native-frame-screen.js` rejects tiny/upscaled timing evidence
 and never promotes a short renderer-only run into a real-time qualification.
+The [native full-frame screen](docs/evidence/native-resolution-2026-09-26.md)
+records 2,342.07 ms at 1080p and 8,966.80 ms at 4K for the fixed32/four-bounce
+simple scene. The current fixed path fails the real-time target; full-resolution
+adaptive comparison and matched-quality qualification remain outstanding.
 
 See the [retained paired adaptive diagnostic](docs/evidence/paired-adaptive-2026-09-20.md)
 for fixed/adaptive images, ray counts, timings and failed quality gates. It does
