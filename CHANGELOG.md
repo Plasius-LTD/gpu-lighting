@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add tested exact-area circular budget maps and a native adaptive trace protocol
+  for 5.95 mean SPP at 1080p/4K. Separate the fixed reference from adaptive
+  real-time acceptance and diagnostic traces from timing-only measurements.
+
 - Retain native M2 Max fixed32 full-frame receipts and images, including the
   rejected adapter-reuse run. Both corrected native lanes complete but fail the
   60 Hz budget; no adaptive, sustained-performance or quality success is claimed.

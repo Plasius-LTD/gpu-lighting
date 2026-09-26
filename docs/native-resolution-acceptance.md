@@ -7,6 +7,12 @@ Three.js is prohibited and cannot be a fallback.
 
 ## Product gate
 
+The target applies to the **adaptive configuration**; fixed32 is the control,
+not itself a required real-time configuration. See the subsequent
+[native radial trace protocol](native-radial-adaptive-trace.md) for the user's
+prescribed 5.95-SPP workload and full-tile diagnostic extension. The original
+single-tile paired mode remains diagnostic-only by default.
+
 - Minimum: native **1920×1080 at sustained 60 Hz on the user's M2 Max MacBook Pro**.
   Failure to meet this means the real-time milestone has not succeeded.
 - Ideal target: native **3840×2160 at 60 Hz**, measured separately. 1440p remains

@@ -1,5 +1,11 @@
 # @plasius/gpu-lighting
 
+The [native radial adaptive trace](docs/native-radial-adaptive-trace.md) defines
+the requested centred 32/16/8/4/2/1 SPP bands with exact 5/10/15/20/25/25% pixel
+area shares (5.95 mean SPP), renderer-owned full-frame execution and separate
+timing-only/count/HDR/CPU/GPU evidence. Fixed32 is the reference; the adaptive
+configuration is the one required to meet the real-time target.
+
 Real-time acceptance requires native **1920×1080 at sustained 60 Hz on the M2 Max
 MacBook Pro**, with native **3840×2160 at 60 Hz** the ideal target. Small 128×128
 fixtures are correctness diagnostics, not performance qualification. See the
