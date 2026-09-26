@@ -8,6 +8,11 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add source-hashed original Eames fidelity admission for native comparisons,
+  rejecting substitute/reduced geometry, textures and material defaults. Correct
+  reference-loader glTF PBR omission defaults in agreement with gpu-shared#130.
+  Historical six-triangle timings remain synthetic diagnostics only.
+
 - Retain source-pinned native 1080p/4K radial adaptive timings, actual rays/counts,
   CPU/GPU attribution, lossless HDR, circular overlays and failed-fusion evidence.
   The prescribed 5.95-SPP mode saves work but does not qualify image quality or

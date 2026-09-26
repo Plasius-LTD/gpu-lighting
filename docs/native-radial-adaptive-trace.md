@@ -36,6 +36,10 @@ pixel IDs and dense queue slots, including short right/bottom tiles.
 
 ## Trace lanes and evidence
 
+The diffuse-silhouette lane below is synthetic. Realistic Eames cost requires
+the separate [original Eames source-fidelity admission](native-eames-fidelity.md)
+and `native-eames-trace.html`; do not extrapolate toy-scene timings to it.
+
 - Same lighting-owned diffuse-silhouette scene, depth ceiling four, denoise off.
   Fixed32 and radial shared/fused modes. Additional uniform32 shared/fused
   diagnostics must reproduce fixed pixels within the existing 1e-5 tolerance.

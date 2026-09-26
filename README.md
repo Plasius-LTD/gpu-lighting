@@ -1,5 +1,10 @@
 # @plasius/gpu-lighting
 
+Original Eames measurements now require the [full-source admission](docs/native-eames-fidelity.md):
+265,468 model triangles and all five original 1024-square textures through the
+shared Product Studio loader/mesh builder. The six-triangle results below remain
+synthetic diagnostics, not realistic Eames or site cost estimates.
+
 The [native radial adaptive trace](docs/native-radial-adaptive-trace.md) defines
 the requested centred 32/16/8/4/2/1 SPP bands with exact 5/10/15/20/25/25% pixel
 area shares (5.95 mean SPP), renderer-owned full-frame execution and separate
