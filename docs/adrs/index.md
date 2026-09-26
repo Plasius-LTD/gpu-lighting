@@ -12,3 +12,4 @@
 - [Architectural Decision Record (ADR)](./adr-0008:%20Renderer-Aligned%20Wavefront%20Lighting%20Jobs.md)
 - [ADR-0009: Hosted OIDC Package Publication](./adr-0009-hosted-oidc-package-publication.md)
 - [Architectural Decision Record (ADR)](./adr-0010:%20Physical%20Fixed-SPP%20Baseline%20as%20the%20Adaptive%20Admission%20Reference.md)
+- [ADR 0012: Native-resolution real-time admission](./adr-0012-native-resolution-realtime-admission.md)

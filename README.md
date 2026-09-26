@@ -1,5 +1,12 @@
 # @plasius/gpu-lighting
 
+Real-time acceptance requires native **1920×1080 at sustained 60 Hz on the M2 Max
+MacBook Pro**, with native **3840×2160 at 60 Hz** the ideal target. Small 128×128
+fixtures are correctness diagnostics, not performance qualification. See the
+[native-resolution acceptance contract](docs/native-resolution-acceptance.md).
+The lighting-owned `native-frame-screen.js` rejects tiny/upscaled timing evidence
+and never promotes a short renderer-only run into a real-time qualification.
+
 See the [retained paired adaptive diagnostic](docs/evidence/paired-adaptive-2026-09-20.md)
 for fixed/adaptive images, ray counts, timings and failed quality gates. It does
 not establish a production speedup or replace the fixed-SPP baseline programme.
