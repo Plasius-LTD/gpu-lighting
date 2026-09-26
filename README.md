@@ -5,6 +5,12 @@ Original Eames measurements now require the [full-source admission](docs/native-
 shared Product Studio loader/mesh builder. The six-triangle results below remain
 synthetic diagnostics, not realistic Eames or site cost estimates.
 
+The [original-Eames physical capture](docs/evidence/native-eames-2026-09-26.md)
+measured fixed32 → radial jobs of 12,368.57 → 3,542.67 ms at 1080p and
+43,994.43 → 11,532.23 ms at 4K. Uniform32 is bit-identical at both sizes.
+Reduced-SPP noise and brightness boundaries remain: no matched-quality,
+real-time or full-site qualification is claimed.
+
 The [native radial adaptive trace](docs/native-radial-adaptive-trace.md) defines
 the requested centred 32/16/8/4/2/1 SPP bands with exact 5/10/15/20/25/25% pixel
 area shares (5.95 mean SPP), renderer-owned full-frame execution and separate

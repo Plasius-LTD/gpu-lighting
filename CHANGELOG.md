@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Retain full-source Eames native 1080p/4K physical traces, exact uniform32
+  identity, actual rays, HDR and allocation evidence. Both adaptive lanes remain
+  far above the real-time budget and have visible reduced-prefix quality errors.
+
 - Add source-hashed original Eames fidelity admission for native comparisons,
   rejecting substitute/reduced geometry, textures and material defaults. Correct
   reference-loader glTF PBR omission defaults in agreement with gpu-shared#130.
