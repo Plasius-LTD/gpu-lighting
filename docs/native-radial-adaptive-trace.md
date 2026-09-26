@@ -39,6 +39,11 @@ pixel IDs and dense queue slots, including short right/bottom tiles.
 - Same lighting-owned diffuse-silhouette scene, depth ceiling four, denoise off.
   Fixed32 and radial shared/fused modes. Additional uniform32 shared/fused
   diagnostics must reproduce fixed pixels within the existing 1e-5 tolerance.
+  Qualification finding: the optional fused-hit variant fails the 4K uniform
+  control (maximum absolute error 0.08680737018585205), whereas ordinary shared
+  transport matches bit-for-bit. Final native radial traces therefore disable
+  fusion. Preserve the failed isolation run; neither relax the tolerance nor
+  attribute the failure to the prescribed budget (the failed control is 32 SPP).
 - Timing-only: no CPU profiler or ray/image readback commands; one warmup and
   three rotated measured frames/mode/resolution. Complete renderer job includes
   GPU presentation, not physical display or application delivery. This is a

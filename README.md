@@ -15,7 +15,13 @@ and never promotes a short renderer-only run into a real-time qualification.
 The [native full-frame screen](docs/evidence/native-resolution-2026-09-26.md)
 records 2,342.07 ms at 1080p and 8,966.80 ms at 4K for the fixed32/four-bounce
 simple scene. The current fixed path fails the real-time target; full-resolution
-adaptive comparison and matched-quality qualification remain outstanding.
+matched-quality qualification remains outstanding. The subsequent
+[native radial adaptive trace](docs/evidence/native-radial-2026-09-26.md) verifies
+5.95 actual mean SPP and 81.40625% fewer primary rays: 722.93 ms at 1080p and
+2,996.97 ms at 4K, versus same-run fixed32 2,281.60 / 8,904.07 ms. Reduced-budget
+images show visible brightness boundaries/noise; this is not matched-quality
+or real-time success. Ordinary uniform32 is bit-identical at both sizes; an
+optional fused-hit optimisation fails 4K identity and stays off in native traces.
 
 See the [retained paired adaptive diagnostic](docs/evidence/paired-adaptive-2026-09-20.md)
 for fixed/adaptive images, ray counts, timings and failed quality gates. It does

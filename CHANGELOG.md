@@ -8,6 +8,11 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Retain source-pinned native 1080p/4K radial adaptive timings, actual rays/counts,
+  CPU/GPU attribution, lossless HDR, circular overlays and failed-fusion evidence.
+  The prescribed 5.95-SPP mode saves work but does not qualify image quality or
+  60 Hz; preserve the ordinary equal-budget identity gate and all failed attempts.
+
 - Retain native float32 HDR as bounded, lossless, hashed byte-plane/gzip chunks
   without increasing capture upload limits or duplicating identical controls.
 
