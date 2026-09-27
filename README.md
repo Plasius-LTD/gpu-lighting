@@ -5,6 +5,10 @@ fixed centre-first camera samples separately from temporally stable,
 pixel-decorrelated lighting. The new renderer flag stays off until qualification.
 Global and regional brightness, repeatability and local image errors are separate
 checks; no primary-path or matched-quality claim follows from brightness alone.
+The [native 1080p/4K results](docs/evidence/stable-pattern-2026-09-27.md) correct
+the brightness bias and retain static repeatability, but not the old pattern's
+speed advantage. Low-SPP grain remains. Use the corrected candidate for further
+fixed-camera experiments, not as a qualified production default.
 
 The [fixed-relative sampling experiment](docs/design/fixed-pattern-experiment.md)
 tests a centre-first camera and fixed lighting points against independent random
