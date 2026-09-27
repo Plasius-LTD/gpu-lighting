@@ -8,6 +8,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add common linear reference and strict repeatability/brightness assessments
+  for the default-off fixed-relative sampling experiment, independent of timing.
+
 - Retain native full-Eames progressive-sampler evidence: three-seed 1080p
   brightness-band criteria pass for random and Owen–Sobol; native4K Sobol
   identity passes. Preserve slower timings, residual noise and rejected attempts.

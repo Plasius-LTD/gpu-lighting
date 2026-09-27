@@ -96,7 +96,7 @@ All timings are far above the16.67ms target.
 
 Seed7 radial primary rays are12,337,920 in every sampler. Total path segments:
 legacy27,787,871; random29,625,602; Sobol29,625,583. Better coverage changes
-which paths are followed; secondary work increases about6.6%. Separate
+which paths are followed; total path segments increase about6.6%. Separate
 instrumented GPU tile spans are3,103.72 /4,393.14 /4,428.27ms respectively.
 They exclude uploads/final presentation and must not be subtracted from other
 frames' total times to manufacture an exact overhead figure.
