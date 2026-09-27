@@ -4,6 +4,9 @@ The [fixed-relative sampling experiment](docs/design/fixed-pattern-experiment.md
 tests a centre-first camera and fixed lighting points against independent random
 sampling, using a common linear HDR reference. Repeatability and brightness
 accuracy are reported separately; neither is a production qualification.
+The [27 September results](docs/evidence/fixed-pattern-2026-09-27.md) show shorter
+jobs and identical static frames, but coherent lighting errors and failed
+brightness gates at both1080p and4K. Keep the experimental flag off.
 
 The [progressive-sampling experiment](docs/design/progressive-sampling-experiment.md)
 compares legacy, independent random and Owen–Sobol sampling using original Eames
