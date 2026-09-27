@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Freeze stable-pattern correction controls and require finite global as well
+  as regional brightness evidence, separately from repeatability and performance.
+  Keep all production promotion and full image-quality gates open.
+
 - Retain fixed-relative sampling results at native1080p/4K: identical static
   frames and lower job times, but failed brightness gates and structured lighting
   errors. Separate portable review receipts from locally retained full HDR.

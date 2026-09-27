@@ -1,5 +1,11 @@
 # @plasius/gpu-lighting
 
+The [stable-pattern correction](docs/design/stable-pattern-correction.md) tests
+fixed centre-first camera samples separately from temporally stable,
+pixel-decorrelated lighting. The new renderer flag stays off until qualification.
+Global and regional brightness, repeatability and local image errors are separate
+checks; no primary-path or matched-quality claim follows from brightness alone.
+
 The [fixed-relative sampling experiment](docs/design/fixed-pattern-experiment.md)
 tests a centre-first camera and fixed lighting points against independent random
 sampling, using a common linear HDR reference. Repeatability and brightness

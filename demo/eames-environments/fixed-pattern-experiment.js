@@ -21,3 +21,9 @@ export function assessFixedPattern(hashes, rings) {
   return {repeatable:new Set(hashes).size===1,bandScreenPassed:selected.every(r=>Math.abs(r.relativeEnergyDrift)<=0.01),qualified:false,
     limitation:"Static repeatability is not accuracy; common 96-sample reference is not certified converged. Motion, full quality and performance qualification remain open."};
 }
+
+export function assessStablePattern(hashes, rings, globalError) {
+  if (!Number.isFinite(globalError?.relativeEnergyDrift)) throw new Error("Missing global energy evidence");
+  const result=assessFixedPattern(hashes,rings);
+  return {...result,brightnessScreenPassed:result.bandScreenPassed && Math.abs(globalError.relativeEnergyDrift)<=0.01};
+}
