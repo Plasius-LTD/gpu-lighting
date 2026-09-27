@@ -5,6 +5,9 @@ compares legacy, independent random and Owen–Sobol sampling using original Eam
 assets, unchanged transport and native 1080p/4K. Lighting owns the frozen
 brightness-band metrics; renderer owns sampling and execution. Regional mean
 agreement does not qualify full image quality or real-time performance.
+The [retained experiment results](docs/evidence/progressive-sampling-2026-09-27.md)
+show both progressive samplers correcting brightness bands, with higher measured
+job times and residual noise. No production or performance claim is approved.
 
 Original Eames measurements now require the [full-source admission](docs/native-eames-fidelity.md):
 265,468 model triangles and all five original 1024-square textures through the

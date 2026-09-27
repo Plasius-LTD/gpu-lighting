@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Retain native full-Eames progressive-sampler evidence: three-seed 1080p
+  brightness-band criteria pass for random and Owen–Sobol; native4K Sobol
+  identity passes. Preserve slower timings, residual noise and rejected attempts.
+
 - Freeze original-Eames three-seed progressive sampling controls, regional HDR
   drift criteria and separate native timing evidence. Keep the random control
   alongside Owen–Sobol so prefix-coverage corrections are not misattributed.
