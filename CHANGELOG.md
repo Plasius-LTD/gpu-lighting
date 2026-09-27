@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Freeze original-Eames three-seed progressive sampling controls, regional HDR
+  drift criteria and separate native timing evidence. Keep the random control
+  alongside Owen–Sobol so prefix-coverage corrections are not misattributed.
+
 - Retain full-source Eames native 1080p/4K physical traces, exact uniform32
   identity, actual rays, HDR and allocation evidence. Both adaptive lanes remain
   far above the real-time budget and have visible reduced-prefix quality errors.

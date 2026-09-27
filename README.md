@@ -1,5 +1,11 @@
 # @plasius/gpu-lighting
 
+The [progressive-sampling experiment](docs/design/progressive-sampling-experiment.md)
+compares legacy, independent random and Owen–Sobol sampling using original Eames
+assets, unchanged transport and native 1080p/4K. Lighting owns the frozen
+brightness-band metrics; renderer owns sampling and execution. Regional mean
+agreement does not qualify full image quality or real-time performance.
+
 Original Eames measurements now require the [full-source admission](docs/native-eames-fidelity.md):
 265,468 model triangles and all five original 1024-square textures through the
 shared Product Studio loader/mesh builder. The six-triangle results below remain
