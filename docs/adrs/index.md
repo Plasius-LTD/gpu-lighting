@@ -1,5 +1,7 @@
 # ADR Index
 
+- [ADR 0017: Local room asset provenance](adr-0017-local-room-asset-provenance.md)
+
 - [ADR 0011: Paired Adaptive Diagnostics](./adr-0011-paired-adaptive-diagnostics.md)
 
 - [Architectural Decision Record (ADR)](./adr-0001:%20Lumen-Inspired%20Hybrid%20Realtime%20Lighting.md)

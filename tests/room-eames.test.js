@@ -57,3 +57,12 @@ test("native settings and count admission reject any partial or mislabeled rende
  }
  assert.throws(()=>roomReferenceSettings("720p"),/resolution/);assert.throws(()=>roomReferenceSettings("4k","bad"),/sampler/);
 });
+test("replacement room admits its own verified counts without changing materials or Eames",()=>{
+ const i=inputs(),roomAsset={bytes:100,sha256:'a'.repeat(64),triangles:2,primitives:1};
+ i.room.primitives=[{positions:triangle,indices:[0,1,2,0,2,1],material:{roughness:0.9}}];
+ const r=composeRoomEamesScene({...i,roomAsset});
+ assert.equal(r.evidence.roomTriangleCount,2);assert.equal(r.evidence.sceneTriangleCount,265470);
+ assert.equal(r.evidence.sceneMeshes,10);assert.equal(r.scene.meshes[0].material,i.room.primitives[0].material);
+ assert.throws(()=>composeRoomEamesScene({...i,roomAsset:{...roomAsset,triangles:3}}),/geometry/);
+ assert.throws(()=>composeRoomEamesScene({...i,roomAsset:{...roomAsset,sha256:'bad'}}),/manifest/);
+});

@@ -1,5 +1,14 @@
 # @plasius/gpu-lighting
 
+For a private replacement room, append an absolute GLB path to the room server
+command and use a separate port, for example `5210`. Only that self-contained,
+static GLB is snapshotted; its checksum is recorded separately from code commits.
+The model is not copied into Git. Keep derived images/HDR local until publication
+is approved. Existing Eames, room scale, materials, camera/placement controls and
+native 1080p/4K render settings are preserved; incompatible bounds fail closed.
+Use `127.0.0.1` (not a remote hostname). See the
+[local room reference contract](docs/design/local-model-reference.md).
+
 The local room reference supports the renderer's default-off
 `renderer.denoise.guidedSpatial.enabled` experiment. Lighting provides analytic
 HDR/noise/edge/protected-pixel probes and honest raw-versus-filtered image metrics;

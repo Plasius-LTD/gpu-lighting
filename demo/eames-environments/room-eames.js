@@ -15,15 +15,16 @@ function boundsOf(meshes){
  }
  check(min.every(Number.isFinite),"empty geometry");return {min,max};
 }
-export function composeRoomEamesScene({room,eames,createProductStudioMeshes,lightingOptions,placement={},view=ROOM_DEFAULTS.view}){
- check(room?.primitives?.length===ROOM_ASSET.primitives,"room primitive count changed");
+export function composeRoomEamesScene({room,eames,createProductStudioMeshes,lightingOptions,placement={},view=ROOM_DEFAULTS.view,roomAsset=ROOM_ASSET}){
+ check(Number.isInteger(roomAsset?.bytes)&&roomAsset.bytes>0&&/^[a-f0-9]{64}$/.test(roomAsset.sha256)&&Number.isInteger(roomAsset.triangles)&&roomAsset.triangles>0&&Number.isInteger(roomAsset.primitives)&&roomAsset.primitives>0,"invalid room manifest");
+ check(room?.primitives?.length===roomAsset.primitives,"room primitive count changed");
  check(lightingOptions?.environmentLighting,"lighting missing");
  const bounds=room.bounds;
  check(bounds?.min?.length===3&&bounds?.max?.length===3&&bounds.min.every(Number.isFinite)&&bounds.max.every(Number.isFinite),"room bounds missing");
- const size=bounds.max.map((v,i)=>v-bounds.min[i]);check(size.every(v=>v>0),"invalid room bounds");
+ const size=bounds.max.map((v,i)=>v-bounds.min[i]);check(size.every(v=>v>0)&&Math.max(...size)>=0.25,"invalid room bounds");
  const roomMeshes=sourceMeshes(createProductStudioMeshes(room,{targetCenter:bounds.min.map((v,i)=>(v+bounds.max[i])/2),targetSize:Math.max(...size)}));
  const eamesMeshes=sourceMeshes(eames?.scene?.meshes);
- check(roomMeshes.length===73&&count(roomMeshes)===3672,"room geometry changed");
+ check(roomMeshes.length===roomAsset.primitives&&count(roomMeshes)===roomAsset.triangles,"room geometry changed");
  check(eamesMeshes.length===9&&count(eamesMeshes)===265468&&eames.evidence.modelTriangleCount===265468,"original Eames required");
  const p={x:placement.x??ROOM_DEFAULTS.x,z:placement.z??ROOM_DEFAULTS.z,yaw:placement.yaw??ROOM_DEFAULTS.yaw};
  check(Object.values(p).every(Number.isFinite)&&Math.abs(p.yaw)<=180,"invalid placement");
@@ -50,7 +51,7 @@ export function composeRoomEamesScene({room,eames,createProductStudioMeshes,ligh
  check(Math.hypot(...position.map((v,i)=>v-target[i]))>0.5,"camera too close to target");
  const meshes=[...roomMeshes,...placed].map((m,i)=>Object.freeze({...m,id:i+1,materialRefId:i+1}));
  return {scene:{...lightingOptions,meshes,displayQuality:true,accelerationBuildMode:"cpu-upload",probeDepth:6,camera:{position,target,up:[0,1,0],fovYDegrees:62}},
-  evidence:{room:ROOM_ASSET,roomBounds:bounds,roomTriangleCount:3672,eamesTriangleCount:265468,sceneTriangleCount:269140,sceneMeshes:82,
+  evidence:{room:roomAsset,roomBounds:bounds,roomTriangleCount:roomAsset.triangles,eamesTriangleCount:265468,sceneTriangleCount:roomAsset.triangles+265468,sceneMeshes:meshes.length,
    placement:p,eamesBounds,view,floorY,addedGeometry:0,lighting:"external-daylight-no-added-emitter",geometry:"mesh-bvh",proxyGeometry:false,
    interaction:"placement-and-camera-between-renders-not-realtime-or-collision-qualified"}};
 }

@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add checksum-bound local-only replacement rooms for native adaptive reference
+  captures. Preserve the default public room, source materials and Eames; reject
+  external resources and cross-origin access. No private model is packaged (#102).
+
 - Add analytic guided-denoise correctness probes and same-input HDR comparison
   metrics for the native room reference, preserving raw transport and existing
   quality gates (lighting#101, site#2249).
