@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add lighting-owned black, emissive and constant-environment energy probes for
+  the renderer's default-off bounded rough-bounce splitting experiment. Keep
+  native room/Eames as the performance workload and freeze the energy screens.
+
 - Add the user-approved public room GLB, source-preserving room/Eames composition,
   bounded placement and interior camera presets, and a commit-pinned loopback
   demo server. Preserve old reference scenes; no transport or release change.

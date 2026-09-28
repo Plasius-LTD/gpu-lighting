@@ -1,5 +1,13 @@
 # @plasius/gpu-lighting
 
+The room page also provides an experimental rough-bounce splitting comparison:
+off, first bounce only, or first two bounces. All three use the same stable
+sampler, unchanged scene/materials and native 1080p/4K camera budgets. Lighting
+owns the black, emissive and constant-environment energy probes; the renderer
+owns splitting and its default-off flag. Small probes check correctness only,
+never full-frame performance. The comparison retains rotated timing-only jobs,
+separate diagnostic images and source provenance; it is not quality-qualified.
+
 The [room + Eames reference](docs/design/room-eames-reference.md) composes the
 publicly approved `finalscene.glb` with the original Eames chair/ottoman, without
 the old studio walls or emitter panel. It preserves source room scale and adds
