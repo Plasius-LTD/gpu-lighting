@@ -54,7 +54,8 @@ export function composeRoomEamesScene({room,eames,createProductStudioMeshes,ligh
   check(extent.every(v=>Number.isFinite(v)&&v>0)&&Math.max(...extent)>=0.25,'invalid reference model bounds');
   const source=sourceMeshes(createProductStudioMeshes(model,{targetCenter:b.min.map((v,j)=>(v+b.max[j])/2),targetSize:Math.max(...extent)}));
   check(source.length===asset.primitives&&count(source)===asset.triangles,'reference model geometry changed');
-  const placement=i===0?{x:0.35,z:-1.05,yaw:45}:{x:2.3,z:-2.5,yaw:40};
+  // Keep the smaller material-reference chair clear of the Eames in the entry view.
+  const placement=i===0?{x:0.35,z:0.2,yaw:45}:{x:2.3,z:-2.5,yaw:40};
   const meshes=placeOnFloor(source,placement,floorY),placedBounds=boundsOf(meshes);
   check(placedBounds.min.every((v,j)=>v>=bounds.min[j])&&placedBounds.max.every((v,j)=>v<=bounds.max[j]),'reference model leaves room bounds');
   return {meshes,evidence:{asset,placement,bounds:placedBounds,sourceBounds:b,scale:1,

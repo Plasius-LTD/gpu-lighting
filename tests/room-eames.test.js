@@ -35,6 +35,7 @@ test('extra reference models preserve UV1, materials, source scale and all primi
  assert.equal(r.scene.meshes.length,83);assert.equal(r.evidence.sceneTriangleCount,269141);assert.equal(r.evidence.referenceModels[0].scale,1);
  assert.equal(r.scene.meshes.at(-1).material,material);assert.equal(r.scene.meshes.at(-1).uvs1,extra.primitives[0].uvs1);
  assert.equal(r.evidence.referenceModels[0].bounds.min[1],ROOM_DEFAULTS.floorY);
+ assert.deepEqual(r.evidence.referenceModels[0].placement,{x:0.35,z:0.2,yaw:45});
  assert.throws(()=>composeRoomEamesScene({...input,referenceModels:[{model:extra,asset:{...asset,triangles:2}}]}),/geometry/);
 });
 test("rigid Eames yaw rotates positions and normals without rescaling room",()=>{
