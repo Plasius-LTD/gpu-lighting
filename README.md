@@ -5,6 +5,9 @@ reference as well as the unchanged four-bounce default. The native 4K capture
 uses corrected stable sampling, circular 5.95-average-SPP budgets and denoise
 off. Verify the recorded depth; do not relabel four-bounce benchmark history or
 present a reference screenshot as performance qualification.
+The [retained six-bounce 4K image and receipt](docs/evidence/stable-reference-4k-2026-09-28.md)
+verify native dimensions, completed counts and static repeatability; visible
+low-SPP grain and the performance/production gates remain.
 
 The [stable-pattern correction](docs/design/stable-pattern-correction.md) tests
 fixed centre-first camera samples separately from temporally stable,
