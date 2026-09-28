@@ -1,6 +1,6 @@
 // Reference composition only: no new transport, loader or material implementation.
 export const ROOM_ASSET=Object.freeze({bytes:651696,sha256:"125331dadb83664e978a8c12cc974bae81bb7b75457e290c6063d921bbe11bc5",triangles:3672,primitives:73});
-export const ROOM_DEFAULTS=Object.freeze({x:1.8,z:-1.1,yaw:-25,floorY:-1.3440840244293213,view:"entry",fovYDegrees:52});
+export const ROOM_DEFAULTS=Object.freeze({x:2.3,z:-2.5,yaw:-25,floorY:-1.3440840244293213,view:"entry",fovYDegrees:52});
 const check=(v,m)=>{if(!v)throw new Error("Room reference: "+m);};
 const count=meshes=>meshes.reduce((n,m)=>n+m.indices.length/3,0);
 function sourceMeshes(meshes){
@@ -15,16 +15,17 @@ function boundsOf(meshes){
  }
  check(min.every(Number.isFinite),"empty geometry");return {min,max};
 }
-function placeOnFloor(meshes,p,floorY){
+function placeOnFloor(meshes,p,floorY,scale=1){
+ check(Number.isFinite(scale)&&scale>0,'invalid uniform scale');
  const original=boundsOf(meshes),cx=(original.min[0]+original.max[0])/2,cz=(original.min[2]+original.max[2])/2;
  const angle=p.yaw*Math.PI/180,c=Math.cos(angle),s=Math.sin(angle);
  const rotate=(values,position)=>{
   if(!values)return values;
   const result=new Array(values.length);
   for(let i=0;i<values.length;i+=3){
-   const x=values[i]-(position?cx:0),z=values[i+2]-(position?cz:0);
+   const x=position?(values[i]-cx)*scale:values[i],z=position?(values[i+2]-cz)*scale:values[i+2];
    result[i]=c*x+s*z+(position?p.x:0);
-   result[i+1]=values[i+1]+(position?floorY-original.min[1]:0);
+   result[i+1]=position?(values[i+1]-original.min[1])*scale+floorY:values[i+1];
    result[i+2]=-s*x+c*z+(position?p.z:0);
   }
   return Object.freeze(result);
@@ -54,17 +55,22 @@ export function composeRoomEamesScene({room,eames,createProductStudioMeshes,ligh
   check(extent.every(v=>Number.isFinite(v)&&v>0)&&Math.max(...extent)>=0.25,'invalid reference model bounds');
   const source=sourceMeshes(createProductStudioMeshes(model,{targetCenter:b.min.map((v,j)=>(v+b.max[j])/2),targetSize:Math.max(...extent)}));
   check(source.length===asset.primitives&&count(source)===asset.triangles,'reference model geometry changed');
-  // Keep the smaller material-reference chair clear of the Eames in the entry view.
-  const placement=i===0?{x:0.35,z:0.2,yaw:45}:{x:2.3,z:-2.5,yaw:40};
-  const meshes=placeOnFloor(source,placement,floorY),placedBounds=boundsOf(meshes);
+  const sourceBounds=boundsOf(source),sourceDimensions=sourceBounds.max.map((v,j)=>v-sourceBounds.min[j]);
+  check(sourceDimensions[0]>0,'reference model width must be positive');
+  // User-requested local size override: preserve every proportion, not just width.
+  const scale=i===0?2.1/sourceDimensions[0]:1,displayDimensions=sourceDimensions.map(v=>v*scale);
+  const placement=i===0?{x:0.35,z:0.2,yaw:45}:{x:1.8,z:-1.1,yaw:40};
+  const meshes=placeOnFloor(source,placement,floorY,scale),placedBounds=boundsOf(meshes);
   check(placedBounds.min.every((v,j)=>v>=bounds.min[j])&&placedBounds.max.every((v,j)=>v<=bounds.max[j]),'reference model leaves room bounds');
-  return {meshes,evidence:{asset,placement,bounds:placedBounds,sourceBounds:b,scale:1,
+  return {meshes,evidence:{asset,placement,bounds:placedBounds,sourceBounds,sourceDimensions,displayDimensions,scale,
+   scaleReason:i===0?'user-requested-proportional-two-seater-size':'authored-scale',
    materials:model.primitives.map(m=>({name:m.material?.name,hasUv1:!!m.uvs1,sheenColor:m.material?.sheenColor,
     textureUvSets:Object.fromEntries(Object.entries(m.material??{}).filter(([key,v])=>key.endsWith('Texture')&&v).map(([key,v])=>[key,v.texCoord??0]))}))}};
  });
  const views={entry:[4.55,floorY+1.6,0.95],front:[1.8,floorY+1.6,1.2],corner:[4.7,floorY+1.6,-2.7]};
  check(Object.hasOwn(views,view),"unknown interior view");
- const position=views[view],target=[p.x,floorY+0.85,p.z];
+ // Preserve the comparison camera while subjects exchange their floor positions.
+ const position=views[view],target=[1.8,floorY+0.85,-1.1];
  check(position.every((v,i)=>v>bounds.min[i]&&v<bounds.max[i]),"camera outside room");
  check(Math.hypot(...position.map((v,i)=>v-target[i]))>0.5,"camera too close to target");
  const meshes=[...roomMeshes,...placed,...extras.flatMap(e=>e.meshes)].map((m,i)=>Object.freeze({...m,id:i+1,materialRefId:i+1}));

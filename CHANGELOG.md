@@ -8,6 +8,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Uniformly enlarge the local seating reference to 2.1 m wide without changing proportions; exchange Eames/standing-reference positions with a fixed comparison camera, and record source/display dimensions (#103).
+
 - Add two hash-bound private material-reference models beside the original Eames/room, preserving source scale, dual UVs and default materials; narrow default vertical FOV to 52 degrees (#103).
 
 - Add checksum-bound local-only replacement rooms for native adaptive reference

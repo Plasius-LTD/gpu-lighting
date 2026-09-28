@@ -1,5 +1,41 @@
 # Room plus Eames local adaptive reference
 
+## Material comparison layout revision (site#2256 / lighting#103)
+
+The user requests the standing reflective reference at the old Eames location
+and the complete Eames group at the old standing-reference location. Defaults
+become Eames X/Z 2.3/-2.5, standing reference 1.8/-1.1; keep their respective
+yaw angles and floor contact. Keep the entry camera and its old target fixed
+so the standing reference occupies the high-SPP centre instead of moving the
+camera with the Eames. Reset and initial UI values must agree with the composer.
+
+The first local reference is displayed at 2.1 m source-local width with uniform
+scaling on all three axes, preserving its authored proportions (the user
+explicitly rejected width-only stretching before implementation). This is a
+user-requested scene override, not an authored asset dimension. Scale geometry
+about its source centre, retain normal directions under uniform scaling before
+rigid rotation; retain UVs, materials,
+indices, all primitives, original asset bytes and provenance. Record the scale
+factor, source/display dimensions and override reason. No geometry decimation,
+new material policy, transport, lighting or exposure change in this revision.
+
+Tests must cover the exact swapped defaults, stable camera target, measured
+width and proportional height/depth, unchanged normal directions, immutable inputs,
+two-model preservation, invalid/degenerate extents and room bounds. UI QA uses
+Render/Reset, Eames-only/all selection, an invalid placement and cancellation;
+native 1080p/4K raw/clean captures must show all models without clipping or
+overlap. Inspect the new centre subject separately from the older off-centre
+image. No comparison with another renderer is image-quality qualification
+without matching camera, lighting, sample counts and display transform.
+
+The screenshot comparison also prompts a read-only material-path investigation:
+check texture channel mapping, per-hit vs coarse material categories, filtering
+eligibility and low-SPP placement. Record confirmed defects separately from
+lighting/sampling hypotheses. Do not silently override the suit's authored
+metalness/roughness or change the transport merely to match the screenshot.
+Existing default-off parent flags, local-only assets, full validation and
+GPU-native-only rollback remain unchanged. Three.js remains prohibited.
+
 Tasks renderer#169 / lighting#87; Stories site#2119/#2125; Feature site#2114.
 User supplied a room GLB and explicitly requested the original Eames inside it,
 with an interior viewpoint and model-placement interaction.
@@ -18,7 +54,8 @@ Eames-only page intact. No new package dependency or Three.js runtime.
 ## Interaction and lighting
 Native 1080p default and explicit 4K; six-bounce ceiling, 32 maximum,
 5.95 average SPP, denoise off; fixed-pattern working sampler, stable comparison.
-Camera presets are inside the main room and target the placed Eames.
+Camera presets are inside the main room with a fixed comparison target at the
+original Eames position (now the standing-reference position).
 Placement exposes X/Z and yaw; chair floor alignment is deterministic.
 Bounds admission prevents escape from the room AABB, but there is no wall
 collision/physics guarantee. No live drag, moving-mesh transport, animation,

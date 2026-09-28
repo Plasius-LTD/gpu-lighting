@@ -5,8 +5,10 @@ beside the original room/Eames. CLI room `-` preserves the original room. Each
 model has an independent byte/hash manifest and immutable snapshot. Only existing
 shared-loader texture-transform/sheen (KHR_materials_sheen) support and default
 material variants are admitted; unknown extensions still reject. UV1 support in
-shared/renderer is required before capture. Preserve source scale, all primitives,
-materials and both UV sets, floor-align by rigid transform, validate room bounds.
+shared/renderer is required before capture. Preserve all primitives, materials
+and both UV sets. Apply the explicit user-requested first-seat uniform 2.1 m
+width override (record source dimensions/factor); retain standing-model scale.
+Floor-align after scaling and rigid rotation, validate room bounds.
 Use 52° vertical FOV with explicit 40–80° control (62° restores old framing).
 This is not binocular vision. Model-selection/FOV changes invalidate old output
 and are recorded in both individual captures and splitting benchmarks. Test

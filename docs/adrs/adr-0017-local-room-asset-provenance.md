@@ -1,5 +1,15 @@
 # ADR 0017: Local room assets have separate provenance and publication permission
 
+2026-09-28 layout amendment (site#2256 / lighting#103): an explicitly requested
+local size override may uniformly scale the first material-reference seat to
+2.1 m source-local width. Preserve all proportions and normal directions; retain
+original bytes, UVs and materials. Evidence records measured source/display
+dimensions, uniform factor and override reason. The standing reference keeps
+authored scale. Swap its default position with the Eames while retaining the
+comparison camera target. This supersedes original-scale placement only for the
+first seat, not source provenance or the other models. It is not a loader or
+transport policy and introduces no new production feature.
+
 2026-09-28 extension (site#2256 / lighting#103): permit at most two explicitly
 supplied local material-reference GLBs beside the room, with independent hashes,
 default material variants, original scale and rigid floor placement. Permit only
