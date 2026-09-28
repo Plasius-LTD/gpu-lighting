@@ -1,5 +1,18 @@
 # Local model reference lane
 
+Extension: site#2256 / lighting#103 adds up to two private static material models
+beside the original room/Eames. CLI room `-` preserves the original room. Each
+model has an independent byte/hash manifest and immutable snapshot. Only existing
+shared-loader texture-transform/sheen (KHR_materials_sheen) support and default
+material variants are admitted; unknown extensions still reject. UV1 support in
+shared/renderer is required before capture. Preserve source scale, all primitives,
+materials and both UV sets, floor-align by rigid transform, validate room bounds.
+Use 52° vertical FOV with explicit 40–80° control (62° restores old framing).
+This is not binocular vision. Model-selection/FOV changes invalidate old output
+and are recorded in both individual captures and splitting benchmarks. Test
+both model modes, FOV/reset/rejection, exact counts, original room provenance,
+all three visible objects, material textures and 1080p/4K raw/cleaned output.
+
 Parent: site Epic #2113 / Feature #2114 / Story #2249. Reuse the existing
 renderer-owned native adaptive runner, shared glTF loader and material mapper,
 and lighting-owned radial plan. No new transport or production API.

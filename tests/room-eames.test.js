@@ -24,6 +24,18 @@ test("compose original room and Eames without studio or added emitter; preserve 
  assert.equal(r.evidence.eamesBounds.min[1],ROOM_DEFAULTS.floorY);
  assert.deepEqual(input.eames.scene.meshes[4].positions,triangle);
  assert(Object.isFrozen(ROOM_DEFAULTS));
+ assert.equal(r.scene.camera.fovYDegrees,52);
+ assert.equal(composeRoomEamesScene({...input,fovYDegrees:62}).scene.camera.fovYDegrees,62);
+ assert.throws(()=>composeRoomEamesScene({...input,fovYDegrees:NaN}),/FOV/);
+});
+test('extra reference models preserve UV1, materials, source scale and all primitives',()=>{
+ const input=inputs(),material={sheenColor:[1,0.3,0.1]},asset={bytes:100,sha256:'b'.repeat(64),triangles:1,primitives:1,name:'extra.glb'};
+ const extra={bounds:input.room.bounds,primitives:[{positions:[0,0,0,0.2,0,0,0,0.4,0.2],normals:[0,1,0,0,1,0,0,1,0],indices:[0,1,2],uvs1:[0,0,1,0,0,1],material}]};
+ const r=composeRoomEamesScene({...input,referenceModels:[{model:extra,asset}]});
+ assert.equal(r.scene.meshes.length,83);assert.equal(r.evidence.sceneTriangleCount,269141);assert.equal(r.evidence.referenceModels[0].scale,1);
+ assert.equal(r.scene.meshes.at(-1).material,material);assert.equal(r.scene.meshes.at(-1).uvs1,extra.primitives[0].uvs1);
+ assert.equal(r.evidence.referenceModels[0].bounds.min[1],ROOM_DEFAULTS.floorY);
+ assert.throws(()=>composeRoomEamesScene({...input,referenceModels:[{model:extra,asset:{...asset,triangles:2}}]}),/geometry/);
 });
 test("rigid Eames yaw rotates positions and normals without rescaling room",()=>{
  const r=composeRoomEamesScene({...inputs(),placement:{x:1,z:-1,yaw:90}});

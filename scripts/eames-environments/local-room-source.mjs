@@ -2,7 +2,7 @@ import {createHash} from 'node:crypto';
 
 const check=(value,message)=>{if(!value)throw new Error('Local room: '+message);};
 // Admission only. Geometry, transforms, materials and texture decoding remain in gpu-shared.
-export function inspectLocalRoomGlb(bytes,name){
+export function inspectLocalRoomGlb(bytes,name,{referenceModel=false}={}){
  check(Buffer.isBuffer(bytes)&&bytes.length>=20&&bytes.length<=128*1024*1024,'GLB size outside bounds');
  check(bytes.readUInt32LE(0)===0x46546c67&&bytes.readUInt32LE(4)===2&&bytes.readUInt32LE(8)===bytes.length,'invalid GLB header');
  let offset=12,document,binSeen=false;
@@ -15,7 +15,8 @@ export function inspectLocalRoomGlb(bytes,name){
   offset+=size;
  }
  check(document?.asset?.version==='2.0','unsupported glTF version');
- check(!document.extensionsRequired?.length&&!document.extensionsUsed?.length,'extensions require separate qualification');
+ const supported=referenceModel?['KHR_texture_transform','KHR_materials_sheen','KHR_materials_variants']:[];
+ check([...(document.extensionsRequired??[]),...(document.extensionsUsed??[])].every(name=>supported.includes(name)),'extensions require separate qualification');
  check(!document.animations?.length&&!document.skins?.length,'animated/skinned models unsupported');
  for(const resource of [...document.buffers??[],...document.images??[]])check(resource.uri===undefined,'external or inline URI resources unsupported; embed in BIN');
  let triangles=0,primitives=0,nodes=0;
@@ -38,10 +39,19 @@ export function inspectLocalRoomGlb(bytes,name){
  for(const root of scene.nodes)visit(root);
  check(primitives>0&&triangles<=2000000,'geometry outside reference limits');
  check(typeof name==='string'&&name.length>0&&name.length<=160&&!/[\\/]/.test(name)&&[...name].every(c=>c.charCodeAt(0)>=32),'invalid display name');
- return Object.freeze({name,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),triangles,primitives,embeddedImages:document.images?.length??0,publication:'local-only-not-approved-for-publication'});
+ return Object.freeze({name,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),triangles,primitives,embeddedImages:document.images?.length??0,extensionsUsed:document.extensionsUsed??[],materialVariant:'default',publication:'local-only-not-approved-for-publication'});
 }
 export function addLocalRoomSnapshot(snapshot,input,name){
  const bytes=Buffer.from(input),room=inspectLocalRoomGlb(bytes,name),bodies=new Map(snapshot.bodies);
  bodies.set('/__room-model.glb',bytes);bodies.set('/__room-manifest.json',Buffer.from(JSON.stringify(room)));
- return {...snapshot,bodies,source:'immutable-git-code-and-local-asset-snapshot',assets:{room}};
+ return {...snapshot,bodies,source:'immutable-git-code-and-local-asset-snapshot',assets:{...snapshot.assets,room}};
+}
+export function addLocalReferenceModels(snapshot,inputs){
+ check(Array.isArray(inputs)&&inputs.length<=2,'at most two reference models are supported');
+ const bodies=new Map(snapshot.bodies),models=inputs.map(({bytes:input,name},i)=>{
+  const bytes=Buffer.from(input),asset=inspectLocalRoomGlb(bytes,name,{referenceModel:true});
+  bodies.set(`/__reference-model-${i}.glb`,bytes);return asset;
+ });
+ bodies.set('/__reference-models.json',Buffer.from(JSON.stringify(models)));
+ return {...snapshot,bodies,source:inputs.length?'immutable-git-code-and-local-asset-snapshot':snapshot.source,assets:{...snapshot.assets,models}};
 }

@@ -5,7 +5,7 @@ import {execFileSync} from "node:child_process";
 import {randomUUID} from "node:crypto";
 import {readFileSync,statSync} from "node:fs";
 import {createCaptureBridgeServer} from "./capture-bridge-server.mjs";
-import {addLocalRoomSnapshot} from "./local-room-source.mjs";
+import {addLocalRoomSnapshot,addLocalReferenceModels} from "./local-room-source.mjs";
 import {ROOM_ASSET} from "../../demo/eames-environments/room-eames.js";
 
 const types={".html":"text/html; charset=utf-8",".json":"application/json",".png":"image/png",".jpg":"image/jpeg",".glb":"model/gltf-binary",".gltf":"model/gltf+json",".bin":"application/octet-stream"};
@@ -38,12 +38,16 @@ export function loadCommittedRoomSources(roots){
  if(!bodies.has("/tests/fixtures/native-room-reference.html")||!bodies.has("/lighting/demo/eames-environments/assets/finalscene.glb"))throw new Error("Room reference commits are missing");
  bodies.set('/__room-model.glb',bodies.get('/lighting/demo/eames-environments/assets/finalscene.glb'));
  bodies.set('/__room-manifest.json',Buffer.from(JSON.stringify({...ROOM_ASSET,name:'finalscene.glb',publication:'public-user-approved'})));
+ bodies.set('/__reference-models.json',Buffer.from('[]'));
  return {bodies,sources};
 }
 if(process.argv[1]&&pathToFileURL(path.resolve(process.argv[1])).href===import.meta.url){
- const [renderer,shared,site,portValue="5209",localRoom]=process.argv.slice(2),port=Number(portValue);
+ const [renderer,shared,site,portValue="5209",localRoom,...referenceModels]=process.argv.slice(2),port=Number(portValue);
  if(!renderer||!shared||!site||!Number.isInteger(port)||port<1024||port>65535)throw new Error("Usage: node room-reference-server.mjs RENDERER_ROOT SHARED_ROOT SITE_ROOT [PORT] [LOCAL_ROOM_GLB]");
  const lighting=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"../..");let snapshot=loadCommittedRoomSources({renderer,lighting,shared,site});
- if(localRoom){if(!statSync(localRoom).isFile()||statSync(localRoom).size>128*1024*1024)throw new Error('Local room must be a GLB file under 128 MiB');snapshot=addLocalRoomSnapshot(snapshot,readFileSync(localRoom),path.basename(localRoom));}
+ const localBytes=file=>{const s=statSync(file);if(!s.isFile()||s.size>128*1024*1024)throw Error('Local model must be a GLB file under 128 MiB');return readFileSync(file);};
+ if(localRoom&&localRoom!=='-')snapshot=addLocalRoomSnapshot(snapshot,localBytes(localRoom),path.basename(localRoom));
+ if(referenceModels.length>2)throw Error('At most two additional reference models are supported');
+ snapshot=addLocalReferenceModels(snapshot,referenceModels.map(file=>({bytes:localBytes(file),name:path.basename(file)})));
  createRoomReferenceServer(snapshot).listen(port,"127.0.0.1",()=>console.log(JSON.stringify({url:`http://127.0.0.1:${port}/tests/fixtures/native-room-reference.html`,sources:snapshot.sources})));
 }

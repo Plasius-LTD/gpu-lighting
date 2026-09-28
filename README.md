@@ -1,5 +1,12 @@
 # @plasius/gpu-lighting
 
+To keep the original room and include up to two private material-reference GLBs,
+append `- /absolute/path/fabric.glb /absolute/path/reflective.glb` after the server
+port. Files stay local, hash-bound and unmodified. The shared loader must support
+UV1. Models retain source scale/default materials; the page offers Eames-only
+comparison and a 52° vertical FOV (adjustable, including the old 62°). Default
+material variants only; no animation, stereo or new lighting transport.
+
 For a private replacement room, append an absolute GLB path to the room server
 command and use a separate port, for example `5210`. Only that self-contained,
 static GLB is snapshotted; its checksum is recorded separately from code commits.

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {inspectLocalRoomGlb,addLocalRoomSnapshot} from '../scripts/eames-environments/local-room-source.mjs';
+import {inspectLocalRoomGlb,addLocalRoomSnapshot,addLocalReferenceModels} from '../scripts/eames-environments/local-room-source.mjs';
 function glb(patch={}){
  const doc={asset:{version:'2.0'},scenes:[{nodes:[0]}],nodes:[{mesh:0}],meshes:[{primitives:[{attributes:{POSITION:0},indices:1}]}],accessors:[{count:3},{count:3}],...patch};
  const json=Buffer.from(JSON.stringify(doc).padEnd(Math.ceil(JSON.stringify(doc).length/4)*4,' '));
@@ -14,6 +14,16 @@ test('local GLB snapshot validates header/static resources and counts reachable 
  const bad=glb();bad.writeUInt32LE(0xffffffff,12);assert.throws(()=>inspectLocalRoomGlb(bad,'room.glb'));
  const json=glb(),binary=Buffer.concat([json,Buffer.alloc(12)]);binary.writeUInt32LE(binary.length,8);binary.writeUInt32LE(4,json.length);binary.writeUInt32LE(0x004e4942,json.length+4);assert.equal(inspectLocalRoomGlb(binary,'embedded.glb').triangles,1);
  for(const name of ['', '../room.glb', 'line\nname'])assert.throws(()=>inspectLocalRoomGlb(glb(),name));
+});
+test('extra models admit only supported material extensions and preserve the original room',()=>{
+ const extensionsUsed=['KHR_texture_transform','KHR_materials_sheen','KHR_materials_variants'];
+ const snap={bodies:new Map([['/__room-model.glb',Buffer.from('original')]]),sources:{lighting:'a'},assets:{room:{name:'original'}}};
+ const result=addLocalReferenceModels(snap,[{bytes:glb({extensionsUsed}),name:'fabric.glb'},{bytes:glb(),name:'visor.glb'}]);
+ assert.equal(result.bodies.get('/__room-model.glb').toString(),'original');assert.equal(result.assets.models.length,2);
+ assert.deepEqual(result.assets.models[0].extensionsUsed,extensionsUsed);assert.equal(result.assets.models[0].materialVariant,'default');
+ assert.equal(JSON.parse(result.bodies.get('/__reference-models.json')).length,2);
+ assert.throws(()=>addLocalReferenceModels(snap,[{bytes:glb({extensionsRequired:['unknown']}),name:'bad.glb'}]),/extensions/);
+ assert.throws(()=>addLocalReferenceModels(snap,Array.from({length:3},()=>({bytes:glb(),name:'many.glb'}))),/two/);
 });
 test('local room map snapshots private bytes and labels mixed provenance without a source path',()=>{
  const bytes=glb(),snap={bodies:new Map(),sources:{lighting:'a'}};

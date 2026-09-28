@@ -8,6 +8,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add two hash-bound private material-reference models beside the original Eames/room, preserving source scale, dual UVs and default materials; narrow default vertical FOV to 52 degrees (#103).
+
 - Add checksum-bound local-only replacement rooms for native adaptive reference
   captures. Preserve the default public room, source materials and Eames; reject
   external resources and cross-origin access. No private model is packaged (#102).
