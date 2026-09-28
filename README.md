@@ -7,6 +7,9 @@ owns the black, emissive and constant-environment energy probes; the renderer
 owns splitting and its default-off flag. Small probes check correctness only,
 never full-frame performance. The comparison retains rotated timing-only jobs,
 separate diagnostic images and source provenance; it is not quality-qualified.
+See the [native room splitting results](docs/evidence/rough-bounce-splitting-2026-09-28.md):
+first-bounce splitting costs 15–16% and first-two-bounce splitting 32–34% more
+job time in these short captures. Extra buffers are 14/42 MiB; grain remains.
 
 The [room + Eames reference](docs/design/room-eames-reference.md) composes the
 publicly approved `finalscene.glb` with the original Eames chair/ottoman, without
