@@ -11,6 +11,8 @@ export function createGuidedDenoiseProbe() {
   albedo.set([y>=64&&right?0.8:0.3,0.3,0.3,y>=96?0:1],o);
   const spp=y<64?1:32;words[id]=spp|(spp<<9);
   if(x===0&&y>=96){raw[o+3]=0;words[id]=0x80000000;}
+  if(x===1&&y>=96)words[id]=0x80000000; // flag-only invalid despite raw alpha 1
+  if(x===2&&y>=96)words[id]=32|(16<<9); // incomplete camera count
  }
  return {width,height,raw,truth,normalDepth,albedo,words};
 }
@@ -21,7 +23,8 @@ export function evaluateGuidedDenoiseProbe(probe,output) {
  for(let y=0;y<probe.height;y++)for(let x=0;x<probe.width;x++){
   const o=(y*probe.width+x)*4;
   if(!Number.isFinite(output[o])||!Number.isFinite(output[o+1])||!Number.isFinite(output[o+2]))throw new Error('Nonfinite filtered probe');
-  if(probe.raw[o+3]===0){if(output[o+3]!==0)invalid++;continue;}
+  const word=probe.words[y*probe.width+x];
+  if(probe.raw[o+3]===0||(word&0x80000000)||((word>>>9)&511)!==(word&511)){if(output[o+3]!==0)invalid++;continue;}
   for(let c=0;c<3;c++){
    const e=Math.abs(output[o+c]-probe.truth[o+c]);
    if(y<32)constantError=Math.max(constantError,e);
