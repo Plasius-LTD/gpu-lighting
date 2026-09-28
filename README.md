@@ -1,5 +1,13 @@
 # @plasius/gpu-lighting
 
+The local room reference supports the renderer's default-off
+`renderer.denoise.guidedSpatial.enabled` experiment. Lighting provides analytic
+HDR/noise/edge/protected-pixel probes and honest raw-versus-filtered image metrics;
+the GPU filter itself remains renderer-owned. The original room and Eames
+materials, geometry, lighting, sample counts and splitting benchmark are unchanged.
+Native 1080p/4K captures retain separate raw and filtered data. Cleaner appearance
+alone is not convergence or performance qualification (site#2249, lighting#101).
+
 The room page also provides an experimental rough-bounce splitting comparison:
 off, first bounce only, or first two bounces. All three use the same stable
 sampler, unchanged scene/materials and native 1080p/4K camera budgets. Lighting

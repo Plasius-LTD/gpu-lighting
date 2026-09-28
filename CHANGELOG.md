@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add analytic guided-denoise correctness probes and same-input HDR comparison
+  metrics for the native room reference, preserving raw transport and existing
+  quality gates (lighting#101, site#2249).
+
 - Add lighting-owned black, emissive and constant-environment energy probes for
   the renderer's default-off bounded rough-bounce splitting experiment. Keep
   native room/Eames as the performance workload and freeze the energy screens.
