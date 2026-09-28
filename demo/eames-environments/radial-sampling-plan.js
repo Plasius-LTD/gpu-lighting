@@ -1,6 +1,15 @@
 // Prescribed diagnostic policy, not a production importance/performance governor.
 // Order pixel centres by Euclidean distance, then row-major ID only for ties.
-export function createRadialSamplingPlan(width,height) {
+export const RADIAL_SAMPLING_DEFAULTS=Object.freeze({maximumSpp:32,areaPercent:Object.freeze([5,10,15,20,25,25])});
+// Matches the renderer's packed completed-count ABI, not a quality recommendation.
+export const RADIAL_MAXIMUM_SPP=256;
+export function radialSamplingTiers(maximumSpp=RADIAL_SAMPLING_DEFAULTS.maximumSpp){
+  if(!Number.isSafeInteger(maximumSpp)||maximumSpp<1||maximumSpp>RADIAL_MAXIMUM_SPP)
+    throw new RangeError(`Radial ceiling must be an integer from 1 to ${RADIAL_MAXIMUM_SPP}.`);
+  return RADIAL_SAMPLING_DEFAULTS.areaPercent.map((_,index)=>Math.max(1,Math.ceil(maximumSpp/2**index)));
+}
+export function createRadialSamplingPlan(width,height,maximumSpp=RADIAL_SAMPLING_DEFAULTS.maximumSpp) {
+  const spp=radialSamplingTiers(maximumSpp);
   const pixels=width*height;
   if(!Number.isSafeInteger(width)||!Number.isSafeInteger(height)||width<1||height<1||pixels<20||pixels>3840*2160)
     throw new RangeError("Radial plan requires bounded integer dimensions (20 pixels through native 4K).");
@@ -15,7 +24,8 @@ export function createRadialSamplingPlan(width,height) {
     }
     return count;
   };
-  const spp=[32,16,8,4,2,1],percent=[5,15,30,50,75,100];
+  let cumulativePercent=0;
+  const percent=RADIAL_SAMPLING_DEFAULTS.areaPercent.map(p=>cumulativePercent+=p);
   let previous=0;
   const bands=percent.map((p,index)=>{
     const target=Math.floor(pixels*p/100);
@@ -32,7 +42,8 @@ export function createRadialSamplingPlan(width,height) {
     const band=Object.freeze({spp:spp[index],pixels:target-previous,radiusSquared:low,lastTiePixel});
     previous=target;return band;
   });
-  const budgets=new Uint8Array(pixels);
+  const BudgetArray=maximumSpp>0xff?Uint16Array:Uint8Array;
+  const budgets=new BudgetArray(pixels);
   for(let y=0;y<height;y++)for(let x=0;x<width;x++){
     const id=y*width+x,d=(2*x+1-width)**2+(2*y+1-height)**2;
     for(const band of bands)if(d<band.radiusSquared||(d===band.radiusSquared&&id<=band.lastTiePixel)){budgets[id]=band.spp;break;}

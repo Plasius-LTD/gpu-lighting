@@ -86,13 +86,17 @@ test("room artifact is the exact user-approved binary and standard static glTF",
  assert.equal(doc.meshes.reduce((n,m)=>n+m.primitives.reduce((s,p)=>s+doc.accessors[p.indices].count/3,0),0),3672);
 });
 test("native settings and count admission reject any partial or mislabeled render",()=>{
- for(const resolution of ["1080p","4k"]){
- const s=roomReferenceSettings(resolution,"fixed-pattern");assert.equal(s.maxDepth,6);assert.equal(s.height,resolution==="4k"?2160:1080);
+ for(const resolution of ["1080p","4k"])for(const maximum of [1,32,127,256]){
+ const s=roomReferenceSettings(resolution,"fixed-pattern",maximum);assert.equal(s.maximumSpp,maximum);assert.equal(s.maxDepth,6);assert.equal(s.height,resolution==="4k"?2160:1080);
  const plan={totalSamples:95,bands:[{spp:1,pixels:3}]},frame={...s,mode:"radial",diagnostics:true,fused:false,actualSamples:95,actualHistogram:{1:3},validationErrors:0};
  assert.equal(validateRoomFrame(frame,plan,s),true);
- for(const patch of [{actualSamples:0},{width:128},{sampler:"stable-pattern"},{mode:"fixed"},{validationErrors:1},{actualHistogram:{}},{diagnostics:false}])assert.throws(()=>validateRoomFrame({...frame,...patch},plan,s),/Room reference/);
+ for(const patch of [{maximumSpp:maximum+1},{actualSamples:0},{width:128},{sampler:"stable-pattern"},{mode:"fixed"},{validationErrors:1},{actualHistogram:{}},{diagnostics:false}])assert.throws(()=>validateRoomFrame({...frame,...patch},plan,s),/Room reference/);
  }
  assert.throws(()=>roomReferenceSettings("720p"),/resolution/);assert.throws(()=>roomReferenceSettings("4k","bad"),/sampler/);
+ for(const maximum of [0,257,NaN,12.5,'256'])assert.throws(()=>roomReferenceSettings('4k','stable-pattern',maximum),/ceiling/);
+ const settings=roomReferenceSettings('4k','stable-pattern',1);
+ assert.equal(validateRoomFrame({...settings,mode:'radial',diagnostics:true,fused:false,validationErrors:0,actualSamples:5,actualHistogram:{1:5}},
+  {totalSamples:5,bands:[{spp:1,pixels:2},{spp:1,pixels:3}]},settings),true);
 });
 test("replacement room admits its own verified counts without changing materials or Eames",()=>{
  const i=inputs(),roomAsset={bytes:100,sha256:'a'.repeat(64),triangles:2,primitives:1};

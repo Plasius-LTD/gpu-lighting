@@ -35,3 +35,23 @@ test("radial plan rejects unbounded, missing and fractional dimensions before al
   for(const pair of [[0,1080],[1920,NaN],[3841,2160],[1,1],[1920.5,1080],['1920',1080],[Infinity,1]])
     assert.throws(()=>createRadialSamplingPlan(...pair),RangeError);
 });
+
+test('configured ceiling scales every native pixel without changing circular area shares',()=>{
+ for(const [width,height] of [[1920,1080],[3840,2160]]){
+  const original=createRadialSamplingPlan(width,height),high=createRadialSamplingPlan(width,height,256);
+  assert(high.budgets instanceof Uint16Array);assert(original.budgets instanceof Uint8Array);
+  assert.deepEqual(high.bands.map(b=>b.spp),[256,128,64,32,16,8]);
+  assert.deepEqual(high.bands.map(({spp,...band})=>band),original.bands.map(({spp,...band})=>band));
+  assert(high.budgets.every((value,id)=>value===original.budgets[id]*8));
+  assert.equal(high.totalSamples,width*height*47.6);
+ }
+});
+test('ceiling is a validated variable, not a pair of special-case presets',()=>{
+ for(const maximum of [1,2,17,64,127,192,255,256]){
+  const plan=createRadialSamplingPlan(40,25,maximum);
+  assert.deepEqual(plan.bands.map(b=>b.spp),Array.from({length:6},(_,i)=>Math.max(1,Math.ceil(maximum/2**i))));
+  assert.equal(Math.max(...plan.budgets),maximum);
+  assert.equal(plan.totalSamples,plan.budgets.reduce((a,b)=>a+b,0));
+ }
+ for(const maximum of [0,-1,257,NaN,Infinity,32.5,'256',null])assert.throws(()=>createRadialSamplingPlan(40,25,maximum),/ceiling/);
+});

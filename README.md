@@ -1,5 +1,13 @@
 # @plasius/gpu-lighting
 
+The local room capture accepts a variable **SPP ceiling** (integer 1–256,
+default 32). `createRadialSamplingPlan(width, height, maximumSpp)` derives the
+six tiers by repeated halving, rounded up with a one-sample floor, preserving
+5/10/15/20/25/25% circular areas. At 256, native 4K completes 394,813,440 camera
+samples (47.6 average SPP). Wider host budget storage prevents 256 wrapping to
+zero. This is a diagnostic quality reference, not a production governor or
+real-time qualification. See the [design](docs/design/high-spp-room-reference.md).
+
 To keep the original room and include up to two private material-reference GLBs,
 append `- /absolute/path/fabric.glb /absolute/path/reflective.glb` after the server
 port. Files stay local, hash-bound and unmodified. The shared loader must support

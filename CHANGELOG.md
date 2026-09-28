@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Parameterize diagnostic radial SPP ceilings over the supported integer 1–256
+  range, derive tiers while preserving circular shares, and validate actual
+  ceiling/count evidence; default 32 behavior remains unchanged (#104).
+
 - Uniformly enlarge the local seating reference to 1.5 m wide (revised from the reviewed 2.1 m trial) without changing proportions; exchange Eames/standing-reference positions with a fixed comparison camera, and record source/display dimensions (#103).
 
 - Add two hash-bound private material-reference models beside the original Eames/room, preserving source scale, dual UVs and default materials; narrow default vertical FOV to 52 degrees (#103).

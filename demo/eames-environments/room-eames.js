@@ -1,4 +1,5 @@
 // Reference composition only: no new transport, loader or material implementation.
+import {RADIAL_SAMPLING_DEFAULTS,radialSamplingTiers} from './radial-sampling-plan.js';
 export const ROOM_ASSET=Object.freeze({bytes:651696,sha256:"125331dadb83664e978a8c12cc974bae81bb7b75457e290c6063d921bbe11bc5",triangles:3672,primitives:73});
 export const ROOM_DEFAULTS=Object.freeze({x:2.3,z:-2.5,yaw:-25,floorY:-1.3440840244293213,view:"entry",fovYDegrees:52});
 const check=(v,m)=>{if(!v)throw new Error("Room reference: "+m);};
@@ -79,17 +80,21 @@ export function composeRoomEamesScene({room,eames,createProductStudioMeshes,ligh
    placement:p,eamesBounds,view,floorY,addedGeometry:0,lighting:"external-daylight-no-added-emitter",geometry:"mesh-bvh",proxyGeometry:false,
    interaction:"placement-and-camera-between-renders-not-realtime-or-collision-qualified"}};
 }
-export function roomReferenceSettings(resolution="1080p",sampler="fixed-pattern"){
+export function roomReferenceSettings(resolution="1080p",sampler="fixed-pattern",maximumSpp=RADIAL_SAMPLING_DEFAULTS.maximumSpp){
  check(["1080p","4k"].includes(resolution),"unknown resolution");
  check(["fixed-pattern","stable-pattern"].includes(sampler),"unknown sampler");
- return Object.freeze({width:resolution==="4k"?3840:1920,height:resolution==="4k"?2160:1080,maxDepth:6,maximumSpp:32,sampler,denoise:false});
+ radialSamplingTiers(maximumSpp);
+ return Object.freeze({width:resolution==="4k"?3840:1920,height:resolution==="4k"?2160:1080,maxDepth:6,maximumSpp,sampler,denoise:false});
 }
 export function validateRoomFrame(frame,plan,settings){
- const canonical=roomReferenceSettings(settings.width===3840?"4k":"1080p",settings.sampler);
+ const canonical=roomReferenceSettings(settings.width===3840?"4k":"1080p",settings.sampler,settings.maximumSpp);
  check(Object.entries(canonical).every(([key,value])=>settings[key]===value),"settings changed");
  check(frame.width===settings.width&&frame.height===settings.height&&frame.sampler===settings.sampler&&frame.mode==="radial","frame identity changed");
+ check(frame.maximumSpp===settings.maximumSpp,"frame ceiling changed");
  check(frame.diagnostics===true&&frame.fused===false&&frame.validationErrors===0,"invalid diagnostic frame");
  check(frame.actualSamples===plan.totalSamples,"completed samples mismatch");
- for(const band of plan.bands)check(frame.actualHistogram?.[band.spp]===band.pixels,"completed histogram mismatch");
+ const histogram=new Map();
+ for(const band of plan.bands)histogram.set(band.spp,(histogram.get(band.spp)??0)+band.pixels);
+ for(const [spp,pixels] of histogram)check(frame.actualHistogram?.[spp]===pixels,"completed histogram mismatch");
  return true;
 }
