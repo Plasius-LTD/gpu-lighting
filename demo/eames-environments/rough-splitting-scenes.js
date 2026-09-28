@@ -8,8 +8,10 @@ export function createRoughSplittingScene(name) {
     displayQuality: true, probeMaximum: 32, probeDepth: 6,
     camera: {position: [0, 0, 3], target: [0, 0, 0], fovYDegrees: 46},
     meshes: [{
-      positions: [-100, -100, 0, 100, -100, 0, 100, 100, 0, -100, 100, 0],
-      indices: [0, 1, 2, 0, 2, 3],
+      // One oversized triangle keeps internal shared-edge traversal out of the
+      // energy probe. A two-triangle quad exposed an existing unsplit edge miss.
+      positions: [-10, -10, 0, 10, -10, 0, 0, 10, 0],
+      indices: [0, 1, 2],
       materialKind: name === "emissive" ? "emissive" : "diffuse",
       color: [0.6, 0.3, 0.1, 1], emission: name === "emissive" ? [4, 2, 1, 1] : [0, 0, 0, 0],
       roughness: 0.9, metallic: 0,

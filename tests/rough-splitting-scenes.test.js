@@ -5,6 +5,7 @@ test("rough splitting probes retain the same full BSDF and frozen energy screens
   for (const name of ["black", "emissive", "diffuse-constant"]) {
     const scene = createRoughSplittingScene(name);
     assert.equal(scene.probeDepth, 6);assert.equal(scene.meshes[0].roughness, 0.9);
+    assert.deepEqual(scene.meshes[0].indices, [0, 1, 2]);
     const pixel = name === "emissive" ? [4, 2, 1, 1] : name === "black" ? [0, 0, 0, 1] : [0.4, 0.2, 0.1, 1];
     assert.equal(validateRoughSplittingProbe(name, pixel, pixel).passed, true);
   }
