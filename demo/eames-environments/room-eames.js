@@ -58,7 +58,7 @@ export function composeRoomEamesScene({room,eames,createProductStudioMeshes,ligh
   const sourceBounds=boundsOf(source),sourceDimensions=sourceBounds.max.map((v,j)=>v-sourceBounds.min[j]);
   check(sourceDimensions[0]>0,'reference model width must be positive');
   // User-requested local size override: preserve every proportion, not just width.
-  const scale=i===0?2.1/sourceDimensions[0]:1,displayDimensions=sourceDimensions.map(v=>v*scale);
+  const scale=i===0?1.5/sourceDimensions[0]:1,displayDimensions=sourceDimensions.map(v=>v*scale);
   const placement=i===0?{x:0.35,z:0.2,yaw:45}:{x:1.8,z:-1.1,yaw:40};
   const meshes=placeOnFloor(source,placement,floorY,scale),placedBounds=boundsOf(meshes);
   check(placedBounds.min.every((v,j)=>v>=bounds.min[j])&&placedBounds.max.every((v,j)=>v<=bounds.max[j]),'reference model leaves room bounds');

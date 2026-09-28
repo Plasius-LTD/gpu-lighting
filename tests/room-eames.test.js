@@ -35,7 +35,7 @@ test('extra reference models preserve UV1, materials and all primitives with an 
  const extra={bounds:input.room.bounds,primitives:[{positions:[0,0,0,1,0,0,0,0.4,0.2],normals:[0,1,0,0,1,0,0,1,0],indices:[0,1,2],uvs1:[0,0,1,0,0,1],material}]};
  const r=composeRoomEamesScene({...input,referenceModels:[{model:extra,asset}]});
  assert.equal(r.scene.meshes.length,83);assert.equal(r.evidence.sceneTriangleCount,269141);
- assert.equal(r.evidence.referenceModels[0].scale,2.1);
+ assert.equal(r.evidence.referenceModels[0].scale,1.5);
  assert.equal(r.scene.meshes.at(-1).material,material);assert.equal(r.scene.meshes.at(-1).uvs1,extra.primitives[0].uvs1);
  assert.equal(r.evidence.referenceModels[0].bounds.min[1],ROOM_DEFAULTS.floorY);
  assert.deepEqual(r.evidence.referenceModels[0].placement,{x:0.35,z:0.2,yaw:45});
@@ -46,18 +46,18 @@ test('two-seater uniform size override preserves proportions and normal directio
  const extra={bounds:input.room.bounds,primitives:[{positions:[0,0,0,1,0,0,0,0.7,0.6],indices:[0,1,2],normals,uvs:[0,0,1,0,0,1],material}]};
  const asset={bytes:100,sha256:'b'.repeat(64),triangles:1,primitives:1};
  const r=composeRoomEamesScene({...input,referenceModels:[{model:extra,asset},{model:extra,asset}]}),first=r.evidence.referenceModels[0],standing=r.evidence.referenceModels[1];
- assert.deepEqual(first.displayDimensions,[2.1,0.7*2.1,0.6*2.1]);assert.deepEqual(first.sourceDimensions,[1,0.7,0.6]);
- assert.equal(first.scale,2.1);assert.equal(first.scaleReason,'user-requested-proportional-two-seater-size');
+ assert.deepEqual(first.displayDimensions,[1.5,0.7*1.5,0.6*1.5]);assert.deepEqual(first.sourceDimensions,[1,0.7,0.6]);
+ assert.equal(first.scale,1.5);assert.equal(first.scaleReason,'user-requested-proportional-two-seater-size');
  assert.deepEqual(standing.placement,{x:1.8,z:-1.1,yaw:40});assert.equal(standing.scale,1);
  const n=r.scene.meshes[82].normals.slice(0,3);
  assert(Math.abs(n[0]-0.5)<1e-12);assert(Math.abs(n[1]-Math.SQRT1_2)<1e-12);assert(Math.abs(n[2]+0.5)<1e-12);
  const positions=r.scene.meshes[82].positions,original=extra.primitives[0].positions;
  for(const offset of [3,6]){
   const distance=a=>Math.hypot(...a.slice(offset,offset+3).map((v,i)=>v-a[i]));
-  assert(Math.abs(distance(positions)/distance(original)-2.1)<1e-12);
+  assert(Math.abs(distance(positions)/distance(original)-1.5)<1e-12);
  }
  assert.equal(first.bounds.min[1],ROOM_DEFAULTS.floorY);
- assert(Math.abs(first.bounds.max[1]-first.bounds.min[1]-1.47)<1e-12);
+ assert(Math.abs(first.bounds.max[1]-first.bounds.min[1]-1.05)<1e-12);
  assert.equal(r.scene.meshes[82].material,material);assert.equal(r.scene.meshes[82].uvs,extra.primitives[0].uvs);assert.equal(extra.primitives[0].normals,normals);
  const bad={...extra,primitives:[{...extra.primitives[0],positions:[0,0,0,0,1,0,0,0,1]}]};
  assert.throws(()=>composeRoomEamesScene({...input,referenceModels:[{model:bad,asset}]}),/width/);

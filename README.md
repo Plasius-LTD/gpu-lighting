@@ -3,7 +3,7 @@
 To keep the original room and include up to two private material-reference GLBs,
 append `- /absolute/path/fabric.glb /absolute/path/reflective.glb` after the server
 port. Files stay local, hash-bound and unmodified. The shared loader must support
-UV1. The first material-reference seat is uniformly scaled to 2.1 m wide, with
+UV1. The first material-reference seat is uniformly scaled to 1.5 m wide, with
 height and depth scaled by the same factor; this is an explicit local scene
 override, recorded alongside source dimensions. The standing reference retains
 source scale. It and the Eames exchange default positions while the camera

@@ -9,9 +9,10 @@ yaw angles and floor contact. Keep the entry camera and its old target fixed
 so the standing reference occupies the high-SPP centre instead of moving the
 camera with the Eames. Reset and initial UI values must agree with the composer.
 
-The first local reference is displayed at 2.1 m source-local width with uniform
+The first local reference is displayed at 1.5 m source-local width with uniform
 scaling on all three axes, preserving its authored proportions (the user
 explicitly rejected width-only stretching before implementation). This is a
+reduction from the initial 2.1 m trial after the user's visual review. It is a
 user-requested scene override, not an authored asset dimension. Scale geometry
 about its source centre, retain normal directions under uniform scaling before
 rigid rotation; retain UVs, materials,

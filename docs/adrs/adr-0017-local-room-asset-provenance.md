@@ -2,7 +2,8 @@
 
 2026-09-28 layout amendment (site#2256 / lighting#103): an explicitly requested
 local size override may uniformly scale the first material-reference seat to
-2.1 m source-local width. Preserve all proportions and normal directions; retain
+1.5 m source-local width (the user reduced the initial 2.1 m trial after review).
+Preserve all proportions and normal directions; retain
 original bytes, UVs and materials. Evidence records measured source/display
 dimensions, uniform factor and override reason. The standing reference keeps
 authored scale. Swap its default position with the Eames while retaining the
