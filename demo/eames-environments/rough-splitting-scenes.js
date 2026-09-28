@@ -31,7 +31,7 @@ export function validateRoughSplittingProbe(name, image, control) {
     if (channel === 3) {if (image[i] !== 1 || control[i] !== 1) throw Error("Incomplete camera sample");continue;}
     sums[channel] += image[i];reference[channel] += control[i];
     if (name === "black" && image[i] !== 0) throw Error("Black scene has energy");
-    if (name === "emissive" && Math.abs(image[i] - [4, 2, 1][channel]) > 1e-6) throw Error("Emission changed");
+    if (name === "emissive" && Math.abs(image[i] - [4, 2, 1][channel]) > 1e-6) throw Error(`Emission changed at component ${i}: ${image[i]}, control ${control[i]}, expected ${[4, 2, 1][channel]}`);
   }
   if (name === "diffuse-constant") for (let channel = 0; channel < 3; channel++) {
     if (reference[channel] <= 0 || Math.abs(sums[channel] / reference[channel] - 1) > 0.02) throw Error("Diffuse mean energy changed by more than 2%");
