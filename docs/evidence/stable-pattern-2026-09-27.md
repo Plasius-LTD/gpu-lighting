@@ -6,6 +6,13 @@ Tasks renderer#169 / lighting#87; Feature site#2114. All sampler rollout flags r
 
 ## Decision
 
+Updated 28 September: the [fast-path restoration](fast-pattern-restoration-2026-09-28.md)
+supersedes the working-direction choice below. Stable-pattern is retained as a
+comparison, not an accepted replacement. Earlier visual claims of absent bands
+were too broad: visible tier transitions remain and whole-ring means do not
+establish local brightness/contrast or noise quality. Historical measurements
+below remain unchanged.
+
 The fixed pattern's brightness defect can be corrected while retaining pixel-centre
 first camera samples and identical static frames. The correction does NOT retain
 the defective pattern's speed advantage. It is a stable experimental candidate,

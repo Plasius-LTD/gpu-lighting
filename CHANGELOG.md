@@ -8,6 +8,11 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Restore the fast fixed-pattern experimental working direction; retain the
+  slower stable comparison and narrow prior band-removal claims. Document
+  reproduced cross-event sampling correlation and targeted lighting alternatives;
+  no colour compensation, shader or production-default change.
+
 - Add a separately admitted native 4K, six-bounce corrected stable-pattern
   visual reference capture; preserve four-bounce baselines and production defaults.
   Retain the unretouched PNG, raw receipt and independent full-HDR verification;

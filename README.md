@@ -2,12 +2,16 @@
 
 Eames fidelity admission supports an explicitly requested six-bounce visual
 reference as well as the unchanged four-bounce default. The native 4K capture
-uses corrected stable sampling, circular 5.95-average-SPP budgets and denoise
+uses selectable fixed/stable sampling, circular 5.95-average-SPP budgets and denoise
 off. Verify the recorded depth; do not relabel four-bounce benchmark history or
 present a reference screenshot as performance qualification.
 The [retained six-bounce 4K image and receipt](docs/evidence/stable-reference-4k-2026-09-28.md)
 verify native dimensions, completed counts and static repeatability; visible
 low-SPP grain and the performance/production gates remain.
+The [fast-path restoration and lighting investigation](docs/evidence/fast-pattern-restoration-2026-09-28.md)
+supersedes stable-pattern as the working experimental direction. The local
+default is again fixed-pattern, with its known lighting defects retained openly;
+neither candidate is a qualified production replacement.
 
 The [stable-pattern correction](docs/design/stable-pattern-correction.md) tests
 fixed centre-first camera samples separately from temporally stable,
@@ -17,7 +21,7 @@ checks; no primary-path or matched-quality claim follows from brightness alone.
 The [native 1080p/4K results](docs/evidence/stable-pattern-2026-09-27.md) correct
 the brightness bias and retain static repeatability, but not the old pattern's
 speed advantage. Low-SPP grain remains. Use the corrected candidate for further
-fixed-camera experiments, not as a qualified production default.
+fixed-camera comparisons, not as the primary working lane or a production default.
 
 The [fixed-relative sampling experiment](docs/design/fixed-pattern-experiment.md)
 tests a centre-first camera and fixed lighting points against independent random
