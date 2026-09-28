@@ -1,5 +1,23 @@
 # @plasius/gpu-lighting
 
+The [room + Eames reference](docs/design/room-eames-reference.md) composes the
+publicly approved `finalscene.glb` with the original Eames chair/ottoman, without
+the old studio walls or emitter panel. It preserves source room scale and adds
+explicit external daylight. Placement and camera changes happen between renders;
+this is not collision-qualified or a real-time/performance demonstration.
+From a clean, committed checkout, with Node 24 and companion checkouts available:
+
+```sh
+node scripts/eames-environments/room-reference-server.mjs /path/to/gpu-renderer /path/to/gpu-shared /path/to/plasius-ltd-site 5209
+```
+
+Open `http://127.0.0.1:5209/tests/fixtures/native-room-reference.html`. Choose
+1080p/4K, an interior camera, Eames X/Z/yaw, then Render room. Reset restores
+defaults. The server serves commit-pinned files on loopback only; the site checkout
+must contain the Eames manifest's asset commit. Captures retain native PNG, full
+linear HDR, model hashes, actual samples and source commits. The fast sampler's
+known lighting defects remain; production flags stay off.
+
 Eames fidelity admission supports an explicitly requested six-bounce visual
 reference as well as the unchanged four-bounce default. The native 4K capture
 uses selectable fixed/stable sampling, circular 5.95-average-SPP budgets and denoise

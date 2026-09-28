@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add the user-approved public room GLB, source-preserving room/Eames composition,
+  bounded placement and interior camera presets, and a commit-pinned loopback
+  demo server. Preserve old reference scenes; no transport or release change.
+
 - Restore the fast fixed-pattern experimental working direction; retain the
   slower stable comparison and narrow prior band-removal claims. Document
   reproduced cross-event sampling correlation and targeted lighting alternatives;
