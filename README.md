@@ -7,6 +7,7 @@ the GPU filter itself remains renderer-owned. The original room and Eames
 materials, geometry, lighting, sample counts and splitting benchmark are unchanged.
 Native 1080p/4K captures retain separate raw and filtered data. Cleaner appearance
 alone is not convergence or performance qualification (site#2249, lighting#101).
+See the [native denoise evidence and limitations](docs/evidence/guided-denoise-2026-09-28.md).
 
 The room page also provides an experimental rough-bounce splitting comparison:
 off, first bounce only, or first two bounces. All three use the same stable
