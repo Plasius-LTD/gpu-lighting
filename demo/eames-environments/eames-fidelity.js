@@ -4,7 +4,9 @@ const triangles=[84332,19664,45580,21176,69936,9664,11404,3456,256];
 const textureRoles={1:["baseColorTexture","normalTexture"],2:["baseColorTexture","normalTexture","metallicRoughnessTexture"],
   5:["baseColorTexture","normalTexture"],6:["baseColorTexture","normalTexture","metallicRoughnessTexture"]};
 const requireValue=(value,message)=>{if(!value)throw new Error("Eames fidelity admission: "+message);};
-export function createEamesTraceScene(model,{createProductStudioMeshes,lightingOptions}){
+const requireReferenceDepth=maxDepth=>requireValue(maxDepth===4||maxDepth===6,"unsupported reference depth");
+export function createEamesTraceScene(model,{createProductStudioMeshes,lightingOptions,maxDepth=4}){
+  requireReferenceDepth(maxDepth);
   requireValue(model?.name==="Eames_Lounge_Chair_Ottoman","wrong model identity");
   requireValue(model.primitives?.length===9,"original nine primitives required");
   const textureSlots=[];
@@ -31,17 +33,17 @@ export function createEamesTraceScene(model,{createProductStudioMeshes,lightingO
     for(const role of textureRoles[i]??[])requireValue(m.material?.[role]===p.material[role],"submitted texture changed");
   }
   return {
-    scene:{...lightingOptions,meshes,displayQuality:true,accelerationBuildMode:"cpu-upload",probeDepth:4,
+    scene:{...lightingOptions,meshes,displayQuality:true,accelerationBuildMode:"cpu-upload",probeDepth:maxDepth,
       camera:{position:[0,1.12,5.05],target:[0,0.72,0],up:[0,1,0],fovYDegrees:43}},
     evidence:{modelName:model.name,assetTier:"source",modelTriangleCount:265468,sceneTriangleCount:triangleCount,
       modelPrimitives:9,sceneMeshes:13,sourceMaterials:5,sourceTextures:5,textureSlots,
       environment:"product-studio",geometry:"mesh-bvh",proxyGeometry:false,renderScope:"renderer-pipeline-not-site-application"}
   };
 }
-export function assertEamesRendererAdmission(snapshot){
+export function assertEamesRendererAdmission(snapshot,{maxDepth=4}={}){
+  requireReferenceDepth(maxDepth);
   requireValue(snapshot?.displayQuality===true&&snapshot.accelerationBuildMode==="cpu-upload","mesh display path missing");
   requireValue(snapshot.triangleCount===265476&&snapshot.bvhNodeCount>0,"GPU scene geometry mismatch");
-  requireValue(snapshot.maxDepth===4&&snapshot.samplesPerPixel===32,"fixed scene ceiling changed");
+  requireValue(snapshot.maxDepth===maxDepth&&snapshot.samplesPerPixel===32,"fixed scene ceiling changed");
   return snapshot;
 }
-

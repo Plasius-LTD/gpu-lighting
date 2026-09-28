@@ -8,6 +8,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add a separately admitted native 4K, six-bounce corrected stable-pattern
+  visual reference capture; preserve four-bounce baselines and production defaults.
+
 - Retain corrected stable-pattern native Eames 1080p/4K evidence: brightness
   screens and static repeatability pass, but low-SPP grain remains and the old
   defective pattern's speed advantage is lost. No production promotion.

@@ -1,5 +1,11 @@
 # @plasius/gpu-lighting
 
+Eames fidelity admission supports an explicitly requested six-bounce visual
+reference as well as the unchanged four-bounce default. The native 4K capture
+uses corrected stable sampling, circular 5.95-average-SPP budgets and denoise
+off. Verify the recorded depth; do not relabel four-bounce benchmark history or
+present a reference screenshot as performance qualification.
+
 The [stable-pattern correction](docs/design/stable-pattern-correction.md) tests
 fixed centre-first camera samples separately from temporally stable,
 pixel-decorrelated lighting. The new renderer flag stays off until qualification.

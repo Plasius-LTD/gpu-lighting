@@ -36,3 +36,16 @@ test("GPU scene admission requires source triangles, BVH and unchanged fidelity 
  assert.throws(()=>assertEamesRendererAdmission(changed),/fidelity admission/);
 });
 
+test("six-bounce reference is explicit and cannot relabel the four-bounce baseline",()=>{
+ const {model,options}=fixture();
+ assert.equal(createEamesTraceScene(model,{...options,maxDepth:6}).scene.probeDepth,6);
+ assert.equal(createEamesTraceScene(model,options).scene.probeDepth,4);
+ const six={displayQuality:true,accelerationBuildMode:"cpu-upload",triangleCount:265476,bvhNodeCount:100,maxDepth:6,samplesPerPixel:32};
+ assert.equal(assertEamesRendererAdmission(six,{maxDepth:6}),six);
+ assert.throws(()=>assertEamesRendererAdmission(six),/ceiling/);
+ assert.throws(()=>assertEamesRendererAdmission({...six,maxDepth:4},{maxDepth:6}),/ceiling/);
+ for(const maxDepth of [0,5,NaN,"6",null]){
+  assert.throws(()=>createEamesTraceScene(model,{...options,maxDepth}),/reference depth/);
+  assert.throws(()=>assertEamesRendererAdmission(six,{maxDepth}),/reference depth/);
+ }
+});
