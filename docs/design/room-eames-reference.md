@@ -7,8 +7,9 @@ centralReference option (standing default, seating selectable), exchanging only
 X/Z between the two existing reference slots; preserve each model's yaw, floor
 contact, source materials/UVs, uniform 1.5 m seating size, Eames and fixed camera.
 Keep placement defaults named in one configuration, not duplicated in the UI.
-Selecting seating requires the seating asset; invalid selections reject. Eames-only
-mode remains valid and ignores the extra-model selection. Record effective layout.
+Unknown selections and malformed supplied models reject. With no additional models,
+the selection has no effect and the effective centre is null, including Eames-only
+mode. A supplied seating model can be centred without a standing model.
 
 Renderer adds a labelled Centre reference control, forwarded to composition and
 capture evidence, reset to the existing default, locked while busy, with stale
@@ -19,7 +20,7 @@ renderer.denoise.guidedSpatial.enabled and gpu-demo.scene-fidelity.enabled apply
 Rollback by selecting standing centre; Three.js is prohibited including fallback.
 
 Tests first: exact slot swap, unchanged yaw/scales/material identities/UVs/camera,
-legacy layout preservation, invalid/missing subject rejection, one-extra-model
+legacy layout preservation, invalid selection rejection, one-extra-model
 support and Eames-only behavior. Physical native 4K at 256/128/64/32/16/8 with
 six bounces, stable sampler and split depth two; retain raw/clean PNG and HDR,
 actual counts, provenance, timings and cleanup. No ultimate-quality/speed claim.
