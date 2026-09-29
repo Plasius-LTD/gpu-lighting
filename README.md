@@ -1,5 +1,155 @@
 # @plasius/gpu-lighting
 
+The local room page's **Centre reference** control exchanges sofa/spacesuit floor
+positions for high-SPP material inspection. Each retains its yaw, scale, UVs and
+materials; camera and Eames stay fixed. The composer accepts `centralReference:
+"seating"` or `"standing"` (default); Eames-only ignores it. Placement/size defaults
+live in `ROOM_REFERENCE_DEFAULTS`. Captures record the effective centre subject.
+
+The local room capture accepts a variable **SPP ceiling** (integer 1–256,
+default 32). `createRadialSamplingPlan(width, height, maximumSpp)` derives the
+six tiers by repeated halving, rounded up with a one-sample floor, preserving
+5/10/15/20/25/25% circular areas. At 256, native 4K completes 394,813,440 camera
+samples (47.6 average SPP). Wider host budget storage prevents 256 wrapping to
+zero. This is a diagnostic quality reference, not a production governor or
+real-time qualification. See the [design](docs/design/high-spp-room-reference.md).
+
+To keep the original room and include up to two private material-reference GLBs,
+append `- /absolute/path/fabric.glb /absolute/path/reflective.glb` after the server
+port. Files stay local, hash-bound and unmodified. The shared loader must support
+UV1. The first material-reference seat is uniformly scaled to 1.5 m wide, with
+height and depth scaled by the same factor; this is an explicit local scene
+override, recorded alongside source dimensions. The standing reference retains
+source scale. It and the Eames exchange default positions while the camera
+target stays fixed. All retain default materials; the page offers Eames-only
+comparison and a 52° vertical FOV (adjustable, including the old 62°). Default
+material variants only; no animation, stereo or new lighting transport.
+
+For a private replacement room, append an absolute GLB path to the room server
+command and use a separate port, for example `5210`. Only that self-contained,
+static GLB is snapshotted; its checksum is recorded separately from code commits.
+The model is not copied into Git. Keep derived images/HDR local until publication
+is approved. Existing Eames, room scale, materials, camera/placement controls and
+native 1080p/4K render settings are preserved; incompatible bounds fail closed.
+Use `127.0.0.1` (not a remote hostname). See the
+[local room reference contract](docs/design/local-model-reference.md).
+
+The local room reference supports the renderer's default-off
+`renderer.denoise.guidedSpatial.enabled` experiment. Lighting provides analytic
+HDR/noise/edge/protected-pixel probes and honest raw-versus-filtered image metrics;
+the GPU filter itself remains renderer-owned. The original room and Eames
+materials, geometry, lighting, sample counts and splitting benchmark are unchanged.
+Native 1080p/4K captures retain separate raw and filtered data. Cleaner appearance
+alone is not convergence or performance qualification (site#2249, lighting#101).
+See the [native denoise evidence and limitations](docs/evidence/guided-denoise-2026-09-28.md).
+
+The room page also provides an experimental rough-bounce splitting comparison:
+off, first bounce only, or first two bounces. All three use the same stable
+sampler, unchanged scene/materials and native 1080p/4K camera budgets. Lighting
+owns the black, emissive and constant-environment energy probes; the renderer
+owns splitting and its default-off flag. Small probes check correctness only,
+never full-frame performance. The comparison retains rotated timing-only jobs,
+separate diagnostic images and source provenance; it is not quality-qualified.
+See the [native room splitting results](docs/evidence/rough-bounce-splitting-2026-09-28.md):
+first-bounce splitting costs 15–16% and first-two-bounce splitting 32–34% more
+job time in these short captures. Extra buffers are 14/42 MiB; grain remains.
+
+The [room + Eames reference](docs/design/room-eames-reference.md) composes the
+publicly approved `finalscene.glb` with the original Eames chair/ottoman, without
+the old studio walls or emitter panel. It preserves source room scale and adds
+explicit external daylight. Placement and camera changes happen between renders;
+this is not collision-qualified or a real-time/performance demonstration.
+From a clean, committed checkout, with Node 24 and companion checkouts available:
+
+```sh
+node scripts/eames-environments/room-reference-server.mjs /path/to/gpu-renderer /path/to/gpu-shared /path/to/plasius-ltd-site 5209
+```
+
+Open `http://127.0.0.1:5209/tests/fixtures/native-room-reference.html`. Choose
+1080p/4K, an interior camera, Eames X/Z/yaw, then Render room. Reset restores
+defaults. The server serves commit-pinned files on loopback only; the site checkout
+must contain the Eames manifest's asset commit. Captures retain native PNG, full
+linear HDR, model hashes, actual samples and source commits. The fast sampler's
+known lighting defects remain; production flags stay off.
+
+Eames fidelity admission supports an explicitly requested six-bounce visual
+reference as well as the unchanged four-bounce default. The native 4K capture
+uses selectable fixed/stable sampling, circular 5.95-average-SPP budgets and denoise
+off. Verify the recorded depth; do not relabel four-bounce benchmark history or
+present a reference screenshot as performance qualification.
+The [retained six-bounce 4K image and receipt](docs/evidence/stable-reference-4k-2026-09-28.md)
+verify native dimensions, completed counts and static repeatability; visible
+low-SPP grain and the performance/production gates remain.
+The [fast-path restoration and lighting investigation](docs/evidence/fast-pattern-restoration-2026-09-28.md)
+supersedes stable-pattern as the working experimental direction. The local
+default is again fixed-pattern, with its known lighting defects retained openly;
+neither candidate is a qualified production replacement.
+
+The [stable-pattern correction](docs/design/stable-pattern-correction.md) tests
+fixed centre-first camera samples separately from temporally stable,
+pixel-decorrelated lighting. The new renderer flag stays off until qualification.
+Global and regional brightness, repeatability and local image errors are separate
+checks; no primary-path or matched-quality claim follows from brightness alone.
+The [native 1080p/4K results](docs/evidence/stable-pattern-2026-09-27.md) correct
+the brightness bias and retain static repeatability, but not the old pattern's
+speed advantage. Low-SPP grain remains. Use the corrected candidate for further
+fixed-camera comparisons, not as the primary working lane or a production default.
+
+The [fixed-relative sampling experiment](docs/design/fixed-pattern-experiment.md)
+tests a centre-first camera and fixed lighting points against independent random
+sampling, using a common linear HDR reference. Repeatability and brightness
+accuracy are reported separately; neither is a production qualification.
+The [27 September results](docs/evidence/fixed-pattern-2026-09-27.md) show shorter
+jobs and identical static frames, but coherent lighting errors and failed
+brightness gates at both1080p and4K. Keep the experimental flag off.
+
+The [progressive-sampling experiment](docs/design/progressive-sampling-experiment.md)
+compares legacy, independent random and Owen–Sobol sampling using original Eames
+assets, unchanged transport and native 1080p/4K. Lighting owns the frozen
+brightness-band metrics; renderer owns sampling and execution. Regional mean
+agreement does not qualify full image quality or real-time performance.
+The [retained experiment results](docs/evidence/progressive-sampling-2026-09-27.md)
+show both progressive samplers correcting brightness bands, with higher measured
+job times and residual noise. No production or performance claim is approved.
+
+Original Eames measurements now require the [full-source admission](docs/native-eames-fidelity.md):
+265,468 model triangles and all five original 1024-square textures through the
+shared Product Studio loader/mesh builder. The six-triangle results below remain
+synthetic diagnostics, not realistic Eames or site cost estimates.
+
+The [original-Eames physical capture](docs/evidence/native-eames-2026-09-26.md)
+measured fixed32 → radial jobs of 12,368.57 → 3,542.67 ms at 1080p and
+43,994.43 → 11,532.23 ms at 4K. Uniform32 is bit-identical at both sizes.
+Reduced-SPP noise and brightness boundaries remain: no matched-quality,
+real-time or full-site qualification is claimed.
+
+The [native radial adaptive trace](docs/native-radial-adaptive-trace.md) defines
+the requested centred 32/16/8/4/2/1 SPP bands with exact 5/10/15/20/25/25% pixel
+area shares (5.95 mean SPP), renderer-owned full-frame execution and separate
+timing-only/count/HDR/CPU/GPU evidence. Fixed32 is the reference; the adaptive
+configuration is the one required to meet the real-time target.
+
+Real-time acceptance requires native **1920×1080 at sustained 60 Hz on the M2 Max
+MacBook Pro**, with native **3840×2160 at 60 Hz** the ideal target. Small 128×128
+fixtures are correctness diagnostics, not performance qualification. See the
+[native-resolution acceptance contract](docs/native-resolution-acceptance.md).
+The lighting-owned `native-frame-screen.js` rejects tiny/upscaled timing evidence
+and never promotes a short renderer-only run into a real-time qualification.
+The [native full-frame screen](docs/evidence/native-resolution-2026-09-26.md)
+records 2,342.07 ms at 1080p and 8,966.80 ms at 4K for the fixed32/four-bounce
+simple scene. The current fixed path fails the real-time target; full-resolution
+matched-quality qualification remains outstanding. The subsequent
+[native radial adaptive trace](docs/evidence/native-radial-2026-09-26.md) verifies
+5.95 actual mean SPP and 81.40625% fewer primary rays: 722.93 ms at 1080p and
+2,996.97 ms at 4K, versus same-run fixed32 2,281.60 / 8,904.07 ms. Reduced-budget
+images show visible brightness boundaries/noise; this is not matched-quality
+or real-time success. Ordinary uniform32 is bit-identical at both sizes; an
+optional fused-hit optimisation fails 4K identity and stays off in native traces.
+
+See the [retained paired adaptive diagnostic](docs/evidence/paired-adaptive-2026-09-20.md)
+for fixed/adaptive images, ray counts, timings and failed quality gates. It does
+not establish a production speedup or replace the fixed-SPP baseline programme.
+
 [![npm version](https://img.shields.io/npm/v/@plasius/gpu-lighting.svg)](https://www.npmjs.com/package/@plasius/gpu-lighting)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/Plasius-LTD/gpu-lighting/ci.yml?branch=main&label=build&style=flat)](https://github.com/Plasius-LTD/gpu-lighting/actions/workflows/ci.yml)
 [![coverage](https://img.shields.io/codecov/c/github/Plasius-LTD/gpu-lighting)](https://codecov.io/gh/Plasius-LTD/gpu-lighting)
@@ -98,6 +248,14 @@ bridge fallback all follow the same port and readiness rules across macOS and
 Linux.
 
 ### Fixed-SPP adaptive-sampling baseline
+
+An additional [paired diagnostic protocol](docs/paired-adaptive-probe.md) supports
+before/after experimental renderer checks: equal-budget identity, preassigned
+reduced budgets, linear-HDR quality gates, rotated timing rounds and visible error
+previews. Pure timing statistics are shared with the baseline runner; image metrics
+and diagnostic scenes live in `demo/eames-environments/paired-adaptive-*.js`.
+These small probes do not replace the fixed baseline, Eames or full qualification
+matrix, and failed quality cannot be offset by a faster timing result.
 
 Every lane retains its source revision, package versions, browser identity,
 adapter, and capture date. Resume rejects missing or changed identities and
