@@ -69,6 +69,27 @@ test("rigid Eames yaw rotates positions and normals without rescaling room",()=>
  assert.equal(r.evidence.placement.x,1);
  for(const view of ["entry","front","corner"])assert(composeRoomEamesScene({...inputs(),view}).scene.camera.position.every(Number.isFinite));
 });
+test('selecting seating centre exchanges only reference floor positions',()=>{
+ const i=inputs(),material={roughness:0.9,sheenColor:[1,0.2,0.1]},uvs=[0,0,1,0,0,1],uvs1=[1,1,0,1,1,0];
+ const model={bounds:i.room.bounds,primitives:[{positions:[0,0,0,1,0,0,0,0.7,0.6],normals:[0,1,0,0,1,0,0,1,0],indices:[0,1,2],uvs,uvs1,material}]};
+ const asset={bytes:100,sha256:'a'.repeat(64),triangles:1,primitives:1};
+ const referenceModels=[{model,asset},{model,asset}],before=composeRoomEamesScene({...i,referenceModels}),after=composeRoomEamesScene({...i,referenceModels,centralReference:'seating'});
+ assert.equal(before.evidence.centralReference,'standing');assert.equal(after.evidence.centralReference,'seating');
+ assert.deepEqual(after.evidence.referenceModels[0].placement,{x:1.8,z:-1.1,yaw:45});
+ assert.deepEqual(after.evidence.referenceModels[1].placement,{x:0.35,z:0.2,yaw:40});
+ assert.deepEqual(before.scene.camera,after.scene.camera);
+ assert.deepEqual(before.scene.meshes.slice(0,82),after.scene.meshes.slice(0,82));
+ for(const [index,e]of after.evidence.referenceModels.entries()){
+  const original=before.evidence.referenceModels[index];
+  for(const key of ['scale','displayDimensions','sourceDimensions','materials'])assert.deepEqual(e[key],original[key]);
+  const m=after.scene.meshes[82+index];assert.equal(m.material,material);assert.equal(m.uvs,uvs);assert.equal(m.uvs1,uvs1);
+  assert.deepEqual(m.normals,before.scene.meshes[82+index].normals);assert.equal(e.bounds.min[1],ROOM_DEFAULTS.floorY);
+ }
+ assert.equal(composeRoomEamesScene({...i,referenceModels:referenceModels.slice(0,1),centralReference:'seating'}).evidence.centralReference,'seating');
+ assert.equal(composeRoomEamesScene({...i,centralReference:'seating'}).evidence.centralReference,null);
+ assert.throws(()=>composeRoomEamesScene({...i,referenceModels,centralReference:'unknown'}),/central reference/);
+ assert.equal(model.primitives[0].positions[0],0);
+});
 test("reject invalid placement, unknown view, lost assets or studio strip mismatch",()=>{
  for(const placement of [{x:NaN},{z:Infinity},{yaw:181},{x:50},{z:-50}])assert.throws(()=>composeRoomEamesScene({...inputs(),placement}),/Room reference/);
  assert.throws(()=>composeRoomEamesScene({...inputs(),view:"outside"}),/view/);

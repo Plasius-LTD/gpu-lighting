@@ -1,5 +1,36 @@
 # Room plus Eames local adaptive reference
 
+## Selectable high-fidelity subject (2026-09-29)
+
+User requests the seating reference in the high-SPP centre. Add a lighting-owned
+centralReference option (standing default, seating selectable), exchanging only
+X/Z between the two existing reference slots; preserve each model's yaw, floor
+contact, source materials/UVs, uniform 1.5 m seating size, Eames and fixed camera.
+Keep placement defaults named in one configuration, not duplicated in the UI.
+Selecting seating requires the seating asset; invalid selections reject. Eames-only
+mode remains valid and ignores the extra-model selection. Record effective layout.
+
+Renderer adds a labelled Centre reference control, forwarded to composition and
+capture evidence, reset to the existing default, locked while busy, with stale
+captures cleared on change. Non-default filenames identify seating-centre. No
+transport, denoiser, resolution, exposure, sampling policy or production changes.
+Existing default-off renderer.sampling.adaptivePerPixel.enabled,
+renderer.denoise.guidedSpatial.enabled and gpu-demo.scene-fidelity.enabled apply.
+Rollback by selecting standing centre; Three.js is prohibited including fallback.
+
+Tests first: exact slot swap, unchanged yaw/scales/material identities/UVs/camera,
+legacy layout preservation, invalid/missing subject rejection, one-extra-model
+support and Eames-only behavior. Physical native 4K at 256/128/64/32/16/8 with
+six bounces, stable sampler and split depth two; retain raw/clean PNG and HDR,
+actual counts, provenance, timings and cleanup. No ultimate-quality/speed claim.
+QA inventory: select each subject and Reset; Eames-only/all; invalid SPP or
+sampler/splitting combination; busy locking; render final seating-centre image;
+inspect central upholstery, subject separation, viewport fit and raw/clean toggle.
+No need to requalify the full benchmark matrix for a diagnostic placement change.
+Update README/Unreleased CHANGELOG/design, full tests/coverage (>80% and changed
+source in LCOV), types/lint/build/package/zero-Three/audit and exact-head CI.
+Private models and capture binaries remain local. No main/CD or package publish.
+
 ## Material comparison layout revision (site#2256 / lighting#103)
 
 The user requests the standing reflective reference at the old Eames location

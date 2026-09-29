@@ -8,6 +8,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add a configurable centre reference to the local room composer, exchanging sofa
+  and spacesuit floor positions without changing material, scale or camera (#103).
+
 - Parameterize diagnostic radial SPP ceilings over the supported integer 1–256
   range, derive tiers while preserving circular shares, and validate actual
   ceiling/count evidence; default 32 behavior remains unchanged (#104).

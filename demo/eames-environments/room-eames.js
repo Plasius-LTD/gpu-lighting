@@ -1,7 +1,10 @@
 // Reference composition only: no new transport, loader or material implementation.
 import {RADIAL_SAMPLING_DEFAULTS,radialSamplingTiers} from './radial-sampling-plan.js';
 export const ROOM_ASSET=Object.freeze({bytes:651696,sha256:"125331dadb83664e978a8c12cc974bae81bb7b75457e290c6063d921bbe11bc5",triangles:3672,primitives:73});
-export const ROOM_DEFAULTS=Object.freeze({x:2.3,z:-2.5,yaw:-25,floorY:-1.3440840244293213,view:"entry",fovYDegrees:52});
+export const ROOM_DEFAULTS=Object.freeze({x:2.3,z:-2.5,yaw:-25,floorY:-1.3440840244293213,view:"entry",fovYDegrees:52,centralReference:'standing'});
+export const ROOM_REFERENCE_DEFAULTS=Object.freeze({seatingWidth:1.5,placements:Object.freeze([
+ Object.freeze({x:0.35,z:0.2,yaw:45}),Object.freeze({x:1.8,z:-1.1,yaw:40}),
+])});
 const check=(v,m)=>{if(!v)throw new Error("Room reference: "+m);};
 const count=meshes=>meshes.reduce((n,m)=>n+m.indices.length/3,0);
 function sourceMeshes(meshes){
@@ -33,7 +36,8 @@ function placeOnFloor(meshes,p,floorY,scale=1){
  };
  return meshes.map(m=>({...m,positions:rotate(m.positions,true),normals:rotate(m.normals,false)}));
 }
-export function composeRoomEamesScene({room,eames,createProductStudioMeshes,lightingOptions,placement={},view=ROOM_DEFAULTS.view,roomAsset=ROOM_ASSET,referenceModels=[],fovYDegrees=ROOM_DEFAULTS.fovYDegrees}){
+export function composeRoomEamesScene({room,eames,createProductStudioMeshes,lightingOptions,placement={},view=ROOM_DEFAULTS.view,roomAsset=ROOM_ASSET,referenceModels=[],fovYDegrees=ROOM_DEFAULTS.fovYDegrees,centralReference=ROOM_DEFAULTS.centralReference}){
+ check(['standing','seating'].includes(centralReference),'unknown central reference');
  check(Number.isFinite(fovYDegrees)&&fovYDegrees>=40&&fovYDegrees<=80,'FOV must be between 40 and 80 degrees');
  check(Array.isArray(referenceModels)&&referenceModels.length<=2,'at most two reference models');
  check(Number.isInteger(roomAsset?.bytes)&&roomAsset.bytes>0&&/^[a-f0-9]{64}$/.test(roomAsset.sha256)&&Number.isInteger(roomAsset.triangles)&&roomAsset.triangles>0&&Number.isInteger(roomAsset.primitives)&&roomAsset.primitives>0,"invalid room manifest");
@@ -59,8 +63,9 @@ export function composeRoomEamesScene({room,eames,createProductStudioMeshes,ligh
   const sourceBounds=boundsOf(source),sourceDimensions=sourceBounds.max.map((v,j)=>v-sourceBounds.min[j]);
   check(sourceDimensions[0]>0,'reference model width must be positive');
   // User-requested local size override: preserve every proportion, not just width.
-  const scale=i===0?1.5/sourceDimensions[0]:1,displayDimensions=sourceDimensions.map(v=>v*scale);
-  const placement=i===0?{x:0.35,z:0.2,yaw:45}:{x:1.8,z:-1.1,yaw:40};
+  const scale=i===0?ROOM_REFERENCE_DEFAULTS.seatingWidth/sourceDimensions[0]:1,displayDimensions=sourceDimensions.map(v=>v*scale);
+  const original=ROOM_REFERENCE_DEFAULTS.placements[i],slot=ROOM_REFERENCE_DEFAULTS.placements[centralReference==='seating'?1-i:i];
+  const placement={...original,x:slot.x,z:slot.z};
   const meshes=placeOnFloor(source,placement,floorY,scale),placedBounds=boundsOf(meshes);
   check(placedBounds.min.every((v,j)=>v>=bounds.min[j])&&placedBounds.max.every((v,j)=>v<=bounds.max[j]),'reference model leaves room bounds');
   return {meshes,evidence:{asset,placement,bounds:placedBounds,sourceBounds,sourceDimensions,displayDimensions,scale,
@@ -77,7 +82,7 @@ export function composeRoomEamesScene({room,eames,createProductStudioMeshes,ligh
  const meshes=[...roomMeshes,...placed,...extras.flatMap(e=>e.meshes)].map((m,i)=>Object.freeze({...m,id:i+1,materialRefId:i+1}));
  return {scene:{...lightingOptions,meshes,displayQuality:true,accelerationBuildMode:"cpu-upload",probeDepth:6,camera:{position,target,up:[0,1,0],fovYDegrees}},
   evidence:{room:roomAsset,roomBounds:bounds,roomTriangleCount:roomAsset.triangles,eamesTriangleCount:265468,sceneTriangleCount:count(meshes),sceneMeshes:meshes.length,referenceModels:extras.map(e=>e.evidence),camera:{position,target,fovYDegrees},
-   placement:p,eamesBounds,view,floorY,addedGeometry:0,lighting:"external-daylight-no-added-emitter",geometry:"mesh-bvh",proxyGeometry:false,
+   placement:p,eamesBounds,view,floorY,centralReference:referenceModels.length>(centralReference==='seating'?0:1)?centralReference:null,addedGeometry:0,lighting:"external-daylight-no-added-emitter",geometry:"mesh-bvh",proxyGeometry:false,
    interaction:"placement-and-camera-between-renders-not-realtime-or-collision-qualified"}};
 }
 export function roomReferenceSettings(resolution="1080p",sampler="fixed-pattern",maximumSpp=RADIAL_SAMPLING_DEFAULTS.maximumSpp){

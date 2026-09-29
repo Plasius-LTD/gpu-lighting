@@ -1,5 +1,11 @@
 # @plasius/gpu-lighting
 
+The local room page's **Centre reference** control exchanges sofa/spacesuit floor
+positions for high-SPP material inspection. Each retains its yaw, scale, UVs and
+materials; camera and Eames stay fixed. The composer accepts `centralReference:
+"seating"` or `"standing"` (default); Eames-only ignores it. Placement/size defaults
+live in `ROOM_REFERENCE_DEFAULTS`. Captures record the effective centre subject.
+
 The local room capture accepts a variable **SPP ceiling** (integer 1–256,
 default 32). `createRadialSamplingPlan(width, height, maximumSpp)` derives the
 six tiers by repeated halving, rounded up with a one-sample floor, preserving
