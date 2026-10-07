@@ -90,3 +90,14 @@ Do not claim image, HDR or optical qualification. Renderer Task
 [gpu-renderer#234](https://github.com/Plasius-LTD/gpu-renderer/issues/234) records the
 bounded branching and nested refraction follow-up; it is not yet implemented.
 The original room remains available with the glass selector off.
+# Optical metadata follow-up (#105 / gpu-renderer#234)
+
+The user approved transport corrections on 2026-10-07. The scene now supplies
+explicit medium IOR and configurable integer `glassPriority` / `waterPriority`
+(defaults 2 / 1). Higher priority wins; validation requires glass to outrank water.
+This lets overlapping water enter occupancy without creating a spurious
+glass-to-water-to-glass bounce. The separately controlled renderer flags are
+`renderer.transport.boundedDielectricBranching.enabled` and
+`renderer.transport.nestedMediaRefraction.enabled`, both default off. Geometry,
+material colour and the off composition are unchanged. Qualification below is
+historical until superseded by new provenance-bound physical evidence.

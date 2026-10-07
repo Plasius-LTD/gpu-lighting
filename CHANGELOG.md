@@ -8,6 +8,9 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Supply explicit IOR and configurable glass-over-water optical priorities in
+  the room reference, ready for separately flagged renderer transport tests (#105).
+
 - Add an opt-in parametric glass/water room reference with real wall/base
   thickness, bounded adjustable dimensions/fill, a neutral support and close-up
   camera. Preserve original assets and record contact/medium limitations; nested

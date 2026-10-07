@@ -31,6 +31,9 @@ test('closed outward glass, water and stand preserve correct volume and contact 
  const h=(s.height-s.base-s.headspace)*s.fill+s.overlap;
  assert(Math.abs(volume(water)-fac*(s.radius-s.wall+s.overlap)**2*h)<1e-9);volume(stand);
  assert.notEqual(glass.mediumRefId,water.mediumRefId);assert.equal(glass.ior,1.5);assert.equal(water.ior,1.333);
+ assert.equal(glass.medium.ior,glass.ior);assert.equal(water.medium.ior,water.ior);
+ assert(glass.medium.priority>water.medium.priority);
+ assert.throws(()=>glassWaterSettings({glassPriority:1,waterPriority:2}),/priority/);
  assert(e.overlapMeters>0);assert.equal(e.qualification,'nested-interface-unqualified');
  for(const m of [glass,water]){assert.equal(m.opacity,1);assert.equal(m.transmission,1);assert.equal(m.doubleSided,false);assert.equal(m.materialKind,'dielectric');}
 });

@@ -5,8 +5,9 @@ thick-walled tumbler on a neutral support, with a glass close-up. The original
 parametric geometry in `demo/eames-environments/glass-water-reference.js` has
 bounded, configurable dimensions, fill, placement, IOR and camera distance/elevation.
 No source model is modified and Off preserves the previous composition. A small
-recorded water/glass overlap is deliberate, not an air gap. The renderer currently
-uses air-relative refraction: nested interfaces, caustics and longer paths remain
+recorded water/glass overlap is deliberate, not an air gap. Explicit medium IOR
+and adjustable glass-over-water priorities support experimental nested optics;
+the default renderer still uses air-relative refraction. Caustics and longer paths remain
 unqualified. This reference adds no transport model. See the
 [design, limitations and tests](docs/glass-water-reference.md) (#105).
 
