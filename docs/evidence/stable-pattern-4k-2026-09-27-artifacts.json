@@ -1,0 +1,233 @@
+{
+  "capture": "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f",
+  "resolution": "4K",
+  "reviewBundles": [
+    {
+      "name": "stable-pattern-review-4K-part1-2026-09-27.tar.gz",
+      "bytes": 775295,
+      "sha256": "62338e6899e211f37a03434fec6f2a3bc10b9f3f95153ea829bcd0300370cdce",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-checkpoint-fixed-pattern-19.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part2-2026-09-27.tar.gz",
+      "bytes": 822251,
+      "sha256": "664bbde1893abbb6a3a177b6d50ffd7e21b2ec11787a0198d29ea8d23ff1186e",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-checkpoint-fixed-pattern-43.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part3-2026-09-27.tar.gz",
+      "bytes": 1282751,
+      "sha256": "2272c400ee3b55ad3012870741375b39ed99c6b3a8096d573b0195f51f09deb5",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-checkpoint-fixed-pattern-7.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-checkpoint-independent-random-19.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part4-2026-09-27.tar.gz",
+      "bytes": 1106932,
+      "sha256": "59d4d6c35a61af74ffe529d25b4b3e6705980221093a2048f92b075d6083376a",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-checkpoint-independent-random-43.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-checkpoint-independent-random-7.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part5-2026-09-27.tar.gz",
+      "bytes": 1001385,
+      "sha256": "7a65aaff1a0c19eacb3698c9cb5e70d780900e329a17aa4d693ff9617e7f24fe",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-checkpoint-stable-camera-random-19.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part6-2026-09-27.tar.gz",
+      "bytes": 1052231,
+      "sha256": "1b4ea9e9f1e481201650f97853f23a28517f6b936437ac213866d55f6ceb5644",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-checkpoint-stable-camera-random-43.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part7-2026-09-27.tar.gz",
+      "bytes": 950087,
+      "sha256": "ab2c66069563d0ec49949599e4bf3bc608ba658ab7c6c0fd2a8e9a124874fa17",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-checkpoint-stable-camera-random-7.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part8-2026-09-27.tar.gz",
+      "bytes": 1231172,
+      "sha256": "4ce51cefe38dba4603ec235042829a2d9ad0e4fa804253aeb1a7c7409b788998",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-checkpoint-stable-pattern-19.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part9-2026-09-27.tar.gz",
+      "bytes": 1281960,
+      "sha256": "fc5348bfd64b9bbb700277e62d247384111950f57eea0effe5791b69f2ebca1e",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-checkpoint-stable-pattern-43.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part10-2026-09-27.tar.gz",
+      "bytes": 6311622,
+      "sha256": "3abfa9eea1c9067e52eebffc4427f12bee37c08b400c59295d9a6558c0e46769",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-checkpoint-stable-pattern-7.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-common96.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-fixed-pattern-fixed.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-fixed-pattern-fixed.png",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-fixed-pattern-radial-7.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-fixed-pattern-radial-7.png",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-independent-random-radial-19.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-independent-random-radial-43.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-independent-random-radial-7.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part11-2026-09-27.tar.gz",
+      "bytes": 42182347,
+      "sha256": "aac747f297d8a991ad8ef9c7e9ab4e5c960bd2be25052d262c48fd67489a1504",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-independent-random-radial-7.png",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-random-fixed-19.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-random-fixed-43.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-random-fixed-7.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-random-fixed-7.png",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-stable-camera-random-fixed.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-stable-camera-random-fixed.png",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-stable-camera-random-radial-7.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part12-2026-09-27.tar.gz",
+      "bytes": 29622090,
+      "sha256": "85529e23fdbdc059988e7eb42c95fa3e06c957fdc018ec21838262a88dc07a1e",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-stable-camera-random-radial-7.png",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-stable-pattern-fixed.json",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-stable-pattern-fixed.png",
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-stable-pattern-radial-7.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part13-2026-09-27.tar.gz",
+      "bytes": 15904450,
+      "sha256": "eeb645db7b31bd5204cdfd14bf8f61784650863efa2c7c56ed1f6f2b8cf65fd3",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-stable-pattern-radial-7.png"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part14-2026-09-27.tar.gz",
+      "bytes": 1282484,
+      "sha256": "f656b6d4c1589352bfcf15e2479322fadc935645e6bfce235330a0504495b7e2",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/4K-summary.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-4K-part15-2026-09-27.tar.gz",
+      "bytes": 1282506,
+      "sha256": "4ab3152229c3d807ea134b439da389839ee589b198c955fa77e79c4f9c844741",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f/stable-pattern-summary.json"
+      ]
+    }
+  ],
+  "rawEvidence": {
+    "location": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-37-56-866Z-d7f89a83-25f8-4f80-8ad4-3245ee5bb80f",
+    "fileCount": 886,
+    "totalBytes": 1880263718,
+    "floatHdrIncludedInReviewBundle": false,
+    "images": [
+      {
+        "name": "4K-common96.json",
+        "sha256": "bcd52382eae585757a21d05079548d7f1a22e62775805b32cf427bbd18e3b2e8",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-fixed-pattern-fixed.json",
+        "sha256": "73c8d7528f9b9d8acf757248d0ad05f7cef0816be689dc61c159bff7a14d0c7c",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-fixed-pattern-radial-7.json",
+        "sha256": "3aa70ac232a809035b6d85d572f17b778be5990dc9e8d86720816d98fe03dcff",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-independent-random-radial-19.json",
+        "sha256": "c6d4f64a70bd488b08f598d49a0e2e11d241781fb161c7e0d2baf2b86bd5e1ee",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-independent-random-radial-43.json",
+        "sha256": "4b0bed4849a22fb6008a0d381f2a841decfe7200166d1a3e70f2370db54ed978",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-independent-random-radial-7.json",
+        "sha256": "6cd71bca0afe81e3d1501134d2555c5bc0e768a3329e597ffb6218a0364bbf61",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-random-fixed-19.json",
+        "sha256": "b54b02bb706e57e41775790895aa9ee61da0b5a62ef4c57412d440777e5e4385",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-random-fixed-43.json",
+        "sha256": "8cf82f759f0a988f3503a0d4d22bc46bf71097f309a2717c456b6adc7ae49b05",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-random-fixed-7.json",
+        "sha256": "a018afe70ebc4e6bb26895d740769a2e8c45b3866ec5dacb7f89326c5aa8bed1",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-stable-camera-random-fixed.json",
+        "sha256": "c66ae676bf3157280832e15e9b6286ae05ef23a81d0aee2da6b28f4de91ca832",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-stable-camera-random-radial-7.json",
+        "sha256": "30cd9b7a13b4a792ab7975eb602001fba97c2dc37986e5855d64f952cde03fd2",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-stable-pattern-fixed.json",
+        "sha256": "e5cb2a7b5adf017d428f57a77ecd9a02b0777d03945e2653dbd3a89a8ec11cf5",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-stable-pattern-radial-7.json",
+        "sha256": "be866daa3a5bebc6f22dcc7960350faefccda15670f17d89e36e82ad79d9daa8",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      }
+    ]
+  },
+  "limitation": "Full float-HDR chunks remain local; separate archival delivery is required for externally portable HDR recomputation."
+}

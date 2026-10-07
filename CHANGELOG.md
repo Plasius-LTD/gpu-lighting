@@ -8,6 +8,109 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add an opt-in parametric glass/water room reference with real wall/base
+  thickness, bounded adjustable dimensions/fill, a neutral support and close-up
+  camera. Preserve original assets and record contact/medium limitations; nested
+  refraction remains unqualified. No transport changes (#105).
+
+- Add a configurable centre reference to the local room composer, exchanging sofa
+  and spacesuit floor positions without changing material, scale or camera (#103).
+
+- Parameterize diagnostic radial SPP ceilings over the supported integer 1–256
+  range, derive tiers while preserving circular shares, and validate actual
+  ceiling/count evidence; default 32 behavior remains unchanged (#104).
+
+- Uniformly enlarge the local seating reference to 1.5 m wide (revised from the reviewed 2.1 m trial) without changing proportions; exchange Eames/standing-reference positions with a fixed comparison camera, and record source/display dimensions (#103).
+
+- Add two hash-bound private material-reference models beside the original Eames/room, preserving source scale, dual UVs and default materials; narrow default vertical FOV to 52 degrees (#103).
+
+- Add checksum-bound local-only replacement rooms for native adaptive reference
+  captures. Preserve the default public room, source materials and Eames; reject
+  external resources and cross-origin access. No private model is packaged (#102).
+
+- Add analytic guided-denoise correctness probes and same-input HDR comparison
+  metrics for the native room reference, preserving raw transport and existing
+  quality gates (lighting#101, site#2249).
+
+- Add lighting-owned black, emissive and constant-environment energy probes for
+  the renderer's default-off bounded rough-bounce splitting experiment. Keep
+  native room/Eames as the performance workload and freeze the energy screens.
+  Retain physical 1080p/4K same-sampler timings, ray/count/allocation checks and
+  native images: bounded extra work, not a converged-quality or speedup claim.
+
+- Add the user-approved public room GLB, source-preserving room/Eames composition,
+  bounded placement and interior camera presets, and a commit-pinned loopback
+  demo server. Preserve old reference scenes; no transport or release change.
+
+- Restore the fast fixed-pattern experimental working direction; retain the
+  slower stable comparison and narrow prior band-removal claims. Document
+  reproduced cross-event sampling correlation and targeted lighting alternatives;
+  no colour compensation, shader or production-default change.
+
+- Add a separately admitted native 4K, six-bounce corrected stable-pattern
+  visual reference capture; preserve four-bounce baselines and production defaults.
+  Retain the unretouched PNG, raw receipt and independent full-HDR verification;
+  actual counts and repeatability pass, with no performance or convergence claim.
+
+- Retain corrected stable-pattern native Eames 1080p/4K evidence: brightness
+  screens and static repeatability pass, but low-SPP grain remains and the old
+  defective pattern's speed advantage is lost. No production promotion.
+
+- Freeze stable-pattern correction controls and require finite global as well
+  as regional brightness evidence, separately from repeatability and performance.
+  Keep all production promotion and full image-quality gates open.
+
+- Retain fixed-relative sampling results at native1080p/4K: identical static
+  frames and lower job times, but failed brightness gates and structured lighting
+  errors. Separate portable review receipts from locally retained full HDR.
+
+- Add common linear reference and strict repeatability/brightness assessments
+  for the default-off fixed-relative sampling experiment, independent of timing.
+
+- Retain native full-Eames progressive-sampler evidence: three-seed 1080p
+  brightness-band criteria pass for random and Owen–Sobol; native4K Sobol
+  identity passes. Preserve slower timings, residual noise and rejected attempts.
+
+- Freeze original-Eames three-seed progressive sampling controls, regional HDR
+  drift criteria and separate native timing evidence. Keep the random control
+  alongside Owen–Sobol so prefix-coverage corrections are not misattributed.
+
+- Retain full-source Eames native 1080p/4K physical traces, exact uniform32
+  identity, actual rays, HDR and allocation evidence. Both adaptive lanes remain
+  far above the real-time budget and have visible reduced-prefix quality errors.
+
+- Add source-hashed original Eames fidelity admission for native comparisons,
+  rejecting substitute/reduced geometry, textures and material defaults. Correct
+  reference-loader glTF PBR omission defaults in agreement with gpu-shared#130.
+  Historical six-triangle timings remain synthetic diagnostics only.
+
+- Retain source-pinned native 1080p/4K radial adaptive timings, actual rays/counts,
+  CPU/GPU attribution, lossless HDR, circular overlays and failed-fusion evidence.
+  The prescribed 5.95-SPP mode saves work but does not qualify image quality or
+  60 Hz; preserve the ordinary equal-budget identity gate and all failed attempts.
+
+- Retain native float32 HDR as bounded, lossless, hashed byte-plane/gzip chunks
+  without increasing capture upload limits or duplicating identical controls.
+
+- Add tested exact-area circular budget maps and a native adaptive trace protocol
+  for 5.95 mean SPP at 1080p/4K. Separate the fixed reference from adaptive
+  real-time acceptance and diagnostic traces from timing-only measurements.
+
+- Retain native M2 Max fixed32 full-frame receipts and images, including the
+  rejected adapter-reuse run. Both corrected native lanes complete but fail the
+  60 Hz budget; no adaptive, sustained-performance or quality success is claimed.
+
+- Add native 1080p minimum / 4K target real-time acceptance and a tested full-frame
+  timing screen. Report deadline misses and tails; reject tiny/upscaled evidence
+  and prevent short diagnostic runs from qualifying sustained 60 Hz.
+
+- Retained before/after adaptive diagnostics, including unchanged equal-budget
+  images, reduced-budget quality failures, measured overhead and raw evidence.
+
+- Added prequalification paired adaptive diagnostic scenes, frozen linear-HDR
+  quality/identity criteria and paired timing gates; reused baseline timing
+  statistics through a browser-safe module. No adaptive performance claim.
+
 - **Added**
   - Added a resumable, physical-WebGPU fixed-SPP baseline runner covering 216
     scene, resolution, bounce, SPP, and denoise lanes with retained ray,

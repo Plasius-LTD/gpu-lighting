@@ -1,0 +1,18 @@
+{
+  "observedDuringCapture": true,
+  "os": {
+    "product": "macOS",
+    "version": "26.6.2",
+    "build": "25G83"
+  },
+  "model": "Mac14,5",
+  "chip": "Apple M2 Max",
+  "memory": "32 GB",
+  "gpuCoresReported": 38,
+  "power": "AC attached, battery 78%, not charging",
+  "thermal": "No thermal or performance warning recorded by pmset; GPU temperatures/clocks not measured",
+  "limitations": [
+    "sysctl model query denied by sandbox; system_profiler supplied sanitized model/chip fields",
+    "Point-in-time power/thermal observation, not continuous monitoring"
+  ]
+}
