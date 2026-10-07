@@ -85,14 +85,15 @@ export function composeRoomEamesScene({room,eames,createProductStudioMeshes,ligh
    placement:p,eamesBounds,view,floorY,centralReference:referenceModels.length>(centralReference==='seating'?0:1)?centralReference:null,addedGeometry:0,lighting:"external-daylight-no-added-emitter",geometry:"mesh-bvh",proxyGeometry:false,
    interaction:"placement-and-camera-between-renders-not-realtime-or-collision-qualified"}};
 }
-export function roomReferenceSettings(resolution="1080p",sampler="fixed-pattern",maximumSpp=RADIAL_SAMPLING_DEFAULTS.maximumSpp){
+export function roomReferenceSettings(resolution="1080p",sampler="fixed-pattern",maximumSpp=RADIAL_SAMPLING_DEFAULTS.maximumSpp,maxDepth=6){
  check(["1080p","4k"].includes(resolution),"unknown resolution");
  check(["fixed-pattern","stable-pattern"].includes(sampler),"unknown sampler");
  radialSamplingTiers(maximumSpp);
- return Object.freeze({width:resolution==="4k"?3840:1920,height:resolution==="4k"?2160:1080,maxDepth:6,maximumSpp,sampler,denoise:false});
+ check(Number.isInteger(maxDepth)&&maxDepth>=1&&maxDepth<=8,'invalid depth');
+ return Object.freeze({width:resolution==="4k"?3840:1920,height:resolution==="4k"?2160:1080,maxDepth,maximumSpp,sampler,denoise:false});
 }
 export function validateRoomFrame(frame,plan,settings){
- const canonical=roomReferenceSettings(settings.width===3840?"4k":"1080p",settings.sampler,settings.maximumSpp);
+ const canonical=roomReferenceSettings(settings.width===3840?"4k":"1080p",settings.sampler,settings.maximumSpp,settings.maxDepth);
  check(Object.entries(canonical).every(([key,value])=>settings[key]===value),"settings changed");
  check(frame.width===settings.width&&frame.height===settings.height&&frame.sampler===settings.sampler&&frame.mode==="radial","frame identity changed");
  check(frame.maximumSpp===settings.maximumSpp,"frame ceiling changed");

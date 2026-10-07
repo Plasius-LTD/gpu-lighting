@@ -5,6 +5,10 @@ import {createHash} from "node:crypto";
 import {composeRoomEamesScene,ROOM_ASSET,ROOM_DEFAULTS,roomReferenceSettings,validateRoomFrame} from "../demo/eames-environments/room-eames.js";
 
 const triangle=[-1,0,-1,1,0,-1,0,1,1];
+test('room qualification depth is configurable without changing the six-bounce default',()=>{
+ assert.equal(roomReferenceSettings('4k','stable-pattern',32,8).maxDepth,8);
+ for(const depth of [0,9,NaN,2.5])assert.throws(()=>roomReferenceSettings('1080p','fixed-pattern',32,depth),/depth/);
+});
 function inputs(){
  const mesh={positions:triangle,indices:new Array(3*265468).fill(0),normals:[1,0,0,1,0,0,1,0,0],uvs:[0,0,1,0,0,1],material:{baseColorTexture:{width:1024}},roughness:0.4};
  const eames={scene:{meshes:[...Array.from({length:4},(_,i)=>({id:i+1,indices:[0,1,2,0,2,3]})),...Array.from({length:9},(_,i)=>({...mesh,indices:i===0?mesh.indices:[],id:1000+i}))]},evidence:{modelTriangleCount:265468}};
