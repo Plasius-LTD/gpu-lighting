@@ -79,3 +79,14 @@ lighting, sampling, denoise or camera unless a corresponding control is selected
 - Retain source-pinned receipts, HDR/count evidence and screenshots. Report any
   skipped visual check or capture failure explicitly; do not infer success from
   unit tests or a receipt alone.
+
+## Physical test result, 2026-10-07
+
+Geometry/control implementation passes local tests and CI, but the actual room
+and close-up glass captures fail closed. Empty/filled one-SPP 1080p close-ups
+confirmed 290/267 continuation queue overflow events in the first failing tile.
+The multi-sample filled room also failed with rough splitting both on and off.
+Do not claim image, HDR or optical qualification. Renderer Task
+[gpu-renderer#234](https://github.com/Plasius-LTD/gpu-renderer/issues/234) records the
+bounded branching and nested refraction follow-up; it is not yet implemented.
+The original room remains available with the glass selector off.

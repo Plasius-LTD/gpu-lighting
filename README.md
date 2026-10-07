@@ -10,6 +10,10 @@ uses air-relative refraction: nested interfaces, caustics and longer paths remai
 unqualified. This reference adds no transport model. See the
 [design, limitations and tests](docs/glass-water-reference.md) (#105).
 
+Physical empty/filled captures currently fail closed on continuation-queue
+overflow. The fixture is a reproducible diagnostic, not a completed water render;
+see [the tracked transport follow-up](https://github.com/Plasius-LTD/gpu-renderer/issues/234).
+
 The local room page's **Centre reference** control exchanges sofa/spacesuit floor
 positions for high-SPP material inspection. Each retains its yaw, scale, UVs and
 materials; camera and Eames stay fixed. The composer accepts `centralReference:
