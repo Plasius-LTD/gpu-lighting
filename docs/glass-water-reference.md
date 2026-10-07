@@ -15,12 +15,10 @@ water volume, a neutral support and a configurable camera close-up. No new
 dependency, imported renderer, external asset licence or private model rewrite.
 Three.js is prohibited in every dependency/artifact and cannot be a fallback.
 
-The existing renderer tracks absorption media, but `dielectric_eta(hit)` assumes
-air on one side and medium records do not store IOR. Thus glass/water contact is
-a diagnostic of an existing limitation, not a physically qualified result.
-The user has been asked whether to include that separate transport correction.
-Until authorized and qualified, do not alter transport, hide this limitation with
-an air gap, or claim that the filled scene establishes water realism.
+The original renderer tracked absorption media but assumed air on one side of
+refraction. The user approved separate transport corrections on 2026-10-07 in
+gpu-renderer#234. Scene optical metadata supports that work; it does not establish
+water realism or authorise hiding contact errors behind an artificial air gap.
 
 ## Geometry and controls
 
@@ -80,7 +78,7 @@ lighting, sampling, denoise or camera unless a corresponding control is selected
   skipped visual check or capture failure explicitly; do not infer success from
   unit tests or a receipt alone.
 
-## Physical test result, 2026-10-07
+## Historical pre-correction test result, 2026-10-07
 
 Geometry/control implementation passes local tests and CI, but the actual room
 and close-up glass captures fail closed. Empty/filled one-SPP 1080p close-ups
@@ -88,9 +86,10 @@ confirmed 290/267 continuation queue overflow events in the first failing tile.
 The multi-sample filled room also failed with rough splitting both on and off.
 Do not claim image, HDR or optical qualification. Renderer Task
 [gpu-renderer#234](https://github.com/Plasius-LTD/gpu-renderer/issues/234) records the
-bounded branching and nested refraction follow-up; it is not yet implemented.
+bounded branching and nested refraction follow-up; subsequent implementation
+and physical qualification are recorded there.
 The original room remains available with the glass selector off.
-# Optical metadata follow-up (#105 / gpu-renderer#234)
+## Optical metadata follow-up (#105 / gpu-renderer#234)
 
 The user approved transport corrections on 2026-10-07. The scene now supplies
 explicit medium IOR and configurable integer `glassPriority` / `waterPriority`
@@ -99,5 +98,10 @@ This lets overlapping water enter occupancy without creating a spurious
 glass-to-water-to-glass bounce. The separately controlled renderer flags are
 `renderer.transport.boundedDielectricBranching.enabled` and
 `renderer.transport.nestedMediaRefraction.enabled`, both default off. Geometry,
-material colour and the off composition are unchanged. Qualification below is
-historical until superseded by new provenance-bound physical evidence.
+material colour and the off composition are unchanged. The room capture settings
+accept a fourth `maxDepth` argument (integer 1..8, default 6), validated against
+the completed frame. Historical results above are not evidence for corrected
+transport. Renderer `c605bd3b831ba504692def40e02f0e0025e6c87b` with lighting
+`1d76fa54d70741172f36fc328eebfd8d1bb65c69` completes the empty 1080p, uniform
+32-SPP, six-bounce close-up (66,355,200 completed samples). This is functional
+integrity evidence, not image convergence or real-time qualification.

@@ -11,9 +11,11 @@ the default renderer still uses air-relative refraction. Caustics and longer pat
 unqualified. This reference adds no transport model. See the
 [design, limitations and tests](docs/glass-water-reference.md) (#105).
 
-Physical empty/filled captures currently fail closed on continuation-queue
-overflow. The fixture is a reproducible diagnostic, not a completed water render;
-see [the tracked transport follow-up](https://github.com/Plasius-LTD/gpu-renderer/issues/234).
+The legacy split control fails closed on continuation-queue overflow. The new
+combined renderer experiments complete the empty 1080p/uniform-32 close-up;
+filled-water, image-quality and performance qualification remain separate gates.
+Room capture bounce depth is adjustable from one to eight (six by default). See
+[the tracked transport follow-up](https://github.com/Plasius-LTD/gpu-renderer/issues/234).
 
 The local room page's **Centre reference** control exchanges sofa/spacesuit floor
 positions for high-SPP material inspection. Each retains its yaw, scale, UVs and
