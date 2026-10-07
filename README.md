@@ -1,5 +1,15 @@
 # @plasius/gpu-lighting
 
+The local room also offers an opt-in **Glass of water reference**: empty or filled
+thick-walled tumbler on a neutral support, with a glass close-up. The original
+parametric geometry in `demo/eames-environments/glass-water-reference.js` has
+bounded, configurable dimensions, fill, placement, IOR and camera distance/elevation.
+No source model is modified and Off preserves the previous composition. A small
+recorded water/glass overlap is deliberate, not an air gap. The renderer currently
+uses air-relative refraction: nested interfaces, caustics and longer paths remain
+unqualified. This reference adds no transport model. See the
+[design, limitations and tests](docs/glass-water-reference.md) (#105).
+
 The local room page's **Centre reference** control exchanges sofa/spacesuit floor
 positions for high-SPP material inspection. Each retains its yaw, scale, UVs and
 materials; camera and Eames stay fixed. The composer accepts `centralReference:

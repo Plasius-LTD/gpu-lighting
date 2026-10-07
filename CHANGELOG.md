@@ -8,6 +8,11 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add an opt-in parametric glass/water room reference with real wall/base
+  thickness, bounded adjustable dimensions/fill, a neutral support and close-up
+  camera. Preserve original assets and record contact/medium limitations; nested
+  refraction remains unqualified. No transport changes (#105).
+
 - Add a configurable centre reference to the local room composer, exchanging sofa
   and spacesuit floor positions without changing material, scale or camera (#103).
 
