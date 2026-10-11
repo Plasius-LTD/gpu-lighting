@@ -8,6 +8,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Record completed earlier empty/filled 1080p glass sample counts separately
+  from pending final-source 4K, image-quality and performance qualification (#105).
 - Supply explicit IOR and configurable glass-over-water optical priorities in
   the room reference, ready for separately flagged renderer transport tests (#105).
 - Validate configurable room capture bounce limits from one to eight while

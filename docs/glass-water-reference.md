@@ -105,3 +105,15 @@ transport. Renderer `c605bd3b831ba504692def40e02f0e0025e6c87b` with lighting
 `1d76fa54d70741172f36fc328eebfd8d1bb65c69` completes the empty 1080p, uniform
 32-SPP, six-bounce close-up (66,355,200 completed samples). This is functional
 integrity evidence, not image convergence or real-time qualification.
+
+The filled close-up also completed at renderer
+`a68a2e7b5c91af4eec204b5f13fab4ecc73c1d1a`, lighting
+`2852eec116443594394a859550a991b7f84ca995`, with the same uniform 32-SPP,
+1080p/six-bounce settings and both transport flags on, no splitting or denoise.
+All 66,355,200 samples completed; receipt SHA-256
+`f3b0b427d2d2ea9b7c0f04fbdd3ff3921a46f0d126738dfc08befdad07b78b95`.
+Subsequent 4K/eight-bounce/split-depth-two captures exposed a hidden-boundary
+traversal failure. The renderer cursor correction still needs physical recapture.
+As of 2026-10-11 browser automation is unavailable; local tests and a responding
+server are not substitutes for that evidence. Do not publish a qualified water,
+4K correctness, photographic quality or performance claim from these captures.

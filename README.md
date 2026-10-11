@@ -12,8 +12,9 @@ unqualified. This reference adds no transport model. See the
 [design, limitations and tests](docs/glass-water-reference.md) (#105).
 
 The legacy split control fails closed on continuation-queue overflow. The new
-combined renderer experiments complete the empty 1080p/uniform-32 close-up;
-filled-water, image-quality and performance qualification remain separate gates.
+combined renderer experiments complete both empty and filled 1080p/uniform-32
+close-ups on retained earlier commits. Final-source 4K, image-quality and
+performance qualification remain separate gates.
 Room capture bounce depth is adjustable from one to eight (six by default). See
 [the tracked transport follow-up](https://github.com/Plasius-LTD/gpu-renderer/issues/234).
 
