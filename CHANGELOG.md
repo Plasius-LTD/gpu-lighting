@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add a validated, default-zero support-only clearance diagnostic with recorded
+  contact heights; preserve glass/water geometry and camera for controlled dark-band
+  comparisons. No transport change or optical-quality claim (#105).
+
 - Record completed earlier empty/filled 1080p glass sample counts separately
   from pending final-source 4K, image-quality and performance qualification (#105).
 - Supply explicit IOR and configurable glass-over-water optical priorities in

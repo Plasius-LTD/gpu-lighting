@@ -11,6 +11,12 @@ the default renderer still uses air-relative refraction. Caustics and longer pat
 unqualified. This reference adds no transport model. See the
 [design, limitations and tests](docs/glass-water-reference.md) (#105).
 
+For contact diagnosis only, `supportClearance` (metres, 0..0.01, default 0)
+lowers just the pedestal top while preserving the glass, water and camera.
+The receipt records clearance and both contact heights. Positive clearance is a
+deliberately floating control, not an optical fix or a glass/water air gap.
+Reset it to zero after the comparison; geometry at zero is unchanged.
+
 The legacy split control fails closed on continuation-queue overflow. The new
 combined renderer experiments complete both empty and filled 1080p/uniform-32
 close-ups on retained earlier commits. Final-source 4K, image-quality and

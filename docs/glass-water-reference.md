@@ -58,6 +58,31 @@ lighting, sampling, denoise or camera unless a corresponding control is selected
   or performance/photographic claim. Further transport work needs its own tracked
   acceptance, flag and physical Snell/Fresnel/total-internal-reflection tests.
 
+## Pedestal contact isolation (#105 / gpu-renderer#233)
+
+The 2026-10-13 review found two independent suspects for the dark lower band:
+strict depth truncation and a glass bottom coincident with the support top.
+First capture uniform 32-SPP, 1080p, raw filled close-ups at six and eight bounces
+with identical camera, scene, sampling and transport switches. Then compare
+eight-bounce contact against a separately recorded support-only clearance.
+
+Add `supportClearance` in metres, finite 0..0.01, default 0. A positive value
+lowers only the pedestal top; its bottom stays on the floor. Glass/water vertices,
+overlap, materials, medium identities, camera and sampling remain identical.
+This deliberately floating diagnostic is not a realism fix, a glass/water air gap,
+or a production default. Retain the setting and support-top/glass-bottom heights
+in capture evidence. No new GPU pass, buffer policy or transport change is allowed.
+The existing local opt-in fixture and inherited Feature flags still govern access.
+
+Before implementation, require regression tests for zero-default geometry parity,
+positive-clearance isolation, unchanged optics/camera/counts, closed pedestal
+geometry, invalid values and disabled identity. Renderer controls must be labelled,
+remain in collapsed advanced settings, reset to zero and mark nonzero captures
+distinctly. Physical comparisons must verify exact completed counts (66,355,200),
+same settings apart from the tested variable, native images and finite linear HDR.
+Retain provenance and failures; no speedup, convergence or contact-fix claim until
+that physical evidence exists. Set clearance to zero to restore original contact.
+
 ## Browser QA inventory
 
 - Original/off and reset: original composition and camera are retained; selecting

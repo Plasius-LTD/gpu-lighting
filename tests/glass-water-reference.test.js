@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {GLASS_WATER_DEFAULTS,glassWaterSettings,withRoomGlass} from '../demo/eames-environments/glass-water-reference.js';
 
 const composed=()=>({scene:{meshes:[{id:1,positions:[0,0,0],indices:[],material:{name:'preserve'}}],camera:{position:[4,1,2],target:[0,0,0],up:[0,1,0],fovYDegrees:45}},evidence:{floorY:-1,roomBounds:{min:[-6,-1.1,-4],max:[6,2,4]},sceneMeshes:1,sceneTriangleCount:0,addedGeometry:0}});
@@ -48,4 +49,35 @@ test('off is identity, input untouched, empty/zero/full states and camera indepe
  assert.throws(()=>withRoomGlass(c,{mode:'off',closeup:true}),/close-up/);
  assert.throws(()=>withRoomGlass(c,{mode:'empty',x:5.95}),/bounds/);
  assert.throws(()=>withRoomGlass({...c,evidence:{...c.evidence,eamesBounds:{min:[2,-1,-1],max:[4,1,1]}}},{mode:'empty'}),/collision/);
+});
+test('support clearance defaults to identical contact geometry and rejects invalid distances',()=>{
+ assert.equal(GLASS_WATER_DEFAULTS.supportClearance,0);
+ for(const supportClearance of [-.0001,.01001,NaN,Infinity,'0.001'])assert.throws(()=>glassWaterSettings({supportClearance}),/supportClearance/);
+ assert.equal(glassWaterSettings({supportClearance:.01}).supportClearance,.01);
+ const c=composed(),original=withRoomGlass(c,{mode:'filled',closeup:true});
+ assert.equal(createHash('sha256').update(JSON.stringify(original.scene)).digest('hex'),'59f6929f6a7b9c3c55b85149c7a7140bf76dbf821a4c230eb55dff55fab26558');
+ assert.deepEqual(withRoomGlass(c,{mode:'filled',closeup:true,supportClearance:0}).scene,original.scene);
+ assert.equal(withRoomGlass(c,{mode:'off',supportClearance:.001}),c);
+});
+test('support isolation lowers only the pedestal top and records the real contact heights',()=>{
+ const c=composed(),before=structuredClone(c),contact=withRoomGlass(c,{mode:'filled',closeup:true});
+ for(const supportClearance of [.0001,.001,.01]){
+  const separated=withRoomGlass(c,{mode:'filled',closeup:true,supportClearance});
+  const [stand,glass,water]=separated.scene.meshes.slice(1),oldStand=contact.scene.meshes[1];
+  assert.deepEqual(glass,contact.scene.meshes[2]);assert.deepEqual(water,contact.scene.meshes[3]);
+  assert.deepEqual(separated.scene.camera,contact.scene.camera);
+  assert.deepEqual({...stand,positions:[]},{...oldStand,positions:[]});
+  for(let i=0;i<stand.positions.length;i++){
+   const expected=i%3===1&&oldStand.positions[i]>c.evidence.floorY?oldStand.positions[i]-supportClearance:oldStand.positions[i];
+   assert(Math.abs(stand.positions[i]-expected)<1e-12);
+  }
+  volume(stand);
+  const e=separated.evidence.glassWater;
+  assert.equal(e.settings.supportClearance,supportClearance);
+  assert.equal(e.glassBottomY,c.evidence.floorY+e.settings.standHeight);
+  assert(Math.abs(e.glassBottomY-e.supportTopY-supportClearance)<1e-12);
+  for(const key of ['bounds','triangles','waterSurfaceY','overlapMeters','mediumIds'])assert.deepEqual(e[key],contact.evidence.glassWater[key]);
+  assert.equal(separated.evidence.sceneTriangleCount,contact.evidence.sceneTriangleCount);
+ }
+ assert.deepEqual(c,before);
 });
