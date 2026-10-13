@@ -8,6 +8,11 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Allow room diagnostics up to 20 bounces using shared bounded configuration,
+  retaining the six-bounce default and exact count admission; no transport change (#105).
+- Replace the Mac-recorded floating-point scene checksum with exact same-platform
+  equality against a frozen pre-clearance generator, preserving geometry gates (#105).
+
 - Add a validated, default-zero support-only clearance diagnostic with recorded
   contact heights; preserve glass/water geometry and camera for controlled dark-band
   comparisons. No transport change or optical-quality claim (#105).

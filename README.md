@@ -21,7 +21,10 @@ The legacy split control fails closed on continuation-queue overflow. The new
 combined renderer experiments complete both empty and filled 1080p/uniform-32
 close-ups on retained earlier commits. Final-source 4K, image-quality and
 performance qualification remain separate gates.
-Room capture bounce depth is adjustable from one to eight (six by default). See
+Room capture bounce depth is adjustable from one to twenty (six by default),
+using the shared `ROOM_CAPTURE_DEPTH_LIMITS` diagnostic configuration. Rough-bounce
+splitting remains limited to eight; deeper optical tests must turn it off.
+Longer paths increase work and path-record storage, not guaranteed image quality. See
 [the tracked transport follow-up](https://github.com/Plasius-LTD/gpu-renderer/issues/234).
 
 The local room page's **Centre reference** control exchanges sofa/spacesuit floor

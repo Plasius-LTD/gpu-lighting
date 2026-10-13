@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createHash} from 'node:crypto';
+import {withRoomGlass as withLegacyRoomGlass} from './fixtures/glass-water-before-clearance.js';
 import {GLASS_WATER_DEFAULTS,glassWaterSettings,withRoomGlass} from '../demo/eames-environments/glass-water-reference.js';
 
 const composed=()=>({scene:{meshes:[{id:1,positions:[0,0,0],indices:[],material:{name:'preserve'}}],camera:{position:[4,1,2],target:[0,0,0],up:[0,1,0],fovYDegrees:45}},evidence:{floorY:-1,roomBounds:{min:[-6,-1.1,-4],max:[6,2,4]},sceneMeshes:1,sceneTriangleCount:0,addedGeometry:0}});
@@ -55,7 +55,11 @@ test('support clearance defaults to identical contact geometry and rejects inval
  for(const supportClearance of [-.0001,.01001,NaN,Infinity,'0.001'])assert.throws(()=>glassWaterSettings({supportClearance}),/supportClearance/);
  assert.equal(glassWaterSettings({supportClearance:.01}).supportClearance,.01);
  const c=composed(),original=withRoomGlass(c,{mode:'filled',closeup:true});
- assert.equal(createHash('sha256').update(JSON.stringify(original.scene)).digest('hex'),'59f6929f6a7b9c3c55b85149c7a7140bf76dbf821a4c230eb55dff55fab26558');
+ assert.deepEqual(original.scene,withLegacyRoomGlass(c,{mode:'filled',closeup:true}).scene);
+ for(const mode of ['empty','filled'])for(const closeup of [false,true]){
+  const selection={mode,closeup,fill:.7,radius:.06,height:.2,segments:64};
+  assert.deepEqual(withRoomGlass(c,{...selection,supportClearance:0}).scene,withLegacyRoomGlass(c,selection).scene);
+ }
  assert.deepEqual(withRoomGlass(c,{mode:'filled',closeup:true,supportClearance:0}).scene,original.scene);
  assert.equal(withRoomGlass(c,{mode:'off',supportClearance:.001}),c);
 });

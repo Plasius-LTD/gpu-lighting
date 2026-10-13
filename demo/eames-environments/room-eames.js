@@ -2,6 +2,8 @@
 import {RADIAL_SAMPLING_DEFAULTS,radialSamplingTiers} from './radial-sampling-plan.js';
 export const ROOM_ASSET=Object.freeze({bytes:651696,sha256:"125331dadb83664e978a8c12cc974bae81bb7b75457e290c6063d921bbe11bc5",triangles:3672,primitives:73});
 export const ROOM_DEFAULTS=Object.freeze({x:2.3,z:-2.5,yaw:-25,floorY:-1.3440840244293213,view:"entry",fovYDegrees:52,centralReference:'standing'});
+// Diagnostic admission, not the renderer's engine limit or a convergence claim.
+export const ROOM_CAPTURE_DEPTH_LIMITS=Object.freeze({minimum:1,maximum:20,default:6});
 export const ROOM_REFERENCE_DEFAULTS=Object.freeze({seatingWidth:1.5,placements:Object.freeze([
  Object.freeze({x:0.35,z:0.2,yaw:45}),Object.freeze({x:1.8,z:-1.1,yaw:40}),
 ])});
@@ -85,11 +87,11 @@ export function composeRoomEamesScene({room,eames,createProductStudioMeshes,ligh
    placement:p,eamesBounds,view,floorY,centralReference:referenceModels.length>(centralReference==='seating'?0:1)?centralReference:null,addedGeometry:0,lighting:"external-daylight-no-added-emitter",geometry:"mesh-bvh",proxyGeometry:false,
    interaction:"placement-and-camera-between-renders-not-realtime-or-collision-qualified"}};
 }
-export function roomReferenceSettings(resolution="1080p",sampler="fixed-pattern",maximumSpp=RADIAL_SAMPLING_DEFAULTS.maximumSpp,maxDepth=6){
+export function roomReferenceSettings(resolution="1080p",sampler="fixed-pattern",maximumSpp=RADIAL_SAMPLING_DEFAULTS.maximumSpp,maxDepth=ROOM_CAPTURE_DEPTH_LIMITS.default){
  check(["1080p","4k"].includes(resolution),"unknown resolution");
  check(["fixed-pattern","stable-pattern"].includes(sampler),"unknown sampler");
  radialSamplingTiers(maximumSpp);
- check(Number.isInteger(maxDepth)&&maxDepth>=1&&maxDepth<=8,'invalid depth');
+ check(Number.isInteger(maxDepth)&&maxDepth>=ROOM_CAPTURE_DEPTH_LIMITS.minimum&&maxDepth<=ROOM_CAPTURE_DEPTH_LIMITS.maximum,'invalid depth');
  return Object.freeze({width:resolution==="4k"?3840:1920,height:resolution==="4k"?2160:1080,maxDepth,maximumSpp,sampler,denoise:false});
 }
 export function validateRoomFrame(frame,plan,settings){

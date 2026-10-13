@@ -2,12 +2,14 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {createHash} from "node:crypto";
-import {composeRoomEamesScene,ROOM_ASSET,ROOM_DEFAULTS,roomReferenceSettings,validateRoomFrame} from "../demo/eames-environments/room-eames.js";
+import {composeRoomEamesScene,ROOM_ASSET,ROOM_DEFAULTS,ROOM_CAPTURE_DEPTH_LIMITS,roomReferenceSettings,validateRoomFrame} from "../demo/eames-environments/room-eames.js";
 
 const triangle=[-1,0,-1,1,0,-1,0,1,1];
 test('room qualification depth is configurable without changing the six-bounce default',()=>{
- assert.equal(roomReferenceSettings('4k','stable-pattern',32,8).maxDepth,8);
- for(const depth of [0,9,NaN,2.5])assert.throws(()=>roomReferenceSettings('1080p','fixed-pattern',32,depth),/depth/);
+ assert.deepEqual(ROOM_CAPTURE_DEPTH_LIMITS,{minimum:1,maximum:20,default:6});assert(Object.isFrozen(ROOM_CAPTURE_DEPTH_LIMITS));
+ assert.equal(roomReferenceSettings().maxDepth,ROOM_CAPTURE_DEPTH_LIMITS.default);
+ for(const resolution of ['1080p','4k'])for(const depth of [1,6,8,12,16,20])assert.equal(roomReferenceSettings(resolution,'stable-pattern',32,depth).maxDepth,depth);
+ for(const depth of [0,21,NaN,Infinity,2.5,'20'])assert.throws(()=>roomReferenceSettings('1080p','fixed-pattern',32,depth),/depth/);
 });
 function inputs(){
  const mesh={positions:triangle,indices:new Array(3*265468).fill(0),normals:[1,0,0,1,0,0,1,0,0],uvs:[0,0,1,0,0,1],material:{baseColorTexture:{width:1024}},roughness:0.4};
@@ -111,8 +113,8 @@ test("room artifact is the exact user-approved binary and standard static glTF",
  assert.equal(doc.meshes.reduce((n,m)=>n+m.primitives.reduce((s,p)=>s+doc.accessors[p.indices].count/3,0),0),3672);
 });
 test("native settings and count admission reject any partial or mislabeled render",()=>{
- for(const resolution of ["1080p","4k"])for(const maximum of [1,32,127,256]){
- const s=roomReferenceSettings(resolution,"fixed-pattern",maximum);assert.equal(s.maximumSpp,maximum);assert.equal(s.maxDepth,6);assert.equal(s.height,resolution==="4k"?2160:1080);
+ for(const resolution of ["1080p","4k"])for(const maximum of [1,32,127,256])for(const depth of [6,20]){
+ const s=roomReferenceSettings(resolution,"fixed-pattern",maximum,depth);assert.equal(s.maximumSpp,maximum);assert.equal(s.maxDepth,depth);assert.equal(s.height,resolution==="4k"?2160:1080);
  const plan={totalSamples:95,bands:[{spp:1,pixels:3}]},frame={...s,mode:"radial",diagnostics:true,fused:false,actualSamples:95,actualHistogram:{1:3},validationErrors:0};
  assert.equal(validateRoomFrame(frame,plan,s),true);
  for(const patch of [{maximumSpp:maximum+1},{actualSamples:0},{width:128},{sampler:"stable-pattern"},{mode:"fixed"},{validationErrors:1},{actualHistogram:{}},{diagnostics:false}])assert.throws(()=>validateRoomFrame({...frame,...patch},plan,s),/Room reference/);

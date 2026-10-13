@@ -83,6 +83,34 @@ same settings apart from the tested variable, native images and finite linear HD
 Retain provenance and failures; no speedup, convergence or contact-fix claim until
 that physical evidence exists. Set clearance to zero to restore original contact.
 
+## Longer-path diagnostic admission (2026-10-13)
+
+User-approved continuation extends the room-only configurable depth range to
+1..20, retaining default six. Export one frozen `ROOM_CAPTURE_DEPTH_LIMITS`
+configuration for settings validation, browser bounds and Reset. The core
+renderer already supports up to 32; this is diagnostic admission, not a transport
+change or qualification of 20-bounce images. Preserve the independent eight-bounce
+rough-splitting guard; the UI must reject an incompatible selection before asset
+loading/GPU work rather than silently disable splitting or clamp depth.
+
+Tests first: 1/6/8/12/16/20 at both native resolutions, invalid/fractional/out-of-range
+depth rejection, unchanged default settings, exact count admission and propagation
+into the existing renderer. Renderer tests cover unsplit 20-depth memory estimates
+and scheduling, unchanged split rejection/allocation limits, canonical UI bounds,
+Reset and early rejection. Increased depth adds work and path records: measure
+allocations/timing, retain bounded allocation/failure checks and never call it a
+performance improvement. Source/ABI/shader/BSDF/PDF/MIS/optical policy remain intact.
+
+Physical plan: fixed camera/lighting/material/IOR/sample sequence, denoise off,
+rough splitting off, contact clearance zero. Compare empty and filled glass at
+8/12/16/20 with uniform 32 SPP first, holding every other setting fixed; inspect
+finite HDR, native images, band-region changes, counts and failure/cleanup records.
+This isolates convergence with path length; no statement that water is correct
+merely because a deeper image is brighter. Run contact isolation separately.
+Keep the existing default-off flags and local-only exposure. Roll back by
+selecting the prior depth or glass Off; Three.js remains prohibited. Docs/CHANGELOG,
+coverage/LCOV, package gates and exact-head CI remain required; no main/CD release.
+
 ## Browser QA inventory
 
 - Original/off and reset: original composition and camera are retained; selecting
@@ -124,7 +152,7 @@ glass-to-water-to-glass bounce. The separately controlled renderer flags are
 `renderer.transport.boundedDielectricBranching.enabled` and
 `renderer.transport.nestedMediaRefraction.enabled`, both default off. Geometry,
 material colour and the off composition are unchanged. The room capture settings
-accept a fourth `maxDepth` argument (integer 1..8, default 6), validated against
+accept a fourth `maxDepth` argument (originally integer 1..8, now 1..20, default 6), validated against
 the completed frame. Historical results above are not evidence for corrected
 transport. Renderer `c605bd3b831ba504692def40e02f0e0025e6c87b` with lighting
 `1d76fa54d70741172f36fc328eebfd8d1bb65c69` completes the empty 1080p, uniform
@@ -142,3 +170,15 @@ traversal failure. The renderer cursor correction still needs physical recapture
 As of 2026-10-11 browser automation is unavailable; local tests and a responding
 server are not substitutes for that evidence. Do not publish a qualified water,
 4K correctness, photographic quality or performance claim from these captures.
+
+## Portable zero-clearance regression
+
+CI run 38371792214 failed the Mac-recorded scene JSON hash on Linux while the
+other 173 tests passed. That checksum over host-generated floating-point geometry
+is not a portable compatibility contract. With user approval, compare exact scene
+objects against the frozen generator from pre-clearance commit
+`7df395306b41a731fa3b3f9f8d02668d9343ab39`, evaluated on the same runtime/platform.
+The test oracle is test-only and is not active renderer guidance. Cover default
+and varied dimensions, empty/filled and close-up/room cases. No geometry tolerance,
+platform allowlist, collision test, volume/manifold check or failure gate is relaxed.
+This test change does not alter runtime geometry or imply a transport correction.
