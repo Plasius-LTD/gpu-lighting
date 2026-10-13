@@ -1,0 +1,541 @@
+{
+  "status": "independently-verified-visual-reference-not-performance-or-convergence",
+  "captureId": "native-stable-reference-2026-09-28T08-17-55-720Z-0427b890-f26f-437a-937b-27aea1343b71",
+  "provenance": {
+    "sources": {
+      "renderer": "69c36d75a546c25ec998face4dd84eaa7f014aef",
+      "lighting": "3166c396dcda08ea0848cabd45f2583449ebcbbf",
+      "shared": "729f89c7f77fcadb9ee7eeca53fb6daf02865b8e",
+      "site": "21d43a9b63722f1ce69175a5a42b53304ee79102"
+    },
+    "source": "immutable-git-objects",
+    "captureId": "native-stable-reference-2026-09-28T08-17-55-720Z-0427b890-f26f-437a-937b-27aea1343b71"
+  },
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "platform": "MacIntel"
+  },
+  "adapter": {
+    "vendor": "apple",
+    "architecture": "metal-3",
+    "isFallbackAdapter": false
+  },
+  "settings": {
+    "width": 3840,
+    "height": 2160,
+    "maxDepth": 6,
+    "maximumSpp": 32,
+    "sampler": "stable-pattern",
+    "denoise": false
+  },
+  "scene": {
+    "modelName": "Eames_Lounge_Chair_Ottoman",
+    "assetTier": "source",
+    "modelTriangleCount": 265468,
+    "sceneTriangleCount": 265476,
+    "modelPrimitives": 9,
+    "sceneMeshes": 13,
+    "sourceMaterials": 5,
+    "sourceTextures": 5,
+    "textureSlots": [
+      {
+        "primitive": 1,
+        "role": "baseColorTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 1,
+        "role": "normalTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 2,
+        "role": "baseColorTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 2,
+        "role": "normalTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 2,
+        "role": "metallicRoughnessTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 5,
+        "role": "baseColorTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 5,
+        "role": "normalTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 6,
+        "role": "baseColorTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 6,
+        "role": "normalTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 6,
+        "role": "metallicRoughnessTexture",
+        "width": 1024,
+        "height": 1024
+      }
+    ],
+    "environment": "product-studio",
+    "geometry": "mesh-bvh",
+    "proxyGeometry": false,
+    "renderScope": "renderer-pipeline-not-site-application",
+    "manifest": {
+      "schemaVersion": 1,
+      "assetTier": "source",
+      "siteCommit": "21d43a9b63722f1ce69175a5a42b53304ee79102",
+      "sourceDirectory": "deployment-assets/gpu-demo/product-studio/eames/",
+      "model": "Eames_Lounge_Chair_Ottoman.gltf",
+      "files": [
+        {
+          "name": "Eames_Lounge_Chair_Ottoman.gltf",
+          "bytes": 15652,
+          "sha256": "ac45b81a4576a9a76e432092058139e57fd03341e1f60e3aa91ff296a762ad2e"
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman.bin",
+          "bytes": 6979720,
+          "sha256": "ad10b0101ed49293d126e148cbff35c14b8323e79a05237f65e9df19425d8486"
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Wood_normal.png",
+          "bytes": 1066723,
+          "sha256": "579db0dd72a1e1b92cb571f2758d813320daf64e6320135493e95092e847444a",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Wood_albedo.jpg",
+          "bytes": 842338,
+          "sha256": "11a9530415b321e6840f603ed5c81504c767588098345a6cd2f65dad19187157",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Leather_normal.png",
+          "bytes": 1873550,
+          "sha256": "c1f42e48431dd56d9d682c32417c380ce6c9ff24d7f519a55af3fac59931da40",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Leather_basecolortexture.jpg",
+          "bytes": 526825,
+          "sha256": "2980c158b9d099c2160470fc8874e4e86c7bb12256a0c0a9d8e73e61de9b3f60",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Leather_roughness0.jpg",
+          "bytes": 770750,
+          "sha256": "29f75dc067921aaf38c6bf8e9aff3e434c62db0ee9dfc393669d42903f9dbd35",
+          "width": 1024,
+          "height": 1024
+        }
+      ]
+    },
+    "assetVerificationAndSceneSetupMs": 1118.5
+  },
+  "admission": {
+    "triangleCount": 265476,
+    "bvhNodeCount": 137735,
+    "displayQuality": true,
+    "accelerationBuildMode": "cpu-upload",
+    "maxDepth": 6,
+    "samplesPerPixel": 32,
+    "camera": {
+      "position": [
+        0,
+        1.12,
+        5.05
+      ],
+      "forward": [
+        0,
+        -0.07896061279595368,
+        -0.9968777365489149
+      ],
+      "right": [
+        1,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        0.9968777365489149,
+        -0.07896061279595368
+      ],
+      "fovYDegrees": 43,
+      "aspect": 1.7777777777777777,
+      "tanHalfFovY": 0.39391047561494236
+    }
+  },
+  "budgets": {
+    "bands": [
+      {
+        "spp": 32,
+        "pixels": 414720,
+        "radiusSquared": 528122,
+        "lastTiePixel": 4644819
+      },
+      {
+        "spp": 16,
+        "pixels": 829440,
+        "radiusSquared": 1584170,
+        "lastTiePixel": 2682740
+      },
+      {
+        "spp": 8,
+        "pixels": 1244160,
+        "radiusSquared": 3168194,
+        "lastTiePixel": 1580747
+      },
+      {
+        "spp": 4,
+        "pixels": 1658880,
+        "radiusSquared": 5400482,
+        "lastTiePixel": 5739965
+      },
+      {
+        "spp": 2,
+        "pixels": 2073600,
+        "radiusSquared": 9911794,
+        "lastTiePixel": 2541677
+      },
+      {
+        "spp": 1,
+        "pixels": 2073600,
+        "radiusSquared": 19399202,
+        "lastTiePixel": 8294399
+      }
+    ],
+    "meanSpp": 5.95,
+    "totalSamples": 49351680,
+    "sha256": "8aa79d23e40fe6f631cd154a5c8f743c42132a685799cc4725f0a4613b69a36f"
+  },
+  "probe": {
+    "status": "passed",
+    "comparedWords": 8704,
+    "events": 17,
+    "bounces": 8,
+    "ordinals": [
+      0,
+      1,
+      2,
+      7,
+      31,
+      255,
+      65537,
+      4294967295
+    ],
+    "modes": 2
+  },
+  "png": {
+    "name": "4k-stable-6-bounces.png",
+    "width": 3840,
+    "height": 2160,
+    "bytes": 15955723,
+    "sha256": "16b11f23803e5c7abd4fc6678fa8b70aaa756467817a74bbc51d2c8f9e43afee"
+  },
+  "receipt": {
+    "name": "4k-stable-6-bounces.json",
+    "bytes": 1714788,
+    "sha256": "4f0475c834a94cff063ca9b2a6fa89d1254553ea93fa750493f8df6641396754"
+  },
+  "linearImage": {
+    "sha256": "00e96af3f4dc662b35ceb292d1796ef6549a0441dff6cf3878274dc793bd777c",
+    "uncompressedBytes": 132710400,
+    "chunks": 32,
+    "finiteValues": true,
+    "localOnly": true
+  },
+  "repeatSha256": "00e96af3f4dc662b35ceb292d1796ef6549a0441dff6cf3878274dc793bd777c",
+  "frames": [
+    {
+      "seed": 7,
+      "primaryRays": 49351680,
+      "secondaryRays": 70755626,
+      "totalPathSegments": 120107306,
+      "bounceHistogram": [
+        49351680,
+        44622538,
+        19508225,
+        5014768,
+        1259133,
+        350962
+      ],
+      "gpuTileSpansMs": 20737.294336000003,
+      "diagnosticReadbackInclusiveMs": 24446.30000001192,
+      "validationErrors": 0
+    },
+    {
+      "seed": 19,
+      "primaryRays": 49351680,
+      "secondaryRays": 70755626,
+      "totalPathSegments": 120107306,
+      "bounceHistogram": [
+        49351680,
+        44622538,
+        19508225,
+        5014768,
+        1259133,
+        350962
+      ],
+      "gpuTileSpansMs": 21257.519104000003,
+      "diagnosticReadbackInclusiveMs": 24796.69999998808,
+      "validationErrors": 0
+    }
+  ],
+  "memory": {
+    "rendererBufferBytes": 192581020,
+    "textureInventory": [
+      {
+        "format": "rgba16float",
+        "size": {
+          "width": 3840,
+          "height": 2160
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba16float",
+        "size": {
+          "width": 3840,
+          "height": 2160
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3840,
+          "height": 2160
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba16float",
+        "size": {
+          "width": 1,
+          "height": 1
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba16float",
+        "size": {
+          "width": 1,
+          "height": 1
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba16float",
+        "size": {
+          "width": 1,
+          "height": 2
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba16float",
+        "size": {
+          "width": 128,
+          "height": 128
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3081,
+          "height": 2052
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 1029,
+          "height": 2052
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3081,
+          "height": 2052
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      },
+      {
+        "format": "rgba8unorm",
+        "size": {
+          "width": 3,
+          "height": 3
+        },
+        "mipLevelCount": 1,
+        "sampleCount": 1
+      }
+    ],
+    "adaptiveBufferBytes": 34304284,
+    "telemetryBufferBytes": 12352,
+    "fixtureStagingBytes": 589824,
+    "cachedBudgetHostBytes": 74649600,
+    "textureLogicalBytes": 225043336,
+    "applicationVisibleGpuAllocationBytes": 452530816,
+    "notPhysicalVramResidency": true
+  },
+  "cleanupPassed": true,
+  "failures": []
+}

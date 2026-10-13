@@ -1,0 +1,1222 @@
+{
+  "capture": "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d",
+  "resolution": "1080p",
+  "reviewBundles": [
+    {
+      "name": "stable-pattern-review-1080p-part1-2026-09-27.tar.gz",
+      "bytes": 1298340,
+      "sha256": "06a0ec7e5ac3a606aa6320c27611d83aa1aed1df46d89201706d919c22c1d44e",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-checkpoint-fixed-pattern-19.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-checkpoint-fixed-pattern-43.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-checkpoint-fixed-pattern-7.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-checkpoint-independent-random-19.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-checkpoint-independent-random-43.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-checkpoint-independent-random-7.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-1080p-part2-2026-09-27.tar.gz",
+      "bytes": 1756074,
+      "sha256": "0124e1e8490360dd74ddf7b2596f828f48f4a67178c43b487b922b5ee372656a",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-checkpoint-stable-camera-random-19.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-checkpoint-stable-camera-random-43.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-checkpoint-stable-camera-random-7.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-checkpoint-stable-pattern-19.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-checkpoint-stable-pattern-43.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-1080p-part3-2026-09-27.tar.gz",
+      "bytes": 24731376,
+      "sha256": "02593e2954e0f323af058b6e6273cb73f6c99b8bcc6fd317a35ad2c24e9ef856",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-checkpoint-stable-pattern-7.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-common96.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-fixed.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-fixed.png",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-radial-7.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-radial-7.png",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-19.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-43.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-7.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-7.png",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-19.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-43.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-7.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-7.png",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-fixed.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-fixed.png",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-radial-7.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-radial-7.png",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-fixed.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-fixed.png",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-radial-7.json",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-radial-7.png",
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-summary.json"
+      ]
+    },
+    {
+      "name": "stable-pattern-review-1080p-part4-2026-09-27.tar.gz",
+      "bytes": 406158,
+      "sha256": "e17524fe254a2ff356bfe1e7df319e01a96e9bd55ce29ebed68023b232207097",
+      "files": [
+        "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/stable-pattern-summary.json"
+      ]
+    }
+  ],
+  "rawEvidence": {
+    "location": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d",
+    "fileCount": 262,
+    "totalBytes": 486019487,
+    "floatHdrIncludedInReviewBundle": false,
+    "images": [
+      {
+        "name": "1080p-common96.json",
+        "sha256": "c0c422b53640eab9cec627b614b83b88a11241d1436a60e8be3ead2b90929ed5",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "0b46580d95170b950bec480cf41f247c44e9b513dad6411aa6511df6d5cd14ae",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-common96-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "25dc8bd70053e2ea4fd2e6b43c1e395368d2f1e14161005832e1c5c6288a89af",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-common96-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "c3affa79c36a8872727cb4780ec258cb369baf5b81b956f73ff1901fe53ae33e",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-common96-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "2f56f900a4c087e11e53c13365f010c51bf623d077a7ba765be3837c6ba84d4f",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-common96-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "ed8e3ba4de41ee41e64434a2cdad03e928fab20a726bf4834108d7d4c1d17448",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-common96-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "87b46b491f5137cb2dece39014937a6eab91e20b5c5074d0dbed6af2841f19f2",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-common96-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "cf6736bdf7a7c65800090eef1329eafa3eb5a4412965b1649480d2d826f7e83f",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-common96-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "458a3cfeddd0a1952da8e2d9ed8cc448242151e99f5eacf22135a8c1185aca7d",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-common96-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      },
+      {
+        "name": "1080p-fixed-pattern-fixed.json",
+        "sha256": "866a8325ff8d448cc682791b0720260e5524a882a4db452e3e90b84646b5d8c8",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "d422f49adae93921d093337b19ac2bbae5d7dddf2ba6f2367c9ee4e3713fbd1c",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-fixed-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "99ddbe8a8155b3b77d601cd932cab94f3f11c0cfc29596185ff0ccf3eece2b2c",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-fixed-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "a167c5a745011eb2f7e8d12153d7319518e28f7bc84dee25a6bbb7965f0a5d4f",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-fixed-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "8430225e4ee3b79de296423268adaa13d81cc515c905b66226e4fab81eea957c",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-fixed-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "6e0c4a325357b5fe757fc16077b7e3c62a2490be5c02a2e6033207e9e6a392e3",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-fixed-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "7f6db86ad9846cf4877f78b2d00e77f497dfc16004757f7fbbcaede73b2c4573",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-fixed-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "ebd578c481c4033ca61d6b6322466b806454817a008d9182adea957996651ca0",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-fixed-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "f43137fbd2a723b274823927d57ce5530eb0fbe9045c6a8bce17d604e3c4020e",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-fixed-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      },
+      {
+        "name": "1080p-fixed-pattern-radial-7.json",
+        "sha256": "4fe37b6a6571d2ffe2da406254a5f28ce7a39ff9412381c66190311c8addcb3e",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "0e9e9a3ba3c535502ceaf3c699252901d530f7bf1e66060214f24f2b87b31db3",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-radial-7-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "9d8a22b05c4a98197eda661122c9ae0dba6bc18a5ad0b4cb12cc5d5e35126e29",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-radial-7-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "3b24ed64117b63376d3e4ba03e90734ce7c739fc701631a9bbba8eb3dbd3dfea",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-radial-7-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "01ea8ea8d3de7cd863c55202850f7a3f45ce174ab672b2008801431528a682ff",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-radial-7-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "9d9d25af388e8b9d2f86d449af45ab949bd942cc619fb055d33b078f5f7aab40",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-radial-7-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "7a05f34e55119b08b7719f57d55a1641386a7a38a310d6de2f812b50c1840dad",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-radial-7-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "29a83f6c5c67291c4e99a05b55b219403891096e1a9c2aff62ad6a0a4cfc54fa",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-radial-7-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "7910f1cec8e1bd1d21d981d2b34d02d6668abe641ebbe4a67744a888ba686fe6",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-fixed-pattern-radial-7-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      },
+      {
+        "name": "1080p-independent-random-radial-19.json",
+        "sha256": "9c3bacf37f4b08fb99e272a636ea3cd08d7c5d344f69234ca493c7daa156af55",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "d84d0eb54d55182a27cfbbf51822ebaf662dedecca009ea1a3001b9e8e3efab0",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-19-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "2ed1b61326771410a8dedb26daa38540fb8497dab33d685546f6a901e8b444e2",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-19-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "2846bdef5ce9bf2a68c96280f18c6badebcab26550a00c4a48a53a566a4c93dd",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-19-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "98bee83b1b3d794623d6a2a456172b5f23747e9bcb5a1a19b2672e8d8baf0141",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-19-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "2666986a6320425fb4f6e236a22edf50d8e9d3fac2a12ec83edb3386c87518a0",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-19-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "508acb7fb167ddc10fbdccad32f6888d55437b3fc355aab46ec44874c1331474",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-19-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "a76dfed18aed046477e67a1a5022568758104c6b403fbed4ded3aa152be4a8d5",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-19-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "0e4904b997af629c6a29c66fcc0c722654823b8227ad0debd3bd0b552428f263",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-19-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      },
+      {
+        "name": "1080p-independent-random-radial-43.json",
+        "sha256": "4d3e39f28a9b3801d7b650042b221204b7ca1c9d6c68061276cdcd89566cef81",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "d2842055c8170b9ae388816fb8583a78fc3b0ae241259e736313ac64811669c9",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-43-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "f7e4d76886a2315f2c9369ffff478c039042a7e47f8dace34262bd5bffd48512",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-43-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "d2aa7a3e84dfa77c25d64e00e075d51137564d0ac6a1a9b7733bfbc3b4e5d090",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-43-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "cd57211ef5f000f8c82fe55ac794431892d89e39fd9506e6d2d490b2f869d100",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-43-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "e8f3ac866dd511def4e0d092bab9cc9b8ac16e720ceea2aca081cac6aabbe498",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-43-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "4ae1ee65194936566f72f72b25349592a725ae043b388504cb00ded7ed1fdca4",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-43-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "91529853e2bd4ca3962375d5387649e3abd3b8c4b9e6064fffcaea2725226ee1",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-43-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "010c752fb2ff90308166d9abba2c77b4b24a93a99ee44440d3cdeae269ab5f3e",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-43-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      },
+      {
+        "name": "1080p-independent-random-radial-7.json",
+        "sha256": "7bca050e884ef6f36a27340a11da854dec03e3ee6e84683d1f5e6bb6be2fbc60",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "7d278633194035071bf5cd4c37031be1c9d4298662a99c440cec3a51ac7089ba",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-7-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "039618f309dce168277f04272e89ba23f8908c569820b8393210766614a47202",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-7-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "c7d02f59f3e8c1fa9f50fe98f6d29e591ff3f4ca199a7553e9555ff25a6cbffb",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-7-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "c1dceffa2bcc91798b12e55989b2a3d1c43fe0d8eb68f6a6e2cbfa0dc4031c60",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-7-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "38591842ca618748ea06472f10db1e828a63bcea9a5e939a7cf8b04fd9bf3068",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-7-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "abf95acf037ba2c1877e716cca30312c6fc57411bf434c5c54f73c5da81c457c",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-7-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "cdcd54fee981784572651568363d6765c366e9e3dd66fe9cd2daa53a861fcc65",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-7-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "7633e52d2704c5d854454f6485796c31441ee1e3ca360ad9dad17235a1d23c99",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-independent-random-radial-7-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      },
+      {
+        "name": "1080p-random-fixed-19.json",
+        "sha256": "4584037e536fcb0e544c98d2704c2f019cbc863aecadba5a160c2db8eb50187c",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "0728fc1cf33d6075a7b2c7c24e2d12659b73fb6b4402047189bb20639013bc38",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-19-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "787a322658cb5f2054ddc2c24489c0b3c2803551cfc7a29ac421678eeadc42ed",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-19-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "45bb5476b79cb68814c836d6382b1c0cbb8f7d9c5b944e164b65a1cff5d80de5",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-19-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "49093ddb53417c07f81d57a885d67ff2ab899076039a2cf871c366640c4d4643",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-19-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "48706ba5346ccf007045850125862ba47c9f38b40a1af80692b66c9f2ae0d9e5",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-19-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "9e64443ddb020477a575e148f2bbc7058f77f2a3b2c06c4306386a67ac829ee9",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-19-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "11007048441928af0bee03c949f55fc0320132b165f4747e2d67f6fe7dcd25ba",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-19-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "94c5e5598910af7281ac866ea6f23ca6de929a06ab63a26fa63f51db1902520e",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-19-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      },
+      {
+        "name": "1080p-random-fixed-43.json",
+        "sha256": "1326ea8dea7246a36f997eb6715d27b4ba9430936b7dfcc29ec4690159c0a739",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "7413a86c15a87e4193daac16be5d15d49967c83b8e725239c4d40f6aaa158db1",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-43-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "f75eff3bfa55cb9ef30736aa4882a0df5ddec7acafbdd5240a5c171343c0fd05",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-43-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "7f85ea4fe8dddc816efd64c2f2d75dd47804b7e59a01e1d2971d4b4d95b37f7a",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-43-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "7ea826fb0059c9b94fd7a3e9ec2877682acb6d9081f56a04c52eb517eaab4c2f",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-43-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "6e50385bea476ae76cdbe935c1c10a0cb3a15a6877e0eda094000ea9195df645",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-43-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "e3557023b7be71a3ff57b6314f81075e704b6b470ef194522bc60c37ece32ae2",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-43-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "969ca11dbfa9ce82cdf895f69b5b25052a1c142d98e5aa21b84b81ff3c0f6077",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-43-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "a5143a807708ae1ada291c59b0de99a561af6d3bc3b7ce9281a4bfb48702f7b4",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-43-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      },
+      {
+        "name": "1080p-random-fixed-7.json",
+        "sha256": "1237c0bd94b0595d010042f08a0f793ed39b488ff162c67103547f7ce66a2f5f",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "8e7db6475f05ae885b0e97463adf30fb7c4d7a1eec2c4bdaf51fbb45e18685ad",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-7-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "3fad6894368ba262dcc51f427026ec0356fdd7cef29b24731bb21405ada7e158",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-7-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "851cdaef882f843d2073575239ef0903e24f1f00cc0ae4464154afc0aee03ced",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-7-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "f4f95d0ba3edf2847d76cef91ee876c9a523b0e23a2c26c3ebec8fe3f3f957f9",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-7-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "cb1289581d06027b99c8169278db268ff7639f05a512d1fb6f0dc86cff568e6f",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-7-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "183b5ae395bf4ada7a3a51744ead55f21b17122b0356ec414c1e38e05c8989b9",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-7-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "abc214a376a7e1b735848d1215961e6aa2e6bf2e29af5408536f999379eded09",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-7-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "8d4d4db732848802f8bfbba0f37676538d14d3d0da7251fe077a96324da0001e",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-random-fixed-7-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      },
+      {
+        "name": "1080p-stable-camera-random-fixed.json",
+        "sha256": "c8169ab20aca40c6c35b510a82ee04973b7c2b9ee014d1ceb5ca858d27b3565e",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "1c06d28a59d72e5f52364d8a93c7afd691961d1480f75b63c0b93da228ee07a2",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-fixed-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "5b14f01a364477db8e735e8bc4515ef00925cf570efd1557c2f9384110328d45",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-fixed-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "7f5a99c179d8807fa66da782793521a28ce4ecafb702fc62c41cdfc9c851b437",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-fixed-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "51ae07d9ef707878b7ebc2fc4f5e9b2ff993588ede71f29161d74d52e5f1556a",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-fixed-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "04b19d004cb4e54775d276e12c42689fbef35b75c1c155675a64186da830345f",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-fixed-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "8d9c3aa2c421ffd1547fb3d132b141f47b7fcdecdfd5c2ce10558c73c0cb4dba",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-fixed-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "b8523bc9a5671ab5a5a8e013a0374b62a3230101b9dc01ddebb8e875215ef56c",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-fixed-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "83eb9ed94d0adb6e24d7feea511fbf7d887a8180bd74056d3357fe8cc230c3ea",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-fixed-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      },
+      {
+        "name": "1080p-stable-camera-random-radial-7.json",
+        "sha256": "11b21c14733cc53548fdc25d29e6283a23561301282343287f902bf1023a8c58",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "51c6dbdc554ad7d0433d0a2769be102eac2aa73a94826cd7cda80ab6523fccc3",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-radial-7-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "8ac4ac4bb95b6c56d8b72a76a6e05d7a298d4fb479c557c8358a3e455d09266c",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-radial-7-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "23694222423c9ce5934c723bb2da8879f2077d3d963751d5f61794b2440425c4",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-radial-7-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "8cd6fdbd0d98ac1b3c60944d0a452a65b73abb2776c06e827167439089e42526",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-radial-7-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "a5c05694655391f160739039a2bd25c0b1518cf0b35cf22df5066561517d665c",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-radial-7-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "d488b4c875e5c5963a61659c12cc50c2dd4cf817a0ecf5af9b1ad83ea8565934",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-radial-7-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "ba6e011c9c942c44ebeaf84b5b805fed6ddf32be385d9c833ab3ff68fbae3b03",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-radial-7-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "5b940993047092231fe45ccf7917f68c41616f2fda00436a9230467eaf38a7b0",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-camera-random-radial-7-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      },
+      {
+        "name": "1080p-stable-pattern-fixed.json",
+        "sha256": "9d858e3e0eb76ec11d6b1992a5d3357e33abec6509d2cf836c476cb57d0439a8",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "2e34ee513bcd5312c9761c6b307cdb5fb08e284840f8aa410810dbdabefb64ea",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-fixed-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "964ce25ce30e5247cd39eac727b61d88f2803e68164d636b907a6452d23e6643",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-fixed-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "dba1f53e126b31c8c1c8c1b44cdd86234441189ace64308f33093f16b0442fea",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-fixed-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "d328cb93006bf00813086a60bce0f15309d9293b80bd1117444f937d6ef2143e",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-fixed-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "51a6899c77e27ddc239115c3dc2bb06a1a1739fb2a1712d3bf77583a31383230",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-fixed-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "503512b720fec6441ae8b695add3af86075f8fea2dea25da94f7960d1a0f805f",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-fixed-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "825d1d693ae787445a7eb55c7dd06a084d726bd3a58f61a663c89db00482ad12",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-fixed-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "e8a01f3048d6ddd028db4629a0946378483d34afa85ad6918ab10251b6dde85c",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-fixed-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      },
+      {
+        "name": "1080p-stable-pattern-radial-7.json",
+        "sha256": "045b50b67830604a5807df6556383087147ae2dab50a8bf89c306e014645cf6e",
+        "format": "rgba-float32-little-endian",
+        "uncompressedBytes": 33177600,
+        "chunks": [
+          {
+            "byteOffset": 0,
+            "byteLength": 4194304,
+            "sha256": "f05aaa1e628bd30569a7c119e05e94a09d15e39061ff06bb77582a24cb1ababc",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-radial-7-hdr-0.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 4194304,
+            "byteLength": 4194304,
+            "sha256": "62508e586b9960092f3461eb6b1fdd7ee4f20960166115ac562fb4fd62d8e31c",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-radial-7-hdr-1.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 8388608,
+            "byteLength": 4194304,
+            "sha256": "2f44b92b55863ad920c96d9677739faa11ee0da91fa3369b60fdd79553fe9dc6",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-radial-7-hdr-2.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 12582912,
+            "byteLength": 4194304,
+            "sha256": "6a15e10ad4cc55751f6dcd8b63052c570f2b5212cd5087db3be53d58cc06d4af",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-radial-7-hdr-3.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 16777216,
+            "byteLength": 4194304,
+            "sha256": "09fe5dd8f349b844756e0bab1576e7653e8dba4b2809046140daa7478f287569",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-radial-7-hdr-4.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 20971520,
+            "byteLength": 4194304,
+            "sha256": "32ae2e36dbc6e80c56c4ebf383524667086b78bf8027ae9a7fcc6121ee5827a3",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-radial-7-hdr-5.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 25165824,
+            "byteLength": 4194304,
+            "sha256": "6a3beeb56c84fd2cfe67924351f6c09492ab246534066e2b97764a1037e28a2b",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-radial-7-hdr-6.png",
+              "bytes": 126
+            }
+          },
+          {
+            "byteOffset": 29360128,
+            "byteLength": 3817472,
+            "sha256": "1eaae95c7303b010ed2d2503c5d36df64f9bcdf61c45ce59f1d83b7ac6f92bf2",
+            "artifact": {
+              "ok": true,
+              "path": "output/playwright/eames-environments/native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d/1080p-stable-pattern-radial-7-hdr-7.png",
+              "bytes": 126
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "limitation": "Full float-HDR chunks remain local; separate archival delivery is required for externally portable HDR recomputation."
+}

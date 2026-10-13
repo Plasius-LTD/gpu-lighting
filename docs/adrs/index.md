@@ -1,5 +1,9 @@
 # ADR Index
 
+- [ADR 0017: Local room asset provenance](adr-0017-local-room-asset-provenance.md)
+
+- [ADR 0011: Paired Adaptive Diagnostics](./adr-0011-paired-adaptive-diagnostics.md)
+
 - [Architectural Decision Record (ADR)](./adr-0001:%20Lumen-Inspired%20Hybrid%20Realtime%20Lighting.md)
 - [Architectural Decision Record (ADR)](./adr-0002:%20Path-Traced%20Reference%20Rendering%20Mode.md)
 - [Architectural Decision Record (ADR)](./adr-0003:%20Froxel%20Volumetric%20Lighting%20Pipeline.md)
@@ -10,3 +14,5 @@
 - [Architectural Decision Record (ADR)](./adr-0008:%20Renderer-Aligned%20Wavefront%20Lighting%20Jobs.md)
 - [ADR-0009: Hosted OIDC Package Publication](./adr-0009-hosted-oidc-package-publication.md)
 - [Architectural Decision Record (ADR)](./adr-0010:%20Physical%20Fixed-SPP%20Baseline%20as%20the%20Adaptive%20Admission%20Reference.md)
+- [ADR 0012: Native-resolution real-time admission](./adr-0012-native-resolution-realtime-admission.md)
+- [ADR 0013: Prescribed native radial budgets](./adr-0013-prescribed-native-radial-budgets.md)

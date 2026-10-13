@@ -1,0 +1,4500 @@
+{
+  "status": "verified-diagnostic-not-qualified",
+  "capture": {
+    "sources": {
+      "renderer": "82bbd72a1b7af133cf05bc6a9d654ad96ded6811",
+      "lighting": "c21b08d76a3320a952259363cde487c8911d9da0",
+      "shared": "729f89c7f77fcadb9ee7eeca53fb6daf02865b8e",
+      "site": "21d43a9b63722f1ce69175a5a42b53304ee79102"
+    },
+    "source": "immutable-git-objects",
+    "captureId": "native-sampler-2026-09-27T16-57-43-720Z"
+  },
+  "assetHashesVerified": 7,
+  "scene": {
+    "modelName": "Eames_Lounge_Chair_Ottoman",
+    "assetTier": "source",
+    "modelTriangleCount": 265468,
+    "sceneTriangleCount": 265476,
+    "modelPrimitives": 9,
+    "sceneMeshes": 13,
+    "sourceMaterials": 5,
+    "sourceTextures": 5,
+    "textureSlots": [
+      {
+        "primitive": 1,
+        "role": "baseColorTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 1,
+        "role": "normalTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 2,
+        "role": "baseColorTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 2,
+        "role": "normalTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 2,
+        "role": "metallicRoughnessTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 5,
+        "role": "baseColorTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 5,
+        "role": "normalTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 6,
+        "role": "baseColorTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 6,
+        "role": "normalTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 6,
+        "role": "metallicRoughnessTexture",
+        "width": 1024,
+        "height": 1024
+      }
+    ],
+    "environment": "product-studio",
+    "geometry": "mesh-bvh",
+    "proxyGeometry": false,
+    "renderScope": "renderer-pipeline-not-site-application",
+    "manifest": {
+      "schemaVersion": 1,
+      "assetTier": "source",
+      "siteCommit": "21d43a9b63722f1ce69175a5a42b53304ee79102",
+      "sourceDirectory": "deployment-assets/gpu-demo/product-studio/eames/",
+      "model": "Eames_Lounge_Chair_Ottoman.gltf",
+      "files": [
+        {
+          "name": "Eames_Lounge_Chair_Ottoman.gltf",
+          "bytes": 15652,
+          "sha256": "ac45b81a4576a9a76e432092058139e57fd03341e1f60e3aa91ff296a762ad2e"
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman.bin",
+          "bytes": 6979720,
+          "sha256": "ad10b0101ed49293d126e148cbff35c14b8323e79a05237f65e9df19425d8486"
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Wood_normal.png",
+          "bytes": 1066723,
+          "sha256": "579db0dd72a1e1b92cb571f2758d813320daf64e6320135493e95092e847444a",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Wood_albedo.jpg",
+          "bytes": 842338,
+          "sha256": "11a9530415b321e6840f603ed5c81504c767588098345a6cd2f65dad19187157",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Leather_normal.png",
+          "bytes": 1873550,
+          "sha256": "c1f42e48431dd56d9d682c32417c380ce6c9ff24d7f519a55af3fac59931da40",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Leather_basecolortexture.jpg",
+          "bytes": 526825,
+          "sha256": "2980c158b9d099c2160470fc8874e4e86c7bb12256a0c0a9d8e73e61de9b3f60",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Leather_roughness0.jpg",
+          "bytes": 770750,
+          "sha256": "29f75dc067921aaf38c6bf8e9aff3e434c62db0ee9dfc393669d42903f9dbd35",
+          "width": 1024,
+          "height": 1024
+        }
+      ]
+    },
+    "assetVerificationAndSceneSetupMs": 1021.1999999880791
+  },
+  "samplingProbe": {
+    "status": "passed",
+    "pairsPerSampler": 4096,
+    "comparedWords": 16384,
+    "adapter": {},
+    "validationErrors": 0
+  },
+  "bandScreen": {
+    "passed": true,
+    "qualified": false,
+    "results": {
+      "legacy": [
+        {
+          "spp": 16,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": -0.09721752473272263
+            },
+            {
+              "seed": 19,
+              "drift": -0.09743124425755746
+            },
+            {
+              "seed": 43,
+              "drift": -0.09767135882153866
+            }
+          ],
+          "meanSignedDrift": -0.09744004260393958,
+          "bandPassed": false
+        },
+        {
+          "spp": 8,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": -0.01982521415318145
+            },
+            {
+              "seed": 19,
+              "drift": -0.019854103314338654
+            },
+            {
+              "seed": 43,
+              "drift": -0.02013085526817131
+            }
+          ],
+          "meanSignedDrift": -0.019936724245230474,
+          "bandPassed": false
+        },
+        {
+          "spp": 4,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": 0.02440904060569526
+            },
+            {
+              "seed": 19,
+              "drift": 0.02521836023114843
+            },
+            {
+              "seed": 43,
+              "drift": 0.024578349098928448
+            }
+          ],
+          "meanSignedDrift": 0.024735249978590713,
+          "bandPassed": false
+        },
+        {
+          "spp": 2,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": -0.03133032614027823
+            },
+            {
+              "seed": 19,
+              "drift": -0.03078768559445768
+            },
+            {
+              "seed": 43,
+              "drift": -0.030823709121596137
+            }
+          ],
+          "meanSignedDrift": -0.03098057361877735,
+          "bandPassed": false
+        },
+        {
+          "spp": 1,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": -0.06405136340591508
+            },
+            {
+              "seed": 19,
+              "drift": -0.06410928951941612
+            },
+            {
+              "seed": 43,
+              "drift": -0.06449867535255044
+            }
+          ],
+          "meanSignedDrift": -0.0642197760926272,
+          "bandPassed": false
+        }
+      ],
+      "independent-random": [
+        {
+          "spp": 16,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": -0.00013429364798065485
+            },
+            {
+              "seed": 19,
+              "drift": -0.00014458653960771093
+            },
+            {
+              "seed": 43,
+              "drift": -0.00014301730677093862
+            }
+          ],
+          "meanSignedDrift": -0.00014063249811976813,
+          "bandPassed": true
+        },
+        {
+          "spp": 8,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": -0.0002807782119880619
+            },
+            {
+              "seed": 19,
+              "drift": -0.0001888345434628645
+            },
+            {
+              "seed": 43,
+              "drift": -0.000056124273589938004
+            }
+          ],
+          "meanSignedDrift": -0.0001752456763469548,
+          "bandPassed": true
+        },
+        {
+          "spp": 4,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": 0.00018999207596332495
+            },
+            {
+              "seed": 19,
+              "drift": 0.00020832712481578383
+            },
+            {
+              "seed": 43,
+              "drift": 0.00006146539080244434
+            }
+          ],
+          "meanSignedDrift": 0.00015326153052718438,
+          "bandPassed": true
+        },
+        {
+          "spp": 2,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": -0.0006495823214896272
+            },
+            {
+              "seed": 19,
+              "drift": 0.00020442424380822663
+            },
+            {
+              "seed": 43,
+              "drift": 0.00006647588994155323
+            }
+          ],
+          "meanSignedDrift": -0.00012622739591328246,
+          "bandPassed": true
+        },
+        {
+          "spp": 1,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": -0.00023644792337256884
+            },
+            {
+              "seed": 19,
+              "drift": 0.00037394046372602445
+            },
+            {
+              "seed": 43,
+              "drift": 0.0005303788294744946
+            }
+          ],
+          "meanSignedDrift": 0.00022262378994265006,
+          "bandPassed": true
+        }
+      ],
+      "owen-sobol": [
+        {
+          "spp": 16,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": -0.000245084172069923
+            },
+            {
+              "seed": 19,
+              "drift": 0.0002310836571219734
+            },
+            {
+              "seed": 43,
+              "drift": -0.00034507922387483635
+            }
+          ],
+          "meanSignedDrift": -0.00011969324627426198,
+          "bandPassed": true
+        },
+        {
+          "spp": 8,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": -0.00013565538549436274
+            },
+            {
+              "seed": 19,
+              "drift": 0.00006648845647677853
+            },
+            {
+              "seed": 43,
+              "drift": -0.00025878985860155546
+            }
+          ],
+          "meanSignedDrift": -0.00010931892920637989,
+          "bandPassed": true
+        },
+        {
+          "spp": 4,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": -0.00003273499883231109
+            },
+            {
+              "seed": 19,
+              "drift": 0.00040072901176973705
+            },
+            {
+              "seed": 43,
+              "drift": -0.000008681870081954638
+            }
+          ],
+          "meanSignedDrift": 0.0001197707142851571,
+          "bandPassed": true
+        },
+        {
+          "spp": 2,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": 0.000033368966531579194
+            },
+            {
+              "seed": 19,
+              "drift": 0.000016866250902084015
+            },
+            {
+              "seed": 43,
+              "drift": -0.0003386128434575961
+            }
+          ],
+          "meanSignedDrift": -0.00009612587534131097,
+          "bandPassed": true
+        },
+        {
+          "spp": 1,
+          "perSeed": [
+            {
+              "seed": 7,
+              "drift": 0.00030398040332282796
+            },
+            {
+              "seed": 19,
+              "drift": -0.00003281098457086771
+            },
+            {
+              "seed": 43,
+              "drift": 0.00016790907300954258
+            }
+          ],
+          "meanSignedDrift": 0.00014635949725383426,
+          "bandPassed": true
+        }
+      ]
+    },
+    "controls": {
+      "independent-random": {
+        "improvement": 0.9985567278670906,
+        "passed": true
+      },
+      "owen-sobol": {
+        "improvement": 0.9987716215728603,
+        "passed": true
+      }
+    },
+    "limitation": "Diagnostic brightness-band screen only; fixed32 is not a converged reference. No full image quality or performance qualification."
+  },
+  "lanes": [
+    {
+      "name": "1080p",
+      "width": 1920,
+      "height": 1080,
+      "memory": {
+        "rendererBufferBytes": 184339868,
+        "textureInventory": [
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1920,
+              "height": 1080
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1920,
+              "height": 1080
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 1920,
+              "height": 1080
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1,
+              "height": 1
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1,
+              "height": 1
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1,
+              "height": 2
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 128,
+              "height": 128
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3081,
+              "height": 2052
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 1029,
+              "height": 2052
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3081,
+              "height": 2052
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          }
+        ],
+        "adaptiveBufferBytes": 9421084,
+        "telemetryBufferBytes": 8256,
+        "fixtureStagingBytes": 589824,
+        "cachedBudgetHostBytes": 18662400
+      },
+      "admission": {
+        "triangleCount": 265476,
+        "bvhNodeCount": 137735,
+        "displayQuality": true,
+        "accelerationBuildMode": "cpu-upload",
+        "maxDepth": 4,
+        "samplesPerPixel": 32,
+        "camera": {
+          "position": [
+            0,
+            1.12,
+            5.05
+          ],
+          "forward": [
+            0,
+            -0.07896061279595368,
+            -0.9968777365489149
+          ],
+          "right": [
+            1,
+            0,
+            0
+          ],
+          "up": [
+            0,
+            0.9968777365489149,
+            -0.07896061279595368
+          ],
+          "fovYDegrees": 43,
+          "aspect": 1.7777777777777777,
+          "tanHalfFovY": 0.39391047561494236
+        }
+      },
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "isFallbackAdapter": false
+      },
+      "timing": {
+        "legacy": {
+          "fixed": {
+            "times": [
+              12282.5,
+              12395.600000023842,
+              11979.5
+            ],
+            "meanMs": 12219.200000007948
+          },
+          "radial": {
+            "times": [
+              3785.399999976158,
+              3439.400000035763,
+              3757.300000011921
+            ],
+            "meanMs": 3660.7000000079474
+          }
+        },
+        "independent-random": {
+          "fixed": {
+            "times": [
+              16741.30000001192,
+              16458.30000001192,
+              16137
+            ],
+            "meanMs": 16445.533333341282
+          },
+          "radial": {
+            "times": [
+              5112.300000011921,
+              5029.899999976158,
+              5105
+            ],
+            "meanMs": 5082.399999996026
+          }
+        },
+        "owen-sobol": {
+          "fixed": {
+            "times": [
+              17070.19999998808,
+              17112.599999964237,
+              16649.099999964237
+            ],
+            "meanMs": 16943.96666663885
+          },
+          "radial": {
+            "times": [
+              5230.800000011921,
+              5168.899999976158,
+              4986.599999964237
+            ],
+            "meanMs": 5128.766666650772
+          }
+        }
+      },
+      "traces": [
+        {
+          "sampler": "legacy",
+          "seed": 7,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 74096704,
+          "segments": 140451904,
+          "gpuTileSpanMs": 10779.033600000002,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 11.600000262260437,
+                "exclusiveMs": 9.800000250339508,
+                "kind": "synchronous-host"
+              },
+              "uploads": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 1.800000011920929,
+                "exclusiveMs": 1.800000011920929,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 78.90000003576279,
+                "exclusiveMs": 78.90000003576279,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.09999996423721313,
+                "exclusiveMs": 0.09999996423721313,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.9999998211860657,
+                "exclusiveMs": 0.9999998211860657,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 11791.600000202656,
+                "exclusiveMs": 11791.600000202656,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 256.5999999642372,
+                "exclusiveMs": 256.5999999642372,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 184.39999949932098,
+                "exclusiveMs": 184.39999949932098,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 25920,
+              "renderPasses": 1,
+              "pipelineChanges": 60481,
+              "bindGroupChanges": 25921,
+              "directDispatches": 25920,
+              "indirectDispatches": 34560,
+              "bufferCopies": 34560,
+              "bufferCopyBytes": 276480,
+              "clears": 0,
+              "clearBytes": 0,
+              "uploadCalls": 135,
+              "uploadBytes": 2211840,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 4455,
+              "bytes": 3594240
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "1a80ccffb35002018130e70a1b9b33d7b0869f91af7eb7248cd13ec1692ad211"
+        },
+        {
+          "sampler": "legacy",
+          "seed": 7,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 15449951,
+          "segments": 27787871,
+          "gpuTileSpanMs": 3103.7194240000003,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 271,
+                "failures": 0,
+                "elapsedMs": 1.399999976158142,
+                "exclusiveMs": 1.399999976158142,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 6.299999833106995,
+                "exclusiveMs": 5.6999998688697815,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 22.899999976158142,
+                "exclusiveMs": 22.899999976158142,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.09999996423721313,
+                "exclusiveMs": 0.09999996423721313,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1.0999997854232788,
+                "exclusiveMs": 1.0999997854232788,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 3426.699999988079,
+                "exclusiveMs": 3426.699999988079,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 121.20000022649765,
+                "exclusiveMs": 121.20000022649765,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 189.30000019073486,
+                "exclusiveMs": 189.30000019073486,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 7394,
+              "renderPasses": 1,
+              "pipelineChanges": 15587,
+              "bindGroupChanges": 7395,
+              "directDispatches": 5101,
+              "indirectDispatches": 10485,
+              "bufferCopies": 8192,
+              "bufferCopyBytes": 65536,
+              "clears": 1024,
+              "clearBytes": 131072,
+              "uploadCalls": 271,
+              "uploadBytes": 8881408,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 1294,
+              "bytes": 914688
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "4ed14a3e9a43471fa4a213e81fdbfa554e8ef0b14b675a8b279ceb8270208cac",
+          "differenceFromFixed32": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10134929258140886,
+            "normalizedRmse": 0.12241081503241084,
+            "maxAbsoluteError": 6.641538739204407,
+            "p95LocalError": 0.22620639204978943,
+            "p99LocalError": 0.3693981468677521,
+            "meanLuminanceAbsoluteError": 0.061719848912922905,
+            "maxLuminanceAbsoluteError": 5.626853258323669,
+            "meanLuminance": 0.5495180182914223,
+            "referenceMeanLuminance": 0.5650295794470371,
+            "relativeEnergyDrift": -0.027452653312053384
+          },
+          "rings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.3467391825652845,
+              "referenceMeanLuminance": 0.3467391825652845,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.06821630551744647,
+              "normalizedRmse": 0.14425247104845773,
+              "maxAbsoluteError": 1.205336332321167,
+              "p95LocalError": 0.16192829608917236,
+              "p99LocalError": 0.22612053155899048,
+              "meanLuminanceAbsoluteError": 0.05419413734504649,
+              "maxLuminanceAbsoluteError": 1.173794409584999,
+              "meanLuminance": 0.38577808275386544,
+              "referenceMeanLuminance": 0.4273211912312012,
+              "relativeEnergyDrift": -0.09721752473272263
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.08870410068946125,
+              "normalizedRmse": 0.06266955060222543,
+              "maxAbsoluteError": 5.105761289596558,
+              "p95LocalError": 0.19850173592567444,
+              "p99LocalError": 0.3096883296966553,
+              "meanLuminanceAbsoluteError": 0.06909026357207235,
+              "maxLuminanceAbsoluteError": 4.324873910045624,
+              "meanLuminance": 0.7740743088846964,
+              "referenceMeanLuminance": 0.789730892961032,
+              "relativeEnergyDrift": -0.01982521415318145
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.12208678167536567,
+              "normalizedRmse": 0.1190256793426766,
+              "maxAbsoluteError": 6.641538739204407,
+              "p95LocalError": 0.23713535070419312,
+              "p99LocalError": 0.6165397763252258,
+              "meanLuminanceAbsoluteError": 0.06530032691487993,
+              "maxLuminanceAbsoluteError": 5.626853258323669,
+              "meanLuminance": 0.6612062451508467,
+              "referenceMeanLuminance": 0.6454513958212432,
+              "relativeEnergyDrift": 0.02440904060569526
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.10566100806067434,
+              "normalizedRmse": 0.19227722939246514,
+              "maxAbsoluteError": 2.0265358090400696,
+              "p95LocalError": 0.23130199313163757,
+              "p99LocalError": 0.3645068407058716,
+              "meanLuminanceAbsoluteError": 0.06316128512207794,
+              "maxLuminanceAbsoluteError": 1.9785892055988312,
+              "meanLuminance": 0.512474734579528,
+              "referenceMeanLuminance": 0.5290500450350035,
+              "relativeEnergyDrift": -0.03133032614027823
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.10684514856484821,
+              "normalizedRmse": 0.20440230617230698,
+              "maxAbsoluteError": 0.8340935111045837,
+              "p95LocalError": 0.24651077389717102,
+              "p99LocalError": 0.3167436718940735,
+              "meanLuminanceAbsoluteError": 0.06834603591644722,
+              "maxLuminanceAbsoluteError": 0.7883213506221771,
+              "meanLuminance": 0.46852868751986204,
+              "referenceMeanLuminance": 0.5005923073138254,
+              "relativeEnergyDrift": -0.06405136340591508
+            }
+          ]
+        },
+        {
+          "sampler": "legacy",
+          "seed": 7,
+          "mode": "uniform",
+          "primary": 66355200,
+          "secondary": 74096704,
+          "segments": 140451904,
+          "gpuTileSpanMs": 10841.423872000001,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 271,
+                "failures": 0,
+                "elapsedMs": 2.6000000834465027,
+                "exclusiveMs": 2.6000000834465027,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 12.49999988079071,
+                "exclusiveMs": 10.899999797344208,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 79.40000081062317,
+                "exclusiveMs": 79.40000081062317,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.19999998807907104,
+                "exclusiveMs": 0.19999998807907104,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1.3999998569488525,
+                "exclusiveMs": 1.3999998569488525,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 11844.899999201298,
+                "exclusiveMs": 11844.899999201298,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 324.30000030994415,
+                "exclusiveMs": 324.30000030994415,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 249.69999992847443,
+                "exclusiveMs": 249.69999992847443,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 26730,
+              "renderPasses": 1,
+              "pipelineChanges": 61291,
+              "bindGroupChanges": 26731,
+              "directDispatches": 17955,
+              "indirectDispatches": 43335,
+              "bufferCopies": 34560,
+              "bufferCopyBytes": 276480,
+              "clears": 4320,
+              "clearBytes": 552960,
+              "uploadCalls": 271,
+              "uploadBytes": 10540800,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 4590,
+              "bytes": 3628800
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "1a80ccffb35002018130e70a1b9b33d7b0869f91af7eb7248cd13ec1692ad211",
+          "differenceFromFixed32": {
+            "pixels": 2073600,
+            "rgbRmse": 0,
+            "normalizedRmse": 0,
+            "maxAbsoluteError": 0,
+            "p95LocalError": 0,
+            "p99LocalError": 0,
+            "meanLuminanceAbsoluteError": 0,
+            "maxLuminanceAbsoluteError": 0,
+            "meanLuminance": 0.5650295794470371,
+            "referenceMeanLuminance": 0.5650295794470371,
+            "relativeEnergyDrift": 0
+          },
+          "uniformBitIdentical": true
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 7,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 72342046,
+          "segments": 138697246,
+          "gpuTileSpanMs": 14932.508671999994,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 13.999999701976776,
+                "exclusiveMs": 12.299999952316284,
+                "kind": "synchronous-host"
+              },
+              "uploads": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 1.699999749660492,
+                "exclusiveMs": 1.699999749660492,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 93.59999972581863,
+                "exclusiveMs": 93.59999972581863,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.30000007152557373,
+                "exclusiveMs": 0.30000007152557373,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1.4000000357627869,
+                "exclusiveMs": 1.4000000357627869,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 16078.100000441074,
+                "exclusiveMs": 16078.100000441074,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 304.3999999165535,
+                "exclusiveMs": 304.3999999165535,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 214.200000166893,
+                "exclusiveMs": 214.200000166893,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 25920,
+              "renderPasses": 1,
+              "pipelineChanges": 60481,
+              "bindGroupChanges": 25921,
+              "directDispatches": 25920,
+              "indirectDispatches": 34560,
+              "bufferCopies": 34560,
+              "bufferCopyBytes": 276480,
+              "clears": 0,
+              "clearBytes": 0,
+              "uploadCalls": 135,
+              "uploadBytes": 2211840,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 4455,
+              "bytes": 3594240
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "1237c0bd94b0595d010042f08a0f793ed39b488ff162c67103547f7ce66a2f5f"
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 7,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17287682,
+          "segments": 29625602,
+          "gpuTileSpanMs": 4393.140224,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 271,
+                "failures": 0,
+                "elapsedMs": 1.8999999165534973,
+                "exclusiveMs": 1.8999999165534973,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 6.599999845027924,
+                "exclusiveMs": 5.499999940395355,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 24.00000011920929,
+                "exclusiveMs": 24.00000011920929,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.2999999523162842,
+                "exclusiveMs": 0.2999999523162842,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.800000011920929,
+                "exclusiveMs": 0.800000011920929,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 4729.699999988079,
+                "exclusiveMs": 4729.699999988079,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 144.50000017881393,
+                "exclusiveMs": 144.50000017881393,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 208.19999980926514,
+                "exclusiveMs": 208.19999980926514,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 7394,
+              "renderPasses": 1,
+              "pipelineChanges": 15587,
+              "bindGroupChanges": 7395,
+              "directDispatches": 5101,
+              "indirectDispatches": 10485,
+              "bufferCopies": 8192,
+              "bufferCopyBytes": 65536,
+              "clears": 1024,
+              "clearBytes": 131072,
+              "uploadCalls": 271,
+              "uploadBytes": 8881408,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 1294,
+              "bytes": 914688
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "7bca050e884ef6f36a27340a11da854dec03e3ee6e84683d1f5e6bb6be2fbc60",
+          "differenceFromFixed32": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10447414451032863,
+            "normalizedRmse": 0.12593770602202353,
+            "maxAbsoluteError": 3.8310840129852295,
+            "p95LocalError": 0.21616801619529724,
+            "p99LocalError": 0.4222058653831482,
+            "meanLuminanceAbsoluteError": 0.05450740357412893,
+            "maxLuminanceAbsoluteError": 3.245621526789665,
+            "meanLuminance": 0.5669494630044825,
+            "referenceMeanLuminance": 0.5670797026496429,
+            "relativeEnergyDrift": -0.00022966726643860186
+          },
+          "rings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.3498345588334148,
+              "referenceMeanLuminance": 0.3498345588334148,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.0403921485002653,
+              "normalizedRmse": 0.08472970362563478,
+              "maxAbsoluteError": 0.6573949456214905,
+              "p95LocalError": 0.09955444931983948,
+              "p99LocalError": 0.1467685103416443,
+              "meanLuminanceAbsoluteError": 0.030166863494136834,
+              "maxLuminanceAbsoluteError": 0.6394285771369934,
+              "meanLuminance": 0.4300646660311331,
+              "referenceMeanLuminance": 0.430122428741167,
+              "relativeEnergyDrift": -0.00013429364798065485
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.06530540540272148,
+              "normalizedRmse": 0.0460814549550889,
+              "maxAbsoluteError": 1.7870697975158691,
+              "p95LocalError": 0.14531292021274567,
+              "p99LocalError": 0.2382115125656128,
+              "meanLuminanceAbsoluteError": 0.04842836622154802,
+              "maxLuminanceAbsoluteError": 1.5137657432079314,
+              "meanLuminance": 0.7936935541060806,
+              "referenceMeanLuminance": 0.7939164685525887,
+              "relativeEnergyDrift": -0.0002807782119880619
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.07983177705666895,
+              "normalizedRmse": 0.07769436247381345,
+              "maxAbsoluteError": 3.8310840129852295,
+              "p95LocalError": 0.1669020652770996,
+              "p99LocalError": 0.31208282709121704,
+              "meanLuminanceAbsoluteError": 0.0497715289465759,
+              "maxLuminanceAbsoluteError": 3.245621526789665,
+              "meanLuminance": 0.6487428056921962,
+              "referenceMeanLuminance": 0.6486195731129901,
+              "relativeEnergyDrift": 0.00018999207596332495
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.1107866262325161,
+              "normalizedRmse": 0.20110286574119599,
+              "maxAbsoluteError": 3.1475824117660522,
+              "p95LocalError": 0.23053915798664093,
+              "p99LocalError": 0.43434956669807434,
+              "meanLuminanceAbsoluteError": 0.05989684836935028,
+              "maxLuminanceAbsoluteError": 2.9863136504888534,
+              "meanLuminance": 0.5295064305369829,
+              "referenceMeanLuminance": 0.5298506121276515,
+              "relativeEnergyDrift": -0.0006495823214896272
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15190698792747803,
+              "normalizedRmse": 0.2898877527616111,
+              "maxAbsoluteError": 3.217742145061493,
+              "p95LocalError": 0.29652804136276245,
+              "p99LocalError": 0.5631119310855865,
+              "meanLuminanceAbsoluteError": 0.07719177763931546,
+              "maxLuminanceAbsoluteError": 3.125378056180477,
+              "meanLuminance": 0.5010882662843735,
+              "referenceMeanLuminance": 0.5012067755856411,
+              "relativeEnergyDrift": -0.00023644792337256884
+            }
+          ]
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 7,
+          "mode": "uniform",
+          "primary": 66355200,
+          "secondary": 72342046,
+          "segments": 138697246,
+          "gpuTileSpanMs": 15106.244608000003,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 271,
+                "failures": 0,
+                "elapsedMs": 3.299999713897705,
+                "exclusiveMs": 3.299999713897705,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 11.799999594688416,
+                "exclusiveMs": 9.49999988079071,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 67.0000005364418,
+                "exclusiveMs": 67.0000005364418,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.3999999761581421,
+                "exclusiveMs": 0.3999999761581421,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1,
+                "exclusiveMs": 1,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 16038.39999961853,
+                "exclusiveMs": 16038.39999961853,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 259.49999994039536,
+                "exclusiveMs": 259.49999994039536,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 236.00000059604645,
+                "exclusiveMs": 236.00000059604645,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 26730,
+              "renderPasses": 1,
+              "pipelineChanges": 61291,
+              "bindGroupChanges": 26731,
+              "directDispatches": 17955,
+              "indirectDispatches": 43335,
+              "bufferCopies": 34560,
+              "bufferCopyBytes": 276480,
+              "clears": 4320,
+              "clearBytes": 552960,
+              "uploadCalls": 271,
+              "uploadBytes": 10540800,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 4590,
+              "bytes": 3628800
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "1237c0bd94b0595d010042f08a0f793ed39b488ff162c67103547f7ce66a2f5f",
+          "differenceFromFixed32": {
+            "pixels": 2073600,
+            "rgbRmse": 0,
+            "normalizedRmse": 0,
+            "maxAbsoluteError": 0,
+            "p95LocalError": 0,
+            "p99LocalError": 0,
+            "meanLuminanceAbsoluteError": 0,
+            "maxLuminanceAbsoluteError": 0,
+            "meanLuminance": 0.5670797026496429,
+            "referenceMeanLuminance": 0.5670797026496429,
+            "relativeEnergyDrift": 0
+          },
+          "uniformBitIdentical": true
+        },
+        {
+          "sampler": "owen-sobol",
+          "seed": 7,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 72336107,
+          "segments": 138691307,
+          "gpuTileSpanMs": 15219.42528,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 11.600000262260437,
+                "exclusiveMs": 10.40000033378601,
+                "kind": "synchronous-host"
+              },
+              "uploads": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 1.1999999284744263,
+                "exclusiveMs": 1.1999999284744263,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 81.79999965429306,
+                "exclusiveMs": 81.79999965429306,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.2999999523162842,
+                "exclusiveMs": 0.2999999523162842,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.7999998927116394,
+                "exclusiveMs": 0.7999998927116394,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 16226.200000286102,
+                "exclusiveMs": 16226.200000286102,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 251.10000014305115,
+                "exclusiveMs": 251.10000014305115,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 187.49999952316284,
+                "exclusiveMs": 187.49999952316284,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 25920,
+              "renderPasses": 1,
+              "pipelineChanges": 60481,
+              "bindGroupChanges": 25921,
+              "directDispatches": 25920,
+              "indirectDispatches": 34560,
+              "bufferCopies": 34560,
+              "bufferCopyBytes": 276480,
+              "clears": 0,
+              "clearBytes": 0,
+              "uploadCalls": 135,
+              "uploadBytes": 2211840,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 4455,
+              "bytes": 3594240
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "8bcdd939954467a36bf830f2e7b70dbc169b0c5575854545af10b99437bc6cd0"
+        },
+        {
+          "sampler": "owen-sobol",
+          "seed": 7,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17287663,
+          "segments": 29625583,
+          "gpuTileSpanMs": 4428.26752,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 271,
+                "failures": 0,
+                "elapsedMs": 1.8000000715255737,
+                "exclusiveMs": 1.8000000715255737,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 6.500000059604645,
+                "exclusiveMs": 5.5,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 24.89999955892563,
+                "exclusiveMs": 24.89999955892563,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.10000002384185791,
+                "exclusiveMs": 0.10000002384185791,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1.5000001788139343,
+                "exclusiveMs": 1.5000001788139343,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 4787.500000476837,
+                "exclusiveMs": 4787.500000476837,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 136.79999935626984,
+                "exclusiveMs": 136.79999935626984,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 215.8000003695488,
+                "exclusiveMs": 215.8000003695488,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 7394,
+              "renderPasses": 1,
+              "pipelineChanges": 15587,
+              "bindGroupChanges": 7395,
+              "directDispatches": 5101,
+              "indirectDispatches": 10485,
+              "bufferCopies": 8192,
+              "bufferCopyBytes": 65536,
+              "clears": 1024,
+              "clearBytes": 131072,
+              "uploadCalls": 271,
+              "uploadBytes": 8881408,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 1294,
+              "bytes": 914688
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "ec9a0cd52bcf3efa5f7eba7c84df06acb03e967801567eb27c53bb5c60cec07a",
+          "differenceFromFixed32": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10367785029322488,
+            "normalizedRmse": 0.12499313290919102,
+            "maxAbsoluteError": 3.3344558477401733,
+            "p95LocalError": 0.21429085731506348,
+            "p99LocalError": 0.41977304220199585,
+            "meanLuminanceAbsoluteError": 0.05362872879894733,
+            "maxLuminanceAbsoluteError": 3.1101605432867996,
+            "meanLuminance": 0.5670619203824034,
+            "referenceMeanLuminance": 0.5670503555702705,
+            "relativeEnergyDrift": 0.000020394682799038428
+          },
+          "rings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.34992856887281765,
+              "referenceMeanLuminance": 0.34992856887281765,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.038459395505610276,
+              "normalizedRmse": 0.08069598446303373,
+              "maxAbsoluteError": 1.085048496723175,
+              "p95LocalError": 0.0952322781085968,
+              "p99LocalError": 0.14080572128295898,
+              "meanLuminanceAbsoluteError": 0.028646366172129827,
+              "maxLuminanceAbsoluteError": 1.055033910048008,
+              "meanLuminance": 0.4300107090023565,
+              "referenceMeanLuminance": 0.4301161236564167,
+              "relativeEnergyDrift": -0.000245084172069923
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.06268424488491794,
+              "normalizedRmse": 0.04423435656257443,
+              "maxAbsoluteError": 1.8471384644508362,
+              "p95LocalError": 0.13939696550369263,
+              "p99LocalError": 0.2293960452079773,
+              "meanLuminanceAbsoluteError": 0.0464324196461547,
+              "maxLuminanceAbsoluteError": 1.7938795477747917,
+              "meanLuminance": 0.7937081860999939,
+              "referenceMeanLuminance": 0.7938158714980535,
+              "relativeEnergyDrift": -0.00013565538549436274
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.07725835415226907,
+              "normalizedRmse": 0.07519661438296363,
+              "maxAbsoluteError": 2.5540539026260376,
+              "p95LocalError": 0.16130474209785461,
+              "p99LocalError": 0.3046596646308899,
+              "meanLuminanceAbsoluteError": 0.04827136064577962,
+              "maxLuminanceAbsoluteError": 2.163746164369583,
+              "meanLuminance": 0.6486221987612856,
+              "referenceMeanLuminance": 0.648643432103278,
+              "relativeEnergyDrift": -0.00003273499883231109
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.10996184688328715,
+              "normalizedRmse": 0.19966899351602574,
+              "maxAbsoluteError": 2.593175709247589,
+              "p95LocalError": 0.2266964316368103,
+              "p99LocalError": 0.42283520102500916,
+              "meanLuminanceAbsoluteError": 0.059196250899320416,
+              "maxLuminanceAbsoluteError": 2.518686757647991,
+              "meanLuminance": 0.5298183863665141,
+              "referenceMeanLuminance": 0.5298007074644383,
+              "relativeEnergyDrift": 0.000033368966531579194
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15225129684696248,
+              "normalizedRmse": 0.2906237447404187,
+              "maxAbsoluteError": 3.3344558477401733,
+              "p95LocalError": 0.2980161979794502,
+              "p99LocalError": 0.5643401741981506,
+              "meanLuminanceAbsoluteError": 0.07738357752330717,
+              "maxLuminanceAbsoluteError": 3.1101605432867996,
+              "meanLuminance": 0.5013166271185345,
+              "referenceMeanLuminance": 0.5011642829976579,
+              "relativeEnergyDrift": 0.00030398040332282796
+            }
+          ]
+        },
+        {
+          "sampler": "owen-sobol",
+          "seed": 7,
+          "mode": "uniform",
+          "primary": 66355200,
+          "secondary": 72336107,
+          "segments": 138691307,
+          "gpuTileSpanMs": 15305.801728000002,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 271,
+                "failures": 0,
+                "elapsedMs": 2.3000001311302185,
+                "exclusiveMs": 2.3000001311302185,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 13.899999678134918,
+                "exclusiveMs": 12.0999995470047,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 86.50000017881393,
+                "exclusiveMs": 86.50000017881393,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.19999998807907104,
+                "exclusiveMs": 0.19999998807907104,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1.100000023841858,
+                "exclusiveMs": 1.100000023841858,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 16394.60000014305,
+                "exclusiveMs": 16394.60000014305,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 323.49999964237213,
+                "exclusiveMs": 323.49999964237213,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 269.8000003695488,
+                "exclusiveMs": 269.8000003695488,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 26730,
+              "renderPasses": 1,
+              "pipelineChanges": 61291,
+              "bindGroupChanges": 26731,
+              "directDispatches": 17955,
+              "indirectDispatches": 43335,
+              "bufferCopies": 34560,
+              "bufferCopyBytes": 276480,
+              "clears": 4320,
+              "clearBytes": 552960,
+              "uploadCalls": 271,
+              "uploadBytes": 10540800,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 4590,
+              "bytes": 3628800
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "8bcdd939954467a36bf830f2e7b70dbc169b0c5575854545af10b99437bc6cd0",
+          "differenceFromFixed32": {
+            "pixels": 2073600,
+            "rgbRmse": 0,
+            "normalizedRmse": 0,
+            "maxAbsoluteError": 0,
+            "p95LocalError": 0,
+            "p99LocalError": 0,
+            "meanLuminanceAbsoluteError": 0,
+            "maxLuminanceAbsoluteError": 0,
+            "meanLuminance": 0.5670503555702705,
+            "referenceMeanLuminance": 0.5670503555702705,
+            "relativeEnergyDrift": 0
+          },
+          "uniformBitIdentical": true
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 19,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 72343253,
+          "segments": 138698453,
+          "gpuTileSpanMs": 14946.533375999998,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 14.70000034570694,
+                "exclusiveMs": 12.300000131130219,
+                "kind": "synchronous-host"
+              },
+              "uploads": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 2.400000214576721,
+                "exclusiveMs": 2.400000214576721,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 94.20000004768372,
+                "exclusiveMs": 94.20000004768372,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.19999998807907104,
+                "exclusiveMs": 0.19999998807907104,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1,
+                "exclusiveMs": 1,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 16113.000000298023,
+                "exclusiveMs": 16113.000000298023,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 315.1000000834465,
+                "exclusiveMs": 315.1000000834465,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 218.49999928474426,
+                "exclusiveMs": 218.49999928474426,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 25920,
+              "renderPasses": 1,
+              "pipelineChanges": 60481,
+              "bindGroupChanges": 25921,
+              "directDispatches": 25920,
+              "indirectDispatches": 34560,
+              "bufferCopies": 34560,
+              "bufferCopyBytes": 276480,
+              "clears": 0,
+              "clearBytes": 0,
+              "uploadCalls": 135,
+              "uploadBytes": 2211840,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 4455,
+              "bytes": 3594240
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "4584037e536fcb0e544c98d2704c2f019cbc863aecadba5a160c2db8eb50187c"
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 19,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17288605,
+          "segments": 29626525,
+          "gpuTileSpanMs": 4560.912384,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 271,
+                "failures": 0,
+                "elapsedMs": 1,
+                "exclusiveMs": 1,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 7.699999928474426,
+                "exclusiveMs": 6.999999940395355,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 24.100000619888306,
+                "exclusiveMs": 24.100000619888306,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0,
+                "exclusiveMs": 0,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.30000007152557373,
+                "exclusiveMs": 0.30000007152557373,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 4918.199999809265,
+                "exclusiveMs": 4918.199999809265,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 138.09999972581863,
+                "exclusiveMs": 138.09999972581863,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 208.29999953508377,
+                "exclusiveMs": 208.29999953508377,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 7394,
+              "renderPasses": 1,
+              "pipelineChanges": 15587,
+              "bindGroupChanges": 7395,
+              "directDispatches": 5101,
+              "indirectDispatches": 10485,
+              "bufferCopies": 8192,
+              "bufferCopyBytes": 65536,
+              "clears": 1024,
+              "clearBytes": 131072,
+              "uploadCalls": 271,
+              "uploadBytes": 8881408,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 1294,
+              "bytes": 914688
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "9c3bacf37f4b08fb99e272a636ea3cd08d7c5d344f69234ca493c7daa156af55",
+          "differenceFromFixed32": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10468776268829551,
+            "normalizedRmse": 0.12619936777448298,
+            "maxAbsoluteError": 3.5757709741592407,
+            "p95LocalError": 0.216657817363739,
+            "p99LocalError": 0.42455679178237915,
+            "meanLuminanceAbsoluteError": 0.05461275296294562,
+            "maxLuminanceAbsoluteError": 3.0815754277944567,
+            "meanLuminance": 0.5671360961210246,
+            "referenceMeanLuminance": 0.5670638523528778,
+            "relativeEnergyDrift": 0.00012739970613012152
+          },
+          "rings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.3499347932681757,
+              "referenceMeanLuminance": 0.3499347932681757,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.04059193766180063,
+              "normalizedRmse": 0.08514219360789375,
+              "maxAbsoluteError": 1.9252790212631226,
+              "p95LocalError": 0.09964650869369507,
+              "p99LocalError": 0.14768272638320923,
+              "meanLuminanceAbsoluteError": 0.03020888140146605,
+              "maxLuminanceAbsoluteError": 1.8732587932348248,
+              "meanLuminance": 0.43012007245500444,
+              "referenceMeanLuminance": 0.43018227102097195,
+              "relativeEnergyDrift": -0.00014458653960771093
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.06500008903619138,
+              "normalizedRmse": 0.04586646655517411,
+              "maxAbsoluteError": 2.2976584434509277,
+              "p95LocalError": 0.14448189735412598,
+              "p99LocalError": 0.2349885106086731,
+              "meanLuminanceAbsoluteError": 0.04825659378812615,
+              "maxLuminanceAbsoluteError": 1.9462660562992093,
+              "meanLuminance": 0.7937291403749871,
+              "referenceMeanLuminance": 0.7938790521633672,
+              "relativeEnergyDrift": -0.0001888345434628645
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.07977874680920756,
+              "normalizedRmse": 0.07764378426163969,
+              "maxAbsoluteError": 3.5757709741592407,
+              "p95LocalError": 0.16717234253883362,
+              "p99LocalError": 0.31421923637390137,
+              "meanLuminanceAbsoluteError": 0.04980470743033562,
+              "maxLuminanceAbsoluteError": 3.029350112628937,
+              "meanLuminance": 0.6488129708640155,
+              "referenceMeanLuminance": 0.648677833675994,
+              "relativeEnergyDrift": 0.00020832712481578383
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.1111983883242497,
+              "normalizedRmse": 0.20187622263539032,
+              "maxAbsoluteError": 2.5144495964050293,
+              "p95LocalError": 0.2312244176864624,
+              "p99LocalError": 0.43894821405410767,
+              "meanLuminanceAbsoluteError": 0.06008325920265764,
+              "maxLuminanceAbsoluteError": 2.444797687292099,
+              "meanLuminance": 0.5299282039507661,
+              "referenceMeanLuminance": 0.5298198959191883,
+              "relativeEnergyDrift": 0.00020442424380822663
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15227350787577,
+              "normalizedRmse": 0.29064557583929196,
+              "maxAbsoluteError": 3.1730595231056213,
+              "p95LocalError": 0.29850906133651733,
+              "p99LocalError": 0.5688727498054504,
+              "meanLuminanceAbsoluteError": 0.07748647787139744,
+              "maxLuminanceAbsoluteError": 3.0815754277944567,
+              "meanLuminance": 0.5012933319819698,
+              "referenceMeanLuminance": 0.5011059481913273,
+              "relativeEnergyDrift": 0.00037394046372602445
+            }
+          ]
+        },
+        {
+          "sampler": "owen-sobol",
+          "seed": 19,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 72345433,
+          "segments": 138700633,
+          "gpuTileSpanMs": 15208.153088000001,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 10.899999678134918,
+                "exclusiveMs": 8.79999965429306,
+                "kind": "synchronous-host"
+              },
+              "uploads": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 2.100000023841858,
+                "exclusiveMs": 2.100000023841858,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 77.3000003695488,
+                "exclusiveMs": 77.3000003695488,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.40000003576278687,
+                "exclusiveMs": 0.40000003576278687,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1.5,
+                "exclusiveMs": 1.5,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 16202.79999947548,
+                "exclusiveMs": 16202.79999947548,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 244.60000026226044,
+                "exclusiveMs": 244.60000026226044,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 180.60000032186508,
+                "exclusiveMs": 180.60000032186508,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 25920,
+              "renderPasses": 1,
+              "pipelineChanges": 60481,
+              "bindGroupChanges": 25921,
+              "directDispatches": 25920,
+              "indirectDispatches": 34560,
+              "bufferCopies": 34560,
+              "bufferCopyBytes": 276480,
+              "clears": 0,
+              "clearBytes": 0,
+              "uploadCalls": 135,
+              "uploadBytes": 2211840,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 4455,
+              "bytes": 3594240
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "6e8b36af9c21b52f15abbe655bec906bfca440be09c7a503fb7f6cfbacee7384"
+        },
+        {
+          "sampler": "owen-sobol",
+          "seed": 19,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17291021,
+          "segments": 29628941,
+          "gpuTileSpanMs": 4546.887679999999,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 271,
+                "failures": 0,
+                "elapsedMs": 1.2000001072883606,
+                "exclusiveMs": 1.2000001072883606,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 6.3000001311302185,
+                "exclusiveMs": 5.300000011920929,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 26.100000023841858,
+                "exclusiveMs": 26.100000023841858,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.39999985694885254,
+                "exclusiveMs": 0.39999985694885254,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.9000001549720764,
+                "exclusiveMs": 0.9000001549720764,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 4919.099999964237,
+                "exclusiveMs": 4919.099999964237,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 144.99999976158142,
+                "exclusiveMs": 144.99999976158142,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 219.69999980926514,
+                "exclusiveMs": 219.69999980926514,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 7394,
+              "renderPasses": 1,
+              "pipelineChanges": 15587,
+              "bindGroupChanges": 7395,
+              "directDispatches": 5101,
+              "indirectDispatches": 10485,
+              "bufferCopies": 8192,
+              "bufferCopyBytes": 65536,
+              "clears": 1024,
+              "clearBytes": 131072,
+              "uploadCalls": 271,
+              "uploadBytes": 8881408,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 1294,
+              "bytes": 914688
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "b1e9da07254febc58668bd042c224470888891269839c055b9ddd2e681813e5c",
+          "differenceFromFixed32": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10340041364317669,
+            "normalizedRmse": 0.12466025041621209,
+            "maxAbsoluteError": 7.855458378791809,
+            "p95LocalError": 0.21418482065200806,
+            "p99LocalError": 0.4190964996814728,
+            "meanLuminanceAbsoluteError": 0.053552623623859374,
+            "maxLuminanceAbsoluteError": 7.29985327796936,
+            "meanLuminance": 0.567104256374811,
+            "referenceMeanLuminance": 0.5670362911411018,
+            "relativeEnergyDrift": 0.00011986046531947033
+          },
+          "rings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.34987187469041103,
+              "referenceMeanLuminance": 0.34987187469041103,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.038755079887247725,
+              "normalizedRmse": 0.08131096062738695,
+              "maxAbsoluteError": 1.4780871868133545,
+              "p95LocalError": 0.09576660394668579,
+              "p99LocalError": 0.1418921947479248,
+              "meanLuminanceAbsoluteError": 0.028693233435801293,
+              "maxLuminanceAbsoluteError": 1.4372669413805008,
+              "meanLuminance": 0.43028153211649267,
+              "referenceMeanLuminance": 0.43018212405803685,
+              "relativeEnergyDrift": 0.0002310836571219734
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.06235922055903354,
+              "normalizedRmse": 0.044006578295273026,
+              "maxAbsoluteError": 1.0739091038703918,
+              "p95LocalError": 0.13889189809560776,
+              "p99LocalError": 0.22988170385360718,
+              "meanLuminanceAbsoluteError": 0.046236402429106684,
+              "maxLuminanceAbsoluteError": 0.9028586414694786,
+              "meanLuminance": 0.793805100943936,
+              "referenceMeanLuminance": 0.7937523255769835,
+              "relativeEnergyDrift": 0.00006648845647677853
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.07765808597842569,
+              "normalizedRmse": 0.07558376817706258,
+              "maxAbsoluteError": 2.043354034423828,
+              "p95LocalError": 0.1612231433391571,
+              "p99LocalError": 0.30486950278282166,
+              "meanLuminanceAbsoluteError": 0.048337214376651595,
+              "maxLuminanceAbsoluteError": 1.7311211476325985,
+              "meanLuminance": 0.6488830070623206,
+              "referenceMeanLuminance": 0.6486230849744677,
+              "relativeEnergyDrift": 0.00040072901176973705
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.10966731334462036,
+              "normalizedRmse": 0.19911862238805594,
+              "maxAbsoluteError": 7.855458378791809,
+              "p95LocalError": 0.22657126188278198,
+              "p99LocalError": 0.41923969984054565,
+              "meanLuminanceAbsoluteError": 0.05900122282217953,
+              "maxLuminanceAbsoluteError": 7.29985327796936,
+              "meanLuminance": 0.5298540965001757,
+              "referenceMeanLuminance": 0.5298451599987679,
+              "relativeEnergyDrift": 0.000016866250902084015
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15159503282042963,
+              "normalizedRmse": 0.2894168176432014,
+              "maxAbsoluteError": 3.168596923351288,
+              "p95LocalError": 0.29738081991672516,
+              "p99LocalError": 0.5631836354732513,
+              "meanLuminanceAbsoluteError": 0.07732036534014138,
+              "maxLuminanceAbsoluteError": 3.077256998980045,
+              "meanLuminance": 0.501086474998287,
+              "referenceMeanLuminance": 0.5011029166783545,
+              "relativeEnergyDrift": -0.00003281098457086771
+            }
+          ]
+        },
+        {
+          "sampler": "legacy",
+          "seed": 19,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 74095939,
+          "segments": 140451139,
+          "gpuTileSpanMs": 10762.256384000004,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 10.300000250339508,
+                "exclusiveMs": 7.900000154972076,
+                "kind": "synchronous-host"
+              },
+              "uploads": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 2.4000000953674316,
+                "exclusiveMs": 2.4000000953674316,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 77.1000000834465,
+                "exclusiveMs": 77.1000000834465,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.20000004768371582,
+                "exclusiveMs": 0.20000004768371582,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.9000000357627869,
+                "exclusiveMs": 0.9000000357627869,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 11768.700000107288,
+                "exclusiveMs": 11768.700000107288,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 253.599999666214,
+                "exclusiveMs": 253.599999666214,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 182,
+                "exclusiveMs": 182,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 25920,
+              "renderPasses": 1,
+              "pipelineChanges": 60481,
+              "bindGroupChanges": 25921,
+              "directDispatches": 25920,
+              "indirectDispatches": 34560,
+              "bufferCopies": 34560,
+              "bufferCopyBytes": 276480,
+              "clears": 0,
+              "clearBytes": 0,
+              "uploadCalls": 135,
+              "uploadBytes": 2211840,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 4455,
+              "bytes": 3594240
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "d092359234efde07422b8d64b6fe87b595d0000b10309f63310f1ae0e3714ed3"
+        },
+        {
+          "sampler": "legacy",
+          "seed": 19,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 15450761,
+          "segments": 27788681,
+          "gpuTileSpanMs": 3236.036608,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 271,
+                "failures": 0,
+                "elapsedMs": 1.1999998688697815,
+                "exclusiveMs": 1.1999998688697815,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 3.7999998927116394,
+                "exclusiveMs": 2.900000035762787,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 18.799999952316284,
+                "exclusiveMs": 18.799999952316284,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0,
+                "exclusiveMs": 0,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1,
+                "exclusiveMs": 1,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 3558.699999988079,
+                "exclusiveMs": 3558.699999988079,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 102.30000013113022,
+                "exclusiveMs": 102.30000013113022,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 176.3999999165535,
+                "exclusiveMs": 176.3999999165535,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 7394,
+              "renderPasses": 1,
+              "pipelineChanges": 15587,
+              "bindGroupChanges": 7395,
+              "directDispatches": 5101,
+              "indirectDispatches": 10485,
+              "bufferCopies": 8192,
+              "bufferCopyBytes": 65536,
+              "clears": 1024,
+              "clearBytes": 131072,
+              "uploadCalls": 271,
+              "uploadBytes": 8881408,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 1294,
+              "bytes": 914688
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "c5b241f5b3449c8652d476cf845e6f0323997e367e2dc41811e10999191b4fdf",
+          "differenceFromFixed32": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10149883829590269,
+            "normalizedRmse": 0.12259011557845037,
+            "maxAbsoluteError": 6.639536261558533,
+            "p95LocalError": 0.22623121738433838,
+            "p99LocalError": 0.3716585636138916,
+            "meanLuminanceAbsoluteError": 0.06179376409948523,
+            "maxLuminanceAbsoluteError": 5.624618472433091,
+            "meanLuminance": 0.5496800804005068,
+            "referenceMeanLuminance": 0.5650344294887298,
+            "relativeEnergyDrift": -0.027174183176972806
+          },
+          "rings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.3468102954579673,
+              "referenceMeanLuminance": 0.3468102954579673,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.06827129194232028,
+              "normalizedRmse": 0.14435185085967892,
+              "maxAbsoluteError": 1.4683746695518494,
+              "p95LocalError": 0.16211146116256714,
+              "p99LocalError": 0.22546130418777466,
+              "meanLuminanceAbsoluteError": 0.05419561915367265,
+              "maxLuminanceAbsoluteError": 1.4270193852365014,
+              "meanLuminance": 0.3856871435922596,
+              "referenceMeanLuminance": 0.42732162080549513,
+              "relativeEnergyDrift": -0.09743124425755746
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.08869823615065775,
+              "normalizedRmse": 0.06266460869257695,
+              "maxAbsoluteError": 4.595313251018524,
+              "p95LocalError": 0.1978687047958374,
+              "p99LocalError": 0.31111419200897217,
+              "meanLuminanceAbsoluteError": 0.06903932151044381,
+              "maxLuminanceAbsoluteError": 3.8925284048974516,
+              "meanLuminance": 0.7741093662019584,
+              "referenceMeanLuminance": 0.7897899372119903,
+              "relativeEnergyDrift": -0.019854103314338654
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.12262768209017123,
+              "normalizedRmse": 0.11954943565519834,
+              "maxAbsoluteError": 6.639536261558533,
+              "p95LocalError": 0.24055349826812744,
+              "p99LocalError": 0.6204562783241272,
+              "meanLuminanceAbsoluteError": 0.06563835575961743,
+              "maxLuminanceAbsoluteError": 5.624618472433091,
+              "meanLuminance": 0.6617636072530676,
+              "referenceMeanLuminance": 0.6454855208639305,
+              "relativeEnergyDrift": 0.02521836023114843
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.10573069710736571,
+              "normalizedRmse": 0.1924161699818478,
+              "maxAbsoluteError": 1.5954005122184753,
+              "p95LocalError": 0.2308955043554306,
+              "p99LocalError": 0.3656235933303833,
+              "meanLuminanceAbsoluteError": 0.06323189995262596,
+              "maxLuminanceAbsoluteError": 1.5475911656856538,
+              "meanLuminance": 0.5127446923052064,
+              "referenceMeanLuminance": 0.5290323747276093,
+              "relativeEnergyDrift": -0.03078768559445768
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.10683737024027828,
+              "normalizedRmse": 0.2043896834968172,
+              "maxAbsoluteError": 0.9472645819187164,
+              "p95LocalError": 0.24634933471679688,
+              "p99LocalError": 0.31817855685949326,
+              "meanLuminanceAbsoluteError": 0.06833063126989418,
+              "maxLuminanceAbsoluteError": 0.8592699552774429,
+              "meanLuminance": 0.4684622072445415,
+              "referenceMeanLuminance": 0.5005522567950099,
+              "relativeEnergyDrift": -0.06410928951941612
+            }
+          ]
+        },
+        {
+          "sampler": "owen-sobol",
+          "seed": 43,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 72344499,
+          "segments": 138699699,
+          "gpuTileSpanMs": 15237.971968,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 13.300000131130219,
+                "exclusiveMs": 10.399999976158142,
+                "kind": "synchronous-host"
+              },
+              "uploads": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 2.9000001549720764,
+                "exclusiveMs": 2.9000001549720764,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 86.10000014305115,
+                "exclusiveMs": 86.10000014305115,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.5,
+                "exclusiveMs": 0.5,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1,
+                "exclusiveMs": 1,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 16348.799999654293,
+                "exclusiveMs": 16348.799999654293,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 287.19999980926514,
+                "exclusiveMs": 287.19999980926514,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 205.10000002384186,
+                "exclusiveMs": 205.10000002384186,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 25920,
+              "renderPasses": 1,
+              "pipelineChanges": 60481,
+              "bindGroupChanges": 25921,
+              "directDispatches": 25920,
+              "indirectDispatches": 34560,
+              "bufferCopies": 34560,
+              "bufferCopyBytes": 276480,
+              "clears": 0,
+              "clearBytes": 0,
+              "uploadCalls": 135,
+              "uploadBytes": 2211840,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 4455,
+              "bytes": 3594240
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "c1f9438262d6952b902719569f1b900790266f4570ac705cd5133772ce6eeb05"
+        },
+        {
+          "sampler": "owen-sobol",
+          "seed": 43,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17286924,
+          "segments": 29624844,
+          "gpuTileSpanMs": 4410.572799999999,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 271,
+                "failures": 0,
+                "elapsedMs": 0.9999999403953552,
+                "exclusiveMs": 0.9999999403953552,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 4.299999952316284,
+                "exclusiveMs": 3.5000000596046448,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 19.200000047683716,
+                "exclusiveMs": 19.200000047683716,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0,
+                "exclusiveMs": 0,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.8000000715255737,
+                "exclusiveMs": 0.8000000715255737,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 4730.599999845028,
+                "exclusiveMs": 4730.599999845028,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 106.10000020265579,
+                "exclusiveMs": 106.10000020265579,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 174.69999992847443,
+                "exclusiveMs": 174.69999992847443,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 7394,
+              "renderPasses": 1,
+              "pipelineChanges": 15587,
+              "bindGroupChanges": 7395,
+              "directDispatches": 5101,
+              "indirectDispatches": 10485,
+              "bufferCopies": 8192,
+              "bufferCopyBytes": 65536,
+              "clears": 1024,
+              "clearBytes": 131072,
+              "uploadCalls": 271,
+              "uploadBytes": 8881408,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 1294,
+              "bytes": 914688
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "04f8687a83df86872317340fc2f502ac79e75f6270445686927987a4bcb67337",
+          "differenceFromFixed32": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10346331335566383,
+            "normalizedRmse": 0.12473455243154848,
+            "maxAbsoluteError": 5.10651707649231,
+            "p95LocalError": 0.2144383192062378,
+            "p99LocalError": 0.41933274269104004,
+            "meanLuminanceAbsoluteError": 0.05363846625467689,
+            "maxLuminanceAbsoluteError": 4.723762078845501,
+            "meanLuminance": 0.56699446701286,
+            "referenceMeanLuminance": 0.5670650710007276,
+            "relativeEnergyDrift": -0.0001245077354930109
+          },
+          "rings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.34993506810086833,
+              "referenceMeanLuminance": 0.34993506810086833,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.03850775996662346,
+              "normalizedRmse": 0.08082453058778145,
+              "maxAbsoluteError": 1.2401130199432373,
+              "p95LocalError": 0.09502255916595459,
+              "p99LocalError": 0.14144116640090942,
+              "meanLuminanceAbsoluteError": 0.028673962765082748,
+              "maxLuminanceAbsoluteError": 1.2051813057899474,
+              "meanLuminance": 0.4298873212676304,
+              "referenceMeanLuminance": 0.43003571765931875,
+              "relativeEnergyDrift": -0.00034507922387483635
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.06233104299982065,
+              "normalizedRmse": 0.04398524288058899,
+              "maxAbsoluteError": 1.1916887760162354,
+              "p95LocalError": 0.13873037695884705,
+              "p99LocalError": 0.2292678952217102,
+              "meanLuminanceAbsoluteError": 0.04635220815510393,
+              "maxLuminanceAbsoluteError": 1.1556948089480399,
+              "meanLuminance": 0.7936721373413903,
+              "referenceMeanLuminance": 0.79387758480931,
+              "relativeEnergyDrift": -0.00025878985860155546
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.07735118002107698,
+              "normalizedRmse": 0.07528681937998455,
+              "maxAbsoluteError": 2.5533432960510254,
+              "p95LocalError": 0.1609925925731659,
+              "p99LocalError": 0.3036695718765259,
+              "meanLuminanceAbsoluteError": 0.048273483075364436,
+              "maxLuminanceAbsoluteError": 2.162951796245575,
+              "meanLuminance": 0.6486463508986625,
+              "referenceMeanLuminance": 0.6486519824109023,
+              "relativeEnergyDrift": -0.000008681870081954638
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.10869094644669457,
+              "normalizedRmse": 0.19733766980224685,
+              "maxAbsoluteError": 2.729575276374817,
+              "p95LocalError": 0.2266613245010376,
+              "p99LocalError": 0.4185004234313965,
+              "meanLuminanceAbsoluteError": 0.059023376969305444,
+              "maxLuminanceAbsoluteError": 2.3150603859841823,
+              "meanLuminance": 0.5297083644402375,
+              "referenceMeanLuminance": 0.5298877912519467,
+              "relativeEnergyDrift": -0.0003386128434575961
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15262407601117942,
+              "normalizedRmse": 0.2913470193090279,
+              "maxAbsoluteError": 5.10651707649231,
+              "p95LocalError": 0.29795676469802856,
+              "p99LocalError": 0.5647191405296326,
+              "meanLuminanceAbsoluteError": 0.07763079159001474,
+              "maxLuminanceAbsoluteError": 4.723762078845501,
+              "meanLuminance": 0.5012071983602878,
+              "referenceMeanLuminance": 0.5011230552526167,
+              "relativeEnergyDrift": 0.00016790907300954258
+            }
+          ]
+        },
+        {
+          "sampler": "legacy",
+          "seed": 43,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 74103243,
+          "segments": 140458443,
+          "gpuTileSpanMs": 10813.177856000011,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 14.699999272823334,
+                "exclusiveMs": 11.79999953508377,
+                "kind": "synchronous-host"
+              },
+              "uploads": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 2.899999737739563,
+                "exclusiveMs": 2.899999737739563,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 96.70000004768372,
+                "exclusiveMs": 96.70000004768372,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.20000004768371582,
+                "exclusiveMs": 0.20000004768371582,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1.100000023841858,
+                "exclusiveMs": 1.100000023841858,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 12032.099999904633,
+                "exclusiveMs": 12032.099999904633,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 294.3000001311302,
+                "exclusiveMs": 294.3000001311302,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 228.900000333786,
+                "exclusiveMs": 228.900000333786,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 25920,
+              "renderPasses": 1,
+              "pipelineChanges": 60481,
+              "bindGroupChanges": 25921,
+              "directDispatches": 25920,
+              "indirectDispatches": 34560,
+              "bufferCopies": 34560,
+              "bufferCopyBytes": 276480,
+              "clears": 0,
+              "clearBytes": 0,
+              "uploadCalls": 135,
+              "uploadBytes": 2211840,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 4455,
+              "bytes": 3594240
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "8556f4c6fe7c3fa8d93543d693052d92dfa2e6da8b086f10ad180b07871ca506"
+        },
+        {
+          "sampler": "legacy",
+          "seed": 43,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 15448403,
+          "segments": 27786323,
+          "gpuTileSpanMs": 3041.8534400000003,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 271,
+                "failures": 0,
+                "elapsedMs": 0.7999999523162842,
+                "exclusiveMs": 0.7999999523162842,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 5.699999690055847,
+                "exclusiveMs": 4.999999701976776,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 23.49999988079071,
+                "exclusiveMs": 23.49999988079071,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.09999996423721313,
+                "exclusiveMs": 0.09999996423721313,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1.100000023841858,
+                "exclusiveMs": 1.100000023841858,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 3434.200000345707,
+                "exclusiveMs": 3434.200000345707,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 113.19999974966049,
+                "exclusiveMs": 113.19999974966049,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 210.80000019073486,
+                "exclusiveMs": 210.80000019073486,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 7394,
+              "renderPasses": 1,
+              "pipelineChanges": 15587,
+              "bindGroupChanges": 7395,
+              "directDispatches": 5101,
+              "indirectDispatches": 10485,
+              "bufferCopies": 8192,
+              "bufferCopyBytes": 65536,
+              "clears": 1024,
+              "clearBytes": 131072,
+              "uploadCalls": 271,
+              "uploadBytes": 8881408,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 1294,
+              "bytes": 914688
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "09b9fc0ea2e7269951497cc35cd65205a4f0d1e1b66314f7accdc1ef7f9f8be6",
+          "differenceFromFixed32": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10144985420467757,
+            "normalizedRmse": 0.12253084545694497,
+            "maxAbsoluteError": 6.1278581619262695,
+            "p95LocalError": 0.22612755000591278,
+            "p99LocalError": 0.3712767958641052,
+            "meanLuminanceAbsoluteError": 0.06176440720284024,
+            "maxLuminanceAbsoluteError": 5.190901622939109,
+            "meanLuminance": 0.5495036382608225,
+            "referenceMeanLuminance": 0.5650359055998716,
+            "relativeEnergyDrift": -0.027488991735063695
+          },
+          "rings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.34674610686922364,
+              "referenceMeanLuminance": 0.34674610686922364,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.06831911908317945,
+              "normalizedRmse": 0.14447474722931963,
+              "maxAbsoluteError": 1.0771295428276062,
+              "p95LocalError": 0.16220885515213013,
+              "p99LocalError": 0.22620436549186707,
+              "meanLuminanceAbsoluteError": 0.05426168613705142,
+              "maxLuminanceAbsoluteError": 1.0462844714045525,
+              "meanLuminance": 0.38550845404515327,
+              "referenceMeanLuminance": 0.4272373018567499,
+              "relativeEnergyDrift": -0.09767135882153866
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.08814359503490529,
+              "normalizedRmse": 0.062273075227255614,
+              "maxAbsoluteError": 5.105905711650848,
+              "p95LocalError": 0.19696301221847534,
+              "p99LocalError": 0.30918657779693604,
+              "meanLuminanceAbsoluteError": 0.06886727198730148,
+              "maxLuminanceAbsoluteError": 4.325033744454384,
+              "meanLuminance": 0.7738733098714933,
+              "referenceMeanLuminance": 0.7897720976644157,
+              "relativeEnergyDrift": -0.02013085526817131
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.12220950942624646,
+              "normalizedRmse": 0.11913515396840281,
+              "maxAbsoluteError": 6.1278581619262695,
+              "p95LocalError": 0.24005578458309174,
+              "p99LocalError": 0.61857008934021,
+              "meanLuminanceAbsoluteError": 0.06548278053366935,
+              "maxLuminanceAbsoluteError": 5.190901622939109,
+              "meanLuminance": 0.6614465357505186,
+              "referenceMeanLuminance": 0.6455792632473951,
+              "relativeEnergyDrift": 0.024578349098928448
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.10618707879220354,
+              "normalizedRmse": 0.193267852882429,
+              "maxAbsoluteError": 1.5754984617233276,
+              "p95LocalError": 0.2311241626739502,
+              "p99LocalError": 0.36915576457977295,
+              "meanLuminanceAbsoluteError": 0.0632714235313911,
+              "maxLuminanceAbsoluteError": 1.530048998618126,
+              "meanLuminance": 0.5126928130958516,
+              "referenceMeanLuminance": 0.5289985092713909,
+              "relativeEnergyDrift": -0.030823709121596137
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.1068451580300231,
+              "normalizedRmse": 0.2044009234643951,
+              "maxAbsoluteError": 0.7850210666656494,
+              "p95LocalError": 0.24658620357513428,
+              "p99LocalError": 0.31644539535045624,
+              "meanLuminanceAbsoluteError": 0.06837494320583204,
+              "maxLuminanceAbsoluteError": 0.7586751633048057,
+              "meanLuminance": 0.46828792243212836,
+              "referenceMeanLuminance": 0.5005743018147046,
+              "relativeEnergyDrift": -0.06449867535255044
+            }
+          ]
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 43,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 72343542,
+          "segments": 138698742,
+          "gpuTileSpanMs": 15053.422592000004,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 18.49999976158142,
+                "exclusiveMs": 14.999999940395355,
+                "kind": "synchronous-host"
+              },
+              "uploads": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 3.4999998211860657,
+                "exclusiveMs": 3.4999998211860657,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 104.20000022649765,
+                "exclusiveMs": 104.20000022649765,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.3999999761581421,
+                "exclusiveMs": 0.3999999761581421,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 1.5999999642372131,
+                "exclusiveMs": 1.5999999642372131,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 16490.100000202656,
+                "exclusiveMs": 16490.100000202656,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 331.60000014305115,
+                "exclusiveMs": 331.60000014305115,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 259.29999977350235,
+                "exclusiveMs": 259.29999977350235,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 25920,
+              "renderPasses": 1,
+              "pipelineChanges": 60481,
+              "bindGroupChanges": 25921,
+              "directDispatches": 25920,
+              "indirectDispatches": 34560,
+              "bufferCopies": 34560,
+              "bufferCopyBytes": 276480,
+              "clears": 0,
+              "clearBytes": 0,
+              "uploadCalls": 135,
+              "uploadBytes": 2211840,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 4455,
+              "bytes": 3594240
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "1326ea8dea7246a36f997eb6715d27b4ba9430936b7dfcc29ec4690159c0a739"
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 43,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17290691,
+          "segments": 29628611,
+          "gpuTileSpanMs": 4457.562111999999,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 271,
+                "failures": 0,
+                "elapsedMs": 1.9000001549720764,
+                "exclusiveMs": 1.9000001549720764,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 6.800000071525574,
+                "exclusiveMs": 5.4999998807907104,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 26.100000023841858,
+                "exclusiveMs": 26.100000023841858,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.10000002384185791,
+                "exclusiveMs": 0.10000002384185791,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 0.9000000357627869,
+                "exclusiveMs": 0.9000000357627869,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 136,
+                "failures": 0,
+                "elapsedMs": 4877.999999880791,
+                "exclusiveMs": 4877.999999880791,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 131.70000010728836,
+                "exclusiveMs": 131.70000010728836,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 135,
+                "failures": 0,
+                "elapsedMs": 230.69999969005585,
+                "exclusiveMs": 230.69999969005585,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 136,
+              "computePasses": 7394,
+              "renderPasses": 1,
+              "pipelineChanges": 15587,
+              "bindGroupChanges": 7395,
+              "directDispatches": 5101,
+              "indirectDispatches": 10485,
+              "bufferCopies": 8192,
+              "bufferCopyBytes": 65536,
+              "clears": 1024,
+              "clearBytes": 131072,
+              "uploadCalls": 271,
+              "uploadBytes": 8881408,
+              "submissions": 136,
+              "commandBuffers": 136
+            },
+            "knownTemporaryBuffers": {
+              "count": 1294,
+              "bytes": 914688
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "4d3e39f28a9b3801d7b650042b221204b7ca1c9d6c68061276cdcd89566cef81",
+          "differenceFromFixed32": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10493844052906241,
+            "normalizedRmse": 0.12650158742070725,
+            "maxAbsoluteError": 10.057444751262665,
+            "p95LocalError": 0.2165566086769104,
+            "p99LocalError": 0.4244755506515503,
+            "meanLuminanceAbsoluteError": 0.05460537322273269,
+            "maxLuminanceAbsoluteError": 9.55196791321039,
+            "meanLuminance": 0.5671311312986166,
+            "referenceMeanLuminance": 0.5670607394194546,
+            "relativeEnergyDrift": 0.00012413463720671727
+          },
+          "rings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.35007840268444346,
+              "referenceMeanLuminance": 0.35007840268444346,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.04060668841818542,
+              "normalizedRmse": 0.08519084708994829,
+              "maxAbsoluteError": 1.5887703895568848,
+              "p95LocalError": 0.09933191537857056,
+              "p99LocalError": 0.14818835258483887,
+              "meanLuminanceAbsoluteError": 0.030184240333250453,
+              "maxLuminanceAbsoluteError": 1.5469276534438134,
+              "meanLuminance": 0.4299814853078482,
+              "referenceMeanLuminance": 0.4300429888979161,
+              "relativeEnergyDrift": -0.00014301730677093862
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.06493777191469625,
+              "normalizedRmse": 0.04582289415949539,
+              "maxAbsoluteError": 1.7244017124176025,
+              "p95LocalError": 0.1447393000125885,
+              "p99LocalError": 0.2361888289451599,
+              "meanLuminanceAbsoluteError": 0.04824723238137531,
+              "maxLuminanceAbsoluteError": 1.6766536641597747,
+              "meanLuminance": 0.7938218740454063,
+              "referenceMeanLuminance": 0.7938664292220737,
+              "relativeEnergyDrift": -0.000056124273589938004
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.0797860023060404,
+              "normalizedRmse": 0.07765167954759625,
+              "maxAbsoluteError": 2.80910587310791,
+              "p95LocalError": 0.16751939058303833,
+              "p99LocalError": 0.31336700916290283,
+              "meanLuminanceAbsoluteError": 0.04981983611909026,
+              "maxLuminanceAbsoluteError": 2.3797263023376463,
+              "meanLuminance": 0.6486695971601134,
+              "referenceMeanLuminance": 0.6486297288803418,
+              "relativeEnergyDrift": 0.00006146539080244434
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11126102921984256,
+              "normalizedRmse": 0.20196956357108034,
+              "maxAbsoluteError": 2.934789001941681,
+              "p95LocalError": 0.23070329427719116,
+              "p99LocalError": 0.4404374957084656,
+              "meanLuminanceAbsoluteError": 0.060062548159121654,
+              "maxLuminanceAbsoluteError": 2.85245999174118,
+              "meanLuminance": 0.5299002571854431,
+              "referenceMeanLuminance": 0.5298650339357632,
+              "relativeEnergyDrift": 0.00006647588994155323
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15292787142309075,
+              "normalizedRmse": 0.29190603087576583,
+              "maxAbsoluteError": 10.057444751262665,
+              "p95LocalError": 0.29885951429605484,
+              "p99LocalError": 0.5644180774688721,
+              "meanLuminanceAbsoluteError": 0.07748104027440998,
+              "maxLuminanceAbsoluteError": 9.55196791321039,
+              "meanLuminance": 0.5013871911937349,
+              "referenceMeanLuminance": 0.5011214070084611,
+              "relativeEnergyDrift": 0.0005303788294744946
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4K",
+      "width": 3840,
+      "height": 2160,
+      "memory": {
+        "rendererBufferBytes": 190483868,
+        "textureInventory": [
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 3840,
+              "height": 2160
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 3840,
+              "height": 2160
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3840,
+              "height": 2160
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1,
+              "height": 1
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1,
+              "height": 1
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1,
+              "height": 2
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 128,
+              "height": 128
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3081,
+              "height": 2052
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 1029,
+              "height": 2052
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3081,
+              "height": 2052
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          }
+        ],
+        "adaptiveBufferBytes": 34304284,
+        "telemetryBufferBytes": 8256,
+        "fixtureStagingBytes": 589824,
+        "cachedBudgetHostBytes": 74649600
+      },
+      "admission": {
+        "triangleCount": 265476,
+        "bvhNodeCount": 137735,
+        "displayQuality": true,
+        "accelerationBuildMode": "cpu-upload",
+        "maxDepth": 4,
+        "samplesPerPixel": 32,
+        "camera": {
+          "position": [
+            0,
+            1.12,
+            5.05
+          ],
+          "forward": [
+            0,
+            -0.07896061279595368,
+            -0.9968777365489149
+          ],
+          "right": [
+            1,
+            0,
+            0
+          ],
+          "up": [
+            0,
+            0.9968777365489149,
+            -0.07896061279595368
+          ],
+          "fovYDegrees": 43,
+          "aspect": 1.7777777777777777,
+          "tanHalfFovY": 0.39391047561494236
+        }
+      },
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "isFallbackAdapter": false
+      },
+      "timing": {
+        "owen-sobol": {
+          "fixed": {
+            "times": [
+              64031.19999998808,
+              63921.19999998808,
+              63718.89999997616
+            ],
+            "meanMs": 63890.433333317436
+          },
+          "radial": {
+            "times": [
+              17556,
+              17836.5,
+              18072.899999976158
+            ],
+            "meanMs": 17821.799999992054
+          }
+        }
+      },
+      "traces": [
+        {
+          "sampler": "owen-sobol",
+          "seed": 7,
+          "mode": "fixed",
+          "primary": 265420800,
+          "secondary": 289344322,
+          "segments": 554765122,
+          "gpuTileSpanMs": 56647.81107199994,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "configPacking": {
+                "calls": 510,
+                "failures": 0,
+                "elapsedMs": 71.90000081062317,
+                "exclusiveMs": 56.00000047683716,
+                "kind": "synchronous-host"
+              },
+              "uploads": {
+                "calls": 510,
+                "failures": 0,
+                "elapsedMs": 15.90000033378601,
+                "exclusiveMs": 15.90000033378601,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 511,
+                "failures": 0,
+                "elapsedMs": 424.7999999523163,
+                "exclusiveMs": 424.7999999523163,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 511,
+                "failures": 0,
+                "elapsedMs": 1.2000001668930054,
+                "exclusiveMs": 1.2000001668930054,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 511,
+                "failures": 0,
+                "elapsedMs": 7.499999701976776,
+                "exclusiveMs": 7.499999701976776,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 511,
+                "failures": 0,
+                "elapsedMs": 62504.19999909401,
+                "exclusiveMs": 62504.19999909401,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 510,
+                "failures": 0,
+                "elapsedMs": 1355.4000007510185,
+                "exclusiveMs": 1355.4000007510185,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 510,
+                "failures": 0,
+                "elapsedMs": 1028.5999991893768,
+                "exclusiveMs": 1028.5999991893768,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 511,
+              "computePasses": 97920,
+              "renderPasses": 1,
+              "pipelineChanges": 228481,
+              "bindGroupChanges": 97921,
+              "directDispatches": 97920,
+              "indirectDispatches": 130560,
+              "bufferCopies": 130560,
+              "bufferCopyBytes": 1044480,
+              "clears": 0,
+              "clearBytes": 0,
+              "uploadCalls": 510,
+              "uploadBytes": 8355840,
+              "submissions": 511,
+              "commandBuffers": 511
+            },
+            "knownTemporaryBuffers": {
+              "count": 16830,
+              "bytes": 13578240
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "ccdfe6a4b74a344b00608891353a75c1613198bef4a97236add00969f786d2ac"
+        },
+        {
+          "sampler": "owen-sobol",
+          "seed": 7,
+          "mode": "radial",
+          "primary": 49351680,
+          "secondary": 69141958,
+          "segments": 118493638,
+          "gpuTileSpanMs": 15626.993663999994,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 1021,
+                "failures": 0,
+                "elapsedMs": 7.599999845027924,
+                "exclusiveMs": 7.599999845027924,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 510,
+                "failures": 0,
+                "elapsedMs": 24.099999845027924,
+                "exclusiveMs": 20.399999976158142,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 511,
+                "failures": 0,
+                "elapsedMs": 105.4000004529953,
+                "exclusiveMs": 105.4000004529953,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 511,
+                "failures": 0,
+                "elapsedMs": 0.6000000238418579,
+                "exclusiveMs": 0.6000000238418579,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 511,
+                "failures": 0,
+                "elapsedMs": 3.6999998688697815,
+                "exclusiveMs": 3.6999998688697815,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 511,
+                "failures": 0,
+                "elapsedMs": 17322.599999308586,
+                "exclusiveMs": 17322.599999308586,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 510,
+                "failures": 0,
+                "elapsedMs": 553.0000006556511,
+                "exclusiveMs": 553.0000006556511,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 510,
+                "failures": 0,
+                "elapsedMs": 941.699999332428,
+                "exclusiveMs": 941.699999332428,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 511,
+              "computePasses": 25440,
+              "renderPasses": 1,
+              "pipelineChanges": 54097,
+              "bindGroupChanges": 25441,
+              "directDispatches": 17544,
+              "indirectDispatches": 36552,
+              "bufferCopies": 28656,
+              "bufferCopyBytes": 229248,
+              "clears": 3582,
+              "clearBytes": 458496,
+              "uploadCalls": 1021,
+              "uploadBytes": 35198976,
+              "submissions": 511,
+              "commandBuffers": 511
+            },
+            "knownTemporaryBuffers": {
+              "count": 4602,
+              "bytes": 3167616
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "40d969fa7ddd82b388c638f9d2216c1ac6e7be62c0da52bb403be890e106d9f8",
+          "differenceFromFixed32": {
+            "pixels": 8294400,
+            "rgbRmse": 0.10328084371550295,
+            "normalizedRmse": 0.12468992623166651,
+            "maxAbsoluteError": 4.439500272274017,
+            "p95LocalError": 0.21442648768424988,
+            "p99LocalError": 0.4181072413921356,
+            "meanLuminanceAbsoluteError": 0.053541569416553386,
+            "maxLuminanceAbsoluteError": 4.13227392759323,
+            "meanLuminance": 0.5669352632858388,
+            "referenceMeanLuminance": 0.5669710548964064,
+            "relativeEnergyDrift": -0.00006312775627367702
+          },
+          "rings": [
+            {
+              "spp": 32,
+              "pixels": 414720,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.3494508026447355,
+              "referenceMeanLuminance": 0.3494508026447355,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 829440,
+              "rgbRmse": 0.038506515765949455,
+              "normalizedRmse": 0.08084894281421814,
+              "maxAbsoluteError": 1.5499033331871033,
+              "p95LocalError": 0.0952986478805542,
+              "p99LocalError": 0.1406230330467224,
+              "meanLuminanceAbsoluteError": 0.028650016406618795,
+              "maxLuminanceAbsoluteError": 1.5073073292732238,
+              "meanLuminance": 0.4297348139264212,
+              "referenceMeanLuminance": 0.42972433992062264,
+              "relativeEnergyDrift": 0.00002437377831676549
+            },
+            {
+              "spp": 8,
+              "pixels": 1244160,
+              "rgbRmse": 0.0626219853644146,
+              "normalizedRmse": 0.0444308629893091,
+              "maxAbsoluteError": 1.7292842864990234,
+              "p95LocalError": 0.13920217752456665,
+              "p99LocalError": 0.23149681091308594,
+              "meanLuminanceAbsoluteError": 0.04633016565402076,
+              "maxLuminanceAbsoluteError": 1.6859715391159058,
+              "meanLuminance": 0.7913037259083735,
+              "referenceMeanLuminance": 0.7913825928558905,
+              "relativeEnergyDrift": -0.00009965716737884376
+            },
+            {
+              "spp": 4,
+              "pixels": 1658880,
+              "rgbRmse": 0.07749078234095308,
+              "normalizedRmse": 0.07518712820109087,
+              "maxAbsoluteError": 4.006301999092102,
+              "p95LocalError": 0.16119492053985596,
+              "p99LocalError": 0.3048430383205414,
+              "meanLuminanceAbsoluteError": 0.048299774109413426,
+              "maxLuminanceAbsoluteError": 3.900146932196617,
+              "meanLuminance": 0.6502144797402161,
+              "referenceMeanLuminance": 0.6502453722256871,
+              "relativeEnergyDrift": -0.000047508966292616153
+            },
+            {
+              "spp": 2,
+              "pixels": 2073600,
+              "rgbRmse": 0.10898740639823461,
+              "normalizedRmse": 0.19787221460225085,
+              "maxAbsoluteError": 3.112639605998993,
+              "p95LocalError": 0.2267482876777649,
+              "p99LocalError": 0.4188416600227356,
+              "meanLuminanceAbsoluteError": 0.059000448412882926,
+              "maxLuminanceAbsoluteError": 2.975384336137771,
+              "meanLuminance": 0.5298451883405432,
+              "referenceMeanLuminance": 0.5298924597347466,
+              "relativeEnergyDrift": -0.00008920941095675057
+            },
+            {
+              "spp": 1,
+              "pixels": 2073600,
+              "rgbRmse": 0.1517880441598295,
+              "normalizedRmse": 0.28972147500607737,
+              "maxAbsoluteError": 4.439500272274017,
+              "p95LocalError": 0.2966950386762619,
+              "p99LocalError": 0.5639042854309082,
+              "meanLuminanceAbsoluteError": 0.0772679040107018,
+              "maxLuminanceAbsoluteError": 4.13227392759323,
+              "meanLuminance": 0.5011579593662782,
+              "referenceMeanLuminance": 0.501186009859282,
+              "relativeEnergyDrift": -0.000055968228266432886
+            }
+          ]
+        },
+        {
+          "sampler": "owen-sobol",
+          "seed": 7,
+          "mode": "uniform",
+          "primary": 265420800,
+          "secondary": 289344322,
+          "segments": 554765122,
+          "gpuTileSpanMs": 57158.72972800003,
+          "cpuProfile": {
+            "schemaVersion": 1,
+            "timingBasis": "host-elapsed-not-cpu-utilization",
+            "stages": {
+              "uploads": {
+                "calls": 1021,
+                "failures": 0,
+                "elapsedMs": 15.899999916553497,
+                "exclusiveMs": 15.899999916553497,
+                "kind": "synchronous-host"
+              },
+              "configPacking": {
+                "calls": 510,
+                "failures": 0,
+                "elapsedMs": 74.20000022649765,
+                "exclusiveMs": 62.80000030994415,
+                "kind": "synchronous-host"
+              },
+              "commandEncoding": {
+                "calls": 511,
+                "failures": 0,
+                "elapsedMs": 424.8000001311302,
+                "exclusiveMs": 424.8000001311302,
+                "kind": "synchronous-host"
+              },
+              "finish": {
+                "calls": 511,
+                "failures": 0,
+                "elapsedMs": 0.9999998807907104,
+                "exclusiveMs": 0.9999998807907104,
+                "kind": "synchronous-host"
+              },
+              "submit": {
+                "calls": 511,
+                "failures": 0,
+                "elapsedMs": 5.799999952316284,
+                "exclusiveMs": 5.799999952316284,
+                "kind": "synchronous-host"
+              },
+              "gpuWait": {
+                "calls": 511,
+                "failures": 0,
+                "elapsedMs": 63053.99999940395,
+                "exclusiveMs": 63053.99999940395,
+                "kind": "asynchronous-wait"
+              },
+              "telemetryReadback": {
+                "calls": 510,
+                "failures": 0,
+                "elapsedMs": 1738.6000001430511,
+                "exclusiveMs": 1738.6000001430511,
+                "kind": "asynchronous-wait"
+              },
+              "outputReadback": {
+                "calls": 510,
+                "failures": 0,
+                "elapsedMs": 1336.8999997973442,
+                "exclusiveMs": 1336.8999997973442,
+                "kind": "asynchronous-wait"
+              }
+            },
+            "commands": {
+              "commandEncoders": 511,
+              "computePasses": 100980,
+              "renderPasses": 1,
+              "pipelineChanges": 231541,
+              "bindGroupChanges": 100981,
+              "directDispatches": 67830,
+              "indirectDispatches": 163710,
+              "bufferCopies": 130560,
+              "bufferCopyBytes": 1044480,
+              "clears": 16320,
+              "clearBytes": 2088960,
+              "uploadCalls": 1021,
+              "uploadBytes": 41664000,
+              "submissions": 511,
+              "commandBuffers": 511
+            },
+            "knownTemporaryBuffers": {
+              "count": 17340,
+              "bytes": 13708800
+            },
+            "timeline": {
+              "enabled": false,
+              "emitted": 0,
+              "dropped": 0,
+              "errors": 0
+            }
+          },
+          "imageSha256": "ccdfe6a4b74a344b00608891353a75c1613198bef4a97236add00969f786d2ac",
+          "differenceFromFixed32": {
+            "pixels": 8294400,
+            "rgbRmse": 0,
+            "normalizedRmse": 0,
+            "maxAbsoluteError": 0,
+            "p95LocalError": 0,
+            "p99LocalError": 0,
+            "meanLuminanceAbsoluteError": 0,
+            "maxLuminanceAbsoluteError": 0,
+            "meanLuminance": 0.5669710548964064,
+            "referenceMeanLuminance": 0.5669710548964064,
+            "relativeEnergyDrift": 0
+          },
+          "uniformBitIdentical": true
+        }
+      ]
+    }
+  ]
+}

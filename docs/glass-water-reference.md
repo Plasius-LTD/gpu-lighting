@@ -1,0 +1,184 @@
+# Glass and water room reference
+
+Parent Epic: Plasius-LTD/plasius-ltd-site#2113. Parent Feature: #2114.
+Story: plasius-ltd-site#2291. Tasks: gpu-lighting#105 and gpu-renderer#233.
+Inherits `renderer.sampling.adaptivePerPixel.enabled` and public-route
+`gpu-demo.scene-fidelity.enabled`, both default off. This local validation fixture
+has an independent off/empty/filled selector; it does not enable production access.
+
+## Problem and scope
+
+The room has opaque material references but no controlled nested transmissive
+object. Reuse the existing gpu-lighting scene composition and gpu-renderer mesh-BVH
+transport. Add an original parametric thick-walled drinking glass with a closed
+water volume, a neutral support and a configurable camera close-up. No new
+dependency, imported renderer, external asset licence or private model rewrite.
+Three.js is prohibited in every dependency/artifact and cannot be a fallback.
+
+The original renderer tracked absorption media but assumed air on one side of
+refraction. The user approved separate transport corrections on 2026-10-07 in
+gpu-renderer#234. Scene optical metadata supports that work; it does not establish
+water realism or authorise hiding contact errors behind an artificial air gap.
+
+## Geometry and controls
+
+Lighting owns an original deterministic surface-of-revolution mesh generator:
+closed thick cup, open cavity, positive wall/base thickness, closed water surface.
+Controls include fill fraction, dimensions, segment count, placement, glass/water
+IOR and close-up distance. Use explicit bounded defaults, no resolution-dependent
+geometry. A small documented glass/water overlap avoids coincident triangles;
+correct overlapping-medium handling is a qualification prerequisite. No liquid
+dynamics, moving meniscus, bubbles, spectral dispersion or caustic convergence
+claim. The neutral support is explicitly added fixture geometry.
+
+Renderer fixture owns accessible off/empty/filled controls and optional close-up,
+using the existing renderer, sample-count validation, physical probes, cancellation
+and provenance-bound raw/clean captures. Off returns the original composition
+unchanged. Capture receipts record parameters, added triangles, medium identities
+and the known nested-IOR limitation. Do not override existing room/seat materials,
+lighting, sampling, denoise or camera unless a corresponding control is selected.
+
+## Acceptance and tests defined before implementation
+
+- Pure unit tests: finite bounded configuration; empty/half/full states; manifold
+  surfaces, outward winding, no degenerate triangles; volume, dimensions, separate
+  media, no air-gap disguise; disabled identity and no source mutation.
+- Integration: composition counts/bounds, collision-safe placement admission,
+  preserved source material objects and original room-off camera; close-up finite
+  and outside the object; invalid input rejected before GPU work.
+- Physical WebGPU: actual 1080p room and close-up with raw HDR/counts retained;
+  no validation error, overflow, timeout or device-loss success claim. A diagnostic
+  appearance is not optical correctness. Retain memory/timing and exact sources.
+- GPU cost: bounded added mesh triangles/BVH, no new rendering pass or allocation
+  policy. Existing medium table/queues reused; extra intersections may cost time.
+- Tests/coverage >=80% and changed source LCOV, lint, type/build/package/Zero-Three,
+  documentation/Unreleased CHANGELOG, exact-head post-push CI; release/CD only via
+  approved main workflow when separately authorized.
+- Rollback: fixture off restores original scene; GPU-native only. No publication
+  or performance/photographic claim. Further transport work needs its own tracked
+  acceptance, flag and physical Snell/Fresnel/total-internal-reflection tests.
+
+## Pedestal contact isolation (#105 / gpu-renderer#233)
+
+The 2026-10-13 review found two independent suspects for the dark lower band:
+strict depth truncation and a glass bottom coincident with the support top.
+First capture uniform 32-SPP, 1080p, raw filled close-ups at six and eight bounces
+with identical camera, scene, sampling and transport switches. Then compare
+eight-bounce contact against a separately recorded support-only clearance.
+
+Add `supportClearance` in metres, finite 0..0.01, default 0. A positive value
+lowers only the pedestal top; its bottom stays on the floor. Glass/water vertices,
+overlap, materials, medium identities, camera and sampling remain identical.
+This deliberately floating diagnostic is not a realism fix, a glass/water air gap,
+or a production default. Retain the setting and support-top/glass-bottom heights
+in capture evidence. No new GPU pass, buffer policy or transport change is allowed.
+The existing local opt-in fixture and inherited Feature flags still govern access.
+
+Before implementation, require regression tests for zero-default geometry parity,
+positive-clearance isolation, unchanged optics/camera/counts, closed pedestal
+geometry, invalid values and disabled identity. Renderer controls must be labelled,
+remain in collapsed advanced settings, reset to zero and mark nonzero captures
+distinctly. Physical comparisons must verify exact completed counts (66,355,200),
+same settings apart from the tested variable, native images and finite linear HDR.
+Retain provenance and failures; no speedup, convergence or contact-fix claim until
+that physical evidence exists. Set clearance to zero to restore original contact.
+
+## Longer-path diagnostic admission (2026-10-13)
+
+User-approved continuation extends the room-only configurable depth range to
+1..20, retaining default six. Export one frozen `ROOM_CAPTURE_DEPTH_LIMITS`
+configuration for settings validation, browser bounds and Reset. The core
+renderer already supports up to 32; this is diagnostic admission, not a transport
+change or qualification of 20-bounce images. Preserve the independent eight-bounce
+rough-splitting guard; the UI must reject an incompatible selection before asset
+loading/GPU work rather than silently disable splitting or clamp depth.
+
+Tests first: 1/6/8/12/16/20 at both native resolutions, invalid/fractional/out-of-range
+depth rejection, unchanged default settings, exact count admission and propagation
+into the existing renderer. Renderer tests cover unsplit 20-depth memory estimates
+and scheduling, unchanged split rejection/allocation limits, canonical UI bounds,
+Reset and early rejection. Increased depth adds work and path records: measure
+allocations/timing, retain bounded allocation/failure checks and never call it a
+performance improvement. Source/ABI/shader/BSDF/PDF/MIS/optical policy remain intact.
+
+Physical plan: fixed camera/lighting/material/IOR/sample sequence, denoise off,
+rough splitting off, contact clearance zero. Compare empty and filled glass at
+8/12/16/20 with uniform 32 SPP first, holding every other setting fixed; inspect
+finite HDR, native images, band-region changes, counts and failure/cleanup records.
+This isolates convergence with path length; no statement that water is correct
+merely because a deeper image is brighter. Run contact isolation separately.
+Keep the existing default-off flags and local-only exposure. Roll back by
+selecting the prior depth or glass Off; Three.js remains prohibited. Docs/CHANGELOG,
+coverage/LCOV, package gates and exact-head CI remain required; no main/CD release.
+
+## Browser QA inventory
+
+- Original/off and reset: original composition and camera are retained; selecting
+  empty/filled and returning to off restores the controls without changing assets.
+- Empty and filled: render each at 1080p with the same close-up/capture settings;
+  inspect the actual raw/clean images for walls, rim and water level. The images
+  demonstrate diagnostic scene integration, not qualified nested optics.
+- Fill, dimensions, position and both IOR controls: edit through labelled fields,
+  verify the receipt records the values, then reset. Check close-up distance and
+  elevation separately from the preserved room camera.
+- Off-happy-path: request a glass close-up with glass off, and place the support
+  outside the room; both must report validation errors before rendering.
+- Inspect the initial controls, render progress, final overview and close-up at
+  the available desktop viewport for clipping/legibility. Exercise changes and
+  reset during a short exploratory pass. Full mobile/accessibility certification
+  and optical correctness remain outside this local diagnostic acceptance.
+- Retain source-pinned receipts, HDR/count evidence and screenshots. Report any
+  skipped visual check or capture failure explicitly; do not infer success from
+  unit tests or a receipt alone.
+
+## Historical pre-correction test result, 2026-10-07
+
+Geometry/control implementation passes local tests and CI, but the actual room
+and close-up glass captures fail closed. Empty/filled one-SPP 1080p close-ups
+confirmed 290/267 continuation queue overflow events in the first failing tile.
+The multi-sample filled room also failed with rough splitting both on and off.
+Do not claim image, HDR or optical qualification. Renderer Task
+[gpu-renderer#234](https://github.com/Plasius-LTD/gpu-renderer/issues/234) records the
+bounded branching and nested refraction follow-up; subsequent implementation
+and physical qualification are recorded there.
+The original room remains available with the glass selector off.
+## Optical metadata follow-up (#105 / gpu-renderer#234)
+
+The user approved transport corrections on 2026-10-07. The scene now supplies
+explicit medium IOR and configurable integer `glassPriority` / `waterPriority`
+(defaults 2 / 1). Higher priority wins; validation requires glass to outrank water.
+This lets overlapping water enter occupancy without creating a spurious
+glass-to-water-to-glass bounce. The separately controlled renderer flags are
+`renderer.transport.boundedDielectricBranching.enabled` and
+`renderer.transport.nestedMediaRefraction.enabled`, both default off. Geometry,
+material colour and the off composition are unchanged. The room capture settings
+accept a fourth `maxDepth` argument (originally integer 1..8, now 1..20, default 6), validated against
+the completed frame. Historical results above are not evidence for corrected
+transport. Renderer `c605bd3b831ba504692def40e02f0e0025e6c87b` with lighting
+`1d76fa54d70741172f36fc328eebfd8d1bb65c69` completes the empty 1080p, uniform
+32-SPP, six-bounce close-up (66,355,200 completed samples). This is functional
+integrity evidence, not image convergence or real-time qualification.
+
+The filled close-up also completed at renderer
+`a68a2e7b5c91af4eec204b5f13fab4ecc73c1d1a`, lighting
+`2852eec116443594394a859550a991b7f84ca995`, with the same uniform 32-SPP,
+1080p/six-bounce settings and both transport flags on, no splitting or denoise.
+All 66,355,200 samples completed; receipt SHA-256
+`f3b0b427d2d2ea9b7c0f04fbdd3ff3921a46f0d126738dfc08befdad07b78b95`.
+Subsequent 4K/eight-bounce/split-depth-two captures exposed a hidden-boundary
+traversal failure. The renderer cursor correction still needs physical recapture.
+As of 2026-10-11 browser automation is unavailable; local tests and a responding
+server are not substitutes for that evidence. Do not publish a qualified water,
+4K correctness, photographic quality or performance claim from these captures.
+
+## Portable zero-clearance regression
+
+CI run 38371792214 failed the Mac-recorded scene JSON hash on Linux while the
+other 173 tests passed. That checksum over host-generated floating-point geometry
+is not a portable compatibility contract. With user approval, compare exact scene
+objects against the frozen generator from pre-clearance commit
+`7df395306b41a731fa3b3f9f8d02668d9343ab39`, evaluated on the same runtime/platform.
+The test oracle is test-only and is not active renderer guidance. Cover default
+and varied dimensions, empty/filled and close-up/room cases. No geometry tolerance,
+platform allowlist, collision test, volume/manifold check or failure gate is relaxed.
+This test change does not alter runtime geometry or imply a transport correction.

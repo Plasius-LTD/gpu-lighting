@@ -1,0 +1,168 @@
+{
+  "capture": "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79",
+  "reviewBundle": {
+    "name": "fixed-pattern-review-2026-09-27.tar.gz",
+    "bytes": 50781158,
+    "sha256": "64dbfb6cfc8160c3b2015e84900f900091824af4884bce40af99dbed8e25be7b",
+    "files": [
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-checkpoint-fixed-pattern-19.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-checkpoint-fixed-pattern-43.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-checkpoint-fixed-pattern-7.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-checkpoint-independent-random-19.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-checkpoint-independent-random-43.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-checkpoint-independent-random-7.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-common96.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-fixed-pattern-fixed.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-fixed-pattern-fixed.png",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-fixed-pattern-radial-7.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-fixed-pattern-radial-7.png",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-independent-random-radial-19.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-independent-random-radial-43.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-independent-random-radial-7.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-independent-random-radial-7.png",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-random-fixed-19.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-random-fixed-43.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-random-fixed-7.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-random-fixed-7.png",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/1080p-summary.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-checkpoint-fixed-pattern-19.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-checkpoint-fixed-pattern-43.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-checkpoint-fixed-pattern-7.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-checkpoint-independent-random-19.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-checkpoint-independent-random-43.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-checkpoint-independent-random-7.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-common96.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-fixed-pattern-fixed.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-fixed-pattern-fixed.png",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-fixed-pattern-radial-7.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-fixed-pattern-radial-7.png",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-independent-random-radial-19.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-independent-random-radial-43.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-independent-random-radial-7.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-independent-random-radial-7.png",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-random-fixed-19.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-random-fixed-43.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-random-fixed-7.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-random-fixed-7.png",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/4K-summary.json",
+      "native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79/fixed-pattern-summary.json"
+    ]
+  },
+  "rawEvidence": {
+    "location": "output/playwright/eames-environments/native-fixed-pattern-2026-09-27T18-33-06-548Z-3d290b54-b8f6-43de-a8f2-8907bb3fcf79",
+    "fileCount": 786,
+    "totalBytes": 1384306219,
+    "floatHdrIncludedInReviewBundle": false,
+    "images": [
+      {
+        "name": "1080p-common96.json",
+        "sha256": "c0c422b53640eab9cec627b614b83b88a11241d1436a60e8be3ead2b90929ed5",
+        "uncompressedBytes": 33177600,
+        "chunks": 8
+      },
+      {
+        "name": "1080p-fixed-pattern-fixed.json",
+        "sha256": "866a8325ff8d448cc682791b0720260e5524a882a4db452e3e90b84646b5d8c8",
+        "uncompressedBytes": 33177600,
+        "chunks": 8
+      },
+      {
+        "name": "1080p-fixed-pattern-radial-7.json",
+        "sha256": "4fe37b6a6571d2ffe2da406254a5f28ce7a39ff9412381c66190311c8addcb3e",
+        "uncompressedBytes": 33177600,
+        "chunks": 8
+      },
+      {
+        "name": "1080p-independent-random-radial-19.json",
+        "sha256": "9c3bacf37f4b08fb99e272a636ea3cd08d7c5d344f69234ca493c7daa156af55",
+        "uncompressedBytes": 33177600,
+        "chunks": 8
+      },
+      {
+        "name": "1080p-independent-random-radial-43.json",
+        "sha256": "4d3e39f28a9b3801d7b650042b221204b7ca1c9d6c68061276cdcd89566cef81",
+        "uncompressedBytes": 33177600,
+        "chunks": 8
+      },
+      {
+        "name": "1080p-independent-random-radial-7.json",
+        "sha256": "7bca050e884ef6f36a27340a11da854dec03e3ee6e84683d1f5e6bb6be2fbc60",
+        "uncompressedBytes": 33177600,
+        "chunks": 8
+      },
+      {
+        "name": "1080p-random-fixed-19.json",
+        "sha256": "4584037e536fcb0e544c98d2704c2f019cbc863aecadba5a160c2db8eb50187c",
+        "uncompressedBytes": 33177600,
+        "chunks": 8
+      },
+      {
+        "name": "1080p-random-fixed-43.json",
+        "sha256": "1326ea8dea7246a36f997eb6715d27b4ba9430936b7dfcc29ec4690159c0a739",
+        "uncompressedBytes": 33177600,
+        "chunks": 8
+      },
+      {
+        "name": "1080p-random-fixed-7.json",
+        "sha256": "1237c0bd94b0595d010042f08a0f793ed39b488ff162c67103547f7ce66a2f5f",
+        "uncompressedBytes": 33177600,
+        "chunks": 8
+      },
+      {
+        "name": "4K-common96.json",
+        "sha256": "bcd52382eae585757a21d05079548d7f1a22e62775805b32cf427bbd18e3b2e8",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-fixed-pattern-fixed.json",
+        "sha256": "73c8d7528f9b9d8acf757248d0ad05f7cef0816be689dc61c159bff7a14d0c7c",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-fixed-pattern-radial-7.json",
+        "sha256": "3aa70ac232a809035b6d85d572f17b778be5990dc9e8d86720816d98fe03dcff",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-independent-random-radial-19.json",
+        "sha256": "c6d4f64a70bd488b08f598d49a0e2e11d241781fb161c7e0d2baf2b86bd5e1ee",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-independent-random-radial-43.json",
+        "sha256": "4b0bed4849a22fb6008a0d381f2a841decfe7200166d1a3e70f2370db54ed978",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-independent-random-radial-7.json",
+        "sha256": "6cd71bca0afe81e3d1501134d2555c5bc0e768a3329e597ffb6218a0364bbf61",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-random-fixed-19.json",
+        "sha256": "b54b02bb706e57e41775790895aa9ee61da0b5a62ef4c57412d440777e5e4385",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-random-fixed-43.json",
+        "sha256": "8cf82f759f0a988f3503a0d4d22bc46bf71097f309a2717c456b6adc7ae49b05",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      },
+      {
+        "name": "4K-random-fixed-7.json",
+        "sha256": "a018afe70ebc4e6bb26895d740769a2e8c45b3866ec5dacb7f89326c5aa8bed1",
+        "uncompressedBytes": 132710400,
+        "chunks": 32
+      }
+    ]
+  },
+  "limitation": "Full float-HDR chunks are locally retained, not included in this Git review archive. Separate archival delivery is required for externally portable HDR-error recomputation."
+}

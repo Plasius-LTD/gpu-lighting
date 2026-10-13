@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "assetTier": "source",
+  "siteCommit": "21d43a9b63722f1ce69175a5a42b53304ee79102",
+  "sourceDirectory": "deployment-assets/gpu-demo/product-studio/eames/",
+  "model": "Eames_Lounge_Chair_Ottoman.gltf",
+  "files": [
+    {
+      "name": "Eames_Lounge_Chair_Ottoman.gltf",
+      "bytes": 15652,
+      "sha256": "ac45b81a4576a9a76e432092058139e57fd03341e1f60e3aa91ff296a762ad2e"
+    },
+    {
+      "name": "Eames_Lounge_Chair_Ottoman.bin",
+      "bytes": 6979720,
+      "sha256": "ad10b0101ed49293d126e148cbff35c14b8323e79a05237f65e9df19425d8486"
+    },
+    {
+      "name": "Eames_Lounge_Chair_Ottoman_Wood_normal.png",
+      "bytes": 1066723,
+      "sha256": "579db0dd72a1e1b92cb571f2758d813320daf64e6320135493e95092e847444a",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "name": "Eames_Lounge_Chair_Ottoman_Wood_albedo.jpg",
+      "bytes": 842338,
+      "sha256": "11a9530415b321e6840f603ed5c81504c767588098345a6cd2f65dad19187157",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "name": "Eames_Lounge_Chair_Ottoman_Leather_normal.png",
+      "bytes": 1873550,
+      "sha256": "c1f42e48431dd56d9d682c32417c380ce6c9ff24d7f519a55af3fac59931da40",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "name": "Eames_Lounge_Chair_Ottoman_Leather_basecolortexture.jpg",
+      "bytes": 526825,
+      "sha256": "2980c158b9d099c2160470fc8874e4e86c7bb12256a0c0a9d8e73e61de9b3f60",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "name": "Eames_Lounge_Chair_Ottoman_Leather_roughness0.jpg",
+      "bytes": 770750,
+      "sha256": "29f75dc067921aaf38c6bf8e9aff3e434c62db0ee9dfc393669d42903f9dbd35",
+      "width": 1024,
+      "height": 1024
+    }
+  ]
+}
