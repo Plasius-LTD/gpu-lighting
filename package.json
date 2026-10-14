@@ -21,7 +21,11 @@
       "require": "./dist/index.cjs"
     },
     "./techniques/*": "./dist/techniques/*",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./radial-sampling": {
+      "import": "./dist/radial-sampling-plan.js",
+      "require": "./dist/radial-sampling-plan.cjs"
+    }
   },
   "scripts": {
     "build": "tsup && cp -R src/techniques dist/techniques",

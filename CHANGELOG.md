@@ -8,6 +8,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Export the existing radial sample budget policy through the package index and a lightweight subpath; retain a shared demo re-export.
+
 - Allow room diagnostics up to 20 bounces using shared bounded configuration,
   retaining the six-bounce default and exact count admission; no transport change (#105).
 - Replace the Mac-recorded floating-point scene checksum with exact same-platform
