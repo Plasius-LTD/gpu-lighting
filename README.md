@@ -554,3 +554,9 @@ the package tarball, SBOM, and Zero-Three evidence before a dependency-free
 production job publishes that exact artifact through npm OIDC with provenance;
 there is no npm write-token fallback.
 <!-- END PLASIUS RELEASE INTEGRITY -->
+
+## Experimental radial sample budgets
+
+Import `createRadialSamplingPlan(width, height, ceiling)` from `@plasius/gpu-lighting/radial-sampling` for the lightweight allocation API, or from the main entry. It returns typed per-pixel budgets, circular band counts, total samples and mean SPP. Native UHD is supported; ceilings are integers from 1 to 256. Six bands cover 5/10/15/20/25/25 percent of the image, with tiers rounded up from ceiling / 2^band and never below one. At UHD, ceiling 32 means 5.95 average requested SPP; ceiling 256 means 47.6.
+
+This prescribed radial policy is experimental. It is not a variance classifier, a completed-sample measurement or evidence of matched image quality or real-time performance. Hosts must honour `renderer.sampling.adaptivePerPixel.enabled` and their product access controls. Publishing this pure policy does not qualify or activate the separate adaptive renderer. See [release design](docs/radial-sampling-release.md).

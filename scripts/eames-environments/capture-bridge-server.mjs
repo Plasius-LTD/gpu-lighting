@@ -1,9 +1,11 @@
 import fs from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { decodePngDataUrl, resolveCaptureWorkspaceRoot } from "./capture-runtime.mjs";
 
 const workspaceRoot = resolveCaptureWorkspaceRoot();
+const packageRoot = fileURLToPath(new URL("../../", import.meta.url));
 const captureOutputRoot = path.resolve(workspaceRoot, "output/playwright/eames-environments");
 const port = Number(process.argv[2] ?? 8001);
 const trustedLoopbackHostnames = new Set(["127.0.0.1", "localhost", "::1", "[::1]"]);
@@ -32,8 +34,11 @@ function applyCaptureCorsHeaders(response, origin) {
 
 function resolveWorkspacePath(requestPath) {
   const relativePath = String(requestPath ?? "").replace(/^\/+/, "");
-  const resolvedPath = path.resolve(workspaceRoot, relativePath);
-  const relativeToWorkspace = path.relative(workspaceRoot, resolvedPath);
+  // The public demo URL must resolve this checkout, including named worktrees.
+  const isPackagePath = relativePath === "gpu-lighting" || relativePath.startsWith("gpu-lighting/");
+  const root = isPackagePath ? packageRoot : workspaceRoot;
+  const resolvedPath = path.resolve(root, isPackagePath ? relativePath.slice("gpu-lighting".length).replace(/^\/+/, "") : relativePath);
+  const relativeToWorkspace = path.relative(root, resolvedPath);
   if (relativeToWorkspace.startsWith("..") || path.isAbsolute(relativeToWorkspace)) {
     throw new Error("Path escapes workspace root.");
   }
