@@ -3218,3 +3218,5 @@ export async function loadLightingProfileWorkerPlan(
     workerManifest: getLightingProfileWorkerManifest(profile.name),
   };
 }
+
+export { RADIAL_SAMPLING_DEFAULTS, RADIAL_MAXIMUM_SPP, radialSamplingTiers, createRadialSamplingPlan } from './radial-sampling-plan.js';

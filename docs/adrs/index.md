@@ -16,3 +16,5 @@
 - [Architectural Decision Record (ADR)](./adr-0010:%20Physical%20Fixed-SPP%20Baseline%20as%20the%20Adaptive%20Admission%20Reference.md)
 - [ADR 0012: Native-resolution real-time admission](./adr-0012-native-resolution-realtime-admission.md)
 - [ADR 0013: Prescribed native radial budgets](./adr-0013-prescribed-native-radial-budgets.md)
+
+- [ADR 0018: Reusable radial sample policy](adr-0018-radial-sampling-public-api.md)

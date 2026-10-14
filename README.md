@@ -783,3 +783,9 @@ the package tarball, SBOM, and Zero-Three evidence before a dependency-free
 production job publishes that exact artifact through npm OIDC with provenance;
 there is no npm write-token fallback.
 <!-- END PLASIUS RELEASE INTEGRITY -->
+
+## Radial sample budgets
+
+`createRadialSamplingPlan(width, height, maximumSpp = 32)` is exported by the main package and the lightweight `@plasius/gpu-lighting/radial-sampling` entry. It returns `budgets`, `bands`, `totalSamples` and `meanSpp`. The maximum is a ceiling, with centre-out circular area shares 5/10/15/20/25/25 percent and tiers divided by two per band. Limits: ceiling 1–256 and 20 through UHD pixels. Ceiling 32 produces a 5.95 mean at UHD. This prescribed diagnostic policy is not a variance-based convergence classifier.
+
+The demo imports this same function. The API addition remains experimental until normal CD; downstream hosts own opt-in and rollback. See [ADR0018](docs/adrs/adr-0018-radial-sampling-public-api.md).

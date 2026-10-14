@@ -55,3 +55,9 @@ test('ceiling is a validated variable, not a pair of special-case presets',()=>{
  }
  for(const maximum of [0,-1,257,NaN,Infinity,32.5,'256',null])assert.throws(()=>createRadialSamplingPlan(40,25,maximum),/ceiling/);
 });
+
+test('public policy export is identical to the diagnostic policy',async()=>{
+ const api=await import('../src/index.js');
+ assert.equal(api.createRadialSamplingPlan,createRadialSamplingPlan);
+ assert.deepEqual(api.radialSamplingTiers(256),[256,128,64,32,16,8]);
+});
