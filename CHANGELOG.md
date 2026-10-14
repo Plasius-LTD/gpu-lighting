@@ -8,6 +8,20 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.2.16] - 2026-10-14
+
 - Resolve the capture bridge demo URL against its active package checkout, including named worktrees, while retaining traversal rejection.
 
 - Add an experimental lightweight `radial-sampling` API for deterministic, bounded per-pixel budgets through native UHD; renderer qualification and activation remain separate.
@@ -634,7 +648,7 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.1.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.16
 [0.1.17]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.17
 [0.1.19]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.1.19
-[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.15...HEAD
+[Unreleased]: https://github.com/Plasius-LTD/gpu-lighting/compare/v0.2.16...HEAD
 [0.2.0]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.0
 [0.2.2]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.2
 [0.2.6]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.6
@@ -645,3 +659,4 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 [0.2.13]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.13
 [0.2.14]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.14
 [0.2.15]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.15
+[0.2.16]: https://github.com/Plasius-LTD/gpu-lighting/releases/tag/v0.2.16
