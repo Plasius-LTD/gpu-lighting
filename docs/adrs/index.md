@@ -9,3 +9,5 @@
 - [Architectural Decision Record (ADR)](./adr-0007:%20Reference-First%20Adaptive%20Lighting%20Profile%20Ladder.md)
 - [Architectural Decision Record (ADR)](./adr-0008:%20Renderer-Aligned%20Wavefront%20Lighting%20Jobs.md)
 - [ADR-0009: Hosted OIDC Package Publication](./adr-0009-hosted-oidc-package-publication.md)
+
+- [ADR 0018: Reusable radial sample policy](adr-0018-radial-sampling-public-api.md)

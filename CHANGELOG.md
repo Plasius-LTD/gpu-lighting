@@ -8,6 +8,10 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Resolve the capture bridge demo URL against its active package checkout, including named worktrees, while retaining traversal rejection.
+
+- Add an experimental lightweight `radial-sampling` API for deterministic, bounded per-pixel budgets through native UHD; renderer qualification and activation remain separate.
+
 - **Added**
   - (placeholder)
 

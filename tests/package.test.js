@@ -2132,6 +2132,10 @@ test("capture bridge static asset helper resolves directory requests to index.ht
   assert.match(asset.fileBuffer.toString("utf8"), /<canvas id="stage"/);
 });
 
+test("capture bridge refuses traversal outside the active package", async () => {
+  await assert.rejects(readStaticAssetResponse("/gpu-lighting/../package.json"), /escapes workspace root/);
+});
+
 test("capture bridge server serves demo assets and accepts loopback uploads", async () => {
   const server = createCaptureBridgeServer("127.0.0.1");
   const listeningPort = await new Promise((resolve, reject) => {
