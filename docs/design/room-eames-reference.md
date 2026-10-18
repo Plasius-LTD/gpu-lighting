@@ -1,5 +1,19 @@
 # Room plus Eames local adaptive reference
 
+## Conditional optical sampling control (2026-10-18)
+
+Task #105 (Feature site#2114 / Story site#2291) admits renderer Task #234's
+existing `stable-camera-random` diagnostic specialization as an explicit room
+sampler. It preserves the fixed camera pattern and changes only transport draws.
+No geometry, material, count, depth, default or production flag changes. Renderer
+owns the sampler, slab preflight and receipt; lighting owns strict setting/frame
+identity validation. Reject unknown modes and mismatched receipts as before.
+Keep splitting off; compare fixed/independent with matched empty/filled native
+1080p/4K raw HDR and actual counts. Known fixed-pattern conditional correlation is
+not cured by more SPP alone, but this does not prove the cause of every room band.
+Image/energy/performance/stability qualification remains open. Tests, coverage,
+docs, package/Zero-Three checks and exact-head CI apply; no local publish.
+
 ## Selectable high-fidelity subject (2026-09-29)
 
 User requests the seating reference in the high-SPP centre. Add a lighting-owned

@@ -89,7 +89,7 @@ export function composeRoomEamesScene({room,eames,createProductStudioMeshes,ligh
 }
 export function roomReferenceSettings(resolution="1080p",sampler="fixed-pattern",maximumSpp=RADIAL_SAMPLING_DEFAULTS.maximumSpp,maxDepth=ROOM_CAPTURE_DEPTH_LIMITS.default){
  check(["1080p","4k"].includes(resolution),"unknown resolution");
- check(["fixed-pattern","stable-pattern"].includes(sampler),"unknown sampler");
+ check(["fixed-pattern","stable-pattern","stable-camera-random"].includes(sampler),"unknown sampler");
  radialSamplingTiers(maximumSpp);
  check(Number.isInteger(maxDepth)&&maxDepth>=ROOM_CAPTURE_DEPTH_LIMITS.minimum&&maxDepth<=ROOM_CAPTURE_DEPTH_LIMITS.maximum,'invalid depth');
  return Object.freeze({width:resolution==="4k"?3840:1920,height:resolution==="4k"?2160:1080,maxDepth,maximumSpp,sampler,denoise:false});

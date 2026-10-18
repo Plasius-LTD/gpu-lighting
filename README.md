@@ -92,7 +92,15 @@ From a clean, committed checkout, with Node 24 and companion checkouts available
 node scripts/eames-environments/room-reference-server.mjs /path/to/gpu-renderer /path/to/gpu-shared /path/to/plasius-ltd-site 5209
 ```
 
-Open `http://127.0.0.1:5209/tests/fixtures/native-room-reference.html`. Choose
+Open `http://127.0.0.1:5209/tests/fixtures/native-room-reference.html`.
+**Fixed camera, independent transport** selects the explicit `stable-camera-random`
+band-isolation control: renderer-owned transport draws change, but camera points,
+scene composition and sample budgets do not. Fast fixed remains the default
+comparison control and has known cross-event correlation. Paired empty/filled,
+linear-HDR and performance qualification remain required; this is not a release
+or quality claim. Keep rough splitting off for this comparison.
+
+Choose
 1080p/4K, an interior camera, Eames X/Z/yaw, then Render room. Reset restores
 defaults. The server serves commit-pinned files on loopback only; the site checkout
 must contain the Eames manifest's asset commit. Captures retain native PNG, full

@@ -8,6 +8,11 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Admit the existing `stable-camera-random` room diagnostic sampler, preserving
+  default sampling, geometry, budgets and exact capture-identity checks. Enables
+  a fixed-camera independent-transport comparison for remaining glass/water
+  banding; no optical-quality or performance claim (#105, renderer #234).
+
 - Allow room diagnostics up to 20 bounces using shared bounded configuration,
   retaining the six-bounce default and exact count admission; no transport change (#105).
 - Replace the Mac-recorded floating-point scene checksum with exact same-platform

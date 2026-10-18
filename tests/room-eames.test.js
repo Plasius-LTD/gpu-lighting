@@ -4,6 +4,15 @@ import {readFileSync} from "node:fs";
 import {createHash} from "node:crypto";
 import {composeRoomEamesScene,ROOM_ASSET,ROOM_DEFAULTS,ROOM_CAPTURE_DEPTH_LIMITS,roomReferenceSettings,validateRoomFrame} from "../demo/eames-environments/room-eames.js";
 
+test('room admits the explicit fixed-camera independent-transport control',()=>{
+ for(const resolution of ['1080p','4k']){
+  const settings=roomReferenceSettings(resolution,'stable-camera-random',256,20);
+  assert.equal(settings.sampler,'stable-camera-random');
+  assert.equal(settings.maximumSpp,256);assert.equal(settings.maxDepth,20);
+ }
+ assert.equal(roomReferenceSettings().sampler,'fixed-pattern','retain comparison default');
+});
+
 const triangle=[-1,0,-1,1,0,-1,0,1,1];
 test('room qualification depth is configurable without changing the six-bounce default',()=>{
  assert.deepEqual(ROOM_CAPTURE_DEPTH_LIMITS,{minimum:1,maximum:20,default:6});assert(Object.isFrozen(ROOM_CAPTURE_DEPTH_LIMITS));
