@@ -1,5 +1,7 @@
 # ADR Index
 
+- [ADR0018: Progressive policy capture provenance](adr-0018-progressive-policy-capture-provenance.md)
+
 - [ADR 0017: Local room asset provenance](adr-0017-local-room-asset-provenance.md)
 
 - [ADR 0011: Paired Adaptive Diagnostics](./adr-0011-paired-adaptive-diagnostics.md)

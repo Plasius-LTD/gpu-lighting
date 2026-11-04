@@ -9,6 +9,8 @@ no local package publication or production rollout is implied. The renderer's
 laboratory controls retain one-SPP/focus/stationary/canonical/reset evidence at
 native1080p/4K. These are prefix-correctness experiments, not performance claims;
 the earlier failed convergence evidence remains preserved (#110, site#2367).
+See [ADR0018](docs/adrs/adr-0018-progressive-policy-capture-provenance.md) for
+the development-build provenance boundary and its limitations.
 
 The local room also offers an opt-in **Glass of water reference**: empty or filled
 thick-walled tumbler on a neutral support, with a glass close-up. The original
