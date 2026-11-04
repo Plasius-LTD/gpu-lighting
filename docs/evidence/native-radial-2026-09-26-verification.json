@@ -1,0 +1,292 @@
+{
+  "status": "independently-verified-not-qualified",
+  "captureId": "native-radial-2026-09-26T12-15-45-654Z",
+  "sources": {
+    "renderer": "b9a3df2e938b098148d3341274fed5d1ebd82ec8",
+    "lighting": "72e4815ae4402212c3f121e01aadfca688b9c79d"
+  },
+  "sourceHashesVerified": 10,
+  "lanes": [
+    {
+      "name": "1080p",
+      "width": 1920,
+      "height": 1080,
+      "modes": {
+        "fixed": {
+          "imageSha256": "698ae138e90b0e3a96143b006b891d83a10144205025503c3a6400d254d15bdc",
+          "primaryRays": 66355200,
+          "secondaryRays": 13651676,
+          "totalPathSegments": 80006876,
+          "gpuTileSumMs": 1471.6764159999998,
+          "actualHistogram": {
+            "32": 2073600
+          },
+          "linearDifference": null
+        },
+        "uniform": {
+          "imageSha256": "698ae138e90b0e3a96143b006b891d83a10144205025503c3a6400d254d15bdc",
+          "primaryRays": 66355200,
+          "secondaryRays": 13651676,
+          "totalPathSegments": 80006876,
+          "gpuTileSumMs": 1740.6361599999993,
+          "actualHistogram": {
+            "32": 2073600
+          },
+          "linearDifference": {
+            "pixels": 2073600,
+            "rgbRmse": 0,
+            "normalizedRmse": 0,
+            "maxAbsoluteError": 0,
+            "p95LocalError": 0,
+            "p99LocalError": 0,
+            "meanLuminanceAbsoluteError": 0,
+            "maxLuminanceAbsoluteError": 0,
+            "meanLuminance": 0.7660938368984476,
+            "referenceMeanLuminance": 0.7660938368984476,
+            "relativeEnergyDrift": 0
+          }
+        },
+        "radial": {
+          "imageSha256": "de471ff4df85e88600160c272e27e2f930e74445c979d829eb9dcfc420bfdfe1",
+          "primaryRays": 12337920,
+          "secondaryRays": 6451357,
+          "totalPathSegments": 18789277,
+          "gpuTileSumMs": 503.51308800000027,
+          "actualHistogram": {
+            "1": 518400,
+            "2": 518400,
+            "4": 414720,
+            "8": 311040,
+            "16": 207360,
+            "32": 103680
+          },
+          "linearDifference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.06027618497744433,
+            "normalizedRmse": 0.06739573254373542,
+            "maxAbsoluteError": 1.7225165367126465,
+            "p95LocalError": 0.2870340347290039,
+            "p99LocalError": 0.4679849147796631,
+            "meanLuminanceAbsoluteError": 0.008038141547842034,
+            "maxLuminanceAbsoluteError": 0.8603013920187951,
+            "meanLuminance": 0.7735193248705314,
+            "referenceMeanLuminance": 0.7660938368984476,
+            "relativeEnergyDrift": 0.009692661152511236
+          }
+        }
+      },
+      "times": {
+        "fixed": {
+          "values": [
+            2307.2999999821186,
+            2241.0999999940395,
+            2296.399999976158
+          ],
+          "mean": 2281.5999999841056
+        },
+        "radial": {
+          "values": [
+            727,
+            707.5999999940395,
+            734.1999999880791
+          ],
+          "mean": 722.9333333273729
+        }
+      },
+      "timeReduction": 0.6831463300611811,
+      "speedRatio": 3.156030984880464,
+      "textureAllocationBytes": 41603716,
+      "primaryReduction": 0.8140625
+    },
+    {
+      "name": "4k",
+      "width": 3840,
+      "height": 2160,
+      "modes": {
+        "fixed": {
+          "imageSha256": "eb18701842c9af44e5e2d1ca3a9b3e565ae4591cea71c68a7d4762e290ee84ea",
+          "primaryRays": 265420800,
+          "secondaryRays": 54629768,
+          "totalPathSegments": 320050568,
+          "gpuTileSumMs": 5895.9462399999975,
+          "actualHistogram": {
+            "32": 8294400
+          },
+          "linearDifference": null
+        },
+        "uniform": {
+          "imageSha256": "eb18701842c9af44e5e2d1ca3a9b3e565ae4591cea71c68a7d4762e290ee84ea",
+          "primaryRays": 265420800,
+          "secondaryRays": 54629768,
+          "totalPathSegments": 320050568,
+          "gpuTileSumMs": 6676.348927999993,
+          "actualHistogram": {
+            "32": 8294400
+          },
+          "linearDifference": {
+            "pixels": 8294400,
+            "rgbRmse": 0,
+            "normalizedRmse": 0,
+            "maxAbsoluteError": 0,
+            "p95LocalError": 0,
+            "p99LocalError": 0,
+            "meanLuminanceAbsoluteError": 0,
+            "maxLuminanceAbsoluteError": 0,
+            "meanLuminance": 0.7660860376415028,
+            "referenceMeanLuminance": 0.7660860376415028,
+            "relativeEnergyDrift": 0
+          }
+        },
+        "radial": {
+          "imageSha256": "fa6e90755730d325524c321cecdb6e96a01a98d48bfd2dba8226227decf07a78",
+          "primaryRays": 49351680,
+          "secondaryRays": 25797551,
+          "totalPathSegments": 75149231,
+          "gpuTileSumMs": 1843.8553600000034,
+          "actualHistogram": {
+            "1": 2073600,
+            "2": 2073600,
+            "4": 1658880,
+            "8": 1244160,
+            "16": 829440,
+            "32": 414720
+          },
+          "linearDifference": {
+            "pixels": 8294400,
+            "rgbRmse": 0.060177023562044685,
+            "normalizedRmse": 0.06728674653639748,
+            "maxAbsoluteError": 1.8720487356185913,
+            "p95LocalError": 0.2864980697631836,
+            "p99LocalError": 0.4674251079559326,
+            "meanLuminanceAbsoluteError": 0.008010474513319944,
+            "maxLuminanceAbsoluteError": 0.6092167607471347,
+            "meanLuminance": 0.7735241801326438,
+            "referenceMeanLuminance": 0.7660860376415028,
+            "relativeEnergyDrift": 0.009709278234648731
+          }
+        }
+      },
+      "times": {
+        "fixed": {
+          "values": [
+            8961.5,
+            9037.299999982119,
+            8713.40000000596
+          ],
+          "mean": 8904.066666662693
+        },
+        "radial": {
+          "values": [
+            3045.800000011921,
+            3089.199999988079,
+            2855.9000000059605
+          ],
+          "mean": 2996.9666666686535
+        }
+      },
+      "timeReduction": 0.6634159672355713,
+      "speedRatio": 2.9710262598816994,
+      "textureAllocationBytes": 166019716,
+      "primaryReduction": 0.8140625
+    }
+  ],
+  "fusedFailure": {
+    "captureId": "native-radial-2026-09-26T12-12-32-089Z",
+    "sources": {
+      "renderer": "614ef71cbc6e0eae5201987ec3ec40f5fff1d661",
+      "lighting": "72e4815ae4402212c3f121e01aadfca688b9c79d"
+    },
+    "width": 3840,
+    "height": 2160,
+    "referenceCaptureId": "native-radial-2026-09-26T12-15-45-654Z",
+    "referenceImage": "4k-fixed",
+    "referenceSha256": "eb18701842c9af44e5e2d1ca3a9b3e565ae4591cea71c68a7d4762e290ee84ea",
+    "candidateSha256": "f3923bbbec38ea350e49a9377d3080da61c45e46d338a5f0cf2e231ffd948671",
+    "changedWords": 12,
+    "changedPixels": 4,
+    "pixels": [
+      {
+        "id": 2321123,
+        "x": 1763,
+        "y": 604
+      },
+      {
+        "id": 2962449,
+        "x": 1809,
+        "y": 771
+      },
+      {
+        "id": 4075859,
+        "x": 1619,
+        "y": 1061
+      },
+      {
+        "id": 6184063,
+        "x": 1663,
+        "y": 1610
+      }
+    ],
+    "delta": [
+      {
+        "word": 9284492,
+        "before": 1069146288,
+        "after": 1069281318
+      },
+      {
+        "word": 9284493,
+        "before": 1049253811,
+        "after": 1049378044
+      },
+      {
+        "word": 9284494,
+        "before": 1032827568,
+        "after": 1032995535
+      },
+      {
+        "word": 11849796,
+        "before": 1070053508,
+        "after": 1069956861
+      },
+      {
+        "word": 11849797,
+        "before": 1050068124,
+        "after": 1049955276
+      },
+      {
+        "word": 11849798,
+        "before": 1033721397,
+        "after": 1033538733
+      },
+      {
+        "word": 16303436,
+        "before": 1067925610,
+        "after": 1068629088
+      },
+      {
+        "word": 16303437,
+        "before": 1048496532,
+        "after": 1049017376
+      },
+      {
+        "word": 16303438,
+        "before": 1032496861,
+        "after": 1032808480
+      },
+      {
+        "word": 24736252,
+        "before": 1067850161,
+        "after": 1068578354
+      },
+      {
+        "word": 24736253,
+        "before": 1047953264,
+        "after": 1048780730
+      },
+      {
+        "word": 24736254,
+        "before": 1031885632,
+        "after": 1032248014
+      }
+    ]
+  }
+}

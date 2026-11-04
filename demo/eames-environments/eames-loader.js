@@ -270,7 +270,7 @@ function resolveMaterialTexture(document, textureRef, imageResources) {
 
 function materialInfo(document, primitive, imageResources) {
   const material = document.materials?.[primitive.material] ?? null;
-  const factor = material?.pbrMetallicRoughness?.baseColorFactor ?? [0.56, 0.33, 0.22, 1];
+  const factor = material?.pbrMetallicRoughness?.baseColorFactor ?? [1, 1, 1, 1];
   const specularExtension = material?.extensions?.KHR_materials_specular ?? null;
   const clearcoatExtension = material?.extensions?.KHR_materials_clearcoat ?? null;
   const sheenExtension = material?.extensions?.KHR_materials_sheen ?? null;
@@ -295,11 +295,11 @@ function materialInfo(document, primitive, imageResources) {
     roughness:
       typeof material?.pbrMetallicRoughness?.roughnessFactor === "number"
         ? material.pbrMetallicRoughness.roughnessFactor
-        : 0.92,
+        : 1,
     metallic:
       typeof material?.pbrMetallicRoughness?.metallicFactor === "number"
         ? material.pbrMetallicRoughness.metallicFactor
-        : 0.08,
+        : 1,
     specular:
       typeof specularExtension?.specularFactor === "number"
         ? specularExtension.specularFactor

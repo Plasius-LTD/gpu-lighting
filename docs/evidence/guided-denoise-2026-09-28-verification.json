@@ -1,0 +1,1495 @@
+[
+  {
+    "captureId": "room-reference-2026-09-28T11-59-18-945Z-307a6d83-7c2f-460e-892b-74da635003df",
+    "reportSha256": "5da6f2cd51440f1003d00e3b5aaf0ac0bfaf5326bb414139f64a5cb56424a4d8",
+    "provenance": {
+      "sources": {
+        "renderer": "2108ddbc8de043b1b49c01ce1c002710ebda87fd",
+        "lighting": "bf5d825bd288ac8c0b62e5367822c64a545e785a",
+        "shared": "729f89c7f77fcadb9ee7eeca53fb6daf02865b8e",
+        "site": "21d43a9b63722f1ce69175a5a42b53304ee79102"
+      },
+      "source": "immutable-git-objects",
+      "captureId": "room-reference-2026-09-28T11-59-18-945Z-307a6d83-7c2f-460e-892b-74da635003df"
+    },
+    "settings": {
+      "width": 1920,
+      "height": 1080,
+      "maxDepth": 6,
+      "maximumSpp": 32,
+      "sampler": "stable-pattern",
+      "denoise": false
+    },
+    "splitDepth": 2,
+    "adapter": {
+      "vendor": "apple",
+      "architecture": "metal-3",
+      "isFallbackAdapter": false
+    },
+    "browser": {
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "platform": "MacIntel"
+    },
+    "scene": {
+      "room": {
+        "bytes": 651696,
+        "sha256": "125331dadb83664e978a8c12cc974bae81bb7b75457e290c6063d921bbe11bc5",
+        "triangles": 3672,
+        "primitives": 73
+      },
+      "roomBounds": {
+        "min": [
+          -5.98722505569458,
+          -1.4440840482711792,
+          -4.367950916290283
+        ],
+        "max": [
+          5.9060821533203125,
+          1.4410810470581055,
+          4.414184093475342
+        ]
+      },
+      "roomTriangleCount": 3672,
+      "eamesTriangleCount": 265468,
+      "sceneTriangleCount": 269140,
+      "sceneMeshes": 82,
+      "placement": {
+        "x": 1.8,
+        "z": -1.1,
+        "yaw": -25
+      },
+      "eamesBounds": {
+        "min": [
+          0.6616441165197775,
+          -1.3440840244293213,
+          -1.9633886251089299
+        ],
+        "max": [
+          2.9947004403861617,
+          -0.020079781481169068,
+          -0.1870037243071908
+        ]
+      },
+      "view": "entry",
+      "floorY": -1.3440840244293213,
+      "addedGeometry": 0,
+      "lighting": "external-daylight-no-added-emitter",
+      "geometry": "mesh-bvh",
+      "proxyGeometry": false,
+      "interaction": "placement-and-camera-between-renders-not-realtime-or-collision-qualified"
+    },
+    "actualSamples": 12337920,
+    "actualHistogram": {
+      "1": 518400,
+      "2": 518400,
+      "4": 414720,
+      "8": 311040,
+      "16": 207360,
+      "32": 103680
+    },
+    "rawTransportUnchanged": true,
+    "totals": {
+      "primary": 12337920,
+      "secondary": 66764363,
+      "segments": 79102283,
+      "dispatches": 21595,
+      "gpuMs": 12729.51603200001
+    },
+    "rawHdr": {
+      "sha256": "1ba5752fee3b841413a6359f38e315761171735b823a753d6614ee8eb19cd780",
+      "bytes": 33177600,
+      "chunks": 8
+    },
+    "filteredHdr": {
+      "sha256": "1ae04c336a75d57d5b7aa09e3773caa6c9d50c0e5d20075f28a19b174cfd3740",
+      "bytes": 33177600,
+      "chunks": 8
+    },
+    "images": {
+      "raw": {
+        "filename": "room-eames-1920x1080-stable-pattern-6-bounces-split2-raw.png",
+        "bytes": 4792416,
+        "sha256": "7a41be6e70e561a9e5d4898a0fda77edcb1912065f66c85bc2d4a03cb73a04e2"
+      },
+      "filtered": {
+        "filename": "room-eames-1920x1080-stable-pattern-6-bounces-split2-guided.png",
+        "bytes": 2982709,
+        "sha256": "d7627c094cb8e23aa016733ec58b9b59707cb1de9c6968b936d04fc58ab13aad"
+      }
+    },
+    "denoiseProbe": {
+      "passed": true,
+      "constantError": 0,
+      "protectedError": 0.0019373893737792969,
+      "invalid": 0,
+      "rmseRatio": 0.02039538198333686,
+      "edgeError": 0.0078125,
+      "inputRmse": 0.11661207195678461,
+      "outputRmse": 0.0023783477514269864,
+      "scope": "synthetic-correctness-not-performance-or-room-convergence",
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3"
+      }
+    },
+    "memory": {
+      "rendererBufferBytes": 233419036,
+      "textureInventory": [
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 1920,
+            "height": 1080
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 1920,
+            "height": 1080
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 1920,
+            "height": 1080
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 1,
+            "height": 1
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 1,
+            "height": 1
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 1,
+            "height": 2
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 128,
+            "height": 128
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3595,
+            "height": 2052
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 1029,
+            "height": 2052
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3081,
+            "height": 2052
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        }
+      ],
+      "adaptiveBufferBytes": 9421084,
+      "telemetryBufferBytes": 12352,
+      "fixtureStagingBytes": 852016,
+      "guidedDenoise": {
+        "enabled": true,
+        "width": 1920,
+        "height": 1080,
+        "textureBytes": 41472000,
+        "uniformBytes": 1024,
+        "additionalBytes": 41473024,
+        "maximumAdditionalBytes": 201326592,
+        "passes": 3,
+        "diagnosticStagingBytes": 262192
+      },
+      "cachedBudgetHostBytes": 18662400
+    },
+    "denoise": {
+      "flag": "renderer.denoise.guidedSpatial.enabled",
+      "enabled": true,
+      "memory": {
+        "enabled": true,
+        "width": 1920,
+        "height": 1080,
+        "textureBytes": 41472000,
+        "uniformBytes": 1024,
+        "additionalBytes": 41473024,
+        "maximumAdditionalBytes": 201326592,
+        "passes": 3,
+        "diagnosticStagingBytes": 262192
+      },
+      "timings": [
+        {
+          "round": 0,
+          "filtered": false,
+          "jobMs": 1.199999988079071,
+          "gpuMs": 0.196608,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 0,
+          "filtered": true,
+          "jobMs": 4.800000011920929,
+          "gpuMs": 3.60448,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 1,
+          "filtered": true,
+          "jobMs": 4.600000023841858,
+          "gpuMs": 3.2768,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 1,
+          "filtered": false,
+          "jobMs": 1.199999988079071,
+          "gpuMs": 0.131072,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 2,
+          "filtered": false,
+          "jobMs": 0.8999999761581421,
+          "gpuMs": 0.065536,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 2,
+          "filtered": true,
+          "jobMs": 4.099999964237213,
+          "gpuMs": 3.2768,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 3,
+          "filtered": true,
+          "jobMs": 4.200000047683716,
+          "gpuMs": 3.342336,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 3,
+          "filtered": false,
+          "jobMs": 1.199999988079071,
+          "gpuMs": 0.196608,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 4,
+          "filtered": false,
+          "jobMs": 1.199999988079071,
+          "gpuMs": 0.131072,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 4,
+          "filtered": true,
+          "jobMs": 4.399999976158142,
+          "gpuMs": 3.2768,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        }
+      ],
+      "guideDispatches": 135,
+      "guideCost": "Included in tile render intervals, not isolated",
+      "comparison": {
+        "meanRgbRatio": 0.9968045983584078,
+        "rmseFromRaw": 0.18750336656912497,
+        "maxDifferenceFromRaw": 5.0830078125,
+        "qualification": "change-from-noisy-input-not-error-from-converged-truth"
+      },
+      "rawTextureSha256": "e7eab04c4630bd73f323fa3a6826a8a4fee4ef564d5d09b1db48500197fe3ec5",
+      "filteredSha256": "1ae04c336a75d57d5b7aa09e3773caa6c9d50c0e5d20075f28a19b174cfd3740"
+    },
+    "timingSummary": {
+      "raw": {
+        "medianGpuMs": 0.131072,
+        "medianJobMs": 1.199999988079071,
+        "gpuRangeMs": [
+          0.065536,
+          0.196608
+        ]
+      },
+      "filtered": {
+        "medianGpuMs": 3.2768,
+        "medianJobMs": 4.399999976158142,
+        "gpuRangeMs": [
+          3.2768,
+          3.60448
+        ]
+      }
+    },
+    "verified": true,
+    "qualification": "visual-reference-only-not-performance-or-convergence"
+  },
+  {
+    "captureId": "room-reference-2026-09-28T12-00-39-709Z-d871fcfa-70ed-4d87-99ed-8c24e9603733",
+    "reportSha256": "a7935c531e91a40b35fa5f6a913df11035e0a2a55bda92184fea6e69ebeea758",
+    "provenance": {
+      "sources": {
+        "renderer": "2108ddbc8de043b1b49c01ce1c002710ebda87fd",
+        "lighting": "bf5d825bd288ac8c0b62e5367822c64a545e785a",
+        "shared": "729f89c7f77fcadb9ee7eeca53fb6daf02865b8e",
+        "site": "21d43a9b63722f1ce69175a5a42b53304ee79102"
+      },
+      "source": "immutable-git-objects",
+      "captureId": "room-reference-2026-09-28T12-00-39-709Z-d871fcfa-70ed-4d87-99ed-8c24e9603733"
+    },
+    "settings": {
+      "width": 3840,
+      "height": 2160,
+      "maxDepth": 6,
+      "maximumSpp": 32,
+      "sampler": "stable-pattern",
+      "denoise": false
+    },
+    "splitDepth": 2,
+    "adapter": {
+      "vendor": "apple",
+      "architecture": "metal-3",
+      "isFallbackAdapter": false
+    },
+    "browser": {
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "platform": "MacIntel"
+    },
+    "scene": {
+      "room": {
+        "bytes": 651696,
+        "sha256": "125331dadb83664e978a8c12cc974bae81bb7b75457e290c6063d921bbe11bc5",
+        "triangles": 3672,
+        "primitives": 73
+      },
+      "roomBounds": {
+        "min": [
+          -5.98722505569458,
+          -1.4440840482711792,
+          -4.367950916290283
+        ],
+        "max": [
+          5.9060821533203125,
+          1.4410810470581055,
+          4.414184093475342
+        ]
+      },
+      "roomTriangleCount": 3672,
+      "eamesTriangleCount": 265468,
+      "sceneTriangleCount": 269140,
+      "sceneMeshes": 82,
+      "placement": {
+        "x": 1.8,
+        "z": -1.1,
+        "yaw": -25
+      },
+      "eamesBounds": {
+        "min": [
+          0.6616441165197775,
+          -1.3440840244293213,
+          -1.9633886251089299
+        ],
+        "max": [
+          2.9947004403861617,
+          -0.020079781481169068,
+          -0.1870037243071908
+        ]
+      },
+      "view": "entry",
+      "floorY": -1.3440840244293213,
+      "addedGeometry": 0,
+      "lighting": "external-daylight-no-added-emitter",
+      "geometry": "mesh-bvh",
+      "proxyGeometry": false,
+      "interaction": "placement-and-camera-between-renders-not-realtime-or-collision-qualified"
+    },
+    "actualSamples": 49351680,
+    "actualHistogram": {
+      "1": 2073600,
+      "2": 2073600,
+      "4": 1658880,
+      "8": 1244160,
+      "16": 829440,
+      "32": 414720
+    },
+    "rawTransportUnchanged": true,
+    "totals": {
+      "primary": 49351680,
+      "secondary": 267051586,
+      "segments": 316403266,
+      "dispatches": 75078,
+      "gpuMs": 46522.04032000003
+    },
+    "rawHdr": {
+      "sha256": "c2f32d42357b92a7f1fef4d8a7c3bf68f33930ef303cedc0b646631fc5b7e87f",
+      "bytes": 132710400,
+      "chunks": 32
+    },
+    "filteredHdr": {
+      "sha256": "933f849d613965dca54d6586b513adba537ab98cea1255ae980794c136e598bb",
+      "bytes": 132710400,
+      "chunks": 32
+    },
+    "images": {
+      "raw": {
+        "filename": "room-eames-3840x2160-stable-pattern-6-bounces-split2-raw.png",
+        "bytes": 19047299,
+        "sha256": "4f4d6ba77d5dd3893394f071ebe530475556d6027c6b80cde62e224c460488fb"
+      },
+      "filtered": {
+        "filename": "room-eames-3840x2160-stable-pattern-6-bounces-split2-guided.png",
+        "bytes": 11379088,
+        "sha256": "6e3807aadb3d92f8856bbdb8d4974c466ec95231d885f0fbb7f9df827884aa30"
+      }
+    },
+    "denoiseProbe": {
+      "passed": true,
+      "constantError": 0,
+      "protectedError": 0.0019373893737792969,
+      "invalid": 0,
+      "rmseRatio": 0.02039538198333686,
+      "edgeError": 0.0078125,
+      "inputRmse": 0.11661207195678461,
+      "outputRmse": 0.0023783477514269864,
+      "scope": "synthetic-correctness-not-performance-or-room-convergence",
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3"
+      }
+    },
+    "memory": {
+      "rendererBufferBytes": 239563036,
+      "textureInventory": [
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 3840,
+            "height": 2160
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 3840,
+            "height": 2160
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3840,
+            "height": 2160
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 1,
+            "height": 1
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 1,
+            "height": 1
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 1,
+            "height": 2
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 128,
+            "height": 128
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3595,
+            "height": 2052
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 1029,
+            "height": 2052
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3081,
+            "height": 2052
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        }
+      ],
+      "adaptiveBufferBytes": 34304284,
+      "telemetryBufferBytes": 12352,
+      "fixtureStagingBytes": 852016,
+      "guidedDenoise": {
+        "enabled": true,
+        "width": 3840,
+        "height": 2160,
+        "textureBytes": 165888000,
+        "uniformBytes": 1024,
+        "additionalBytes": 165889024,
+        "maximumAdditionalBytes": 201326592,
+        "passes": 3,
+        "diagnosticStagingBytes": 262192
+      },
+      "cachedBudgetHostBytes": 74649600
+    },
+    "denoise": {
+      "flag": "renderer.denoise.guidedSpatial.enabled",
+      "enabled": true,
+      "memory": {
+        "enabled": true,
+        "width": 3840,
+        "height": 2160,
+        "textureBytes": 165888000,
+        "uniformBytes": 1024,
+        "additionalBytes": 165889024,
+        "maximumAdditionalBytes": 201326592,
+        "passes": 3,
+        "diagnosticStagingBytes": 262192
+      },
+      "timings": [
+        {
+          "round": 0,
+          "filtered": false,
+          "jobMs": 1.9000000357627869,
+          "gpuMs": 0.524288,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 0,
+          "filtered": true,
+          "jobMs": 19.900000035762787,
+          "gpuMs": 18.481152,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 1,
+          "filtered": true,
+          "jobMs": 18.600000023841858,
+          "gpuMs": 17.563648,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 1,
+          "filtered": false,
+          "jobMs": 1.800000011920929,
+          "gpuMs": 0.589824,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 2,
+          "filtered": false,
+          "jobMs": 1.800000011920929,
+          "gpuMs": 0.524288,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 2,
+          "filtered": true,
+          "jobMs": 19.100000023841858,
+          "gpuMs": 17.36704,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 3,
+          "filtered": true,
+          "jobMs": 18.80000001192093,
+          "gpuMs": 17.432576,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 3,
+          "filtered": false,
+          "jobMs": 1.300000011920929,
+          "gpuMs": 0.393216,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 4,
+          "filtered": false,
+          "jobMs": 1.2000000476837158,
+          "gpuMs": 0.393216,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 4,
+          "filtered": true,
+          "jobMs": 18.19999998807907,
+          "gpuMs": 17.104896,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        }
+      ],
+      "guideDispatches": 510,
+      "guideCost": "Included in tile render intervals, not isolated",
+      "comparison": {
+        "meanRgbRatio": 0.9966804931761379,
+        "rmseFromRaw": 0.18774890743484862,
+        "maxDifferenceFromRaw": 4.728515625,
+        "qualification": "change-from-noisy-input-not-error-from-converged-truth"
+      },
+      "rawTextureSha256": "080a511fc546cc8e3a9de61312ad3888bce94eb10c5ab90eceaee0663cc67535",
+      "filteredSha256": "933f849d613965dca54d6586b513adba537ab98cea1255ae980794c136e598bb"
+    },
+    "timingSummary": {
+      "raw": {
+        "medianGpuMs": 0.524288,
+        "medianJobMs": 1.800000011920929,
+        "gpuRangeMs": [
+          0.393216,
+          0.589824
+        ]
+      },
+      "filtered": {
+        "medianGpuMs": 17.432576,
+        "medianJobMs": 18.80000001192093,
+        "gpuRangeMs": [
+          17.104896,
+          18.481152
+        ]
+      }
+    },
+    "verified": true,
+    "qualification": "visual-reference-only-not-performance-or-convergence"
+  },
+  {
+    "captureId": "room-reference-2026-09-28T12-07-50-617Z-9a4653ff-a5ac-469e-9b30-b608b991a181",
+    "reportSha256": "ea242a349e7096129753c21927323245838d59b04001ff68b7579a1c05c4c490",
+    "provenance": {
+      "sources": {
+        "renderer": "7fecfd2deb9adf5e164b868720e3e06547cbd8ff",
+        "lighting": "fa278d21b1f16faac16e5f1c9d1a2933a0ac9795",
+        "shared": "729f89c7f77fcadb9ee7eeca53fb6daf02865b8e",
+        "site": "21d43a9b63722f1ce69175a5a42b53304ee79102"
+      },
+      "source": "immutable-git-objects",
+      "captureId": "room-reference-2026-09-28T12-07-50-617Z-9a4653ff-a5ac-469e-9b30-b608b991a181"
+    },
+    "settings": {
+      "width": 3840,
+      "height": 2160,
+      "maxDepth": 6,
+      "maximumSpp": 32,
+      "sampler": "stable-pattern",
+      "denoise": false
+    },
+    "splitDepth": 2,
+    "adapter": {
+      "vendor": "apple",
+      "architecture": "metal-3",
+      "isFallbackAdapter": false
+    },
+    "browser": {
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "platform": "MacIntel"
+    },
+    "scene": {
+      "room": {
+        "bytes": 651696,
+        "sha256": "125331dadb83664e978a8c12cc974bae81bb7b75457e290c6063d921bbe11bc5",
+        "triangles": 3672,
+        "primitives": 73
+      },
+      "roomBounds": {
+        "min": [
+          -5.98722505569458,
+          -1.4440840482711792,
+          -4.367950916290283
+        ],
+        "max": [
+          5.9060821533203125,
+          1.4410810470581055,
+          4.414184093475342
+        ]
+      },
+      "roomTriangleCount": 3672,
+      "eamesTriangleCount": 265468,
+      "sceneTriangleCount": 269140,
+      "sceneMeshes": 82,
+      "placement": {
+        "x": 1.8,
+        "z": -1.1,
+        "yaw": -25
+      },
+      "eamesBounds": {
+        "min": [
+          0.6616441165197775,
+          -1.3440840244293213,
+          -1.9633886251089299
+        ],
+        "max": [
+          2.9947004403861617,
+          -0.020079781481169068,
+          -0.1870037243071908
+        ]
+      },
+      "view": "entry",
+      "floorY": -1.3440840244293213,
+      "addedGeometry": 0,
+      "lighting": "external-daylight-no-added-emitter",
+      "geometry": "mesh-bvh",
+      "proxyGeometry": false,
+      "interaction": "placement-and-camera-between-renders-not-realtime-or-collision-qualified"
+    },
+    "actualSamples": 49351680,
+    "actualHistogram": {
+      "1": 2073600,
+      "2": 2073600,
+      "4": 1658880,
+      "8": 1244160,
+      "16": 829440,
+      "32": 414720
+    },
+    "rawTransportUnchanged": true,
+    "totals": {
+      "primary": 49351680,
+      "secondary": 267051586,
+      "segments": 316403266,
+      "dispatches": 75078,
+      "gpuMs": 46440.251392
+    },
+    "rawHdr": {
+      "sha256": "c2f32d42357b92a7f1fef4d8a7c3bf68f33930ef303cedc0b646631fc5b7e87f",
+      "bytes": 132710400,
+      "chunks": 32
+    },
+    "filteredHdr": {
+      "sha256": "933f849d613965dca54d6586b513adba537ab98cea1255ae980794c136e598bb",
+      "bytes": 132710400,
+      "chunks": 32
+    },
+    "images": {
+      "raw": {
+        "filename": "room-eames-3840x2160-stable-pattern-6-bounces-split2-raw.png",
+        "bytes": 19047299,
+        "sha256": "4f4d6ba77d5dd3893394f071ebe530475556d6027c6b80cde62e224c460488fb"
+      },
+      "filtered": {
+        "filename": "room-eames-3840x2160-stable-pattern-6-bounces-split2-guided.png",
+        "bytes": 11379088,
+        "sha256": "6e3807aadb3d92f8856bbdb8d4974c466ec95231d885f0fbb7f9df827884aa30"
+      }
+    },
+    "denoiseProbe": {
+      "passed": true,
+      "constantError": 0,
+      "protectedError": 0.0019373893737792969,
+      "invalid": 0,
+      "rmseRatio": 0.02039538198333686,
+      "edgeError": 0.0078125,
+      "inputRmse": 0.11661207195678461,
+      "outputRmse": 0.0023783477514269864,
+      "scope": "synthetic-correctness-not-performance-or-room-convergence",
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3"
+      }
+    },
+    "memory": {
+      "rendererBufferBytes": 239563036,
+      "textureInventory": [
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 3840,
+            "height": 2160
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 3840,
+            "height": 2160
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3840,
+            "height": 2160
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 1,
+            "height": 1
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 1,
+            "height": 1
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 1,
+            "height": 2
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba16float",
+          "size": {
+            "width": 128,
+            "height": 128
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3595,
+            "height": 2052
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 1029,
+            "height": 2052
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3081,
+            "height": 2052
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        },
+        {
+          "format": "rgba8unorm",
+          "size": {
+            "width": 3,
+            "height": 3
+          },
+          "mipLevelCount": 1,
+          "sampleCount": 1
+        }
+      ],
+      "adaptiveBufferBytes": 34304284,
+      "telemetryBufferBytes": 12352,
+      "fixtureStagingBytes": 852016,
+      "guidedDenoise": {
+        "enabled": true,
+        "width": 3840,
+        "height": 2160,
+        "textureBytes": 165888000,
+        "uniformBytes": 1024,
+        "additionalBytes": 165889024,
+        "maximumAdditionalBytes": 201326592,
+        "passes": 3,
+        "diagnosticStagingBytes": 262192,
+        "diagnosticStagingIncludedInFixtureTotal": true
+      },
+      "cachedBudgetHostBytes": 74649600
+    },
+    "denoise": {
+      "flag": "renderer.denoise.guidedSpatial.enabled",
+      "enabled": true,
+      "memory": {
+        "enabled": true,
+        "width": 3840,
+        "height": 2160,
+        "textureBytes": 165888000,
+        "uniformBytes": 1024,
+        "additionalBytes": 165889024,
+        "maximumAdditionalBytes": 201326592,
+        "passes": 3,
+        "diagnosticStagingBytes": 262192,
+        "diagnosticStagingIncludedInFixtureTotal": true
+      },
+      "timings": [
+        {
+          "round": 0,
+          "filtered": false,
+          "jobMs": 1.899999976158142,
+          "gpuMs": 0.589824,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 0,
+          "filtered": true,
+          "jobMs": 22.899999976158142,
+          "gpuMs": 20.840448,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 1,
+          "filtered": true,
+          "jobMs": 22.600000023841858,
+          "gpuMs": 21.2992,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 1,
+          "filtered": false,
+          "jobMs": 1.899999976158142,
+          "gpuMs": 0.589824,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 2,
+          "filtered": false,
+          "jobMs": 1.300000011920929,
+          "gpuMs": 0.393216,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 2,
+          "filtered": true,
+          "jobMs": 19.80000001192093,
+          "gpuMs": 18.939904,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 3,
+          "filtered": true,
+          "jobMs": 19.80000001192093,
+          "gpuMs": 18.67776,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 3,
+          "filtered": false,
+          "jobMs": 1.4000000357627869,
+          "gpuMs": 0.393216,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 4,
+          "filtered": false,
+          "jobMs": 1.300000011920929,
+          "gpuMs": 0.458752,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        },
+        {
+          "round": 4,
+          "filtered": true,
+          "jobMs": 18.80000001192093,
+          "gpuMs": 17.956864,
+          "gpuScope": "filter-and-tone-map-excludes-presentation-and-guide-capture",
+          "jobScope": "encoding-submission-GPU-completion-includes-presentation-excludes-readback"
+        }
+      ],
+      "guideDispatches": 510,
+      "guideCost": "Included in tile render intervals, not isolated",
+      "comparison": {
+        "meanRgbRatio": 0.9966804931761379,
+        "rmseFromRaw": 0.18774890743484862,
+        "maxDifferenceFromRaw": 4.728515625,
+        "qualification": "change-from-noisy-input-not-error-from-converged-truth"
+      },
+      "rawTextureSha256": "080a511fc546cc8e3a9de61312ad3888bce94eb10c5ab90eceaee0663cc67535",
+      "filteredSha256": "933f849d613965dca54d6586b513adba537ab98cea1255ae980794c136e598bb"
+    },
+    "timingSummary": {
+      "raw": {
+        "medianGpuMs": 0.458752,
+        "medianJobMs": 1.4000000357627869,
+        "gpuRangeMs": [
+          0.393216,
+          0.589824
+        ]
+      },
+      "filtered": {
+        "medianGpuMs": 18.939904,
+        "medianJobMs": 19.80000001192093,
+        "gpuRangeMs": [
+          17.956864,
+          21.2992
+        ]
+      }
+    },
+    "verified": true,
+    "qualification": "visual-reference-only-not-performance-or-convergence"
+  }
+]

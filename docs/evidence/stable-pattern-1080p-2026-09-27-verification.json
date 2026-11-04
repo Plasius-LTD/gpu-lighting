@@ -1,0 +1,3271 @@
+{
+  "status": "verified-experiment-not-qualified",
+  "provenance": {
+    "sources": {
+      "renderer": "e390a2a4ce6f4f76af1457a642bf7b62ca20082a",
+      "lighting": "85d72cf4422cd689b742f9a4617d4b166bc3aa54",
+      "shared": "729f89c7f77fcadb9ee7eeca53fb6daf02865b8e",
+      "site": "21d43a9b63722f1ce69175a5a42b53304ee79102"
+    },
+    "source": "immutable-git-objects",
+    "captureId": "native-stable-pattern-2026-09-27T19-25-35-346Z-9ac4ba37-64af-4a1b-aaa7-4f876bcb249d"
+  },
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+    "platform": "MacIntel"
+  },
+  "probe": {
+    "status": "passed",
+    "comparedWords": 8704,
+    "events": 17,
+    "bounces": 8,
+    "ordinals": [
+      0,
+      1,
+      2,
+      7,
+      31,
+      255,
+      65537,
+      4294967295
+    ],
+    "modes": 2
+  },
+  "scene": {
+    "modelName": "Eames_Lounge_Chair_Ottoman",
+    "assetTier": "source",
+    "modelTriangleCount": 265468,
+    "sceneTriangleCount": 265476,
+    "modelPrimitives": 9,
+    "sceneMeshes": 13,
+    "sourceMaterials": 5,
+    "sourceTextures": 5,
+    "textureSlots": [
+      {
+        "primitive": 1,
+        "role": "baseColorTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 1,
+        "role": "normalTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 2,
+        "role": "baseColorTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 2,
+        "role": "normalTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 2,
+        "role": "metallicRoughnessTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 5,
+        "role": "baseColorTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 5,
+        "role": "normalTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 6,
+        "role": "baseColorTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 6,
+        "role": "normalTexture",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "primitive": 6,
+        "role": "metallicRoughnessTexture",
+        "width": 1024,
+        "height": 1024
+      }
+    ],
+    "environment": "product-studio",
+    "geometry": "mesh-bvh",
+    "proxyGeometry": false,
+    "renderScope": "renderer-pipeline-not-site-application",
+    "manifest": {
+      "schemaVersion": 1,
+      "assetTier": "source",
+      "siteCommit": "21d43a9b63722f1ce69175a5a42b53304ee79102",
+      "sourceDirectory": "deployment-assets/gpu-demo/product-studio/eames/",
+      "model": "Eames_Lounge_Chair_Ottoman.gltf",
+      "files": [
+        {
+          "name": "Eames_Lounge_Chair_Ottoman.gltf",
+          "bytes": 15652,
+          "sha256": "ac45b81a4576a9a76e432092058139e57fd03341e1f60e3aa91ff296a762ad2e"
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman.bin",
+          "bytes": 6979720,
+          "sha256": "ad10b0101ed49293d126e148cbff35c14b8323e79a05237f65e9df19425d8486"
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Wood_normal.png",
+          "bytes": 1066723,
+          "sha256": "579db0dd72a1e1b92cb571f2758d813320daf64e6320135493e95092e847444a",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Wood_albedo.jpg",
+          "bytes": 842338,
+          "sha256": "11a9530415b321e6840f603ed5c81504c767588098345a6cd2f65dad19187157",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Leather_normal.png",
+          "bytes": 1873550,
+          "sha256": "c1f42e48431dd56d9d682c32417c380ce6c9ff24d7f519a55af3fac59931da40",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Leather_basecolortexture.jpg",
+          "bytes": 526825,
+          "sha256": "2980c158b9d099c2160470fc8874e4e86c7bb12256a0c0a9d8e73e61de9b3f60",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "Eames_Lounge_Chair_Ottoman_Leather_roughness0.jpg",
+          "bytes": 770750,
+          "sha256": "29f75dc067921aaf38c6bf8e9aff3e434c62db0ee9dfc393669d42903f9dbd35",
+          "width": 1024,
+          "height": 1024
+        }
+      ]
+    },
+    "assetVerificationAndSceneSetupMs": 1047.699999988079
+  },
+  "lanes": [
+    {
+      "name": "1080p",
+      "admission": {
+        "triangleCount": 265476,
+        "bvhNodeCount": 137735,
+        "displayQuality": true,
+        "accelerationBuildMode": "cpu-upload",
+        "maxDepth": 4,
+        "samplesPerPixel": 32,
+        "camera": {
+          "position": [
+            0,
+            1.12,
+            5.05
+          ],
+          "forward": [
+            0,
+            -0.07896061279595368,
+            -0.9968777365489149
+          ],
+          "right": [
+            1,
+            0,
+            0
+          ],
+          "up": [
+            0,
+            0.9968777365489149,
+            -0.07896061279595368
+          ],
+          "fovYDegrees": 43,
+          "aspect": 1.7777777777777777,
+          "tanHalfFovY": 0.39391047561494236
+        }
+      },
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "isFallbackAdapter": false
+      },
+      "memory": {
+        "rendererBufferBytes": 184339868,
+        "textureInventory": [
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1920,
+              "height": 1080
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1920,
+              "height": 1080
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 1920,
+              "height": 1080
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1,
+              "height": 1
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1,
+              "height": 1
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 1,
+              "height": 2
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba16float",
+            "size": {
+              "width": 128,
+              "height": 128
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3081,
+              "height": 2052
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 1029,
+              "height": 2052
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3081,
+              "height": 2052
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          },
+          {
+            "format": "rgba8unorm",
+            "size": {
+              "width": 3,
+              "height": 3
+            },
+            "mipLevelCount": 1,
+            "sampleCount": 1
+          }
+        ],
+        "adaptiveBufferBytes": 9421084,
+        "telemetryBufferBytes": 8256,
+        "fixtureStagingBytes": 589824,
+        "cachedBudgetHostBytes": 18662400
+      },
+      "timing": {
+        "independent-random": {
+          "fixed": {
+            "times": [
+              17115.19999998808,
+              17252.299999952316,
+              17175.69999998808
+            ],
+            "meanMs": 17181.066666642826
+          },
+          "radial": {
+            "times": [
+              5191.800000011921,
+              5202.5,
+              5197.5
+            ],
+            "meanMs": 5197.26666667064
+          }
+        },
+        "fixed-pattern": {
+          "fixed": {
+            "times": [
+              7177.300000011921,
+              7130.100000023842,
+              7109.5
+            ],
+            "meanMs": 7138.966666678588
+          },
+          "radial": {
+            "times": [
+              3075.199999988079,
+              2817,
+              2996.300000011921
+            ],
+            "meanMs": 2962.8333333333335
+          }
+        },
+        "stable-camera-random": {
+          "fixed": {
+            "times": [
+              16855.899999976158,
+              17016.400000035763,
+              17179.899999976158
+            ],
+            "meanMs": 17017.399999996025
+          },
+          "radial": {
+            "times": [
+              5339.300000011921,
+              5130.300000011921,
+              5223.199999988079
+            ],
+            "meanMs": 5230.933333337307
+          }
+        },
+        "stable-pattern": {
+          "fixed": {
+            "times": [
+              16886,
+              17240.80000001192,
+              17160.399999976158
+            ],
+            "meanMs": 17095.73333332936
+          },
+          "radial": {
+            "times": [
+              5297.600000023842,
+              5102.699999988079,
+              5279.899999976158
+            ],
+            "meanMs": 5226.73333332936
+          }
+        }
+      },
+      "assessments": {
+        "fixed-pattern": {
+          "repeatable": true,
+          "bandScreenPassed": false,
+          "qualified": false,
+          "limitation": "Static repeatability is not accuracy; common 96-sample reference is not certified converged. Motion, full quality and performance qualification remain open.",
+          "brightnessScreenPassed": false
+        },
+        "stable-camera-random": {
+          "repeatable": true,
+          "bandScreenPassed": true,
+          "qualified": false,
+          "limitation": "Static repeatability is not accuracy; common 96-sample reference is not certified converged. Motion, full quality and performance qualification remain open.",
+          "brightnessScreenPassed": true
+        },
+        "stable-pattern": {
+          "repeatable": true,
+          "bandScreenPassed": true,
+          "qualified": false,
+          "limitation": "Static repeatability is not accuracy; common 96-sample reference is not certified converged. Motion, full quality and performance qualification remain open.",
+          "brightnessScreenPassed": true
+        }
+      },
+      "traces": [
+        {
+          "sampler": "independent-random",
+          "seed": 7,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 72342046,
+          "segments": 138697246,
+          "gpuTileSpanMs": 15407.251456000002,
+          "imageSha256": "1237c0bd94b0595d010042f08a0f793ed39b488ff162c67103547f7ce66a2f5f"
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 19,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 72343253,
+          "segments": 138698453,
+          "gpuTileSpanMs": 15384.707072,
+          "imageSha256": "4584037e536fcb0e544c98d2704c2f019cbc863aecadba5a160c2db8eb50187c"
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 43,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 72343542,
+          "segments": 138698742,
+          "gpuTileSpanMs": 15355.740160000007,
+          "imageSha256": "1326ea8dea7246a36f997eb6715d27b4ba9430936b7dfcc29ec4690159c0a739"
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 7,
+          "mode": "uniform",
+          "primary": 66355200,
+          "secondary": 72342046,
+          "segments": 138697246,
+          "gpuTileSpanMs": 15534.653440000006,
+          "imageSha256": "1237c0bd94b0595d010042f08a0f793ed39b488ff162c67103547f7ce66a2f5f"
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 7,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17287682,
+          "segments": 29625602,
+          "gpuTileSpanMs": 4496.293888,
+          "imageSha256": "7bca050e884ef6f36a27340a11da854dec03e3ee6e84683d1f5e6bb6be2fbc60",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10763475160543909,
+            "normalizedRmse": 0.12981410379264194,
+            "maxAbsoluteError": 4.256759166717529,
+            "p95LocalError": 0.21829426288604736,
+            "p99LocalError": 0.43561306595802307,
+            "meanLuminanceAbsoluteError": 0.05764405486919861,
+            "maxLuminanceAbsoluteError": 3.6062454363107674,
+            "meanLuminance": 0.5669494630044825,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.00020920792401591596
+          },
+          "commonRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.028339735869499137,
+              "normalizedRmse": 0.06874849271468837,
+              "maxAbsoluteError": 0.4103609621524811,
+              "p95LocalError": 0.07022464275360107,
+              "p99LocalError": 0.09914308786392212,
+              "meanLuminanceAbsoluteError": 0.020734568901759013,
+              "maxLuminanceAbsoluteError": 0.38153078652322286,
+              "meanLuminance": 0.3498345588334148,
+              "referenceMeanLuminance": 0.3499492515713381,
+              "relativeEnergyDrift": -0.00032774105790570214
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.05221482507180355,
+              "normalizedRmse": 0.10979760605867096,
+              "maxAbsoluteError": 0.8024559617042542,
+              "p95LocalError": 0.12816601991653442,
+              "p99LocalError": 0.19012898206710815,
+              "meanLuminanceAbsoluteError": 0.03899727159077993,
+              "maxLuminanceAbsoluteError": 0.7796311217784881,
+              "meanLuminance": 0.4300646660311331,
+              "referenceMeanLuminance": 0.4301158962210533,
+              "relativeEnergyDrift": -0.00011910787387838418
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.07211728821456843,
+              "normalizedRmse": 0.05090053702802103,
+              "maxAbsoluteError": 2.0423641204833984,
+              "p95LocalError": 0.15587598085403442,
+              "p99LocalError": 0.2721855640411377,
+              "meanLuminanceAbsoluteError": 0.0530352232114116,
+              "maxLuminanceAbsoluteError": 1.730015984201431,
+              "meanLuminance": 0.7936935541060806,
+              "referenceMeanLuminance": 0.7938873166689315,
+              "relativeEnergyDrift": -0.00024406809226272045
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.08350502045611055,
+              "normalizedRmse": 0.08129369903892479,
+              "maxAbsoluteError": 4.256759166717529,
+              "p95LocalError": 0.16964203119277954,
+              "p99LocalError": 0.334011435508728,
+              "meanLuminanceAbsoluteError": 0.05137299791213103,
+              "maxLuminanceAbsoluteError": 3.6062454363107674,
+              "meanLuminance": 0.6487428056921962,
+              "referenceMeanLuminance": 0.6486423785612828,
+              "relativeEnergyDrift": 0.00015482665677221333
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11321671434620655,
+              "normalizedRmse": 0.20571090798837477,
+              "maxAbsoluteError": 3.341158926486969,
+              "p95LocalError": 0.23038643598556519,
+              "p99LocalError": 0.4494393765926361,
+              "meanLuminanceAbsoluteError": 0.06059747672097359,
+              "maxLuminanceAbsoluteError": 3.1696500746071337,
+              "meanLuminance": 0.5295064305369829,
+              "referenceMeanLuminance": 0.5298451806485979,
+              "relativeEnergyDrift": -0.0006393379122564208
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15353416097995853,
+              "normalizedRmse": 0.29330072845568245,
+              "maxAbsoluteError": 3.2768660187721252,
+              "p95LocalError": 0.2922186851501465,
+              "p99LocalError": 0.572213351726532,
+              "meanLuminanceAbsoluteError": 0.0773133880826083,
+              "maxLuminanceAbsoluteError": 3.182307680547237,
+              "meanLuminance": 0.5010882662843735,
+              "referenceMeanLuminance": 0.5011447102742899,
+              "relativeEnergyDrift": -0.00011263012211664846
+            }
+          ],
+          "sameSamplerFixed": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10447414451032863,
+            "normalizedRmse": 0.12593770602202353,
+            "maxAbsoluteError": 3.8310840129852295,
+            "p95LocalError": 0.21616801619529724,
+            "p99LocalError": 0.4222058653831482,
+            "meanLuminanceAbsoluteError": 0.05450740357412893,
+            "maxLuminanceAbsoluteError": 3.245621526789665,
+            "meanLuminance": 0.5669494630044825,
+            "referenceMeanLuminance": 0.5670797026496429,
+            "relativeEnergyDrift": -0.00022966726643860186
+          },
+          "sameSamplerRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.3498345588334148,
+              "referenceMeanLuminance": 0.3498345588334148,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.0403921485002653,
+              "normalizedRmse": 0.08472970362563478,
+              "maxAbsoluteError": 0.6573949456214905,
+              "p95LocalError": 0.09955444931983948,
+              "p99LocalError": 0.1467685103416443,
+              "meanLuminanceAbsoluteError": 0.030166863494136834,
+              "maxLuminanceAbsoluteError": 0.6394285771369934,
+              "meanLuminance": 0.4300646660311331,
+              "referenceMeanLuminance": 0.430122428741167,
+              "relativeEnergyDrift": -0.00013429364798065485
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.06530540540272148,
+              "normalizedRmse": 0.0460814549550889,
+              "maxAbsoluteError": 1.7870697975158691,
+              "p95LocalError": 0.14531292021274567,
+              "p99LocalError": 0.2382115125656128,
+              "meanLuminanceAbsoluteError": 0.04842836622154802,
+              "maxLuminanceAbsoluteError": 1.5137657432079314,
+              "meanLuminance": 0.7936935541060806,
+              "referenceMeanLuminance": 0.7939164685525887,
+              "relativeEnergyDrift": -0.0002807782119880619
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.07983177705666895,
+              "normalizedRmse": 0.07769436247381345,
+              "maxAbsoluteError": 3.8310840129852295,
+              "p95LocalError": 0.1669020652770996,
+              "p99LocalError": 0.31208282709121704,
+              "meanLuminanceAbsoluteError": 0.0497715289465759,
+              "maxLuminanceAbsoluteError": 3.245621526789665,
+              "meanLuminance": 0.6487428056921962,
+              "referenceMeanLuminance": 0.6486195731129901,
+              "relativeEnergyDrift": 0.00018999207596332495
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.1107866262325161,
+              "normalizedRmse": 0.20110286574119599,
+              "maxAbsoluteError": 3.1475824117660522,
+              "p95LocalError": 0.23053915798664093,
+              "p99LocalError": 0.43434956669807434,
+              "meanLuminanceAbsoluteError": 0.05989684836935028,
+              "maxLuminanceAbsoluteError": 2.9863136504888534,
+              "meanLuminance": 0.5295064305369829,
+              "referenceMeanLuminance": 0.5298506121276515,
+              "relativeEnergyDrift": -0.0006495823214896272
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15190698792747803,
+              "normalizedRmse": 0.2898877527616111,
+              "maxAbsoluteError": 3.217742145061493,
+              "p95LocalError": 0.29652804136276245,
+              "p99LocalError": 0.5631119310855865,
+              "meanLuminanceAbsoluteError": 0.07719177763931546,
+              "maxLuminanceAbsoluteError": 3.125378056180477,
+              "meanLuminance": 0.5010882662843735,
+              "referenceMeanLuminance": 0.5012067755856411,
+              "relativeEnergyDrift": -0.00023644792337256884
+            }
+          ]
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 19,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17288605,
+          "segments": 29626525,
+          "gpuTileSpanMs": 4570.939392,
+          "imageSha256": "9c3bacf37f4b08fb99e272a636ea3cd08d7c5d344f69234ca493c7daa156af55",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10781646775014218,
+            "normalizedRmse": 0.1300332645944967,
+            "maxAbsoluteError": 3.7460447549819946,
+            "p95LocalError": 0.21856224536895752,
+            "p99LocalError": 0.43733224272727966,
+            "meanLuminanceAbsoluteError": 0.057762461857413724,
+            "maxLuminanceAbsoluteError": 3.1736036417007445,
+            "meanLuminance": 0.5671360961210246,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": 0.00011991148360525877
+          },
+          "commonRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.028431137493004646,
+              "normalizedRmse": 0.06897022109905353,
+              "maxAbsoluteError": 0.2086840271949768,
+              "p95LocalError": 0.0702643096446991,
+              "p99LocalError": 0.09788203239440918,
+              "meanLuminanceAbsoluteError": 0.020883053264591764,
+              "maxLuminanceAbsoluteError": 0.19188157565593716,
+              "meanLuminance": 0.3499347932681757,
+              "referenceMeanLuminance": 0.3499492515713381,
+              "relativeEnergyDrift": -0.0000413154281584926
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.052204469481957234,
+              "normalizedRmse": 0.1097758302704176,
+              "maxAbsoluteError": 1.3273640871047974,
+              "p95LocalError": 0.12779366970062256,
+              "p99LocalError": 0.19023609161376953,
+              "meanLuminanceAbsoluteError": 0.03904184955297753,
+              "maxLuminanceAbsoluteError": 1.290205959355831,
+              "meanLuminance": 0.43012007245500444,
+              "referenceMeanLuminance": 0.4301158962210533,
+              "relativeEnergyDrift": 0.000009709555001093399
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.0719658920381507,
+              "normalizedRmse": 0.050793681281300164,
+              "maxAbsoluteError": 2.0423636436462402,
+              "p95LocalError": 0.15541663765907288,
+              "p99LocalError": 0.2694203853607178,
+              "meanLuminanceAbsoluteError": 0.05294419824516325,
+              "maxLuminanceAbsoluteError": 1.7300153040409088,
+              "meanLuminance": 0.7937291403749871,
+              "referenceMeanLuminance": 0.7938873166689315,
+              "relativeEnergyDrift": -0.0001992427522435573
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.08342255841687592,
+              "normalizedRmse": 0.08121342070160974,
+              "maxAbsoluteError": 3.7460447549819946,
+              "p95LocalError": 0.1697346568107605,
+              "p99LocalError": 0.33663082122802734,
+              "meanLuminanceAbsoluteError": 0.051391647871936626,
+              "maxLuminanceAbsoluteError": 3.1736036417007445,
+              "meanLuminance": 0.6488129708640155,
+              "referenceMeanLuminance": 0.6486423785612828,
+              "relativeEnergyDrift": 0.00026299900896235607
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11360550392315714,
+              "normalizedRmse": 0.20641732538754393,
+              "maxAbsoluteError": 2.672235369682312,
+              "p95LocalError": 0.23087531328201294,
+              "p99LocalError": 0.45329612493515015,
+              "meanLuminanceAbsoluteError": 0.06076466319656914,
+              "maxLuminanceAbsoluteError": 2.598233525431156,
+              "meanLuminance": 0.5299282039507661,
+              "referenceMeanLuminance": 0.5298451806485979,
+              "relativeEnergyDrift": 0.0001566935119927604
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.1538331934567373,
+              "normalizedRmse": 0.2938719788061668,
+              "maxAbsoluteError": 3.2549612522125244,
+              "p95LocalError": 0.2945955619215965,
+              "p99LocalError": 0.575763463973999,
+              "meanLuminanceAbsoluteError": 0.07761199651432948,
+              "maxLuminanceAbsoluteError": 3.1611305217742918,
+              "meanLuminance": 0.5012933319819698,
+              "referenceMeanLuminance": 0.5011447102742899,
+              "relativeEnergyDrift": 0.00029656445460351903
+            }
+          ],
+          "sameSamplerFixed": {
+            "pixels": 2073600,
+            "rgbRmse": 0.11386799525254067,
+            "normalizedRmse": 0.13726146482122106,
+            "maxAbsoluteError": 4.086591839790344,
+            "p95LocalError": 0.23348799347877502,
+            "p99LocalError": 0.44926318526268005,
+            "meanLuminanceAbsoluteError": 0.06361134428199068,
+            "maxLuminanceAbsoluteError": 3.462110581254959,
+            "meanLuminance": 0.5671360961210246,
+            "referenceMeanLuminance": 0.5670797026496429,
+            "relativeEnergyDrift": 0.00009944540620690415
+          },
+          "sameSamplerRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.04917370284633981,
+              "normalizedRmse": 0.11907349706768769,
+              "maxAbsoluteError": 0.5807333886623383,
+              "p95LocalError": 0.12194329500198364,
+              "p99LocalError": 0.17152053117752075,
+              "meanLuminanceAbsoluteError": 0.03604284343728245,
+              "maxLuminanceAbsoluteError": 0.5377900410026312,
+              "meanLuminance": 0.3499347932681757,
+              "referenceMeanLuminance": 0.3498345588334148,
+              "relativeEnergyDrift": 0.00028651953396238104
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.07009876269186746,
+              "normalizedRmse": 0.14704460168457303,
+              "maxAbsoluteError": 1.5884016156196594,
+              "p95LocalError": 0.17174237966537476,
+              "p99LocalError": 0.2557133138179779,
+              "meanLuminanceAbsoluteError": 0.05246541564226932,
+              "maxLuminanceAbsoluteError": 1.5442255425572395,
+              "meanLuminance": 0.43012007245500444,
+              "referenceMeanLuminance": 0.430122428741167,
+              "relativeEnergyDrift": -0.000005478175526578345
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.08400064545528226,
+              "normalizedRmse": 0.05927337769171358,
+              "maxAbsoluteError": 2.2976579666137695,
+              "p95LocalError": 0.18480131030082703,
+              "p99LocalError": 0.30750787258148193,
+              "meanLuminanceAbsoluteError": 0.06231461700120944,
+              "maxLuminanceAbsoluteError": 1.9462655450344084,
+              "meanLuminance": 0.7937291403749871,
+              "referenceMeanLuminance": 0.7939164685525887,
+              "relativeEnergyDrift": -0.0002359545179142203
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.09033561715069505,
+              "normalizedRmse": 0.08791697293947968,
+              "maxAbsoluteError": 4.086591839790344,
+              "p95LocalError": 0.1878603845834732,
+              "p99LocalError": 0.3556075096130371,
+              "meanLuminanceAbsoluteError": 0.056314008436318945,
+              "maxLuminanceAbsoluteError": 3.462110581254959,
+              "meanLuminance": 0.6488129708640155,
+              "referenceMeanLuminance": 0.6486195731129901,
+              "relativeEnergyDrift": 0.00029816823149071936
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11832722879354507,
+              "normalizedRmse": 0.2147907704640609,
+              "maxAbsoluteError": 2.7353848814964294,
+              "p95LocalError": 0.24643564224243164,
+              "p99LocalError": 0.4681673049926758,
+              "meanLuminanceAbsoluteError": 0.06391132134642151,
+              "maxLuminanceAbsoluteError": 2.659712594807148,
+              "meanLuminance": 0.5299282039507661,
+              "referenceMeanLuminance": 0.5298506121276515,
+              "relativeEnergyDrift": 0.00014644094267082734
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15700674836367023,
+              "normalizedRmse": 0.2996197480611039,
+              "maxAbsoluteError": 3.3052889108657837,
+              "p95LocalError": 0.3072212263941765,
+              "p99LocalError": 0.5853224694728851,
+              "meanLuminanceAbsoluteError": 0.0798993438874139,
+              "maxLuminanceAbsoluteError": 3.2095274537563325,
+              "meanLuminance": 0.5012933319819698,
+              "referenceMeanLuminance": 0.5012067755856411,
+              "relativeEnergyDrift": 0.00017269598206771087
+            }
+          ],
+          "staticDifference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.15459136807658957,
+            "normalizedRmse": 0.18490068740148105,
+            "maxAbsoluteError": 6.129894852638245,
+            "p95LocalError": 0.3392237424850464,
+            "p99LocalError": 0.6488442793488503,
+            "meanLuminanceAbsoluteError": 0.08388724079747693,
+            "maxLuminanceAbsoluteError": 5.1931742228031155,
+            "meanLuminance": 0.5671360961210246,
+            "referenceMeanLuminance": 0.5669494630044825,
+            "relativeEnergyDrift": 0.00032918827641709435
+          }
+        },
+        {
+          "sampler": "independent-random",
+          "seed": 43,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17290691,
+          "segments": 29628611,
+          "gpuTileSpanMs": 4556.390399999998,
+          "imageSha256": "4d3e39f28a9b3801d7b650042b221204b7ca1c9d6c68061276cdcd89566cef81",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10810162689103821,
+            "normalizedRmse": 0.13037718398634326,
+            "maxAbsoluteError": 10.242619276046753,
+            "p95LocalError": 0.21878623962402344,
+            "p99LocalError": 0.43782365322113037,
+            "meanLuminanceAbsoluteError": 0.05775394110682308,
+            "maxLuminanceAbsoluteError": 9.727317943137885,
+            "meanLuminance": 0.5671311312986166,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": 0.00011115623458980448
+          },
+          "commonRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.028370536795110663,
+              "normalizedRmse": 0.0688232117318225,
+              "maxAbsoluteError": 0.2399885058403015,
+              "p95LocalError": 0.0701410174369812,
+              "p99LocalError": 0.09881144762039185,
+              "meanLuminanceAbsoluteError": 0.020816428029463586,
+              "maxLuminanceAbsoluteError": 0.22527157156467437,
+              "meanLuminance": 0.35007840268444346,
+              "referenceMeanLuminance": 0.3499492515713381,
+              "relativeEnergyDrift": 0.0003690566918644041
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.05241202769884145,
+              "normalizedRmse": 0.11021228476969733,
+              "maxAbsoluteError": 1.8305959701538086,
+              "p95LocalError": 0.1285802125930786,
+              "p99LocalError": 0.19116666913032532,
+              "meanLuminanceAbsoluteError": 0.03909213967301213,
+              "maxLuminanceAbsoluteError": 1.7818381805062296,
+              "meanLuminance": 0.4299814853078482,
+              "referenceMeanLuminance": 0.4301158962210533,
+              "relativeEnergyDrift": -0.00031249929236748286
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.07160707977461164,
+              "normalizedRmse": 0.050540430814476754,
+              "maxAbsoluteError": 2.0747507214546204,
+              "p95LocalError": 0.15517735481262207,
+              "p99LocalError": 0.26853084564208984,
+              "meanLuminanceAbsoluteError": 0.05278658449383621,
+              "maxLuminanceAbsoluteError": 2.0174036635279653,
+              "meanLuminance": 0.7938218740454063,
+              "referenceMeanLuminance": 0.7938873166689315,
+              "relativeEnergyDrift": -0.00008243313899996285
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.08344755809012623,
+              "normalizedRmse": 0.08123775835103707,
+              "maxAbsoluteError": 2.468167930841446,
+              "p95LocalError": 0.16959159076213837,
+              "p99LocalError": 0.3356996774673462,
+              "meanLuminanceAbsoluteError": 0.05143769551786061,
+              "maxLuminanceAbsoluteError": 2.090783174997568,
+              "meanLuminance": 0.6486695971601134,
+              "referenceMeanLuminance": 0.6486423785612828,
+              "relativeEnergyDrift": 0.000041962412155331724
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11375039505827084,
+              "normalizedRmse": 0.20668058763760855,
+              "maxAbsoluteError": 3.030746579170227,
+              "p95LocalError": 0.2305876612663269,
+              "p99LocalError": 0.4548168182373047,
+              "meanLuminanceAbsoluteError": 0.060780090048513494,
+              "maxLuminanceAbsoluteError": 2.9464719529151915,
+              "meanLuminance": 0.5299002571854431,
+              "referenceMeanLuminance": 0.5298451806485979,
+              "relativeEnergyDrift": 0.00010394835860871906
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.1545883842795803,
+              "normalizedRmse": 0.2953146415793838,
+              "maxAbsoluteError": 10.242619276046753,
+              "p95LocalError": 0.29474642872810364,
+              "p99LocalError": 0.5726281404495239,
+              "meanLuminanceAbsoluteError": 0.07761342579309363,
+              "maxLuminanceAbsoluteError": 9.727317943137885,
+              "meanLuminance": 0.5013871911937349,
+              "referenceMeanLuminance": 0.5011447102742899,
+              "relativeEnergyDrift": 0.0004838540933860642
+            }
+          ],
+          "sameSamplerFixed": {
+            "pixels": 2073600,
+            "rgbRmse": 0.11418604373177697,
+            "normalizedRmse": 0.1376448543772356,
+            "maxAbsoluteError": 10.300253510475159,
+            "p95LocalError": 0.23359167575836182,
+            "p99LocalError": 0.4497494399547577,
+            "meanLuminanceAbsoluteError": 0.06360971540476432,
+            "maxLuminanceAbsoluteError": 9.78237802798748,
+            "meanLuminance": 0.5671311312986166,
+            "referenceMeanLuminance": 0.5670797026496429,
+            "relativeEnergyDrift": 0.00009069033635557001
+          },
+          "sameSamplerRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.049068588781315495,
+              "normalizedRmse": 0.11881896469389927,
+              "maxAbsoluteError": 0.6503494679927826,
+              "p95LocalError": 0.1212509274482727,
+              "p99LocalError": 0.1703101396560669,
+              "meanLuminanceAbsoluteError": 0.03592785503851308,
+              "maxLuminanceAbsoluteError": 0.6068023580878973,
+              "meanLuminance": 0.35007840268444346,
+              "referenceMeanLuminance": 0.3498345588334148,
+              "relativeEnergyDrift": 0.0006970261938722739
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.07032847277343553,
+              "normalizedRmse": 0.14752645936864633,
+              "maxAbsoluteError": 2.1182824969291687,
+              "p95LocalError": 0.17229223251342773,
+              "p99LocalError": 0.25767409801483154,
+              "meanLuminanceAbsoluteError": 0.052475890965033564,
+              "maxLuminanceAbsoluteError": 2.0630356356620787,
+              "meanLuminance": 0.4299814853078482,
+              "referenceMeanLuminance": 0.430122428741167,
+              "relativeEnergyDrift": -0.0003276821293215216
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.08352050618546634,
+              "normalizedRmse": 0.058934577005954884,
+              "maxAbsoluteError": 2.2187507152557373,
+              "p95LocalError": 0.18488717079162598,
+              "p99LocalError": 0.30772554874420166,
+              "meanLuminanceAbsoluteError": 0.06204270557357688,
+              "maxLuminanceAbsoluteError": 2.1566083683371544,
+              "meanLuminance": 0.7938218740454063,
+              "referenceMeanLuminance": 0.7939164685525887,
+              "relativeEnergyDrift": -0.00011914919381235573
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.09047704037818284,
+              "normalizedRmse": 0.0880546097039833,
+              "maxAbsoluteError": 2.8090344071388245,
+              "p95LocalError": 0.1886492669582367,
+              "p99LocalError": 0.3550814986228943,
+              "meanLuminanceAbsoluteError": 0.05644040200718115,
+              "maxLuminanceAbsoluteError": 2.379646542191505,
+              "meanLuminance": 0.6486695971601134,
+              "referenceMeanLuminance": 0.6486195731129901,
+              "relativeEnergyDrift": 0.00007712386304236896
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11855350993518701,
+              "normalizedRmse": 0.2152015220826893,
+              "maxAbsoluteError": 3.0937435030937195,
+              "p95LocalError": 0.24568411707878113,
+              "p99LocalError": 0.4712412357330322,
+              "meanLuminanceAbsoluteError": 0.06394854980234865,
+              "maxLuminanceAbsoluteError": 3.007622263038158,
+              "meanLuminance": 0.5299002571854431,
+              "referenceMeanLuminance": 0.5298506121276515,
+              "relativeEnergyDrift": 0.00009369632997540506
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15781195094126896,
+              "normalizedRmse": 0.3011563354750377,
+              "maxAbsoluteError": 10.300253510475159,
+              "p95LocalError": 0.3078926205635071,
+              "p99LocalError": 0.5822923481464386,
+              "meanLuminanceAbsoluteError": 0.07993643947311523,
+              "maxLuminanceAbsoluteError": 9.78237802798748,
+              "meanLuminance": 0.5013871911937349,
+              "referenceMeanLuminance": 0.5012067755856411,
+              "relativeEnergyDrift": 0.0003599624284468207
+            }
+          ],
+          "staticDifference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.15476739873483797,
+            "normalizedRmse": 0.18511123078510477,
+            "maxAbsoluteError": 10.471658989787102,
+            "p95LocalError": 0.33941584825515747,
+            "p99LocalError": 0.6488226652145386,
+            "meanLuminanceAbsoluteError": 0.08386004499051437,
+            "maxLuminanceAbsoluteError": 9.94636115310192,
+            "meanLuminance": 0.5671311312986166,
+            "referenceMeanLuminance": 0.5669494630044825,
+            "relativeEnergyDrift": 0.00032043119535088974
+          }
+        },
+        {
+          "sampler": "fixed-pattern",
+          "seed": 7,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 72117572,
+          "segments": 138472772,
+          "gpuTileSpanMs": 6107.824128000002,
+          "imageSha256": "866a8325ff8d448cc682791b0720260e5524a882a4db452e3e90b84646b5d8c8",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.03929310838087185,
+            "normalizedRmse": 0.047389895675963724,
+            "maxAbsoluteError": 0.6811001300811768,
+            "p95LocalError": 0.0942004919052124,
+            "p99LocalError": 0.13907697796821594,
+            "meanLuminanceAbsoluteError": 0.027244222660160404,
+            "maxLuminanceAbsoluteError": 0.6444742673158645,
+            "meanLuminance": 0.546647230320122,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.03601131485051511
+          }
+        },
+        {
+          "sampler": "fixed-pattern",
+          "seed": 7,
+          "mode": "uniform",
+          "primary": 66355200,
+          "secondary": 72117572,
+          "segments": 138472772,
+          "gpuTileSpanMs": 6344.015871999999,
+          "imageSha256": "866a8325ff8d448cc682791b0720260e5524a882a4db452e3e90b84646b5d8c8"
+        },
+        {
+          "sampler": "fixed-pattern",
+          "seed": 7,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 16731107,
+          "segments": 29069027,
+          "gpuTileSpanMs": 2491.6131840000007,
+          "imageSha256": "4fe37b6a6571d2ffe2da406254a5f28ce7a39ff9412381c66190311c8addcb3e",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.06633362153223336,
+            "normalizedRmse": 0.08000241095081442,
+            "maxAbsoluteError": 2.8096117973327637,
+            "p95LocalError": 0.15363243222236633,
+            "p99LocalError": 0.22065047919750214,
+            "meanLuminanceAbsoluteError": 0.04721659821387998,
+            "maxLuminanceAbsoluteError": 2.3802912584781644,
+            "meanLuminance": 0.5489751698799628,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.03190609438852864
+          },
+          "commonRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.037044825417272435,
+              "normalizedRmse": 0.08986590143407949,
+              "maxAbsoluteError": 0.24297800660133362,
+              "p95LocalError": 0.08943173289299011,
+              "p99LocalError": 0.11957228183746338,
+              "meanLuminanceAbsoluteError": 0.028180871880388644,
+              "maxLuminanceAbsoluteError": 0.23727635769844052,
+              "meanLuminance": 0.332293325947146,
+              "referenceMeanLuminance": 0.3499492515713381,
+              "relativeEnergyDrift": -0.05045281721539244
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.04745088643637502,
+              "normalizedRmse": 0.09977997108888675,
+              "maxAbsoluteError": 0.6552467942237854,
+              "p95LocalError": 0.11655902862548828,
+              "p99LocalError": 0.15918558835983276,
+              "meanLuminanceAbsoluteError": 0.036427599486164,
+              "maxLuminanceAbsoluteError": 0.6364143365979195,
+              "meanLuminance": 0.40440525053906135,
+              "referenceMeanLuminance": 0.4301158962210533,
+              "relativeEnergyDrift": -0.059776088044832996
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.07302308096328715,
+              "normalizedRmse": 0.051539847496943465,
+              "maxAbsoluteError": 1.0212101936340332,
+              "p95LocalError": 0.15773004293441772,
+              "p99LocalError": 0.21104973554611206,
+              "meanLuminanceAbsoluteError": 0.05985026427454934,
+              "maxLuminanceAbsoluteError": 0.8650380302429199,
+              "meanLuminance": 0.7366858130182488,
+              "referenceMeanLuminance": 0.7938873166689315,
+              "relativeEnergyDrift": -0.07205242160901917
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.051944785272072365,
+              "normalizedRmse": 0.05056921988024515,
+              "maxAbsoluteError": 2.8096117973327637,
+              "p95LocalError": 0.1310177743434906,
+              "p99LocalError": 0.18022888898849487,
+              "meanLuminanceAbsoluteError": 0.03479073266855831,
+              "maxLuminanceAbsoluteError": 2.3802912584781644,
+              "meanLuminance": 0.6344540608447503,
+              "referenceMeanLuminance": 0.6486423785612828,
+              "relativeEnergyDrift": -0.02187386792087624
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.07209158901884458,
+              "normalizedRmse": 0.13098795810345085,
+              "maxAbsoluteError": 0.37411773204803467,
+              "p95LocalError": 0.15190213918685913,
+              "p99LocalError": 0.18760612607002258,
+              "meanLuminanceAbsoluteError": 0.05227517469043792,
+              "maxLuminanceAbsoluteError": 0.3621681589782238,
+              "meanLuminance": 0.5195570767204355,
+              "referenceMeanLuminance": 0.5298451806485979,
+              "relativeEnergyDrift": -0.019417188839140564
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.07661769326968675,
+              "normalizedRmse": 0.14636498551958435,
+              "maxAbsoluteError": 0.36739635467529297,
+              "p95LocalError": 0.20234829187393188,
+              "p99LocalError": 0.2616555094718933,
+              "meanLuminanceAbsoluteError": 0.052641259294973604,
+              "maxLuminanceAbsoluteError": 0.35277123835086827,
+              "meanLuminance": 0.4985481009076128,
+              "referenceMeanLuminance": 0.5011447102742899,
+              "relativeEnergyDrift": -0.005181356429474993
+            }
+          ],
+          "sameSamplerFixed": {
+            "pixels": 2073600,
+            "rgbRmse": 0.05962500547021752,
+            "normalizedRmse": 0.0731710423302529,
+            "maxAbsoluteError": 2.298773765563965,
+            "p95LocalError": 0.14435577392578125,
+            "p99LocalError": 0.2435510754585266,
+            "meanLuminanceAbsoluteError": 0.03711576866692247,
+            "maxLuminanceAbsoluteError": 1.947511422586441,
+            "meanLuminance": 0.5489751698799628,
+            "referenceMeanLuminance": 0.546647230320122,
+            "relativeEnergyDrift": 0.004258577434806585
+          },
+          "sameSamplerRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.332293325947146,
+              "referenceMeanLuminance": 0.332293325947146,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.016311158212299413,
+              "normalizedRmse": 0.036266296376568696,
+              "maxAbsoluteError": 0.5016100406646729,
+              "p95LocalError": 0.03643596172332764,
+              "p99LocalError": 0.04646795988082886,
+              "meanLuminanceAbsoluteError": 0.013142075680548905,
+              "maxLuminanceAbsoluteError": 0.4885270533770322,
+              "meanLuminance": 0.40440525053906135,
+              "referenceMeanLuminance": 0.40590207090231295,
+              "relativeEnergyDrift": -0.003687639138978034
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.05247861310137893,
+              "normalizedRmse": 0.03730564430139365,
+              "maxAbsoluteError": 1.2764768600463867,
+              "p95LocalError": 0.10124306380748749,
+              "p99LocalError": 0.24904856085777283,
+              "meanLuminanceAbsoluteError": 0.035659148633488104,
+              "maxLuminanceAbsoluteError": 1.0812592300891877,
+              "meanLuminance": 0.7366858130182488,
+              "referenceMeanLuminance": 0.7690404070247139,
+              "relativeEnergyDrift": -0.04207138365022923
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.0380125175957685,
+              "normalizedRmse": 0.03744895388428127,
+              "maxAbsoluteError": 2.298773765563965,
+              "p95LocalError": 0.07475733757019043,
+              "p99LocalError": 0.12825918197631836,
+              "meanLuminanceAbsoluteError": 0.026534331765134617,
+              "maxLuminanceAbsoluteError": 1.947511422586441,
+              "meanLuminance": 0.6344540608447503,
+              "referenceMeanLuminance": 0.6291747354566519,
+              "relativeEnergyDrift": 0.008390873139981844
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.06815849644095287,
+              "normalizedRmse": 0.12922468113235439,
+              "maxAbsoluteError": 0.2497592568397522,
+              "p95LocalError": 0.1420103907585144,
+              "p99LocalError": 0.1503855586051941,
+              "meanLuminanceAbsoluteError": 0.04837612783268061,
+              "maxLuminanceAbsoluteError": 0.2351020151257515,
+              "meanLuminance": 0.5195570767204355,
+              "referenceMeanLuminance": 0.5081253329707014,
+              "relativeEnergyDrift": 0.022497881935741378
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.08161004119771798,
+              "normalizedRmse": 0.1616486867593008,
+              "maxAbsoluteError": 0.42488276958465576,
+              "p95LocalError": 0.23464953899383545,
+              "p99LocalError": 0.27910035848617554,
+              "meanLuminanceAbsoluteError": 0.05220716197057908,
+              "maxLuminanceAbsoluteError": 0.41027319485545155,
+              "meanLuminance": 0.4985481009076128,
+              "referenceMeanLuminance": 0.4848800621794102,
+              "relativeEnergyDrift": 0.028188494009772812
+            }
+          ]
+        },
+        {
+          "sampler": "fixed-pattern",
+          "seed": 19,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 16731107,
+          "segments": 29069027,
+          "gpuTileSpanMs": 2493.5792640000013,
+          "imageSha256": "4fe37b6a6571d2ffe2da406254a5f28ce7a39ff9412381c66190311c8addcb3e",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.06633362153223336,
+            "normalizedRmse": 0.08000241095081442,
+            "maxAbsoluteError": 2.8096117973327637,
+            "p95LocalError": 0.15363243222236633,
+            "p99LocalError": 0.22065047919750214,
+            "meanLuminanceAbsoluteError": 0.04721659821387998,
+            "maxLuminanceAbsoluteError": 2.3802912584781644,
+            "meanLuminance": 0.5489751698799628,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.03190609438852864
+          },
+          "commonRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.037044825417272435,
+              "normalizedRmse": 0.08986590143407949,
+              "maxAbsoluteError": 0.24297800660133362,
+              "p95LocalError": 0.08943173289299011,
+              "p99LocalError": 0.11957228183746338,
+              "meanLuminanceAbsoluteError": 0.028180871880388644,
+              "maxLuminanceAbsoluteError": 0.23727635769844052,
+              "meanLuminance": 0.332293325947146,
+              "referenceMeanLuminance": 0.3499492515713381,
+              "relativeEnergyDrift": -0.05045281721539244
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.04745088643637502,
+              "normalizedRmse": 0.09977997108888675,
+              "maxAbsoluteError": 0.6552467942237854,
+              "p95LocalError": 0.11655902862548828,
+              "p99LocalError": 0.15918558835983276,
+              "meanLuminanceAbsoluteError": 0.036427599486164,
+              "maxLuminanceAbsoluteError": 0.6364143365979195,
+              "meanLuminance": 0.40440525053906135,
+              "referenceMeanLuminance": 0.4301158962210533,
+              "relativeEnergyDrift": -0.059776088044832996
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.07302308096328715,
+              "normalizedRmse": 0.051539847496943465,
+              "maxAbsoluteError": 1.0212101936340332,
+              "p95LocalError": 0.15773004293441772,
+              "p99LocalError": 0.21104973554611206,
+              "meanLuminanceAbsoluteError": 0.05985026427454934,
+              "maxLuminanceAbsoluteError": 0.8650380302429199,
+              "meanLuminance": 0.7366858130182488,
+              "referenceMeanLuminance": 0.7938873166689315,
+              "relativeEnergyDrift": -0.07205242160901917
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.051944785272072365,
+              "normalizedRmse": 0.05056921988024515,
+              "maxAbsoluteError": 2.8096117973327637,
+              "p95LocalError": 0.1310177743434906,
+              "p99LocalError": 0.18022888898849487,
+              "meanLuminanceAbsoluteError": 0.03479073266855831,
+              "maxLuminanceAbsoluteError": 2.3802912584781644,
+              "meanLuminance": 0.6344540608447503,
+              "referenceMeanLuminance": 0.6486423785612828,
+              "relativeEnergyDrift": -0.02187386792087624
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.07209158901884458,
+              "normalizedRmse": 0.13098795810345085,
+              "maxAbsoluteError": 0.37411773204803467,
+              "p95LocalError": 0.15190213918685913,
+              "p99LocalError": 0.18760612607002258,
+              "meanLuminanceAbsoluteError": 0.05227517469043792,
+              "maxLuminanceAbsoluteError": 0.3621681589782238,
+              "meanLuminance": 0.5195570767204355,
+              "referenceMeanLuminance": 0.5298451806485979,
+              "relativeEnergyDrift": -0.019417188839140564
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.07661769326968675,
+              "normalizedRmse": 0.14636498551958435,
+              "maxAbsoluteError": 0.36739635467529297,
+              "p95LocalError": 0.20234829187393188,
+              "p99LocalError": 0.2616555094718933,
+              "meanLuminanceAbsoluteError": 0.052641259294973604,
+              "maxLuminanceAbsoluteError": 0.35277123835086827,
+              "meanLuminance": 0.4985481009076128,
+              "referenceMeanLuminance": 0.5011447102742899,
+              "relativeEnergyDrift": -0.005181356429474993
+            }
+          ],
+          "sameSamplerFixed": {
+            "pixels": 2073600,
+            "rgbRmse": 0.05962500547021752,
+            "normalizedRmse": 0.0731710423302529,
+            "maxAbsoluteError": 2.298773765563965,
+            "p95LocalError": 0.14435577392578125,
+            "p99LocalError": 0.2435510754585266,
+            "meanLuminanceAbsoluteError": 0.03711576866692247,
+            "maxLuminanceAbsoluteError": 1.947511422586441,
+            "meanLuminance": 0.5489751698799628,
+            "referenceMeanLuminance": 0.546647230320122,
+            "relativeEnergyDrift": 0.004258577434806585
+          },
+          "sameSamplerRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.332293325947146,
+              "referenceMeanLuminance": 0.332293325947146,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.016311158212299413,
+              "normalizedRmse": 0.036266296376568696,
+              "maxAbsoluteError": 0.5016100406646729,
+              "p95LocalError": 0.03643596172332764,
+              "p99LocalError": 0.04646795988082886,
+              "meanLuminanceAbsoluteError": 0.013142075680548905,
+              "maxLuminanceAbsoluteError": 0.4885270533770322,
+              "meanLuminance": 0.40440525053906135,
+              "referenceMeanLuminance": 0.40590207090231295,
+              "relativeEnergyDrift": -0.003687639138978034
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.05247861310137893,
+              "normalizedRmse": 0.03730564430139365,
+              "maxAbsoluteError": 1.2764768600463867,
+              "p95LocalError": 0.10124306380748749,
+              "p99LocalError": 0.24904856085777283,
+              "meanLuminanceAbsoluteError": 0.035659148633488104,
+              "maxLuminanceAbsoluteError": 1.0812592300891877,
+              "meanLuminance": 0.7366858130182488,
+              "referenceMeanLuminance": 0.7690404070247139,
+              "relativeEnergyDrift": -0.04207138365022923
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.0380125175957685,
+              "normalizedRmse": 0.03744895388428127,
+              "maxAbsoluteError": 2.298773765563965,
+              "p95LocalError": 0.07475733757019043,
+              "p99LocalError": 0.12825918197631836,
+              "meanLuminanceAbsoluteError": 0.026534331765134617,
+              "maxLuminanceAbsoluteError": 1.947511422586441,
+              "meanLuminance": 0.6344540608447503,
+              "referenceMeanLuminance": 0.6291747354566519,
+              "relativeEnergyDrift": 0.008390873139981844
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.06815849644095287,
+              "normalizedRmse": 0.12922468113235439,
+              "maxAbsoluteError": 0.2497592568397522,
+              "p95LocalError": 0.1420103907585144,
+              "p99LocalError": 0.1503855586051941,
+              "meanLuminanceAbsoluteError": 0.04837612783268061,
+              "maxLuminanceAbsoluteError": 0.2351020151257515,
+              "meanLuminance": 0.5195570767204355,
+              "referenceMeanLuminance": 0.5081253329707014,
+              "relativeEnergyDrift": 0.022497881935741378
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.08161004119771798,
+              "normalizedRmse": 0.1616486867593008,
+              "maxAbsoluteError": 0.42488276958465576,
+              "p95LocalError": 0.23464953899383545,
+              "p99LocalError": 0.27910035848617554,
+              "meanLuminanceAbsoluteError": 0.05220716197057908,
+              "maxLuminanceAbsoluteError": 0.41027319485545155,
+              "meanLuminance": 0.4985481009076128,
+              "referenceMeanLuminance": 0.4848800621794102,
+              "relativeEnergyDrift": 0.028188494009772812
+            }
+          ],
+          "staticDifference": {
+            "pixels": 2073600,
+            "rgbRmse": 0,
+            "normalizedRmse": 0,
+            "maxAbsoluteError": 0,
+            "p95LocalError": 0,
+            "p99LocalError": 0,
+            "meanLuminanceAbsoluteError": 0,
+            "maxLuminanceAbsoluteError": 0,
+            "meanLuminance": 0.5489751698799628,
+            "referenceMeanLuminance": 0.5489751698799628,
+            "relativeEnergyDrift": 0
+          }
+        },
+        {
+          "sampler": "fixed-pattern",
+          "seed": 43,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 16731107,
+          "segments": 29069027,
+          "gpuTileSpanMs": 2487.549952000001,
+          "imageSha256": "4fe37b6a6571d2ffe2da406254a5f28ce7a39ff9412381c66190311c8addcb3e",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.06633362153223336,
+            "normalizedRmse": 0.08000241095081442,
+            "maxAbsoluteError": 2.8096117973327637,
+            "p95LocalError": 0.15363243222236633,
+            "p99LocalError": 0.22065047919750214,
+            "meanLuminanceAbsoluteError": 0.04721659821387998,
+            "maxLuminanceAbsoluteError": 2.3802912584781644,
+            "meanLuminance": 0.5489751698799628,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.03190609438852864
+          },
+          "commonRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.037044825417272435,
+              "normalizedRmse": 0.08986590143407949,
+              "maxAbsoluteError": 0.24297800660133362,
+              "p95LocalError": 0.08943173289299011,
+              "p99LocalError": 0.11957228183746338,
+              "meanLuminanceAbsoluteError": 0.028180871880388644,
+              "maxLuminanceAbsoluteError": 0.23727635769844052,
+              "meanLuminance": 0.332293325947146,
+              "referenceMeanLuminance": 0.3499492515713381,
+              "relativeEnergyDrift": -0.05045281721539244
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.04745088643637502,
+              "normalizedRmse": 0.09977997108888675,
+              "maxAbsoluteError": 0.6552467942237854,
+              "p95LocalError": 0.11655902862548828,
+              "p99LocalError": 0.15918558835983276,
+              "meanLuminanceAbsoluteError": 0.036427599486164,
+              "maxLuminanceAbsoluteError": 0.6364143365979195,
+              "meanLuminance": 0.40440525053906135,
+              "referenceMeanLuminance": 0.4301158962210533,
+              "relativeEnergyDrift": -0.059776088044832996
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.07302308096328715,
+              "normalizedRmse": 0.051539847496943465,
+              "maxAbsoluteError": 1.0212101936340332,
+              "p95LocalError": 0.15773004293441772,
+              "p99LocalError": 0.21104973554611206,
+              "meanLuminanceAbsoluteError": 0.05985026427454934,
+              "maxLuminanceAbsoluteError": 0.8650380302429199,
+              "meanLuminance": 0.7366858130182488,
+              "referenceMeanLuminance": 0.7938873166689315,
+              "relativeEnergyDrift": -0.07205242160901917
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.051944785272072365,
+              "normalizedRmse": 0.05056921988024515,
+              "maxAbsoluteError": 2.8096117973327637,
+              "p95LocalError": 0.1310177743434906,
+              "p99LocalError": 0.18022888898849487,
+              "meanLuminanceAbsoluteError": 0.03479073266855831,
+              "maxLuminanceAbsoluteError": 2.3802912584781644,
+              "meanLuminance": 0.6344540608447503,
+              "referenceMeanLuminance": 0.6486423785612828,
+              "relativeEnergyDrift": -0.02187386792087624
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.07209158901884458,
+              "normalizedRmse": 0.13098795810345085,
+              "maxAbsoluteError": 0.37411773204803467,
+              "p95LocalError": 0.15190213918685913,
+              "p99LocalError": 0.18760612607002258,
+              "meanLuminanceAbsoluteError": 0.05227517469043792,
+              "maxLuminanceAbsoluteError": 0.3621681589782238,
+              "meanLuminance": 0.5195570767204355,
+              "referenceMeanLuminance": 0.5298451806485979,
+              "relativeEnergyDrift": -0.019417188839140564
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.07661769326968675,
+              "normalizedRmse": 0.14636498551958435,
+              "maxAbsoluteError": 0.36739635467529297,
+              "p95LocalError": 0.20234829187393188,
+              "p99LocalError": 0.2616555094718933,
+              "meanLuminanceAbsoluteError": 0.052641259294973604,
+              "maxLuminanceAbsoluteError": 0.35277123835086827,
+              "meanLuminance": 0.4985481009076128,
+              "referenceMeanLuminance": 0.5011447102742899,
+              "relativeEnergyDrift": -0.005181356429474993
+            }
+          ],
+          "sameSamplerFixed": {
+            "pixels": 2073600,
+            "rgbRmse": 0.05962500547021752,
+            "normalizedRmse": 0.0731710423302529,
+            "maxAbsoluteError": 2.298773765563965,
+            "p95LocalError": 0.14435577392578125,
+            "p99LocalError": 0.2435510754585266,
+            "meanLuminanceAbsoluteError": 0.03711576866692247,
+            "maxLuminanceAbsoluteError": 1.947511422586441,
+            "meanLuminance": 0.5489751698799628,
+            "referenceMeanLuminance": 0.546647230320122,
+            "relativeEnergyDrift": 0.004258577434806585
+          },
+          "sameSamplerRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.332293325947146,
+              "referenceMeanLuminance": 0.332293325947146,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.016311158212299413,
+              "normalizedRmse": 0.036266296376568696,
+              "maxAbsoluteError": 0.5016100406646729,
+              "p95LocalError": 0.03643596172332764,
+              "p99LocalError": 0.04646795988082886,
+              "meanLuminanceAbsoluteError": 0.013142075680548905,
+              "maxLuminanceAbsoluteError": 0.4885270533770322,
+              "meanLuminance": 0.40440525053906135,
+              "referenceMeanLuminance": 0.40590207090231295,
+              "relativeEnergyDrift": -0.003687639138978034
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.05247861310137893,
+              "normalizedRmse": 0.03730564430139365,
+              "maxAbsoluteError": 1.2764768600463867,
+              "p95LocalError": 0.10124306380748749,
+              "p99LocalError": 0.24904856085777283,
+              "meanLuminanceAbsoluteError": 0.035659148633488104,
+              "maxLuminanceAbsoluteError": 1.0812592300891877,
+              "meanLuminance": 0.7366858130182488,
+              "referenceMeanLuminance": 0.7690404070247139,
+              "relativeEnergyDrift": -0.04207138365022923
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.0380125175957685,
+              "normalizedRmse": 0.03744895388428127,
+              "maxAbsoluteError": 2.298773765563965,
+              "p95LocalError": 0.07475733757019043,
+              "p99LocalError": 0.12825918197631836,
+              "meanLuminanceAbsoluteError": 0.026534331765134617,
+              "maxLuminanceAbsoluteError": 1.947511422586441,
+              "meanLuminance": 0.6344540608447503,
+              "referenceMeanLuminance": 0.6291747354566519,
+              "relativeEnergyDrift": 0.008390873139981844
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.06815849644095287,
+              "normalizedRmse": 0.12922468113235439,
+              "maxAbsoluteError": 0.2497592568397522,
+              "p95LocalError": 0.1420103907585144,
+              "p99LocalError": 0.1503855586051941,
+              "meanLuminanceAbsoluteError": 0.04837612783268061,
+              "maxLuminanceAbsoluteError": 0.2351020151257515,
+              "meanLuminance": 0.5195570767204355,
+              "referenceMeanLuminance": 0.5081253329707014,
+              "relativeEnergyDrift": 0.022497881935741378
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.08161004119771798,
+              "normalizedRmse": 0.1616486867593008,
+              "maxAbsoluteError": 0.42488276958465576,
+              "p95LocalError": 0.23464953899383545,
+              "p99LocalError": 0.27910035848617554,
+              "meanLuminanceAbsoluteError": 0.05220716197057908,
+              "maxLuminanceAbsoluteError": 0.41027319485545155,
+              "meanLuminance": 0.4985481009076128,
+              "referenceMeanLuminance": 0.4848800621794102,
+              "relativeEnergyDrift": 0.028188494009772812
+            }
+          ],
+          "staticDifference": {
+            "pixels": 2073600,
+            "rgbRmse": 0,
+            "normalizedRmse": 0,
+            "maxAbsoluteError": 0,
+            "p95LocalError": 0,
+            "p99LocalError": 0,
+            "meanLuminanceAbsoluteError": 0,
+            "maxLuminanceAbsoluteError": 0,
+            "meanLuminance": 0.5489751698799628,
+            "referenceMeanLuminance": 0.5489751698799628,
+            "relativeEnergyDrift": 0
+          }
+        },
+        {
+          "sampler": "stable-camera-random",
+          "seed": 7,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 72342666,
+          "segments": 138697866,
+          "gpuTileSpanMs": 15233.253375999999,
+          "imageSha256": "c8169ab20aca40c6c35b510a82ee04973b7c2b9ee014d1ceb5ca858d27b3565e",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.03657528001215103,
+            "normalizedRmse": 0.04411202817791784,
+            "maxAbsoluteError": 1.008765161037445,
+            "p95LocalError": 0.08776670694351196,
+            "p99LocalError": 0.13156026601791382,
+            "meanLuminanceAbsoluteError": 0.02489446436940767,
+            "maxLuminanceAbsoluteError": 0.9815020449757575,
+            "meanLuminance": 0.5670409446481702,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.000047884012501351656
+          }
+        },
+        {
+          "sampler": "stable-camera-random",
+          "seed": 7,
+          "mode": "uniform",
+          "primary": 66355200,
+          "secondary": 72342666,
+          "segments": 138697866,
+          "gpuTileSpanMs": 15394.078719999994,
+          "imageSha256": "c8169ab20aca40c6c35b510a82ee04973b7c2b9ee014d1ceb5ca858d27b3565e"
+        },
+        {
+          "sampler": "stable-camera-random",
+          "seed": 7,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17288705,
+          "segments": 29626625,
+          "gpuTileSpanMs": 4421.779455999999,
+          "imageSha256": "11b21c14733cc53548fdc25d29e6283a23561301282343287f902bf1023a8c58",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.11051687241374918,
+            "normalizedRmse": 0.13329011803685556,
+            "maxAbsoluteError": 3.275968849658966,
+            "p95LocalError": 0.22376149892807007,
+            "p99LocalError": 0.4432046413421631,
+            "meanLuminanceAbsoluteError": 0.06039000340795619,
+            "maxLuminanceAbsoluteError": 3.183990616929531,
+            "meanLuminance": 0.5668963005347337,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.000302957634011626
+          },
+          "commonRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.03999171212292878,
+              "normalizedRmse": 0.0970146631638199,
+              "maxAbsoluteError": 0.2886042594909668,
+              "p95LocalError": 0.09905502200126648,
+              "p99LocalError": 0.139410138130188,
+              "meanLuminanceAbsoluteError": 0.029363435211126766,
+              "maxLuminanceAbsoluteError": 0.27555034738779066,
+              "meanLuminance": 0.34985029381504357,
+              "referenceMeanLuminance": 0.3499492515713381,
+              "relativeEnergyDrift": -0.00028277744801626374
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.06173649281800789,
+              "normalizedRmse": 0.12981981857746486,
+              "maxAbsoluteError": 2.0898610949516296,
+              "p95LocalError": 0.1516023576259613,
+              "p99LocalError": 0.2271474003791809,
+              "meanLuminanceAbsoluteError": 0.046081153070755915,
+              "maxLuminanceAbsoluteError": 2.0336090440392494,
+              "meanLuminance": 0.4298437504345197,
+              "referenceMeanLuminance": 0.4301158962210533,
+              "relativeEnergyDrift": -0.0006327266416438204
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.0779663271385296,
+              "normalizedRmse": 0.055028801272256435,
+              "maxAbsoluteError": 1.5906392335891724,
+              "p95LocalError": 0.16912516951560974,
+              "p99LocalError": 0.29355716705322266,
+              "meanLuminanceAbsoluteError": 0.05740271333974715,
+              "maxLuminanceAbsoluteError": 1.5478626142561436,
+              "meanLuminance": 0.793779932265094,
+              "referenceMeanLuminance": 0.7938873166689315,
+              "relativeEnergyDrift": -0.00013526403758163207
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.08697541870821872,
+              "normalizedRmse": 0.08467219663716648,
+              "maxAbsoluteError": 2.8096117973327637,
+              "p95LocalError": 0.17707514762878418,
+              "p99LocalError": 0.35492390394210815,
+              "meanLuminanceAbsoluteError": 0.05360322945629245,
+              "maxLuminanceAbsoluteError": 2.3802912584781644,
+              "meanLuminance": 0.6487657444602011,
+              "referenceMeanLuminance": 0.6486423785612828,
+              "relativeEnergyDrift": 0.00019019093262432824
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11531061603408481,
+              "normalizedRmse": 0.20951545592936757,
+              "maxAbsoluteError": 2.788512170314789,
+              "p95LocalError": 0.23502612859010696,
+              "p99LocalError": 0.46145200729370117,
+              "meanLuminanceAbsoluteError": 0.06184784904104259,
+              "maxLuminanceAbsoluteError": 2.7123543935894965,
+              "meanLuminance": 0.5295539117253559,
+              "referenceMeanLuminance": 0.5298451806485979,
+              "relativeEnergyDrift": -0.0005497245872566046
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15497072397188022,
+              "normalizedRmse": 0.2960450361023573,
+              "maxAbsoluteError": 3.275968849658966,
+              "p95LocalError": 0.29533009976148605,
+              "p99LocalError": 0.5739303529262543,
+              "meanLuminanceAbsoluteError": 0.07808280475137588,
+              "maxLuminanceAbsoluteError": 3.183990616929531,
+              "meanLuminance": 0.5008431765494299,
+              "referenceMeanLuminance": 0.5011447102742899,
+              "relativeEnergyDrift": -0.0006016899284338688
+            }
+          ],
+          "sameSamplerFixed": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10427174807577284,
+            "normalizedRmse": 0.12570150058971974,
+            "maxAbsoluteError": 3.1689568161964417,
+            "p95LocalError": 0.2162187695503235,
+            "p99LocalError": 0.4219385087490082,
+            "meanLuminanceAbsoluteError": 0.05446018899541381,
+            "maxLuminanceAbsoluteError": 3.0777626332640646,
+            "meanLuminance": 0.5668963005347337,
+            "referenceMeanLuminance": 0.5670409446481702,
+            "relativeEnergyDrift": -0.0002550858360436364
+          },
+          "sameSamplerRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.34985029381504357,
+              "referenceMeanLuminance": 0.34985029381504357,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.04031362331009004,
+              "normalizedRmse": 0.08459004853412276,
+              "maxAbsoluteError": 1.0810959339141846,
+              "p95LocalError": 0.09934628009796143,
+              "p99LocalError": 0.14694923162460327,
+              "meanLuminanceAbsoluteError": 0.03008365595025657,
+              "maxLuminanceAbsoluteError": 1.0521069990634917,
+              "meanLuminance": 0.4298437504345197,
+              "referenceMeanLuminance": 0.43002413269949197,
+              "relativeEnergyDrift": -0.00041947009773589286
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.06487504139806465,
+              "normalizedRmse": 0.045780276002791304,
+              "maxAbsoluteError": 1.2764768600463867,
+              "p95LocalError": 0.1446872055530548,
+              "p99LocalError": 0.23654431104660034,
+              "meanLuminanceAbsoluteError": 0.048256477217551344,
+              "maxLuminanceAbsoluteError": 1.173491077852249,
+              "meanLuminance": 0.793779932265094,
+              "referenceMeanLuminance": 0.7937643651576838,
+              "relativeEnergyDrift": 0.00001961174889374554
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.07963674952284044,
+              "normalizedRmse": 0.07750652934673258,
+              "maxAbsoluteError": 2.298773765563965,
+              "p95LocalError": 0.16715097427368164,
+              "p99LocalError": 0.315903902053833,
+              "meanLuminanceAbsoluteError": 0.049757488349968036,
+              "maxLuminanceAbsoluteError": 1.947511422586441,
+              "meanLuminance": 0.6487657444602011,
+              "referenceMeanLuminance": 0.6486434780738103,
+              "relativeEnergyDrift": 0.00018849551490732568
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11062143027617453,
+              "normalizedRmse": 0.20082843139314172,
+              "maxAbsoluteError": 2.631461977958679,
+              "p95LocalError": 0.23128637671470642,
+              "p99LocalError": 0.43699580430984497,
+              "meanLuminanceAbsoluteError": 0.059956294706466066,
+              "maxLuminanceAbsoluteError": 2.5593001146912573,
+              "meanLuminance": 0.5295539117253559,
+              "referenceMeanLuminance": 0.5298269556775007,
+              "relativeEnergyDrift": -0.0005153455278536676
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15167182191672274,
+              "normalizedRmse": 0.2894600286728251,
+              "maxAbsoluteError": 3.1689568161964417,
+              "p95LocalError": 0.29642999172210693,
+              "p99LocalError": 0.5608596801757812,
+              "meanLuminanceAbsoluteError": 0.07709112188458646,
+              "maxLuminanceAbsoluteError": 3.0777626332640646,
+              "meanLuminance": 0.5008431765494299,
+              "referenceMeanLuminance": 0.50118370951825,
+              "relativeEnergyDrift": -0.0006794573773106343
+            }
+          ]
+        },
+        {
+          "sampler": "stable-camera-random",
+          "seed": 19,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17288705,
+          "segments": 29626625,
+          "gpuTileSpanMs": 4523.229183999997,
+          "imageSha256": "11b21c14733cc53548fdc25d29e6283a23561301282343287f902bf1023a8c58",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.11051687241374918,
+            "normalizedRmse": 0.13329011803685556,
+            "maxAbsoluteError": 3.275968849658966,
+            "p95LocalError": 0.22376149892807007,
+            "p99LocalError": 0.4432046413421631,
+            "meanLuminanceAbsoluteError": 0.06039000340795619,
+            "maxLuminanceAbsoluteError": 3.183990616929531,
+            "meanLuminance": 0.5668963005347337,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.000302957634011626
+          },
+          "commonRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.03999171212292878,
+              "normalizedRmse": 0.0970146631638199,
+              "maxAbsoluteError": 0.2886042594909668,
+              "p95LocalError": 0.09905502200126648,
+              "p99LocalError": 0.139410138130188,
+              "meanLuminanceAbsoluteError": 0.029363435211126766,
+              "maxLuminanceAbsoluteError": 0.27555034738779066,
+              "meanLuminance": 0.34985029381504357,
+              "referenceMeanLuminance": 0.3499492515713381,
+              "relativeEnergyDrift": -0.00028277744801626374
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.06173649281800789,
+              "normalizedRmse": 0.12981981857746486,
+              "maxAbsoluteError": 2.0898610949516296,
+              "p95LocalError": 0.1516023576259613,
+              "p99LocalError": 0.2271474003791809,
+              "meanLuminanceAbsoluteError": 0.046081153070755915,
+              "maxLuminanceAbsoluteError": 2.0336090440392494,
+              "meanLuminance": 0.4298437504345197,
+              "referenceMeanLuminance": 0.4301158962210533,
+              "relativeEnergyDrift": -0.0006327266416438204
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.0779663271385296,
+              "normalizedRmse": 0.055028801272256435,
+              "maxAbsoluteError": 1.5906392335891724,
+              "p95LocalError": 0.16912516951560974,
+              "p99LocalError": 0.29355716705322266,
+              "meanLuminanceAbsoluteError": 0.05740271333974715,
+              "maxLuminanceAbsoluteError": 1.5478626142561436,
+              "meanLuminance": 0.793779932265094,
+              "referenceMeanLuminance": 0.7938873166689315,
+              "relativeEnergyDrift": -0.00013526403758163207
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.08697541870821872,
+              "normalizedRmse": 0.08467219663716648,
+              "maxAbsoluteError": 2.8096117973327637,
+              "p95LocalError": 0.17707514762878418,
+              "p99LocalError": 0.35492390394210815,
+              "meanLuminanceAbsoluteError": 0.05360322945629245,
+              "maxLuminanceAbsoluteError": 2.3802912584781644,
+              "meanLuminance": 0.6487657444602011,
+              "referenceMeanLuminance": 0.6486423785612828,
+              "relativeEnergyDrift": 0.00019019093262432824
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11531061603408481,
+              "normalizedRmse": 0.20951545592936757,
+              "maxAbsoluteError": 2.788512170314789,
+              "p95LocalError": 0.23502612859010696,
+              "p99LocalError": 0.46145200729370117,
+              "meanLuminanceAbsoluteError": 0.06184784904104259,
+              "maxLuminanceAbsoluteError": 2.7123543935894965,
+              "meanLuminance": 0.5295539117253559,
+              "referenceMeanLuminance": 0.5298451806485979,
+              "relativeEnergyDrift": -0.0005497245872566046
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15497072397188022,
+              "normalizedRmse": 0.2960450361023573,
+              "maxAbsoluteError": 3.275968849658966,
+              "p95LocalError": 0.29533009976148605,
+              "p99LocalError": 0.5739303529262543,
+              "meanLuminanceAbsoluteError": 0.07808280475137588,
+              "maxLuminanceAbsoluteError": 3.183990616929531,
+              "meanLuminance": 0.5008431765494299,
+              "referenceMeanLuminance": 0.5011447102742899,
+              "relativeEnergyDrift": -0.0006016899284338688
+            }
+          ],
+          "sameSamplerFixed": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10427174807577284,
+            "normalizedRmse": 0.12570150058971974,
+            "maxAbsoluteError": 3.1689568161964417,
+            "p95LocalError": 0.2162187695503235,
+            "p99LocalError": 0.4219385087490082,
+            "meanLuminanceAbsoluteError": 0.05446018899541381,
+            "maxLuminanceAbsoluteError": 3.0777626332640646,
+            "meanLuminance": 0.5668963005347337,
+            "referenceMeanLuminance": 0.5670409446481702,
+            "relativeEnergyDrift": -0.0002550858360436364
+          },
+          "sameSamplerRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.34985029381504357,
+              "referenceMeanLuminance": 0.34985029381504357,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.04031362331009004,
+              "normalizedRmse": 0.08459004853412276,
+              "maxAbsoluteError": 1.0810959339141846,
+              "p95LocalError": 0.09934628009796143,
+              "p99LocalError": 0.14694923162460327,
+              "meanLuminanceAbsoluteError": 0.03008365595025657,
+              "maxLuminanceAbsoluteError": 1.0521069990634917,
+              "meanLuminance": 0.4298437504345197,
+              "referenceMeanLuminance": 0.43002413269949197,
+              "relativeEnergyDrift": -0.00041947009773589286
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.06487504139806465,
+              "normalizedRmse": 0.045780276002791304,
+              "maxAbsoluteError": 1.2764768600463867,
+              "p95LocalError": 0.1446872055530548,
+              "p99LocalError": 0.23654431104660034,
+              "meanLuminanceAbsoluteError": 0.048256477217551344,
+              "maxLuminanceAbsoluteError": 1.173491077852249,
+              "meanLuminance": 0.793779932265094,
+              "referenceMeanLuminance": 0.7937643651576838,
+              "relativeEnergyDrift": 0.00001961174889374554
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.07963674952284044,
+              "normalizedRmse": 0.07750652934673258,
+              "maxAbsoluteError": 2.298773765563965,
+              "p95LocalError": 0.16715097427368164,
+              "p99LocalError": 0.315903902053833,
+              "meanLuminanceAbsoluteError": 0.049757488349968036,
+              "maxLuminanceAbsoluteError": 1.947511422586441,
+              "meanLuminance": 0.6487657444602011,
+              "referenceMeanLuminance": 0.6486434780738103,
+              "relativeEnergyDrift": 0.00018849551490732568
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11062143027617453,
+              "normalizedRmse": 0.20082843139314172,
+              "maxAbsoluteError": 2.631461977958679,
+              "p95LocalError": 0.23128637671470642,
+              "p99LocalError": 0.43699580430984497,
+              "meanLuminanceAbsoluteError": 0.059956294706466066,
+              "maxLuminanceAbsoluteError": 2.5593001146912573,
+              "meanLuminance": 0.5295539117253559,
+              "referenceMeanLuminance": 0.5298269556775007,
+              "relativeEnergyDrift": -0.0005153455278536676
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15167182191672274,
+              "normalizedRmse": 0.2894600286728251,
+              "maxAbsoluteError": 3.1689568161964417,
+              "p95LocalError": 0.29642999172210693,
+              "p99LocalError": 0.5608596801757812,
+              "meanLuminanceAbsoluteError": 0.07709112188458646,
+              "maxLuminanceAbsoluteError": 3.0777626332640646,
+              "meanLuminance": 0.5008431765494299,
+              "referenceMeanLuminance": 0.50118370951825,
+              "relativeEnergyDrift": -0.0006794573773106343
+            }
+          ],
+          "staticDifference": {
+            "pixels": 2073600,
+            "rgbRmse": 0,
+            "normalizedRmse": 0,
+            "maxAbsoluteError": 0,
+            "p95LocalError": 0,
+            "p99LocalError": 0,
+            "meanLuminanceAbsoluteError": 0,
+            "maxLuminanceAbsoluteError": 0,
+            "meanLuminance": 0.5668963005347337,
+            "referenceMeanLuminance": 0.5668963005347337,
+            "relativeEnergyDrift": 0
+          }
+        },
+        {
+          "sampler": "stable-camera-random",
+          "seed": 43,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17288705,
+          "segments": 29626625,
+          "gpuTileSpanMs": 4531.093503999997,
+          "imageSha256": "11b21c14733cc53548fdc25d29e6283a23561301282343287f902bf1023a8c58",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.11051687241374918,
+            "normalizedRmse": 0.13329011803685556,
+            "maxAbsoluteError": 3.275968849658966,
+            "p95LocalError": 0.22376149892807007,
+            "p99LocalError": 0.4432046413421631,
+            "meanLuminanceAbsoluteError": 0.06039000340795619,
+            "maxLuminanceAbsoluteError": 3.183990616929531,
+            "meanLuminance": 0.5668963005347337,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.000302957634011626
+          },
+          "commonRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.03999171212292878,
+              "normalizedRmse": 0.0970146631638199,
+              "maxAbsoluteError": 0.2886042594909668,
+              "p95LocalError": 0.09905502200126648,
+              "p99LocalError": 0.139410138130188,
+              "meanLuminanceAbsoluteError": 0.029363435211126766,
+              "maxLuminanceAbsoluteError": 0.27555034738779066,
+              "meanLuminance": 0.34985029381504357,
+              "referenceMeanLuminance": 0.3499492515713381,
+              "relativeEnergyDrift": -0.00028277744801626374
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.06173649281800789,
+              "normalizedRmse": 0.12981981857746486,
+              "maxAbsoluteError": 2.0898610949516296,
+              "p95LocalError": 0.1516023576259613,
+              "p99LocalError": 0.2271474003791809,
+              "meanLuminanceAbsoluteError": 0.046081153070755915,
+              "maxLuminanceAbsoluteError": 2.0336090440392494,
+              "meanLuminance": 0.4298437504345197,
+              "referenceMeanLuminance": 0.4301158962210533,
+              "relativeEnergyDrift": -0.0006327266416438204
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.0779663271385296,
+              "normalizedRmse": 0.055028801272256435,
+              "maxAbsoluteError": 1.5906392335891724,
+              "p95LocalError": 0.16912516951560974,
+              "p99LocalError": 0.29355716705322266,
+              "meanLuminanceAbsoluteError": 0.05740271333974715,
+              "maxLuminanceAbsoluteError": 1.5478626142561436,
+              "meanLuminance": 0.793779932265094,
+              "referenceMeanLuminance": 0.7938873166689315,
+              "relativeEnergyDrift": -0.00013526403758163207
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.08697541870821872,
+              "normalizedRmse": 0.08467219663716648,
+              "maxAbsoluteError": 2.8096117973327637,
+              "p95LocalError": 0.17707514762878418,
+              "p99LocalError": 0.35492390394210815,
+              "meanLuminanceAbsoluteError": 0.05360322945629245,
+              "maxLuminanceAbsoluteError": 2.3802912584781644,
+              "meanLuminance": 0.6487657444602011,
+              "referenceMeanLuminance": 0.6486423785612828,
+              "relativeEnergyDrift": 0.00019019093262432824
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11531061603408481,
+              "normalizedRmse": 0.20951545592936757,
+              "maxAbsoluteError": 2.788512170314789,
+              "p95LocalError": 0.23502612859010696,
+              "p99LocalError": 0.46145200729370117,
+              "meanLuminanceAbsoluteError": 0.06184784904104259,
+              "maxLuminanceAbsoluteError": 2.7123543935894965,
+              "meanLuminance": 0.5295539117253559,
+              "referenceMeanLuminance": 0.5298451806485979,
+              "relativeEnergyDrift": -0.0005497245872566046
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15497072397188022,
+              "normalizedRmse": 0.2960450361023573,
+              "maxAbsoluteError": 3.275968849658966,
+              "p95LocalError": 0.29533009976148605,
+              "p99LocalError": 0.5739303529262543,
+              "meanLuminanceAbsoluteError": 0.07808280475137588,
+              "maxLuminanceAbsoluteError": 3.183990616929531,
+              "meanLuminance": 0.5008431765494299,
+              "referenceMeanLuminance": 0.5011447102742899,
+              "relativeEnergyDrift": -0.0006016899284338688
+            }
+          ],
+          "sameSamplerFixed": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10427174807577284,
+            "normalizedRmse": 0.12570150058971974,
+            "maxAbsoluteError": 3.1689568161964417,
+            "p95LocalError": 0.2162187695503235,
+            "p99LocalError": 0.4219385087490082,
+            "meanLuminanceAbsoluteError": 0.05446018899541381,
+            "maxLuminanceAbsoluteError": 3.0777626332640646,
+            "meanLuminance": 0.5668963005347337,
+            "referenceMeanLuminance": 0.5670409446481702,
+            "relativeEnergyDrift": -0.0002550858360436364
+          },
+          "sameSamplerRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.34985029381504357,
+              "referenceMeanLuminance": 0.34985029381504357,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.04031362331009004,
+              "normalizedRmse": 0.08459004853412276,
+              "maxAbsoluteError": 1.0810959339141846,
+              "p95LocalError": 0.09934628009796143,
+              "p99LocalError": 0.14694923162460327,
+              "meanLuminanceAbsoluteError": 0.03008365595025657,
+              "maxLuminanceAbsoluteError": 1.0521069990634917,
+              "meanLuminance": 0.4298437504345197,
+              "referenceMeanLuminance": 0.43002413269949197,
+              "relativeEnergyDrift": -0.00041947009773589286
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.06487504139806465,
+              "normalizedRmse": 0.045780276002791304,
+              "maxAbsoluteError": 1.2764768600463867,
+              "p95LocalError": 0.1446872055530548,
+              "p99LocalError": 0.23654431104660034,
+              "meanLuminanceAbsoluteError": 0.048256477217551344,
+              "maxLuminanceAbsoluteError": 1.173491077852249,
+              "meanLuminance": 0.793779932265094,
+              "referenceMeanLuminance": 0.7937643651576838,
+              "relativeEnergyDrift": 0.00001961174889374554
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.07963674952284044,
+              "normalizedRmse": 0.07750652934673258,
+              "maxAbsoluteError": 2.298773765563965,
+              "p95LocalError": 0.16715097427368164,
+              "p99LocalError": 0.315903902053833,
+              "meanLuminanceAbsoluteError": 0.049757488349968036,
+              "maxLuminanceAbsoluteError": 1.947511422586441,
+              "meanLuminance": 0.6487657444602011,
+              "referenceMeanLuminance": 0.6486434780738103,
+              "relativeEnergyDrift": 0.00018849551490732568
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11062143027617453,
+              "normalizedRmse": 0.20082843139314172,
+              "maxAbsoluteError": 2.631461977958679,
+              "p95LocalError": 0.23128637671470642,
+              "p99LocalError": 0.43699580430984497,
+              "meanLuminanceAbsoluteError": 0.059956294706466066,
+              "maxLuminanceAbsoluteError": 2.5593001146912573,
+              "meanLuminance": 0.5295539117253559,
+              "referenceMeanLuminance": 0.5298269556775007,
+              "relativeEnergyDrift": -0.0005153455278536676
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15167182191672274,
+              "normalizedRmse": 0.2894600286728251,
+              "maxAbsoluteError": 3.1689568161964417,
+              "p95LocalError": 0.29642999172210693,
+              "p99LocalError": 0.5608596801757812,
+              "meanLuminanceAbsoluteError": 0.07709112188458646,
+              "maxLuminanceAbsoluteError": 3.0777626332640646,
+              "meanLuminance": 0.5008431765494299,
+              "referenceMeanLuminance": 0.50118370951825,
+              "relativeEnergyDrift": -0.0006794573773106343
+            }
+          ],
+          "staticDifference": {
+            "pixels": 2073600,
+            "rgbRmse": 0,
+            "normalizedRmse": 0,
+            "maxAbsoluteError": 0,
+            "p95LocalError": 0,
+            "p99LocalError": 0,
+            "meanLuminanceAbsoluteError": 0,
+            "maxLuminanceAbsoluteError": 0,
+            "meanLuminance": 0.5668963005347337,
+            "referenceMeanLuminance": 0.5668963005347337,
+            "relativeEnergyDrift": 0
+          }
+        },
+        {
+          "sampler": "stable-pattern",
+          "seed": 7,
+          "mode": "fixed",
+          "primary": 66355200,
+          "secondary": 72337883,
+          "segments": 138693083,
+          "gpuTileSpanMs": 15444.541440000003,
+          "imageSha256": "9d858e3e0eb76ec11d6b1992a5d3357e33abec6509d2cf836c476cb57d0439a8",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.044876607167072,
+            "normalizedRmse": 0.05412393723918363,
+            "maxAbsoluteError": 1.2710766196250916,
+            "p95LocalError": 0.10977771878242493,
+            "p99LocalError": 0.1656651794910431,
+            "meanLuminanceAbsoluteError": 0.030776094586776288,
+            "maxLuminanceAbsoluteError": 1.2376927978873253,
+            "meanLuminance": 0.5669957393562318,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.00012760158449384983
+          }
+        },
+        {
+          "sampler": "stable-pattern",
+          "seed": 7,
+          "mode": "uniform",
+          "primary": 66355200,
+          "secondary": 72337883,
+          "segments": 138693083,
+          "gpuTileSpanMs": 15477.571583999994,
+          "imageSha256": "9d858e3e0eb76ec11d6b1992a5d3357e33abec6509d2cf836c476cb57d0439a8"
+        },
+        {
+          "sampler": "stable-pattern",
+          "seed": 7,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17286834,
+          "segments": 29624754,
+          "gpuTileSpanMs": 4451.926016000001,
+          "imageSha256": "045b50b67830604a5807df6556383087147ae2dab50a8bf89c306e014645cf6e",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10875121674868238,
+            "normalizedRmse": 0.13116062914643417,
+            "maxAbsoluteError": 3.2592819333076477,
+            "p95LocalError": 0.22016167640686035,
+            "p99LocalError": 0.43822741508483887,
+            "meanLuminanceAbsoluteError": 0.05952724394651977,
+            "maxLuminanceAbsoluteError": 3.1661142695426943,
+            "meanLuminance": 0.5669707660633909,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.00017164090344436387
+          },
+          "commonRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.04667598648240366,
+              "normalizedRmse": 0.11322983853529944,
+              "maxAbsoluteError": 0.30731555819511414,
+              "p95LocalError": 0.11252343654632568,
+              "p99LocalError": 0.15356019139289856,
+              "meanLuminanceAbsoluteError": 0.03596838696628002,
+              "maxLuminanceAbsoluteError": 0.2973205199480057,
+              "meanLuminance": 0.34980110123168634,
+              "referenceMeanLuminance": 0.3499492515713381,
+              "relativeEnergyDrift": -0.0004233480682886357
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.06779020446042268,
+              "normalizedRmse": 0.1425495949425605,
+              "maxAbsoluteError": 2.5549952387809753,
+              "p95LocalError": 0.1672661006450653,
+              "p99LocalError": 0.24499881267547607,
+              "meanLuminanceAbsoluteError": 0.0513800143819273,
+              "maxLuminanceAbsoluteError": 2.486595536077022,
+              "meanLuminance": 0.4299585656272092,
+              "referenceMeanLuminance": 0.4301158962210533,
+              "relativeEnergyDrift": -0.0003657865129524229
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.07513910249196402,
+              "normalizedRmse": 0.05303334003998045,
+              "maxAbsoluteError": 1.5036124289035797,
+              "p95LocalError": 0.16541752219200134,
+              "p99LocalError": 0.27949148416519165,
+              "meanLuminanceAbsoluteError": 0.05585498565437187,
+              "maxLuminanceAbsoluteError": 1.2820448491275311,
+              "meanLuminance": 0.793453567311082,
+              "referenceMeanLuminance": 0.7938873166689315,
+              "relativeEnergyDrift": -0.0005463613648213304
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.08008113848337316,
+              "normalizedRmse": 0.07796048590855012,
+              "maxAbsoluteError": 2.8096117973327637,
+              "p95LocalError": 0.15988105535507202,
+              "p99LocalError": 0.3317468762397766,
+              "meanLuminanceAbsoluteError": 0.04865368626070228,
+              "maxLuminanceAbsoluteError": 2.3802912584781644,
+              "meanLuminance": 0.6485530220195501,
+              "referenceMeanLuminance": 0.6486423785612828,
+              "relativeEnergyDrift": -0.00013775933347259214
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11295002412881273,
+              "normalizedRmse": 0.20522634096054232,
+              "maxAbsoluteError": 2.8474599719047546,
+              "p95LocalError": 0.22440451383590698,
+              "p99LocalError": 0.4515100121498108,
+              "meanLuminanceAbsoluteError": 0.0598714302594794,
+              "maxLuminanceAbsoluteError": 2.6300920285224914,
+              "meanLuminance": 0.5300173861759027,
+              "referenceMeanLuminance": 0.5298451806485979,
+              "relativeEnergyDrift": 0.00032501102887067055
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15413547459570068,
+              "normalizedRmse": 0.2944494351695617,
+              "maxAbsoluteError": 3.2592819333076477,
+              "p95LocalError": 0.29653310775756836,
+              "p99LocalError": 0.5723530650138855,
+              "meanLuminanceAbsoluteError": 0.07805592197938435,
+              "maxLuminanceAbsoluteError": 3.1661142695426943,
+              "meanLuminance": 0.5010074735779436,
+              "referenceMeanLuminance": 0.5011447102742899,
+              "relativeEnergyDrift": -0.000273846443018775
+            }
+          ],
+          "sameSamplerFixed": {
+            "pixels": 2073600,
+            "rgbRmse": 0.0990836957351353,
+            "normalizedRmse": 0.11939283703361578,
+            "maxAbsoluteError": 3.173633396625519,
+            "p95LocalError": 0.20823995769023895,
+            "p99LocalError": 0.4037725329399109,
+            "meanLuminanceAbsoluteError": 0.04841714207470961,
+            "maxLuminanceAbsoluteError": 3.083156231951713,
+            "meanLuminance": 0.5669707660633909,
+            "referenceMeanLuminance": 0.5669957393562318,
+            "relativeEnergyDrift": -0.000044044939154539104
+          },
+          "sameSamplerRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.34980110123168634,
+              "referenceMeanLuminance": 0.34980110123168634,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.023041935433598972,
+              "normalizedRmse": 0.04814719263432482,
+              "maxAbsoluteError": 1.2839186191558838,
+              "p95LocalError": 0.05251717567443848,
+              "p99LocalError": 0.08256065845489502,
+              "meanLuminanceAbsoluteError": 0.016878894948023113,
+              "maxLuminanceAbsoluteError": 1.2489027381896973,
+              "meanLuminance": 0.4299585656272092,
+              "referenceMeanLuminance": 0.4300235278582991,
+              "relativeEnergyDrift": -0.00015106669026578064
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.051022940097972355,
+              "normalizedRmse": 0.03599624366132176,
+              "maxAbsoluteError": 1.2764768600463867,
+              "p95LocalError": 0.10674178600311279,
+              "p99LocalError": 0.20376604795455933,
+              "meanLuminanceAbsoluteError": 0.03596681003434136,
+              "maxLuminanceAbsoluteError": 1.0812592300891877,
+              "meanLuminance": 0.793453567311082,
+              "referenceMeanLuminance": 0.7936199193599082,
+              "relativeEnergyDrift": -0.00020961173575429826
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.06988866902321116,
+              "normalizedRmse": 0.06800763802930884,
+              "maxAbsoluteError": 2.298773765563965,
+              "p95LocalError": 0.1405540406703949,
+              "p99LocalError": 0.28401416540145874,
+              "meanLuminanceAbsoluteError": 0.04180195665398903,
+              "maxLuminanceAbsoluteError": 1.947511422586441,
+              "meanLuminance": 0.6485530220195501,
+              "referenceMeanLuminance": 0.648651790415604,
+              "relativeEnergyDrift": -0.0001522672064012703
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.10595594243383945,
+              "normalizedRmse": 0.19220451880794337,
+              "maxAbsoluteError": 2.591468572616577,
+              "p95LocalError": 0.216850146651268,
+              "p99LocalError": 0.40838494896888733,
+              "meanLuminanceAbsoluteError": 0.055949831901836077,
+              "maxLuminanceAbsoluteError": 2.3925940943002697,
+              "meanLuminance": 0.5300173861759027,
+              "referenceMeanLuminance": 0.5298525083478915,
+              "relativeEnergyDrift": 0.0003111768377301123
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.1495384094260071,
+              "normalizedRmse": 0.28525783961023354,
+              "maxAbsoluteError": 3.173633396625519,
+              "p95LocalError": 0.29900313168764114,
+              "p99LocalError": 0.5456526279449463,
+              "meanLuminanceAbsoluteError": 0.0759455270740073,
+              "maxLuminanceAbsoluteError": 3.083156231951713,
+              "meanLuminance": 0.5010074735779436,
+              "referenceMeanLuminance": 0.5010674337388791,
+              "relativeEnergyDrift": -0.00011966485326743647
+            }
+          ]
+        },
+        {
+          "sampler": "stable-pattern",
+          "seed": 19,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17286834,
+          "segments": 29624754,
+          "gpuTileSpanMs": 4519.428096000001,
+          "imageSha256": "045b50b67830604a5807df6556383087147ae2dab50a8bf89c306e014645cf6e",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10875121674868238,
+            "normalizedRmse": 0.13116062914643417,
+            "maxAbsoluteError": 3.2592819333076477,
+            "p95LocalError": 0.22016167640686035,
+            "p99LocalError": 0.43822741508483887,
+            "meanLuminanceAbsoluteError": 0.05952724394651977,
+            "maxLuminanceAbsoluteError": 3.1661142695426943,
+            "meanLuminance": 0.5669707660633909,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.00017164090344436387
+          },
+          "commonRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.04667598648240366,
+              "normalizedRmse": 0.11322983853529944,
+              "maxAbsoluteError": 0.30731555819511414,
+              "p95LocalError": 0.11252343654632568,
+              "p99LocalError": 0.15356019139289856,
+              "meanLuminanceAbsoluteError": 0.03596838696628002,
+              "maxLuminanceAbsoluteError": 0.2973205199480057,
+              "meanLuminance": 0.34980110123168634,
+              "referenceMeanLuminance": 0.3499492515713381,
+              "relativeEnergyDrift": -0.0004233480682886357
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.06779020446042268,
+              "normalizedRmse": 0.1425495949425605,
+              "maxAbsoluteError": 2.5549952387809753,
+              "p95LocalError": 0.1672661006450653,
+              "p99LocalError": 0.24499881267547607,
+              "meanLuminanceAbsoluteError": 0.0513800143819273,
+              "maxLuminanceAbsoluteError": 2.486595536077022,
+              "meanLuminance": 0.4299585656272092,
+              "referenceMeanLuminance": 0.4301158962210533,
+              "relativeEnergyDrift": -0.0003657865129524229
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.07513910249196402,
+              "normalizedRmse": 0.05303334003998045,
+              "maxAbsoluteError": 1.5036124289035797,
+              "p95LocalError": 0.16541752219200134,
+              "p99LocalError": 0.27949148416519165,
+              "meanLuminanceAbsoluteError": 0.05585498565437187,
+              "maxLuminanceAbsoluteError": 1.2820448491275311,
+              "meanLuminance": 0.793453567311082,
+              "referenceMeanLuminance": 0.7938873166689315,
+              "relativeEnergyDrift": -0.0005463613648213304
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.08008113848337316,
+              "normalizedRmse": 0.07796048590855012,
+              "maxAbsoluteError": 2.8096117973327637,
+              "p95LocalError": 0.15988105535507202,
+              "p99LocalError": 0.3317468762397766,
+              "meanLuminanceAbsoluteError": 0.04865368626070228,
+              "maxLuminanceAbsoluteError": 2.3802912584781644,
+              "meanLuminance": 0.6485530220195501,
+              "referenceMeanLuminance": 0.6486423785612828,
+              "relativeEnergyDrift": -0.00013775933347259214
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11295002412881273,
+              "normalizedRmse": 0.20522634096054232,
+              "maxAbsoluteError": 2.8474599719047546,
+              "p95LocalError": 0.22440451383590698,
+              "p99LocalError": 0.4515100121498108,
+              "meanLuminanceAbsoluteError": 0.0598714302594794,
+              "maxLuminanceAbsoluteError": 2.6300920285224914,
+              "meanLuminance": 0.5300173861759027,
+              "referenceMeanLuminance": 0.5298451806485979,
+              "relativeEnergyDrift": 0.00032501102887067055
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15413547459570068,
+              "normalizedRmse": 0.2944494351695617,
+              "maxAbsoluteError": 3.2592819333076477,
+              "p95LocalError": 0.29653310775756836,
+              "p99LocalError": 0.5723530650138855,
+              "meanLuminanceAbsoluteError": 0.07805592197938435,
+              "maxLuminanceAbsoluteError": 3.1661142695426943,
+              "meanLuminance": 0.5010074735779436,
+              "referenceMeanLuminance": 0.5011447102742899,
+              "relativeEnergyDrift": -0.000273846443018775
+            }
+          ],
+          "sameSamplerFixed": {
+            "pixels": 2073600,
+            "rgbRmse": 0.0990836957351353,
+            "normalizedRmse": 0.11939283703361578,
+            "maxAbsoluteError": 3.173633396625519,
+            "p95LocalError": 0.20823995769023895,
+            "p99LocalError": 0.4037725329399109,
+            "meanLuminanceAbsoluteError": 0.04841714207470961,
+            "maxLuminanceAbsoluteError": 3.083156231951713,
+            "meanLuminance": 0.5669707660633909,
+            "referenceMeanLuminance": 0.5669957393562318,
+            "relativeEnergyDrift": -0.000044044939154539104
+          },
+          "sameSamplerRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.34980110123168634,
+              "referenceMeanLuminance": 0.34980110123168634,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.023041935433598972,
+              "normalizedRmse": 0.04814719263432482,
+              "maxAbsoluteError": 1.2839186191558838,
+              "p95LocalError": 0.05251717567443848,
+              "p99LocalError": 0.08256065845489502,
+              "meanLuminanceAbsoluteError": 0.016878894948023113,
+              "maxLuminanceAbsoluteError": 1.2489027381896973,
+              "meanLuminance": 0.4299585656272092,
+              "referenceMeanLuminance": 0.4300235278582991,
+              "relativeEnergyDrift": -0.00015106669026578064
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.051022940097972355,
+              "normalizedRmse": 0.03599624366132176,
+              "maxAbsoluteError": 1.2764768600463867,
+              "p95LocalError": 0.10674178600311279,
+              "p99LocalError": 0.20376604795455933,
+              "meanLuminanceAbsoluteError": 0.03596681003434136,
+              "maxLuminanceAbsoluteError": 1.0812592300891877,
+              "meanLuminance": 0.793453567311082,
+              "referenceMeanLuminance": 0.7936199193599082,
+              "relativeEnergyDrift": -0.00020961173575429826
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.06988866902321116,
+              "normalizedRmse": 0.06800763802930884,
+              "maxAbsoluteError": 2.298773765563965,
+              "p95LocalError": 0.1405540406703949,
+              "p99LocalError": 0.28401416540145874,
+              "meanLuminanceAbsoluteError": 0.04180195665398903,
+              "maxLuminanceAbsoluteError": 1.947511422586441,
+              "meanLuminance": 0.6485530220195501,
+              "referenceMeanLuminance": 0.648651790415604,
+              "relativeEnergyDrift": -0.0001522672064012703
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.10595594243383945,
+              "normalizedRmse": 0.19220451880794337,
+              "maxAbsoluteError": 2.591468572616577,
+              "p95LocalError": 0.216850146651268,
+              "p99LocalError": 0.40838494896888733,
+              "meanLuminanceAbsoluteError": 0.055949831901836077,
+              "maxLuminanceAbsoluteError": 2.3925940943002697,
+              "meanLuminance": 0.5300173861759027,
+              "referenceMeanLuminance": 0.5298525083478915,
+              "relativeEnergyDrift": 0.0003111768377301123
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.1495384094260071,
+              "normalizedRmse": 0.28525783961023354,
+              "maxAbsoluteError": 3.173633396625519,
+              "p95LocalError": 0.29900313168764114,
+              "p99LocalError": 0.5456526279449463,
+              "meanLuminanceAbsoluteError": 0.0759455270740073,
+              "maxLuminanceAbsoluteError": 3.083156231951713,
+              "meanLuminance": 0.5010074735779436,
+              "referenceMeanLuminance": 0.5010674337388791,
+              "relativeEnergyDrift": -0.00011966485326743647
+            }
+          ],
+          "staticDifference": {
+            "pixels": 2073600,
+            "rgbRmse": 0,
+            "normalizedRmse": 0,
+            "maxAbsoluteError": 0,
+            "p95LocalError": 0,
+            "p99LocalError": 0,
+            "meanLuminanceAbsoluteError": 0,
+            "maxLuminanceAbsoluteError": 0,
+            "meanLuminance": 0.5669707660633909,
+            "referenceMeanLuminance": 0.5669707660633909,
+            "relativeEnergyDrift": 0
+          }
+        },
+        {
+          "sampler": "stable-pattern",
+          "seed": 43,
+          "mode": "radial",
+          "primary": 12337920,
+          "secondary": 17286834,
+          "segments": 29624754,
+          "gpuTileSpanMs": 4560.846848,
+          "imageSha256": "045b50b67830604a5807df6556383087147ae2dab50a8bf89c306e014645cf6e",
+          "commonReference": {
+            "pixels": 2073600,
+            "rgbRmse": 0.10875121674868238,
+            "normalizedRmse": 0.13116062914643417,
+            "maxAbsoluteError": 3.2592819333076477,
+            "p95LocalError": 0.22016167640686035,
+            "p99LocalError": 0.43822741508483887,
+            "meanLuminanceAbsoluteError": 0.05952724394651977,
+            "maxLuminanceAbsoluteError": 3.1661142695426943,
+            "meanLuminance": 0.5669707660633909,
+            "referenceMeanLuminance": 0.5670680981440709,
+            "relativeEnergyDrift": -0.00017164090344436387
+          },
+          "commonRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0.04667598648240366,
+              "normalizedRmse": 0.11322983853529944,
+              "maxAbsoluteError": 0.30731555819511414,
+              "p95LocalError": 0.11252343654632568,
+              "p99LocalError": 0.15356019139289856,
+              "meanLuminanceAbsoluteError": 0.03596838696628002,
+              "maxLuminanceAbsoluteError": 0.2973205199480057,
+              "meanLuminance": 0.34980110123168634,
+              "referenceMeanLuminance": 0.3499492515713381,
+              "relativeEnergyDrift": -0.0004233480682886357
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.06779020446042268,
+              "normalizedRmse": 0.1425495949425605,
+              "maxAbsoluteError": 2.5549952387809753,
+              "p95LocalError": 0.1672661006450653,
+              "p99LocalError": 0.24499881267547607,
+              "meanLuminanceAbsoluteError": 0.0513800143819273,
+              "maxLuminanceAbsoluteError": 2.486595536077022,
+              "meanLuminance": 0.4299585656272092,
+              "referenceMeanLuminance": 0.4301158962210533,
+              "relativeEnergyDrift": -0.0003657865129524229
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.07513910249196402,
+              "normalizedRmse": 0.05303334003998045,
+              "maxAbsoluteError": 1.5036124289035797,
+              "p95LocalError": 0.16541752219200134,
+              "p99LocalError": 0.27949148416519165,
+              "meanLuminanceAbsoluteError": 0.05585498565437187,
+              "maxLuminanceAbsoluteError": 1.2820448491275311,
+              "meanLuminance": 0.793453567311082,
+              "referenceMeanLuminance": 0.7938873166689315,
+              "relativeEnergyDrift": -0.0005463613648213304
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.08008113848337316,
+              "normalizedRmse": 0.07796048590855012,
+              "maxAbsoluteError": 2.8096117973327637,
+              "p95LocalError": 0.15988105535507202,
+              "p99LocalError": 0.3317468762397766,
+              "meanLuminanceAbsoluteError": 0.04865368626070228,
+              "maxLuminanceAbsoluteError": 2.3802912584781644,
+              "meanLuminance": 0.6485530220195501,
+              "referenceMeanLuminance": 0.6486423785612828,
+              "relativeEnergyDrift": -0.00013775933347259214
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.11295002412881273,
+              "normalizedRmse": 0.20522634096054232,
+              "maxAbsoluteError": 2.8474599719047546,
+              "p95LocalError": 0.22440451383590698,
+              "p99LocalError": 0.4515100121498108,
+              "meanLuminanceAbsoluteError": 0.0598714302594794,
+              "maxLuminanceAbsoluteError": 2.6300920285224914,
+              "meanLuminance": 0.5300173861759027,
+              "referenceMeanLuminance": 0.5298451806485979,
+              "relativeEnergyDrift": 0.00032501102887067055
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.15413547459570068,
+              "normalizedRmse": 0.2944494351695617,
+              "maxAbsoluteError": 3.2592819333076477,
+              "p95LocalError": 0.29653310775756836,
+              "p99LocalError": 0.5723530650138855,
+              "meanLuminanceAbsoluteError": 0.07805592197938435,
+              "maxLuminanceAbsoluteError": 3.1661142695426943,
+              "meanLuminance": 0.5010074735779436,
+              "referenceMeanLuminance": 0.5011447102742899,
+              "relativeEnergyDrift": -0.000273846443018775
+            }
+          ],
+          "sameSamplerFixed": {
+            "pixels": 2073600,
+            "rgbRmse": 0.0990836957351353,
+            "normalizedRmse": 0.11939283703361578,
+            "maxAbsoluteError": 3.173633396625519,
+            "p95LocalError": 0.20823995769023895,
+            "p99LocalError": 0.4037725329399109,
+            "meanLuminanceAbsoluteError": 0.04841714207470961,
+            "maxLuminanceAbsoluteError": 3.083156231951713,
+            "meanLuminance": 0.5669707660633909,
+            "referenceMeanLuminance": 0.5669957393562318,
+            "relativeEnergyDrift": -0.000044044939154539104
+          },
+          "sameSamplerRings": [
+            {
+              "spp": 32,
+              "pixels": 103680,
+              "rgbRmse": 0,
+              "normalizedRmse": 0,
+              "maxAbsoluteError": 0,
+              "p95LocalError": 0,
+              "p99LocalError": 0,
+              "meanLuminanceAbsoluteError": 0,
+              "maxLuminanceAbsoluteError": 0,
+              "meanLuminance": 0.34980110123168634,
+              "referenceMeanLuminance": 0.34980110123168634,
+              "relativeEnergyDrift": 0
+            },
+            {
+              "spp": 16,
+              "pixels": 207360,
+              "rgbRmse": 0.023041935433598972,
+              "normalizedRmse": 0.04814719263432482,
+              "maxAbsoluteError": 1.2839186191558838,
+              "p95LocalError": 0.05251717567443848,
+              "p99LocalError": 0.08256065845489502,
+              "meanLuminanceAbsoluteError": 0.016878894948023113,
+              "maxLuminanceAbsoluteError": 1.2489027381896973,
+              "meanLuminance": 0.4299585656272092,
+              "referenceMeanLuminance": 0.4300235278582991,
+              "relativeEnergyDrift": -0.00015106669026578064
+            },
+            {
+              "spp": 8,
+              "pixels": 311040,
+              "rgbRmse": 0.051022940097972355,
+              "normalizedRmse": 0.03599624366132176,
+              "maxAbsoluteError": 1.2764768600463867,
+              "p95LocalError": 0.10674178600311279,
+              "p99LocalError": 0.20376604795455933,
+              "meanLuminanceAbsoluteError": 0.03596681003434136,
+              "maxLuminanceAbsoluteError": 1.0812592300891877,
+              "meanLuminance": 0.793453567311082,
+              "referenceMeanLuminance": 0.7936199193599082,
+              "relativeEnergyDrift": -0.00020961173575429826
+            },
+            {
+              "spp": 4,
+              "pixels": 414720,
+              "rgbRmse": 0.06988866902321116,
+              "normalizedRmse": 0.06800763802930884,
+              "maxAbsoluteError": 2.298773765563965,
+              "p95LocalError": 0.1405540406703949,
+              "p99LocalError": 0.28401416540145874,
+              "meanLuminanceAbsoluteError": 0.04180195665398903,
+              "maxLuminanceAbsoluteError": 1.947511422586441,
+              "meanLuminance": 0.6485530220195501,
+              "referenceMeanLuminance": 0.648651790415604,
+              "relativeEnergyDrift": -0.0001522672064012703
+            },
+            {
+              "spp": 2,
+              "pixels": 518400,
+              "rgbRmse": 0.10595594243383945,
+              "normalizedRmse": 0.19220451880794337,
+              "maxAbsoluteError": 2.591468572616577,
+              "p95LocalError": 0.216850146651268,
+              "p99LocalError": 0.40838494896888733,
+              "meanLuminanceAbsoluteError": 0.055949831901836077,
+              "maxLuminanceAbsoluteError": 2.3925940943002697,
+              "meanLuminance": 0.5300173861759027,
+              "referenceMeanLuminance": 0.5298525083478915,
+              "relativeEnergyDrift": 0.0003111768377301123
+            },
+            {
+              "spp": 1,
+              "pixels": 518400,
+              "rgbRmse": 0.1495384094260071,
+              "normalizedRmse": 0.28525783961023354,
+              "maxAbsoluteError": 3.173633396625519,
+              "p95LocalError": 0.29900313168764114,
+              "p99LocalError": 0.5456526279449463,
+              "meanLuminanceAbsoluteError": 0.0759455270740073,
+              "maxLuminanceAbsoluteError": 3.083156231951713,
+              "meanLuminance": 0.5010074735779436,
+              "referenceMeanLuminance": 0.5010674337388791,
+              "relativeEnergyDrift": -0.00011966485326743647
+            }
+          ],
+          "staticDifference": {
+            "pixels": 2073600,
+            "rgbRmse": 0,
+            "normalizedRmse": 0,
+            "maxAbsoluteError": 0,
+            "p95LocalError": 0,
+            "p99LocalError": 0,
+            "meanLuminanceAbsoluteError": 0,
+            "maxLuminanceAbsoluteError": 0,
+            "meanLuminance": 0.5669707660633909,
+            "referenceMeanLuminance": 0.5669707660633909,
+            "relativeEnergyDrift": 0
+          }
+        }
+      ]
+    }
+  ]
+}

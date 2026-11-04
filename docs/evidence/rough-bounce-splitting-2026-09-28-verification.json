@@ -1,0 +1,2504 @@
+[
+  {
+    "captureId": "room-reference-2026-09-28T10-13-01-944Z-9150e831-50d6-4f84-8f24-98cb9069a948",
+    "settings": {
+      "width": 1920,
+      "height": 1080,
+      "maxDepth": 6,
+      "maximumSpp": 32,
+      "sampler": "stable-pattern",
+      "denoise": false
+    },
+    "provenance": {
+      "sources": {
+        "renderer": "06bc5446ccb296ff1edd3cdb1fc39feeeceb3a57",
+        "lighting": "2ece2262e18d212d98cd656390db333d72da37ba",
+        "shared": "729f89c7f77fcadb9ee7eeca53fb6daf02865b8e",
+        "site": "21d43a9b63722f1ce69175a5a42b53304ee79102"
+      },
+      "source": "immutable-git-objects",
+      "captureId": "room-reference-2026-09-28T10-13-01-944Z-9150e831-50d6-4f84-8f24-98cb9069a948"
+    },
+    "adapter": {
+      "vendor": "apple",
+      "architecture": "metal-3",
+      "isFallbackAdapter": false
+    },
+    "scene": {
+      "room": {
+        "bytes": 651696,
+        "sha256": "125331dadb83664e978a8c12cc974bae81bb7b75457e290c6063d921bbe11bc5",
+        "triangles": 3672,
+        "primitives": 73
+      },
+      "roomBounds": {
+        "min": [
+          -5.98722505569458,
+          -1.4440840482711792,
+          -4.367950916290283
+        ],
+        "max": [
+          5.9060821533203125,
+          1.4410810470581055,
+          4.414184093475342
+        ]
+      },
+      "roomTriangleCount": 3672,
+      "eamesTriangleCount": 265468,
+      "sceneTriangleCount": 269140,
+      "sceneMeshes": 82,
+      "placement": {
+        "x": 1.8,
+        "z": -1.1,
+        "yaw": -25
+      },
+      "eamesBounds": {
+        "min": [
+          0.6616441165197775,
+          -1.3440840244293213,
+          -1.9633886251089299
+        ],
+        "max": [
+          2.9947004403861617,
+          -0.020079781481169068,
+          -0.1870037243071908
+        ]
+      },
+      "view": "entry",
+      "floorY": -1.3440840244293213,
+      "addedGeometry": 0,
+      "lighting": "external-daylight-no-added-emitter",
+      "geometry": "mesh-bvh",
+      "proxyGeometry": false,
+      "interaction": "placement-and-camera-between-renders-not-realtime-or-collision-qualified"
+    },
+    "reportSha256": "c11f35cebb6e1ce77e88012c40afaea0df17de3959c9e43763059087f47f0245",
+    "timings": [
+      {
+        "round": 0,
+        "splitDepth": 0,
+        "completedFrameMs": 10141.800000011921
+      },
+      {
+        "round": 0,
+        "splitDepth": 1,
+        "completedFrameMs": 11671.099999964237
+      },
+      {
+        "round": 0,
+        "splitDepth": 2,
+        "completedFrameMs": 13340.699999988079
+      },
+      {
+        "round": 1,
+        "splitDepth": 1,
+        "completedFrameMs": 11431.300000011921
+      },
+      {
+        "round": 1,
+        "splitDepth": 2,
+        "completedFrameMs": 13328.5
+      },
+      {
+        "round": 1,
+        "splitDepth": 0,
+        "completedFrameMs": 10138
+      },
+      {
+        "round": 2,
+        "splitDepth": 2,
+        "completedFrameMs": 13570.299999952316
+      },
+      {
+        "round": 2,
+        "splitDepth": 0,
+        "completedFrameMs": 10035.600000023842
+      },
+      {
+        "round": 2,
+        "splitDepth": 1,
+        "completedFrameMs": 11686.400000035763
+      }
+    ],
+    "correctness": [
+      {
+        "name": "black",
+        "splitDepth": 0,
+        "meanRgb": [
+          0,
+          0,
+          0
+        ],
+        "referenceMeanRgb": [
+          0,
+          0,
+          0
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 524288,
+          "totalPathSegments": 1048576,
+          "bounceHistogram": [
+            524288,
+            524288,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "black",
+        "splitDepth": 1,
+        "meanRgb": [
+          0,
+          0,
+          0
+        ],
+        "referenceMeanRgb": [
+          0,
+          0,
+          0
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 1048576,
+          "totalPathSegments": 1572864,
+          "bounceHistogram": [
+            524288,
+            1048576,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "black",
+        "splitDepth": 2,
+        "meanRgb": [
+          0,
+          0,
+          0
+        ],
+        "referenceMeanRgb": [
+          0,
+          0,
+          0
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 1048576,
+          "totalPathSegments": 1572864,
+          "bounceHistogram": [
+            524288,
+            1048576,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "emissive",
+        "splitDepth": 0,
+        "meanRgb": [
+          4,
+          2,
+          1
+        ],
+        "referenceMeanRgb": [
+          4,
+          2,
+          1
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 0,
+          "totalPathSegments": 524288,
+          "bounceHistogram": [
+            524288,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "emissive",
+        "splitDepth": 1,
+        "meanRgb": [
+          4,
+          2,
+          1
+        ],
+        "referenceMeanRgb": [
+          4,
+          2,
+          1
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 0,
+          "totalPathSegments": 524288,
+          "bounceHistogram": [
+            524288,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "emissive",
+        "splitDepth": 2,
+        "meanRgb": [
+          4,
+          2,
+          1
+        ],
+        "referenceMeanRgb": [
+          4,
+          2,
+          1
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 0,
+          "totalPathSegments": 524288,
+          "bounceHistogram": [
+            524288,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "diffuse-constant",
+        "splitDepth": 0,
+        "meanRgb": [
+          0.4600426024189801,
+          0.23634175204824714,
+          0.08720784958677541
+        ],
+        "referenceMeanRgb": [
+          0.4600426024189801,
+          0.23634175204824714,
+          0.08720784958677541
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 524288,
+          "totalPathSegments": 1048576,
+          "bounceHistogram": [
+            524288,
+            524288,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "diffuse-constant",
+        "splitDepth": 1,
+        "meanRgb": [
+          0.46021517601366213,
+          0.23642895070042869,
+          0.08723813175083706
+        ],
+        "referenceMeanRgb": [
+          0.4600426024189801,
+          0.23634175204824714,
+          0.08720784958677541
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 1048576,
+          "totalPathSegments": 1572864,
+          "bounceHistogram": [
+            524288,
+            1048576,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "diffuse-constant",
+        "splitDepth": 2,
+        "meanRgb": [
+          0.46021517601366213,
+          0.23642895070042869,
+          0.08723813175083706
+        ],
+        "referenceMeanRgb": [
+          0.4600426024189801,
+          0.23634175204824714,
+          0.08720784958677541
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 1048576,
+          "totalPathSegments": 1572864,
+          "bounceHistogram": [
+            524288,
+            1048576,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      }
+    ],
+    "variants": [
+      {
+        "splitDepth": 0,
+        "medianJobMs": 10138,
+        "minJobMs": 10035.600000023842,
+        "maxJobMs": 10141.800000011921,
+        "primary": 12337920,
+        "secondary": 24995815,
+        "segments": 37333735,
+        "gpuMs": 9379.119104000001,
+        "bounceHistogram": [
+          12337920,
+          11477467,
+          7263473,
+          3595511,
+          1752969,
+          906395
+        ],
+        "dispatches": 21460,
+        "comparison": {
+          "rgbRmseFromUnconvergedControl": 0,
+          "maxAbsoluteDifference": 0,
+          "meanRgbRatio": 1
+        },
+        "actualSamples": 12337920,
+        "actualHistogram": {
+          "1": 518400,
+          "2": 518400,
+          "4": 414720,
+          "8": 311040,
+          "16": 207360,
+          "32": 103680
+        },
+        "memory": {
+          "splitDepth": 0,
+          "rendererBufferBytes": 189378844,
+          "textureInventory": [
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1920,
+                "height": 1080
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1920,
+                "height": 1080
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 1920,
+                "height": 1080
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 1
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 1
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 2
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 128,
+                "height": 128
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3595,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 1029,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3081,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            }
+          ],
+          "adaptiveBufferBytes": 9421084,
+          "telemetryBufferBytes": 12352,
+          "fixtureStagingBytes": 589824,
+          "cachedBudgetHostBytes": 18662400
+        },
+        "png": {
+          "path": "output/playwright/eames-environments/room-reference-2026-09-28T10-13-01-944Z-9150e831-50d6-4f84-8f24-98cb9069a948/room-split-0.png",
+          "sha256": "d6181a3c6e570bf6e73282dfdd4018d6fab23fee297b4c78b47df08fe6f558ac",
+          "bytes": 5136717
+        },
+        "linearImage": {
+          "sha256": "ce2ae901abbc48804f7bc1cf5ff2090c56661224f7c0c48748b26b73817d9f5d",
+          "bytes": 33177600,
+          "chunks": 8
+        }
+      },
+      {
+        "splitDepth": 1,
+        "medianJobMs": 11671.099999964237,
+        "minJobMs": 11431.300000011921,
+        "maxJobMs": 11686.400000035763,
+        "primary": 12337920,
+        "secondary": 44992108,
+        "segments": 57330028,
+        "gpuMs": 11043.471360000001,
+        "bounceHistogram": [
+          12337920,
+          20350603,
+          13047649,
+          6637614,
+          3260602,
+          1695640
+        ],
+        "dispatches": 21460,
+        "comparison": {
+          "rgbRmseFromUnconvergedControl": 0.3979711999387344,
+          "maxAbsoluteDifference": 14.194167256355286,
+          "meanRgbRatio": 1.001141661387321
+        },
+        "actualSamples": 12337920,
+        "actualHistogram": {
+          "1": 518400,
+          "2": 518400,
+          "4": 414720,
+          "8": 311040,
+          "16": 207360,
+          "32": 103680
+        },
+        "memory": {
+          "splitDepth": 1,
+          "rendererBufferBytes": 204058908,
+          "textureInventory": [
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1920,
+                "height": 1080
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1920,
+                "height": 1080
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 1920,
+                "height": 1080
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 1
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 1
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 2
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 128,
+                "height": 128
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3595,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 1029,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3081,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            }
+          ],
+          "adaptiveBufferBytes": 9421084,
+          "telemetryBufferBytes": 12352,
+          "fixtureStagingBytes": 589824,
+          "cachedBudgetHostBytes": 18662400
+        },
+        "png": {
+          "path": "output/playwright/eames-environments/room-reference-2026-09-28T10-13-01-944Z-9150e831-50d6-4f84-8f24-98cb9069a948/room-split-1.png",
+          "sha256": "73f193c761f9f7a5b41984221665f28127cc3ffb8853a909358108c17124a67b",
+          "bytes": 4897430
+        },
+        "linearImage": {
+          "sha256": "8fa5b086ff8a5e47d89d6a038ec757713899ce45f621902708b327dd4618e9eb",
+          "bytes": 33177600,
+          "chunks": 8
+        }
+      },
+      {
+        "splitDepth": 2,
+        "medianJobMs": 13340.699999988079,
+        "minJobMs": 13328.5,
+        "maxJobMs": 13570.299999952316,
+        "primary": 12337920,
+        "secondary": 66764363,
+        "segments": 79102283,
+        "gpuMs": 12723.945472000009,
+        "bounceHistogram": [
+          12337920,
+          20350603,
+          24509047,
+          12441908,
+          6220372,
+          3242433
+        ],
+        "dispatches": 21460,
+        "comparison": {
+          "rgbRmseFromUnconvergedControl": 0.37674883222908256,
+          "maxAbsoluteDifference": 14.194167256355286,
+          "meanRgbRatio": 1.0008169533584073
+        },
+        "actualSamples": 12337920,
+        "actualHistogram": {
+          "1": 518400,
+          "2": 518400,
+          "4": 414720,
+          "8": 311040,
+          "16": 207360,
+          "32": 103680
+        },
+        "memory": {
+          "splitDepth": 2,
+          "rendererBufferBytes": 233419036,
+          "textureInventory": [
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1920,
+                "height": 1080
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1920,
+                "height": 1080
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 1920,
+                "height": 1080
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 1
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 1
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 2
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 128,
+                "height": 128
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3595,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 1029,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3081,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            }
+          ],
+          "adaptiveBufferBytes": 9421084,
+          "telemetryBufferBytes": 12352,
+          "fixtureStagingBytes": 589824,
+          "cachedBudgetHostBytes": 18662400
+        },
+        "png": {
+          "path": "output/playwright/eames-environments/room-reference-2026-09-28T10-13-01-944Z-9150e831-50d6-4f84-8f24-98cb9069a948/room-split-2.png",
+          "sha256": "7a41be6e70e561a9e5d4898a0fda77edcb1912065f66c85bc2d4a03cb73a04e2",
+          "bytes": 4792416
+        },
+        "linearImage": {
+          "sha256": "1ba5752fee3b841413a6359f38e315761171735b823a753d6614ee8eb19cd780",
+          "bytes": 33177600,
+          "chunks": 8
+        }
+      }
+    ],
+    "verified": true,
+    "qualification": "experimental-not-converged-not-matched-quality",
+    "memoryNote": "Three independent benchmark renderer instances coexist; per-instance allocations, not exact physical VRAM residency."
+  },
+  {
+    "captureId": "room-reference-2026-09-28T10-17-04-383Z-0c36a4a4-70cc-4c06-b443-fc86d23015f5",
+    "settings": {
+      "width": 3840,
+      "height": 2160,
+      "maxDepth": 6,
+      "maximumSpp": 32,
+      "sampler": "stable-pattern",
+      "denoise": false
+    },
+    "provenance": {
+      "sources": {
+        "renderer": "06bc5446ccb296ff1edd3cdb1fc39feeeceb3a57",
+        "lighting": "2ece2262e18d212d98cd656390db333d72da37ba",
+        "shared": "729f89c7f77fcadb9ee7eeca53fb6daf02865b8e",
+        "site": "21d43a9b63722f1ce69175a5a42b53304ee79102"
+      },
+      "source": "immutable-git-objects",
+      "captureId": "room-reference-2026-09-28T10-17-04-383Z-0c36a4a4-70cc-4c06-b443-fc86d23015f5"
+    },
+    "adapter": {
+      "vendor": "apple",
+      "architecture": "metal-3",
+      "isFallbackAdapter": false
+    },
+    "scene": {
+      "room": {
+        "bytes": 651696,
+        "sha256": "125331dadb83664e978a8c12cc974bae81bb7b75457e290c6063d921bbe11bc5",
+        "triangles": 3672,
+        "primitives": 73
+      },
+      "roomBounds": {
+        "min": [
+          -5.98722505569458,
+          -1.4440840482711792,
+          -4.367950916290283
+        ],
+        "max": [
+          5.9060821533203125,
+          1.4410810470581055,
+          4.414184093475342
+        ]
+      },
+      "roomTriangleCount": 3672,
+      "eamesTriangleCount": 265468,
+      "sceneTriangleCount": 269140,
+      "sceneMeshes": 82,
+      "placement": {
+        "x": 1.8,
+        "z": -1.1,
+        "yaw": -25
+      },
+      "eamesBounds": {
+        "min": [
+          0.6616441165197775,
+          -1.3440840244293213,
+          -1.9633886251089299
+        ],
+        "max": [
+          2.9947004403861617,
+          -0.020079781481169068,
+          -0.1870037243071908
+        ]
+      },
+      "view": "entry",
+      "floorY": -1.3440840244293213,
+      "addedGeometry": 0,
+      "lighting": "external-daylight-no-added-emitter",
+      "geometry": "mesh-bvh",
+      "proxyGeometry": false,
+      "interaction": "placement-and-camera-between-renders-not-realtime-or-collision-qualified"
+    },
+    "reportSha256": "e3baabe6c6e29a1d862005e3daf0b0497cfa294c2d2178dad31cf5ca12ad8233",
+    "timings": [
+      {
+        "round": 0,
+        "splitDepth": 0,
+        "completedFrameMs": 36373.30000001192
+      },
+      {
+        "round": 0,
+        "splitDepth": 1,
+        "completedFrameMs": 42481.10000002384
+      },
+      {
+        "round": 0,
+        "splitDepth": 2,
+        "completedFrameMs": 48867.30000001192
+      },
+      {
+        "round": 1,
+        "splitDepth": 1,
+        "completedFrameMs": 42098
+      },
+      {
+        "round": 1,
+        "splitDepth": 2,
+        "completedFrameMs": 49043
+      },
+      {
+        "round": 1,
+        "splitDepth": 0,
+        "completedFrameMs": 36552.60000002384
+      },
+      {
+        "round": 2,
+        "splitDepth": 2,
+        "completedFrameMs": 49534.299999952316
+      },
+      {
+        "round": 2,
+        "splitDepth": 0,
+        "completedFrameMs": 36487.89999997616
+      },
+      {
+        "round": 2,
+        "splitDepth": 1,
+        "completedFrameMs": 42689.5
+      }
+    ],
+    "correctness": [
+      {
+        "name": "black",
+        "splitDepth": 0,
+        "meanRgb": [
+          0,
+          0,
+          0
+        ],
+        "referenceMeanRgb": [
+          0,
+          0,
+          0
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 524288,
+          "totalPathSegments": 1048576,
+          "bounceHistogram": [
+            524288,
+            524288,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "black",
+        "splitDepth": 1,
+        "meanRgb": [
+          0,
+          0,
+          0
+        ],
+        "referenceMeanRgb": [
+          0,
+          0,
+          0
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 1048576,
+          "totalPathSegments": 1572864,
+          "bounceHistogram": [
+            524288,
+            1048576,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "black",
+        "splitDepth": 2,
+        "meanRgb": [
+          0,
+          0,
+          0
+        ],
+        "referenceMeanRgb": [
+          0,
+          0,
+          0
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 1048576,
+          "totalPathSegments": 1572864,
+          "bounceHistogram": [
+            524288,
+            1048576,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "emissive",
+        "splitDepth": 0,
+        "meanRgb": [
+          4,
+          2,
+          1
+        ],
+        "referenceMeanRgb": [
+          4,
+          2,
+          1
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 0,
+          "totalPathSegments": 524288,
+          "bounceHistogram": [
+            524288,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "emissive",
+        "splitDepth": 1,
+        "meanRgb": [
+          4,
+          2,
+          1
+        ],
+        "referenceMeanRgb": [
+          4,
+          2,
+          1
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 0,
+          "totalPathSegments": 524288,
+          "bounceHistogram": [
+            524288,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "emissive",
+        "splitDepth": 2,
+        "meanRgb": [
+          4,
+          2,
+          1
+        ],
+        "referenceMeanRgb": [
+          4,
+          2,
+          1
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 0,
+          "totalPathSegments": 524288,
+          "bounceHistogram": [
+            524288,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "diffuse-constant",
+        "splitDepth": 0,
+        "meanRgb": [
+          0.4600426024189801,
+          0.23634175204824714,
+          0.08720784958677541
+        ],
+        "referenceMeanRgb": [
+          0.4600426024189801,
+          0.23634175204824714,
+          0.08720784958677541
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 524288,
+          "totalPathSegments": 1048576,
+          "bounceHistogram": [
+            524288,
+            524288,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "diffuse-constant",
+        "splitDepth": 1,
+        "meanRgb": [
+          0.46021517601366213,
+          0.23642895070042869,
+          0.08723813175083706
+        ],
+        "referenceMeanRgb": [
+          0.4600426024189801,
+          0.23634175204824714,
+          0.08720784958677541
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 1048576,
+          "totalPathSegments": 1572864,
+          "bounceHistogram": [
+            524288,
+            1048576,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      },
+      {
+        "name": "diffuse-constant",
+        "splitDepth": 2,
+        "meanRgb": [
+          0.46021517601366213,
+          0.23642895070042869,
+          0.08723813175083706
+        ],
+        "referenceMeanRgb": [
+          0.4600426024189801,
+          0.23634175204824714,
+          0.08720784958677541
+        ],
+        "passed": true,
+        "actualSamples": 524288,
+        "rayCounts": {
+          "status": "available",
+          "source": "gpu-active-queue-readback",
+          "expectedPrimaryRays": 524288,
+          "observedPrimaryRays": 524288,
+          "secondaryRays": 1048576,
+          "totalPathSegments": 1572864,
+          "bounceHistogram": [
+            524288,
+            1048576,
+            0,
+            0,
+            0,
+            0
+          ],
+          "capturedRayCounts": 192,
+          "expectedRayCounts": 192,
+          "reason": null
+        }
+      }
+    ],
+    "variants": [
+      {
+        "splitDepth": 0,
+        "medianJobMs": 36487.89999997616,
+        "minJobMs": 36373.30000001192,
+        "maxJobMs": 36552.60000002384,
+        "primary": 49351680,
+        "secondary": 100003828,
+        "segments": 149355508,
+        "gpuMs": 33540.407296,
+        "bounceHistogram": [
+          49351680,
+          45910506,
+          29047315,
+          14389444,
+          7020290,
+          3636273
+        ],
+        "dispatches": 74568,
+        "comparison": {
+          "rgbRmseFromUnconvergedControl": 0,
+          "maxAbsoluteDifference": 0,
+          "meanRgbRatio": 1
+        },
+        "actualSamples": 49351680,
+        "actualHistogram": {
+          "1": 2073600,
+          "2": 2073600,
+          "4": 1658880,
+          "8": 1244160,
+          "16": 829440,
+          "32": 414720
+        },
+        "memory": {
+          "splitDepth": 0,
+          "rendererBufferBytes": 195522844,
+          "textureInventory": [
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 3840,
+                "height": 2160
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 3840,
+                "height": 2160
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3840,
+                "height": 2160
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 1
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 1
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 2
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 128,
+                "height": 128
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3595,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 1029,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3081,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            }
+          ],
+          "adaptiveBufferBytes": 34304284,
+          "telemetryBufferBytes": 12352,
+          "fixtureStagingBytes": 589824,
+          "cachedBudgetHostBytes": 74649600
+        },
+        "png": {
+          "path": "output/playwright/eames-environments/room-reference-2026-09-28T10-17-04-383Z-0c36a4a4-70cc-4c06-b443-fc86d23015f5/room-split-0.png",
+          "sha256": "5f7dbae9d2bb0ca557630f871440cfa4c5210c45587ae96946b240cd734b3283",
+          "bytes": 20437400
+        },
+        "linearImage": {
+          "sha256": "fbe452a0de69c1102bbf5f552a5259086844c6447e5e69402b6d8ec8cb5b4fcf",
+          "bytes": 132710400,
+          "chunks": 32
+        }
+      },
+      {
+        "splitDepth": 1,
+        "medianJobMs": 42481.10000002384,
+        "minJobMs": 42098,
+        "maxJobMs": 42689.5,
+        "primary": 49351680,
+        "secondary": 179936179,
+        "segments": 229287859,
+        "gpuMs": 39812.26803199996,
+        "bounceHistogram": [
+          49351680,
+          81403826,
+          52185993,
+          26550276,
+          13027241,
+          6768843
+        ],
+        "dispatches": 74568,
+        "comparison": {
+          "rgbRmseFromUnconvergedControl": 0.39780107720490027,
+          "maxAbsoluteDifference": 14.633822619915009,
+          "meanRgbRatio": 0.9997643372061087
+        },
+        "actualSamples": 49351680,
+        "actualHistogram": {
+          "1": 2073600,
+          "2": 2073600,
+          "4": 1658880,
+          "8": 1244160,
+          "16": 829440,
+          "32": 414720
+        },
+        "memory": {
+          "splitDepth": 1,
+          "rendererBufferBytes": 210202908,
+          "textureInventory": [
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 3840,
+                "height": 2160
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 3840,
+                "height": 2160
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3840,
+                "height": 2160
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 1
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 1
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 2
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 128,
+                "height": 128
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3595,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 1029,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3081,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            }
+          ],
+          "adaptiveBufferBytes": 34304284,
+          "telemetryBufferBytes": 12352,
+          "fixtureStagingBytes": 589824,
+          "cachedBudgetHostBytes": 74649600
+        },
+        "png": {
+          "path": "output/playwright/eames-environments/room-reference-2026-09-28T10-17-04-383Z-0c36a4a4-70cc-4c06-b443-fc86d23015f5/room-split-1.png",
+          "sha256": "8839bd3a5c3d2bd5836f2bd94a15a150425c6efcc2ba0460636cc4a67213531f",
+          "bytes": 19474936
+        },
+        "linearImage": {
+          "sha256": "b48aec931d2a03ad45e34e84580d9f26d693fe5a95beda8401f209d3fbe81c86",
+          "bytes": 132710400,
+          "chunks": 32
+        }
+      },
+      {
+        "splitDepth": 2,
+        "medianJobMs": 49043,
+        "minJobMs": 48867.30000001192,
+        "maxJobMs": 49534.299999952316,
+        "primary": 49351680,
+        "secondary": 267051586,
+        "segments": 316403266,
+        "gpuMs": 46692.89267200004,
+        "bounceHistogram": [
+          49351680,
+          81403826,
+          98021112,
+          49775691,
+          24881707,
+          12969250
+        ],
+        "dispatches": 74568,
+        "comparison": {
+          "rgbRmseFromUnconvergedControl": 0.3766348626022914,
+          "maxAbsoluteDifference": 14.568592429161072,
+          "meanRgbRatio": 0.9998415055033765
+        },
+        "actualSamples": 49351680,
+        "actualHistogram": {
+          "1": 2073600,
+          "2": 2073600,
+          "4": 1658880,
+          "8": 1244160,
+          "16": 829440,
+          "32": 414720
+        },
+        "memory": {
+          "splitDepth": 2,
+          "rendererBufferBytes": 239563036,
+          "textureInventory": [
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 3840,
+                "height": 2160
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 3840,
+                "height": 2160
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3840,
+                "height": 2160
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 1
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 1
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 1,
+                "height": 2
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba16float",
+              "size": {
+                "width": 128,
+                "height": 128
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3595,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 1029,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3081,
+                "height": 2052
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            },
+            {
+              "format": "rgba8unorm",
+              "size": {
+                "width": 3,
+                "height": 3
+              },
+              "mipLevelCount": 1,
+              "sampleCount": 1
+            }
+          ],
+          "adaptiveBufferBytes": 34304284,
+          "telemetryBufferBytes": 12352,
+          "fixtureStagingBytes": 589824,
+          "cachedBudgetHostBytes": 74649600
+        },
+        "png": {
+          "path": "output/playwright/eames-environments/room-reference-2026-09-28T10-17-04-383Z-0c36a4a4-70cc-4c06-b443-fc86d23015f5/room-split-2.png",
+          "sha256": "4f4d6ba77d5dd3893394f071ebe530475556d6027c6b80cde62e224c460488fb",
+          "bytes": 19047299
+        },
+        "linearImage": {
+          "sha256": "c2f32d42357b92a7f1fef4d8a7c3bf68f33930ef303cedc0b646631fc5b7e87f",
+          "bytes": 132710400,
+          "chunks": 32
+        }
+      }
+    ],
+    "verified": true,
+    "qualification": "experimental-not-converged-not-matched-quality",
+    "memoryNote": "Three independent benchmark renderer instances coexist; per-instance allocations, not exact physical VRAM residency."
+  }
+]
