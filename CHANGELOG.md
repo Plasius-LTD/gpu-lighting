@@ -12,6 +12,8 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
   room server, binding the bundle/source-map hashes to clean committed sources
   (#110, site#2367). Retain native experiment evidence separately; no environment,
   transport, production flag or performance claim changes.
+- Patch development-only brace/glob/minimatch advisories found during Task110's
+  dependency gate; retain test/coverage thresholds and the runtime package graph.
 
 - Admit the existing `stable-camera-random` room diagnostic sampler, preserving
   default sampling, geometry, budgets and exact capture-identity checks. Enables
