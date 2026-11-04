@@ -7,6 +7,7 @@ import {readFileSync,statSync} from "node:fs";
 import {createCaptureBridgeServer} from "./capture-bridge-server.mjs";
 import {addLocalRoomSnapshot,addLocalReferenceModels} from "./local-room-source.mjs";
 import {ROOM_ASSET} from "../../demo/eames-environments/room-eames.js";
+import {addCommittedRefinementPolicy} from './refinement-policy-source.mjs';
 
 const types={".html":"text/html; charset=utf-8",".json":"application/json",".png":"image/png",".jpg":"image/jpeg",".glb":"model/gltf-binary",".gltf":"model/gltf+json",".bin":"application/octet-stream"};
 export function createRoomReferenceServer({bodies,sources,source="immutable-git-objects",assets,bridge=createCaptureBridgeServer()}){
@@ -49,5 +50,6 @@ if(process.argv[1]&&pathToFileURL(path.resolve(process.argv[1])).href===import.m
  if(localRoom&&localRoom!=='-')snapshot=addLocalRoomSnapshot(snapshot,localBytes(localRoom),path.basename(localRoom));
  if(referenceModels.length>2)throw Error('At most two additional reference models are supported');
  snapshot=addLocalReferenceModels(snapshot,referenceModels.map(file=>({bytes:localBytes(file),name:path.basename(file)})));
+ if(process.env.PLASIUS_REFINEMENT_PERFORMANCE_ROOT)snapshot=addCommittedRefinementPolicy(snapshot,process.env.PLASIUS_REFINEMENT_PERFORMANCE_ROOT);
  createRoomReferenceServer(snapshot).listen(port,"127.0.0.1",()=>console.log(JSON.stringify({url:`http://127.0.0.1:${port}/tests/fixtures/native-room-reference.html`,sources:snapshot.sources})));
 }

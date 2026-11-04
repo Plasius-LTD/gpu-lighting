@@ -8,6 +8,11 @@ The format is based on **[Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ## [Unreleased]
 
+- Add an optional development-only progressive-policy mount to the immutable
+  room server, binding the bundle/source-map hashes to clean committed sources
+  (#110, site#2367). Retain native experiment evidence separately; no environment,
+  transport, production flag or performance claim changes.
+
 - Admit the existing `stable-camera-random` room diagnostic sampler, preserving
   default sampling, geometry, budgets and exact capture-identity checks. Enables
   a fixed-camera independent-transport comparison for remaining glass/water

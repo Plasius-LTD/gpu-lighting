@@ -1,5 +1,15 @@
 # @plasius/gpu-lighting
 
+Progressive room experiments may explicitly set
+`PLASIUS_REFINEMENT_PERFORMANCE_ROOT` when launching the immutable room server.
+The optional development mount requires a clean gpu-performance checkout and a
+built ESM bundle whose source-map contents match that commit. Provenance records
+the package commit and bundle/map SHA256 hashes. A stale build fails admission;
+no local package publication or production rollout is implied. The renderer's
+laboratory controls retain one-SPP/focus/stationary/canonical/reset evidence at
+native1080p/4K. These are prefix-correctness experiments, not performance claims;
+the earlier failed convergence evidence remains preserved (#110, site#2367).
+
 The local room also offers an opt-in **Glass of water reference**: empty or filled
 thick-walled tumbler on a neutral support, with a glass close-up. The original
 parametric geometry in `demo/eames-environments/glass-water-reference.js` has
