@@ -95,7 +95,7 @@
   ],
   "dependencies": {
     "@plasius/gpu-shared": "^1.11.2",
-    "@plasius/gpu-worker": "^0.3.5"
+    "@plasius/gpu-worker": "^0.3.7"
   },
   "overrides": {
     "brace-expansion": "5.0.12",
